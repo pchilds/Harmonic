@@ -33,19 +33,25 @@
 /*
  * TO DO:
  *
- * occasional crashing when reloading files [memory handling?]
+ * whether to broaden to expandable g_array without MXD set size
+ * brush up dynamic memory allocation with g_array
+ * check divide by zero handling
  * HELP: build contents
  * ABOUT: build contents
+ * OPD: better handling of the two modes - maybe inline fft and processing routines in a more optimal way
  * PLOT: signal connect kindex for displaying plot3
  * PLOT: signal connect jindex for displaying plot3
- * PLOT: update trc in upg function
+ * PLOT: still issues with data off the wiggle side
+ * PLOT: check multitrace capability
+ * PRT: ps conversion of graphs
  * BATCH: read filename from config file
  * BATCH: config writer utility
  * FFT: implement invert to 2pi/x routine
- * PRC: differential phase routine
- * PRC: storage of results
- * PRC: chirp
- * SAVE: everything
+ * PRC: triangle optimisation
+ * PRC: convert differentials to doms/chirp
+ * PRC: output to plot3 for batch
+ * PRC: nan for domain shift
+ * SAVE: filling contents
  */
 
 #include <gtk/gtk.h>
@@ -53,34 +59,32 @@
 #include <fftw3.h>
 #include <math.h>
 #include "plotlinear0-1-0.h"
+/*#include "plotpolarboth0-1-0.h"*/
 /*#include "harmonicconf.h"*/
 
 #define DZE 0.00001 /* divide by zero threshold */
+#define NZE -0.00001 /* negative of this */
 #define MXD 16 /* maximum number of windows */
 #define MXDS 256 /* the square of this */
 #define MXDM 15 /* one less than MXD */
 #define LNTOT 0.23025850929940456840179914546843642076011014886288 /* (ln10)/10 */
 
-GtkWidget *svg, *tr, *zpd, *pr, *tracmenu, *trac, *fst, *notebook, *notebook2, *plot1, *plot2, *plot3, *statusbar;
-GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *ncmp, *lcmp, *bat, *twopionx, *trac, *trans, *dBs, *neg;
+GtkWidget *window, *tr, *zpd, *pr, *tracmenu, *trac, *fst, *notebook, *notebook2, *plot1, *plot2, *plot3, *statusbar, *rest, *visl, *dsl, *chil;
+GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *ncmp, *lcmp, *bat, *chi, *twopionx, *opttri, *trac, *trans, *dBs, *neg;
 GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; /* widgets for windowing */
-GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *delx; /* arrays for windowing and data */
-GtkAdjustment *adj;
-GSList *group2=NULL;
-gint lc;
-guint jdim=0, kdim=0, jdimx=0, kdimx=0, satl=0, trc=1, jdimxf=0;
-gchar *contents;
-gulong pr_id, sv_id;
-GError *Err;
+GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *delf, *vis, *doms, *chp; /* arrays for windowing and data */
+GSList *group2=NULL; /* list for various traces available */
+gint lc; /* number of data points */
+guint jdim=0, kdim=0, jdimx=0, kdimx=0, jdimxf=0, kdimxf=0, satl=0, trc=1, flags=0; /* array indices, #of traces, trace number, and current processing state flags */
+gulong pr_id; /* id for disabling/enabling post-transform processing */
 
 void help(GtkWidget *widget, gpointer data)
   {
   GtkWidget *helpwin;
 
-  helpwin=gtk_dialog_new_with_buttons("Instructions", GTK_WINDOW(widget), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
-  g_signal_connect_swapped(helpwin, "destroy", G_CALLBACK(gtk_widget_destroy), helpwin);
+  helpwin=gtk_dialog_new_with_buttons("Instructions", GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+  g_signal_connect_swapped(G_OBJECT(helpwin), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
   gtk_widget_show(helpwin);
-  if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_CLOSE) gtk_widget_destroy(helpwin);
   }
 
 void about(GtkWidget *widget, gpointer data)
@@ -88,74 +92,970 @@ void about(GtkWidget *widget, gpointer data)
   GtkWidget *helpwin;
 
   helpwin=gtk_about_dialog_new();
-  g_signal_connect_swapped(helpwin, "destroy", G_CALLBACK(gtk_widget_destroy), helpwin);
+  g_signal_connect_swapped(G_OBJECT(helpwin), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
+  gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(helpwin), "0.1.0");
+  gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(helpwin), "(c) Paul Childs, 2011");
+  gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(helpwin), "Harmonic is a program for performing harmonic analysis (e.g. Fourier analysis) and obtaining visibility of fringes, domain shift and chirp measurements.");
   gtk_widget_show(helpwin);
+  g_signal_connect_swapped(G_OBJECT(helpwin), "response", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
   }
 
-void sav(GtkWidget *widget, gpointer data)
+void prt(GtkWidget *widget, gpointer data)
   {
   GtkWidget *wfile;
-  gchar *fout=NULL;
+  gchar *str, *fout=NULL;
 
-  wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(widget), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
-  g_signal_connect(wfile, "destroy", G_CALLBACK(gtk_widget_destroy), wfile);
-  gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
-  if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+  switch (gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook2)))
     {
-    fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
-    g_file_set_contents(fout, contents, -1, &Err);
+    case 2:
+      if ((flags&12)==12)
+        {
+        wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+        g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+          {
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          /*
+          create image
+          */
+          g_free(fout);
+          }
+        gtk_widget_destroy(wfile);
+        }
+      else if ((flags&2)!=0)
+        {
+        wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+        g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+          {
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          /*
+          create image
+          */
+          g_free(fout);
+          }
+        gtk_widget_destroy(wfile);
+        }
+      else if ((flags&1)!=0)
+        {
+        wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+        g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+          {
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          /*
+          create image
+          */
+          g_free(fout);
+          }
+        gtk_widget_destroy(wfile);
+        }
+      else
+        {
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
+        str=g_strdup("No available image.");
+        gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+        g_free(str);
+        }
+      break;
+    case 1:
+      if ((flags&2)!=0)
+        {
+        wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+        g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+          {
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          /*
+          create image
+          */
+          g_free(fout);
+          }
+        gtk_widget_destroy(wfile);
+        }
+      else if ((flags&1)!=0)
+        {
+        wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+        g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+          {
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          /*
+          create image
+          */
+          g_free(fout);
+          }
+        gtk_widget_destroy(wfile);
+        }
+      else
+        {
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
+        str=g_strdup("No available image.");
+        gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+        g_free(str);
+        }
+      break;
+    default:
+      if ((flags&1)!=0)
+        {
+        wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+        g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+          {
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          /*
+          create image
+          */
+          g_free(fout);
+          }
+        gtk_widget_destroy(wfile);
+        }
+      else
+        {
+        str=g_strdup("No available image.");
+        gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+        g_free(str);
+        }
+      break;
     }
-  gtk_widget_destroy(wfile);
+  }
+
+  void sav(GtkWidget *widget, gpointer data)
+  {
+  GtkWidget *wfile, *dialog, *cont, *label;
+  gchar *contents, *str, *fout=NULL;
+  GError *Err;
+
+  switch (gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook2)))
+    {
+    case 2:
+      if ((flags&28)==28)
+        {
+        wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+        g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+          {
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          dialog=gtk_dialog_new_with_buttons("Parameter selection", GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Visibility", 1, "Domain Shift", 2, "Chirp", 3, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+          cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
+          label=gtk_label_new("Select Parameter to save:");
+          gtk_container_add(GTK_CONTAINER(cont), label);
+          switch (gtk_dialog_run(GTK_DIALOG(dialog)))
+            {
+            case 1:
+              /*
+              fill contents
+              g_file_set_contents(fout, contents, -1, &Err);
+              g_free(contents);
+              */
+              break;
+            case 2:
+              /*
+              fill contents
+              g_file_set_contents(fout, contents, -1, &Err);
+              g_free(contents);
+              */
+              break;
+            case 3:
+              /*
+              fill contents
+              g_file_set_contents(fout, contents, -1, &Err);
+              g_free(contents);
+              */
+              break;
+            default:
+              break;
+            }
+          gtk_widget_destroy(dialog);
+          g_free(fout);
+          }
+        gtk_widget_destroy(wfile);
+        }
+      else if ((flags&12)==12)
+        {
+        wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+        g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+          {
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          dialog=gtk_dialog_new_with_buttons("Parameter selection", GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Visibility", 1, "Domain Shift", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+          cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
+          label=gtk_label_new("Select Parameter to save:");
+          gtk_container_add(GTK_CONTAINER(cont), label);
+          switch (gtk_dialog_run(GTK_DIALOG(dialog)))
+            {
+            case 1:
+              /*
+              fill contents
+              g_file_set_contents(fout, contents, -1, &Err);
+              g_free(contents);
+              */
+              break;
+            case 2:
+              /*
+              fill contents
+              g_file_set_contents(fout, contents, -1, &Err);
+              g_free(contents);
+              */
+              break;
+            default:
+              break;
+            }
+          gtk_widget_destroy(dialog);
+          g_free(fout);
+          }
+        gtk_widget_destroy(wfile);
+        }
+      else if ((flags&2)!=0)
+        {
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
+        wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+        g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+          {
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          /*
+          fill contents
+          g_file_set_contents(fout, contents, -1, &Err);
+          g_free(contents);
+          */
+          g_free(fout);
+          }
+        gtk_widget_destroy(wfile);
+        }
+      else
+        {
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
+        str=g_strdup("No available processed data.");
+        gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+        g_free(str);
+        }
+      break;
+    case 1:
+      if ((flags&2)!=0)
+        {
+        wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+        g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+          {
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          /*
+          fill contents
+          g_file_set_contents(fout, contents, -1, &Err);
+          g_free(contents);
+          */
+          g_free(fout);
+          }
+        gtk_widget_destroy(wfile);
+        }
+      else
+        {
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
+        str=g_strdup("No available processed data.");
+        gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+        g_free(str);
+        }
+      break;
+    default:
+      if ((flags&2)!=0)
+        {
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
+        wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+        g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+        gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+          {
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          /*
+          fill contents
+          g_file_set_contents(fout, contents, -1, &Err);
+          g_free(contents);
+          */
+          g_free(fout);
+          }
+        gtk_widget_destroy(wfile);
+        }
+      else
+        {
+        str=g_strdup("No available processed data.");
+        gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+        g_free(str);
+        }
+      break;
+    }
   }
 
 void prs(GtkWidget *widget, gpointer data)
   {
+  GtkWidget *label;
   PlotLinear *plt2;
   gint j, k, l, st, sp;
-  gdouble ml, iv, vzt, vt, ivd, ivdt;
+  gdouble idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct;
+  gchar *str;
+  gchar s[10];
 
-  plt2=PLOT_LINEAR(plot2);
-  for (j=0; j<=jdimxf; j++)
+  if ((flags&2)!=0)
     {
-    ml=(g_array_index(delx, gdouble, j))*(plt2->size)/((2*(plt2->size))-1);
-    iv=g_array_index(zwa, gdouble, j)*ml;
-    vzt=0;
-    for (l=0; l<iv; l++)
+    plt2=PLOT_LINEAR(plot2);
+    g_array_free(vis, TRUE);
+    g_array_free(doms, TRUE);
+    vis=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+    doms=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+    if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(opttri)))
       {
-      ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
-      ivd*=ivd;
-      ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
-      ivdt*=ivdt;
-      ivd+=ivdt;
-      ivd=sqrt(ivd);
-      vzt+=ivd;
-      }
-    vzt=1/vzt;
-    for (k=0; k<kdimx; k++)
-      {
-      st=ceil((g_array_index(isra, gdouble, j+(k*MXD)))*ml);
-      if (st>(plt2->size)) st=(plt2->size);
-      sp=floor((g_array_index(ispa, gdouble, j))*ml);
-      if (sp>(plt2->size)) sp=(plt2->size);
-      vt=0;
-      for (l=st; l<sp; l++)
+      if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
         {
-        ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
-        ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
-        /* differential phase routine */
-        ivd*=ivd;
-        ivdt*=ivdt;
-        ivd+=ivdt;
-        ivd=sqrt(ivd);
-        vt+=ivd;
+        g_array_free(chp, TRUE);
+        chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+        for (j=0; j<=jdimxf; j++)
+          {
+          idelf=1/g_array_index(delf, gdouble, j);
+          /*
+          fit values to zwa
+          */
+          iv=g_array_index(zwa, gdouble, j)*idelf/2;
+          vzt=0;
+          for (l=0; l<iv; l++)
+            {
+            ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
+            ivd*=ivd;
+            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+            ivdt*=ivdt;
+            ivd+=ivdt;
+            ivd=sqrt(ivd);
+            vzt+=ivd;
+            }
+          vzt=l/vzt;
+          for (k=0; k<=kdimx; k++)
+            {
+            st=ceil(g_array_index(isra, gdouble, j+(k*MXD))*idelf);
+            sp=floor(g_array_index(ispa, gdouble, j)*idelf);
+            /*
+            fit values to twa and tca
+            */
+            tcn=g_array_index(tca, gdouble, j+(k*MXD))*idelf;
+            twd=g_array_index(twa, gdouble, j+(k*MXD))*idelf/2;
+            if ((st<((plt2->size)-2))&&(sp<(plt2->size))&&((sp-st)>1))
+              {
+              vt=g_array_index(stars, gdouble, st+(2*j*(plt2->size)));
+              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-st);
+              if (vt<DZE)
+                {
+                if (vt>NZE)
+                  {
+                  if (ivdt>=0) phia=G_PI_2;
+                  else phia=-G_PI_2;
+                  }
+                else phia=atan(ivdt/vt)+G_PI;
+                }
+              else phia=atan(ivdt/vt);
+              vt*=vt;
+              ivdt*=ivdt;
+              vt+=ivdt;
+              vt=sqrt(vt);
+              ivd=g_array_index(stars, gdouble, st+1+(2*j*(plt2->size)));
+              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-st-1);
+              if (ivd<DZE)
+                {
+                if (ivd>NZE)
+                  {
+                  if (ivdt>=0) phio=-G_PI_2;
+                  else phio=G_PI_2;
+                  }
+                else phio=-atan(ivdt/ivd)-G_PI;
+                }
+              else phio=-atan(ivdt/ivd);
+              phia+=phio;
+              ivd*=ivd;
+              ivdt*=ivdt;
+              ivd+=ivdt;
+              ivd=sqrt(ivd);
+              vt+=ivd;
+              pn=0;
+              cn=0;
+              dst=0;
+              ddp=0;
+              for (l=st+2; l<=sp; l++)
+                {
+                ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
+                ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+                if (ivd<DZE)
+                  {
+                  if (ivd>NZE)
+                    {
+                    if (ivdt>=0) phi=G_PI_2;
+                    else phi=-G_PI_2;
+                    }
+                  else phi=atan(ivdt/ivd)+G_PI;
+                  }
+                else phi=atan(ivdt/ivd);
+                phio+=phi;
+                if (phio>G_PI) phio-=(2*G_PI);
+                else if (phio<=-G_PI) phio+=(2*G_PI);
+                if (l>(tcn-twd+0.5))
+                  {
+                  if ((l-1)<=(tcn-twd))
+                    {
+                    tp=(((gdouble) l)-tcn-0.5)/twd;
+                    tp++;
+                    pn+=tp;
+                    tp*=phio;
+                    dst+=tp;
+                    }
+                  else if (l<=(tcn+0.5))
+                    {
+                    tp=(((gdouble) l)-tcn-0.5)/twd;
+                    tp++;
+                    ct=(((gdouble) l)-tcn-1)/twd;
+                    ct++;
+                    pn+=tp;
+                    tp*=phio;
+                    dst+=tp;
+                    cn+=ct;
+                    phia+=phio;
+                    ct*=phia;
+                    ddp+=ct;
+                    }
+                  else if ((l-1)<=tcn)
+                    {
+                    tp=(tcn+0.5-((gdouble) l))/twd;
+                    tp++;
+                    ct=(((gdouble) l)-tcn-1)/twd;
+                    ct++;
+                    pn+=tp;
+                    tp*=phio;
+                    dst+=tp;
+                    cn+=ct;
+                    phia+=phio;
+                    ct*=phia;
+                    ddp+=ct;
+                    }
+                  else if (l<(tcn+twd+0.5))
+                    {
+                    tp=(tcn+0.5-((gdouble) l))/twd;
+                    tp++;
+                    ct=(tcn+1-((gdouble) l))/twd;
+                    ct++;
+                    pn+=tp;
+                    tp*=phio;
+                    dst+=tp;
+                    cn+=ct;
+                    phia+=phio;
+                    ct*=phia;
+                    ddp+=ct;
+                    }
+                  else if ((l-1)<(tcn+twd))
+                    {
+                    ct=(tcn+1-((gdouble) l))/twd;
+                    ct++;
+                    cn+=ct;
+                    phia+=phio;
+                    ct*=phia;
+                    ddp+=ct;
+                    }
+                  }
+                phia=-phio;
+                phio=-phi;
+                ivd*=ivd;
+                ivdt*=ivdt;
+                ivd+=ivdt;
+                ivd=sqrt(ivd);
+                vt+=ivd;
+                }
+              pn*=g_array_index(delf, gdouble, j);
+              cn*=g_array_index(delf, gdouble, j);
+              cn*=g_array_index(delf, gdouble, j);
+              dst=dst/pn;
+              ddp=ddp/cn;
+              vt=vt*vzt/(sp-st+1);
+              }
+            else
+              {
+              str=g_strdup_printf("Insufficient windowing range in channel %d, %d.", j, k);
+              gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+              g_free(str);
+              vt=0;
+              dst=0;
+              ddp=0;
+              }
+            g_array_append_val(vis, vt);
+            g_array_append_val(doms, dst);
+            g_array_append_val(chp, ddp);
+            }
+          vt=0;
+          for (k=kdimx; k<MXDM; k++) g_array_append_val(vis, vt);
+          for (k=kdimx; k<MXDM; k++) g_array_append_val(doms, vt);
+          for (k=kdimx; k<MXDM; k++) g_array_append_val(chp, vt);
+          }
+        vt=g_array_index(vis, gdouble, (jdim+(kdim*MXD)));
+        g_snprintf(s, 7, "%f", vt);
+        gtk_label_set_text(GTK_LABEL(visl), s);
+        vt=g_array_index(doms, gdouble, (jdim+(kdim*MXD)));
+        g_snprintf(s, 9, "%f", vt);
+        gtk_label_set_text(GTK_LABEL(dsl), s);
+        label=gtk_label_new("Chirp");
+        gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+        gtk_widget_show(label);
+        vt=g_array_index(chp, gdouble, (jdim+(kdim*MXD)));
+        g_snprintf(s, 8, "%f", vt);
+        chil=gtk_label_new(s);
+        gtk_table_attach(GTK_TABLE(rest), chil, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+        gtk_widget_show(chil);
+        flags|=20;
         }
-      vt*=vzt;
+      else
+        {
+        for (j=0; j<=jdimxf; j++)
+          {
+          idelf=1/g_array_index(delf, gdouble, j);
+          /*
+          fit values to zwa
+          */
+          iv=g_array_index(zwa, gdouble, j)*idelf/2;
+          vzt=0;
+          for (l=0; l<iv; l++)
+            {
+            ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
+            ivd*=ivd;
+            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+            ivdt*=ivdt;
+            ivd+=ivdt;
+            ivd=sqrt(ivd);
+            vzt+=ivd;
+            }
+          vzt=l/vzt;
+          for (k=0; k<=kdimx; k++)
+            {
+            st=ceil(g_array_index(isra, gdouble, j+(k*MXD))*idelf);
+            sp=floor(g_array_index(ispa, gdouble, j)*idelf);
+            /*
+            fit values to twa and tca
+            */
+            tcn=g_array_index(tca, gdouble, j+(k*MXD))*idelf;
+            twd=g_array_index(twa, gdouble, j+(k*MXD))*idelf/2;
+            if ((st<((plt2->size)-1))&&(sp<(plt2->size))&&((sp-st)>0))
+              {
+              vt=g_array_index(stars, gdouble, st+(2*j*(plt2->size)));
+              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-st);
+              if (vt<DZE)
+                {
+                if (vt>NZE)
+                  {
+                  if (ivdt>=0) phio=-G_PI_2;
+                  else phio=G_PI_2;
+                  }
+                else phio=-atan(ivdt/vt)-G_PI;
+                }
+              else phio=-atan(ivdt/vt);
+              vt*=vt;
+              ivdt*=ivdt;
+              vt+=ivdt;
+              vt=sqrt(vt);
+              dst=0;
+              pn=0;
+              for (l=st+1; l<=sp; l++)
+                {
+                ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
+                ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+                if (ivd<DZE)
+                  {
+                  if (ivd>NZE)
+                    {
+                    if (ivdt>=0) phi=G_PI_2;
+                    else phi=-G_PI_2;
+                    }
+                  else phi=atan(ivdt/ivd)+G_PI;
+                  }
+                else phi=atan(ivdt/ivd);
+                phio+=phi;
+                if (phio>G_PI) phio-=(2*G_PI);
+                else if (phio<=-G_PI) phio+=(2*G_PI);
+                if (l>(tcn-twd+0.5))
+                  {
+                  if (l<=(tcn+0.5))
+                    {
+                    tp=(((gdouble) l)-tcn-0.5)/twd;
+                    tp++;
+                    pn+=tp;
+                    tp*=phio;
+                    dst+=tp;
+                    }
+                  else if (l<(tcn+twd+0.5))
+                    {
+                    tp=(tcn+0.5-((gdouble) l))/twd;
+                    tp++;
+                    pn+=tp;
+                    tp*=phio;
+                    dst+=tp;
+                    }
+                  }
+                phio=-phi;
+                ivd*=ivd;
+                ivdt*=ivdt;
+                ivd+=ivdt;
+                ivd=sqrt(ivd);
+                vt+=ivd;
+                }
+              pn*=g_array_index(delf, gdouble, j);
+              dst=dst/pn;
+              vt=vt*vzt/(sp-st+1);
+              }
+            else
+              {
+              str=g_strdup_printf("Insufficient windowing range in channel %d, %d.", j, k);
+              gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+              g_free(str);
+              vt=0;
+              dst=0;
+              }
+            g_array_append_val(vis, vt);
+            g_array_append_val(doms, dst);
+            }
+          vt=0;
+          for (k=kdimx; k<MXD; k++) g_array_append_val(vis, vt);
+          for (k=kdimx; k<MXD; k++) g_array_append_val(doms, vt);
+          }
+        vt=g_array_index(vis, gdouble, (jdim+(kdim*MXD)));
+        g_snprintf(s, 7, "%f", vt);
+        gtk_label_set_text(GTK_LABEL(visl), s);
+        vt=g_array_index(doms, gdouble, (jdim+(kdim*MXD)));
+        g_snprintf(s, 9, "%f", vt);
+        gtk_label_set_text(GTK_LABEL(dsl), s);
+        flags|=4;
+        }
       }
+    else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
+      {
+      g_array_free(chp, TRUE);
+      chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+      for (j=0; j<=jdimxf; j++)
+        {
+        idelf=1/g_array_index(delf, gdouble, j);
+        iv=g_array_index(zwa, gdouble, j)*idelf/2;
+        vzt=0;
+        for (l=0; l<iv; l++)
+          {
+          ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
+          ivd*=ivd;
+          ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+          ivdt*=ivdt;
+          ivd+=ivdt;
+          ivd=sqrt(ivd);
+          vzt+=ivd;
+          }
+        vzt=l/vzt;
+        for (k=0; k<=kdimx; k++)
+          {
+          st=ceil(g_array_index(isra, gdouble, j+(k*MXD))*idelf);
+          sp=floor(g_array_index(ispa, gdouble, j)*idelf);
+          tcn=g_array_index(tca, gdouble, j+(k*MXD))*idelf;
+          twd=g_array_index(twa, gdouble, j+(k*MXD))*idelf/2;
+          if ((st<((plt2->size)-2))&&(sp<(plt2->size))&&((sp-st)>1))
+            {
+            vt=g_array_index(stars, gdouble, st+(2*j*(plt2->size)));
+            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-st);
+            if (vt<DZE)
+              {
+              if (vt>NZE)
+                {
+                if (ivdt>=0) phia=G_PI_2;
+                else phia=-G_PI_2;
+                }
+              else phia=atan(ivdt/vt)+G_PI;
+              }
+            else phia=atan(ivdt/vt);
+            vt*=vt;
+            ivdt*=ivdt;
+            vt+=ivdt;
+            vt=sqrt(vt);
+            ivd=g_array_index(stars, gdouble, st+1+(2*j*(plt2->size)));
+            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-st-1);
+            if (ivd<DZE)
+              {
+              if (ivd>NZE)
+                {
+                if (ivdt>=0) phio=-G_PI_2;
+                else phio=G_PI_2;
+                }
+              else phio=-atan(ivdt/ivd)-G_PI;
+              }
+            else phio=-atan(ivdt/ivd);
+            phia+=phio;
+            ivd*=ivd;
+            ivdt*=ivdt;
+            ivd+=ivdt;
+            ivd=sqrt(ivd);
+            vt+=ivd;
+            pn=0;
+            cn=0;
+            dst=0;
+            ddp=0;
+            for (l=st+2; l<=sp; l++)
+              {
+              ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
+              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+              if (ivd<DZE)
+                {
+                if (ivd>NZE)
+                  {
+                  if (ivdt>=0) phi=G_PI_2;
+                  else phi=-G_PI_2;
+                  }
+                else phi=atan(ivdt/ivd)+G_PI;
+                }
+              else phi=atan(ivdt/ivd);
+              phio+=phi;
+              if (phio>G_PI) phio-=(2*G_PI);
+              else if (phio<=-G_PI) phio+=(2*G_PI);
+              if (l>(tcn-twd+0.5))
+                {
+                if ((l-1)<=(tcn-twd))
+                  {
+                  tp=(((gdouble) l)-tcn-0.5)/twd;
+                  tp++;
+                  pn+=tp;
+                  tp*=phio;
+                  dst+=tp;
+                  }
+                else if (l<=(tcn+0.5))
+                  {
+                  tp=(((gdouble) l)-tcn-0.5)/twd;
+                  tp++;
+                  ct=(((gdouble) l)-tcn-1)/twd;
+                  ct++;
+                  pn+=tp;
+                  tp*=phio;
+                  dst+=tp;
+                  cn+=ct;
+                  phia+=phio;
+                  ct*=phia;
+                  ddp+=ct;
+                  }
+                else if ((l-1)<=tcn)
+                  {
+                  tp=(tcn+0.5-((gdouble) l))/twd;
+                  tp++;
+                  ct=(((gdouble) l)-tcn-1)/twd;
+                  ct++;
+                  pn+=tp;
+                  tp*=phio;
+                  dst+=tp;
+                  cn+=ct;
+                  phia+=phio;
+                  ct*=phia;
+                  ddp+=ct;
+                  }
+                else if (l<(tcn+twd+0.5))
+                  {
+                  tp=(tcn+0.5-((gdouble) l))/twd;
+                  tp++;
+                  ct=(tcn+1-((gdouble) l))/twd;
+                  ct++;
+                  pn+=tp;
+                  tp*=phio;
+                  dst+=tp;
+                  cn+=ct;
+                  phia+=phio;
+                  ct*=phia;
+                  ddp+=ct;
+                  }
+                else if ((l-1)<(tcn+twd))
+                  {
+                  ct=(tcn+1-((gdouble) l))/twd;
+                  ct++;
+                  cn+=ct;
+                  phia+=phio;
+                  ct*=phia;
+                  ddp+=ct;
+                  }
+                }
+              phia=-phio;
+              phio=-phi;
+              ivd*=ivd;
+              ivdt*=ivdt;
+              ivd+=ivdt;
+              ivd=sqrt(ivd);
+              vt+=ivd;
+              }
+            pn*=g_array_index(delf, gdouble, j);
+            cn*=g_array_index(delf, gdouble, j);
+            cn*=g_array_index(delf, gdouble, j);
+            dst=dst/pn;
+            ddp=ddp/cn;
+            vt=vt*vzt/(sp-st+1);
+            }
+          else
+            {
+            str=g_strdup_printf("Insufficient windowing range in channel %d, %d.", j, k);
+            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+            g_free(str);
+            vt=0;
+            dst=0;
+            ddp=0;
+            }
+          g_array_append_val(vis, vt);
+          g_array_append_val(doms, dst);
+          g_array_append_val(chp, ddp);
+          }
+        vt=0;
+        for (k=kdimx; k<MXDM; k++) g_array_append_val(vis, vt);
+        for (k=kdimx; k<MXDM; k++) g_array_append_val(doms, vt);
+        for (k=kdimx; k<MXDM; k++) g_array_append_val(chp, vt);
+        }
+      vt=g_array_index(vis, gdouble, (jdim+(kdim*MXD)));
+      g_snprintf(s, 7, "%f", vt);
+      gtk_label_set_text(GTK_LABEL(visl), s);
+      vt=g_array_index(doms, gdouble, (jdim+(kdim*MXD)));
+      g_snprintf(s, 9, "%f", vt);
+      gtk_label_set_text(GTK_LABEL(dsl), s);
+      label=gtk_label_new("Chirp");
+      gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+      gtk_widget_show(label);
+      vt=g_array_index(chp, gdouble, (jdim+(kdim*MXD)));
+      g_snprintf(s, 8, "%f", vt);
+      chil=gtk_label_new(s);
+      gtk_table_attach(GTK_TABLE(rest), chil, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+      gtk_widget_show(chil);
+      flags|=20;
+      }
+    else
+      {
+      for (j=0; j<=jdimxf; j++)
+        {
+        idelf=1/g_array_index(delf, gdouble, j);
+        iv=g_array_index(zwa, gdouble, j)*idelf/2;
+        vzt=0;
+        for (l=0; l<iv; l++)
+          {
+          ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
+          ivd*=ivd;
+          ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+          ivdt*=ivdt;
+          ivd+=ivdt;
+          ivd=sqrt(ivd);
+          vzt+=ivd;
+          }
+        vzt=l/vzt;
+        for (k=0; k<=kdimx; k++)
+          {
+          st=ceil(g_array_index(isra, gdouble, j+(k*MXD))*idelf);
+          sp=floor(g_array_index(ispa, gdouble, j)*idelf);
+          tcn=g_array_index(tca, gdouble, j+(k*MXD))*idelf;
+          twd=g_array_index(twa, gdouble, j+(k*MXD))*idelf/2;
+          if ((st<((plt2->size)-1))&&(sp<(plt2->size))&&((sp-st)>0))
+            {
+            vt=g_array_index(stars, gdouble, st+(2*j*(plt2->size)));
+            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-st);
+            if (vt<DZE)
+              {
+              if (vt>NZE)
+                {
+                if (ivdt>=0) phio=-G_PI_2;
+                else phio=G_PI_2;
+                }
+              else phio=-atan(ivdt/vt)-G_PI;
+              }
+            else phio=-atan(ivdt/vt);
+            vt*=vt;
+            ivdt*=ivdt;
+            vt+=ivdt;
+            vt=sqrt(vt);
+            dst=0;
+            pn=0;
+            for (l=st+1; l<=sp; l++)
+              {
+              ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
+              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+              if (ivd<DZE)
+                {
+                if (ivd>NZE)
+                  {
+                  if (ivdt>=0) phi=G_PI_2;
+                  else phi=-G_PI_2;
+                  }
+                else phi=atan(ivdt/ivd)+G_PI;
+                }
+              else phi=atan(ivdt/ivd);
+              phio+=phi;
+              if (phio>G_PI) phio-=(2*G_PI);
+              else if (phio<=-G_PI) phio+=(2*G_PI);
+              if (l>(tcn-twd+0.5))
+                {
+                if (l<=(tcn+0.5))
+                  {
+                  tp=(((gdouble) l)-tcn-0.5)/twd;
+                  tp++;
+                  pn+=tp;
+                  tp*=phio;
+                  dst+=tp;
+                  }
+                else if (l<(tcn+twd+0.5))
+                  {
+                  tp=(tcn+0.5-((gdouble) l))/twd;
+                  tp++;
+                  pn+=tp;
+                  tp*=phio;
+                  dst+=tp;
+                  }
+                }
+              phio=-phi;
+              ivd*=ivd;
+              ivdt*=ivdt;
+              ivd+=ivdt;
+              ivd=sqrt(ivd);
+              vt+=ivd;
+              }
+            pn*=g_array_index(delf, gdouble, j);
+            dst=dst/pn;
+            vt=vt*vzt/(sp-st+1);
+            }
+          else
+            {
+            str=g_strdup_printf("Insufficient windowing range in channel %d, %d.", j, k);
+            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+            g_free(str);
+            vt=0;
+            dst=0;
+            }
+          g_array_append_val(vis, vt);
+          g_array_append_val(doms, dst);
+          }
+        vt=0;
+        for (k=kdimx; k<MXDM; k++) g_array_append_val(vis, vt);
+        for (k=kdimx; k<MXDM; k++) g_array_append_val(doms, vt);
+        }
+      vt=g_array_index(vis, gdouble, (jdim+(kdim*MXD)));
+      g_snprintf(s, 7, "%f", vt);
+      gtk_label_set_text(GTK_LABEL(visl), s);
+      vt=g_array_index(doms, gdouble, (jdim+(kdim*MXD)));
+      g_snprintf(s, 9, "%f", vt);
+      gtk_label_set_text(GTK_LABEL(dsl), s);
+      flags|=4;
+      }
+    kdimxf=kdimx;
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 2);
+    }
+  else
+    {
+    str=g_strdup("No transform for analysis exists yet.");
+    gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+    g_free(str);
     }
   }
-  
+
 void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inversion to 2pi/x */
   {
+  GtkAdjustment *adj;
   PlotLinear *plt2;
   guint j, k, st, sp;
   gint n, zp;
@@ -165,25 +1065,337 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
   fftw_plan p;
   fftw_r2r_kind type=FFTW_R2HC;
 
-  ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-  zp=1<<(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(zpd)));
-  n=zp*(jdimx+1);
-  g_array_free(stars, TRUE);
-  g_array_free(xsb, TRUE);
-  g_array_free(ysb, TRUE);
-  g_array_free(delx, TRUE);
-  delx=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
-  y=fftw_malloc(sizeof(double)*n);
-  for (j=0; j<n; j++) y[j]=0;
-  if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
+  if ((flags&1)!=0)
     {
-    if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
+    ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
+    zp=1<<(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(zpd)));
+    n=zp*(jdimx+1);
+    g_array_free(stars, TRUE);
+    g_array_free(xsb, TRUE);
+    g_array_free(ysb, TRUE);
+    g_array_free(delf, TRUE);
+    delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+    y=fftw_malloc(sizeof(double)*n);
+    for (j=0; j<n; j++) y[j]=0;
+    if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
+      {
+      if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
+        {
+        if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
+          {
+          if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
+            {
+            if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss- */
+              {
+              for (j=0; j<=jdimx; j++)
+                {
+                iv=g_array_index(bsra, gdouble, j);
+                k=0;
+                while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+                st=k;
+                iv=g_array_index(bspa, gdouble, j);
+                while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+                sp=k-st;
+                if (sp>zp)
+                  {
+                  str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+                  gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+                  g_free(str);
+                  sp=zp;
+                  }
+                /* fill array */
+                }
+              }
+            else /* +TdBss- */
+              {
+              for (j=0; j<=jdimx; j++)
+                {
+                iv=g_array_index(bsra, gdouble, j);
+                k=0;
+                while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+                st=k;
+                iv=g_array_index(bspa, gdouble, j);
+                while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+                sp=k-st;
+                if (sp>zp)
+                  {
+                  str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+                  gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+                  g_free(str);
+                  sp=zp;
+                  }
+                /* fill array */
+                }
+              }
+            }
+          else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss- */
+            {
+            for (j=0; j<=jdimx; j++)
+              {
+              iv=g_array_index(bsra, gdouble, j);
+              k=0;
+              while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+              st=k;
+              iv=g_array_index(bspa, gdouble, j);
+              while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+              sp=k-st;
+              if (sp>zp)
+                {
+                str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+                gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+                g_free(str);
+                sp=zp;
+                }
+              /* fill array */
+              }
+            }
+          else /* +RdBss- */
+            {
+            for (j=0; j<=jdimx; j++)
+              {
+              iv=g_array_index(bsra, gdouble, j);
+              k=0;
+              while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+              st=k;
+              iv=g_array_index(bspa, gdouble, j);
+              while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+              sp=k-st;
+              if (sp>zp)
+                {
+                str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+                gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+                g_free(str);
+                sp=zp;
+                }
+              /* fill array */
+              }
+            }
+          }
+        else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss- and +Tlss- */
+          {
+          for (j=0; j<=jdimx; j++)
+            {
+            iv=g_array_index(bsra, gdouble, j);
+            k=0;
+            while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+            st=k;
+            iv=g_array_index(bspa, gdouble, j);
+            while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+            sp=k-st;
+            if (sp>zp)
+              {
+              str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+              gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+              g_free(str);
+              sp=zp;
+              }
+            /* fill array */
+            }
+          }
+        else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -Rlss- */
+          {
+          for (j=0; j<=jdimx; j++)
+            {
+            iv=g_array_index(bsra, gdouble, j);
+            k=0;
+            while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+            st=k;
+            iv=g_array_index(bspa, gdouble, j);
+            while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+            sp=k-st;
+            if (sp>zp)
+              {
+              str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+              gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+              g_free(str);
+              sp=zp;
+              }
+            /* fill array */
+            }
+          }
+        else /* +Rlss- */
+          {
+          for (j=0; j<=jdimx; j++)
+            {
+            iv=g_array_index(bsra, gdouble, j);
+            k=0;
+            while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+            st=k;
+            iv=g_array_index(bspa, gdouble, j);
+            while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+            sp=k-st;
+            if (sp>zp)
+              {
+              str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+              gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+              g_free(str);
+              sp=zp;
+              }
+            /* fill array */
+            }
+          }
+        }
+      else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
+        {
+        if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
+          {
+          if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0- */
+            {
+            for (j=0; j<=jdimx; j++)
+              {
+              iv=g_array_index(bsra, gdouble, j);
+              k=0;
+              while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+              st=k;
+              iv=g_array_index(bspa, gdouble, j);
+              while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+              sp=k-st;
+              if (sp>zp)
+               {
+                str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+                gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+                g_free(str);
+                sp=zp;
+                }
+              /* fill array */
+              }
+            }
+          else /* +TdB0- */
+            {
+            for (j=0; j<=jdimx; j++)
+              {
+              iv=g_array_index(bsra, gdouble, j);
+              k=0;
+              while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+              st=k;
+              iv=g_array_index(bspa, gdouble, j);
+              while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+              sp=k-st;
+              if (sp>zp)
+                {
+                str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+                gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+                g_free(str);
+                sp=zp;
+                }
+              /* fill array */
+              }
+            }
+          }
+        else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0- */
+          {
+          for (j=0; j<=jdimx; j++)
+            {
+           iv=g_array_index(bsra, gdouble, j);
+            k=0;
+            while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+            st=k;
+            iv=g_array_index(bspa, gdouble, j);
+            while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+            sp=k-st;
+            if (sp>zp)
+              {
+              str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+              gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+              g_free(str);
+              sp=zp;
+              }
+            /* fill array */
+            }
+          }
+        else /* +RdB0- */
+          {
+          for (j=0; j<=jdimx; j++)
+            {
+            iv=g_array_index(bsra, gdouble, j);
+            k=0;
+            while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+            st=k;
+            iv=g_array_index(bspa, gdouble, j);
+            while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+            sp=k-st;
+            if (sp>zp)
+              {
+              str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+              gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+              g_free(str);
+              sp=zp;
+              }
+            /* fill array */
+            }
+          }
+        }
+      else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0- and +Tl0- */
+        {
+        for (j=0; j<=jdimx; j++)
+          {
+          iv=g_array_index(bsra, gdouble, j);
+          k=0;
+          while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+          st=k;
+          iv=g_array_index(bspa, gdouble, j);
+          while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+          sp=k-st;
+          if (sp>zp)
+            {
+            str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+            g_free(str);
+            sp=zp;
+            }
+          /* fill array */
+          }
+        }
+      else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -Rl0- */
+        {
+        for (j=0; j<=jdimx; j++)
+          {
+          iv=g_array_index(bsra, gdouble, j);
+          k=0;
+          while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+          st=k;
+          iv=g_array_index(bspa, gdouble, j);
+          while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+          sp=k-st;
+          if (sp>zp)
+            {
+            str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+            g_free(str);
+            sp=zp;
+            }
+          /* fill array */
+          }
+        }
+      else /* +Rl0- */
+        {
+        for (j=0; j<=jdimx; j++)
+         {
+          iv=g_array_index(bsra, gdouble, j);
+          k=0;
+          while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+          st=k;
+          iv=g_array_index(bspa, gdouble, j);
+          while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+          sp=k-st;
+          if (sp>zp)
+            {
+            str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+            g_free(str);
+            sp=zp;
+            }
+          /* fill array */
+          }
+        }
+      }
+    else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
       {
       if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
         {
         if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
           {
-          if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss- */
+          if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
             {
             for (j=0; j<=jdimx; j++)
               {
@@ -196,15 +1408,29 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
               sp=k-st;
               if (sp>zp)
                 {
-                str=g_strdup("Some clipping occured. Increase zero padding.");
+                str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
                 gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
                 g_free(str);
                 sp=zp;
                 }
-              /* fill array */
+              iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+              g_array_append_val(delf, iv);
+              for (k=0; k<sp; k++)
+                {
+                clc=ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl));
+                if (clc<0)
+                  {
+                  clc=clc*LNTOT;
+                  clc=exp(clc);
+                  clc=-clc;
+                  clc++;
+                  y[k+(j*zp)]=log(clc);
+                  }
+                else y[k+(j*zp)]=G_MININT;
+                }
               }
             }
-          else /* +TdBss- */
+          else /* +TdBss+ */
             {
             for (j=0; j<=jdimx; j++)
               {
@@ -217,16 +1443,30 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
               sp=k-st;
               if (sp>zp)
                 {
-                str=g_strdup("Some clipping occured. Increase zero padding.");
+                str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
                 gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
                 g_free(str);
                 sp=zp;
                 }
-              /* fill array */
+              iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+              g_array_append_val(delf, iv);
+              for (k=0; k<sp; k++)
+                {
+                clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))-ofs;
+                if (clc<0)
+                  {
+                  clc=clc*LNTOT;
+                  clc=exp(clc);
+                  clc=-clc;
+                  clc++;
+                  y[k+(j*zp)]=log(clc);
+                  }
+                else y[k+(j*zp)]=G_MININT;
+                }
               }
             }
           }
-        else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss- */
+        else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
           {
           for (j=0; j<=jdimx; j++)
             {
@@ -239,15 +1479,17 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
             sp=k-st;
             if (sp>zp)
               {
-              str=g_strdup("Some clipping occured. Increase zero padding.");
+              str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
               gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
               g_free(str);
               sp=zp;
               }
-            /* fill array */
+            iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+            g_array_append_val(delf, iv);
+            for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl)));
             }
           }
-        else /* +RdBss- */
+        else /* +RdBss+ */
           {
           for (j=0; j<=jdimx; j++)
             {
@@ -260,16 +1502,18 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
             sp=k-st;
             if (sp>zp)
               {
-              str=g_strdup("Some clipping occured. Increase zero padding.");
+              str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
               gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
               g_free(str);
               sp=zp;
               }
-            /* fill array */
+            iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+            g_array_append_val(delf, iv);
+            for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(g_array_index(specs, gdouble, trc-1+((k+st)*satl))-ofs);
             }
           }
         }
-      else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss- and +Tlss- */
+      else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
         {
         for (j=0; j<=jdimx; j++)
           {
@@ -282,15 +1526,24 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
           sp=k-st;
           if (sp>zp)
             {
-            str=g_strdup("Some clipping occured. Increase zero padding.");
+            str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
             gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
             g_free(str);
             sp=zp;
             }
-          /* fill array */
+          iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+          g_array_append_val(delf, iv);
+          for (k=0; k<sp; k++)
+            {
+            clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))/ofs;
+            clc=-clc;
+            clc++;
+            if (clc>0) y[k+(j*zp)]=log(clc);
+            else y[k+(j*zp)]=G_MININT;
+            }
           }
         }
-      else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -Rlss- */
+      else /* -Rlss+ +Rlss+ */
         {
         for (j=0; j<=jdimx; j++)
           {
@@ -303,33 +1556,19 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
           sp=k-st;
           if (sp>zp)
             {
-            str=g_strdup("Some clipping occured. Increase zero padding.");
+            str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
             gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
             g_free(str);
             sp=zp;
             }
-          /* fill array */
-          }
-        }
-      else /* +Rlss- */
-        {
-        for (j=0; j<=jdimx; j++)
-          {
-          iv=g_array_index(bsra, gdouble, j);
-          k=0;
-          while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-          st=k;
-          iv=g_array_index(bspa, gdouble, j);
-          while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-          sp=k-st;
-          if (sp>zp)
+          iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+          g_array_append_val(delf, iv);
+          for (k=0; k<sp; k++)
             {
-            str=g_strdup("Some clipping occured. Increase zero padding.");
-            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-            g_free(str);
-            sp=zp;
+            clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))/ofs;
+            if (clc>0) y[k+(j*zp)]=log(clc);
+            else y[k+(j*zp)]=G_MININT;
             }
-          /* fill array */
           }
         }
       }
@@ -337,7 +1576,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
       {
       if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
         {
-        if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0- */
+        if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
           {
           for (j=0; j<=jdimx; j++)
             {
@@ -350,189 +1589,26 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
             sp=k-st;
             if (sp>zp)
               {
-              str=g_strdup("Some clipping occured. Increase zero padding.");
+              str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
               gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
               g_free(str);
               sp=zp;
               }
-            /* fill array */
-            }
-          }
-        else /* +TdB0- */
-          {
-          for (j=0; j<=jdimx; j++)
-            {
-            iv=g_array_index(bsra, gdouble, j);
-            k=0;
-            while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-            st=k;
-            iv=g_array_index(bspa, gdouble, j);
-            while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-            sp=k-st;
-            if (sp>zp)
-              {
-              str=g_strdup("Some clipping occured. Increase zero padding.");
-              gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-              g_free(str);
-              sp=zp;
-              }
-            /* fill array */
-            }
-          }
-        }
-      else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0- */
-        {
-        for (j=0; j<=jdimx; j++)
-          {
-          iv=g_array_index(bsra, gdouble, j);
-          k=0;
-          while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-          st=k;
-          iv=g_array_index(bspa, gdouble, j);
-          while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-          sp=k-st;
-          if (sp>zp)
-            {
-            str=g_strdup("Some clipping occured. Increase zero padding.");
-            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-            g_free(str);
-            sp=zp;
-            }
-          /* fill array */
-          }
-        }
-      else /* +RdB0- */
-        {
-        for (j=0; j<=jdimx; j++)
-          {
-          iv=g_array_index(bsra, gdouble, j);
-          k=0;
-          while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-          st=k;
-          iv=g_array_index(bspa, gdouble, j);
-          while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-          sp=k-st;
-          if (sp>zp)
-            {
-            str=g_strdup("Some clipping occured. Increase zero padding.");
-            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-            g_free(str);
-            sp=zp;
-            }
-          /* fill array */
-          }
-        }
-      }
-    else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0- and +Tl0- */
-      {
-      for (j=0; j<=jdimx; j++)
-        {
-        iv=g_array_index(bsra, gdouble, j);
-        k=0;
-        while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-        st=k;
-        iv=g_array_index(bspa, gdouble, j);
-        while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-        sp=k-st;
-        if (sp>zp)
-          {
-          str=g_strdup("Some clipping occured. Increase zero padding.");
-          gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-          g_free(str);
-          sp=zp;
-          }
-        /* fill array */
-        }
-      }
-    else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -Rl0- */
-      {
-      for (j=0; j<=jdimx; j++)
-        {
-        iv=g_array_index(bsra, gdouble, j);
-        k=0;
-        while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-        st=k;
-        iv=g_array_index(bspa, gdouble, j);
-        while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-        sp=k-st;
-        if (sp>zp)
-          {
-          str=g_strdup("Some clipping occured. Increase zero padding.");
-          gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-          g_free(str);
-          sp=zp;
-          }
-        /* fill array */
-        }
-      }
-    else /* +Rl0- */
-      {
-      for (j=0; j<=jdimx; j++)
-        {
-        iv=g_array_index(bsra, gdouble, j);
-        k=0;
-        while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-        st=k;
-        iv=g_array_index(bspa, gdouble, j);
-        while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-        sp=k-st;
-        if (sp>zp)
-          {
-          str=g_strdup("Some clipping occured. Increase zero padding.");
-          gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-          g_free(str);
-          sp=zp;
-          }
-        /* fill array */
-        }
-      }
-    }
-  else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
-    {
-    if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
-      {
-      if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
-        {
-        if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
-          {
-          for (j=0; j<=jdimx; j++)
-            {
-            iv=g_array_index(bsra, gdouble, j);
-            k=0;
-            while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-            st=k;
-            iv=g_array_index(bspa, gdouble, j);
-            while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-            sp=k-st;
-            if (sp>zp)
-              {
-              str=g_strdup("Some clipping occured. Increase zero padding.");
-              gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-              g_free(str);
-              sp=zp;
-              }
-            iv=g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st);
-            g_array_append_val(delx, iv);
+            iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+            g_array_append_val(delf, iv);
             for (k=0; k<sp; k++)
               {
               clc=ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl));
-              if (clc<0)
-                {
-                clc=clc*LNTOT;
-                clc=exp(clc);
-                clc=-clc;
-                clc++;
-                y[k+(j*zp)]=log(clc);
-                }
-              else
-                {
-                y[k+(j*zp)]=G_MININT;
-                }
+              clc=clc*LNTOT;
+              clc=exp(clc);
+              clc=-clc;
+              y[k+(j*zp)]=clc++;
               }
             }
           }
-        else /* +TdBss+ */
+        else /* +TdB0+ */
           {
+          j=0;
           for (j=0; j<=jdimx; j++)
             {
             iv=g_array_index(bsra, gdouble, j);
@@ -544,33 +1620,25 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
             sp=k-st;
             if (sp>zp)
               {
-              str=g_strdup("Some clipping occured. Increase zero padding.");
+              str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
               gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
               g_free(str);
               sp=zp;
               }
-            iv=g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st);
-            g_array_append_val(delx, iv);
+            iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+            g_array_append_val(delf, iv);
             for (k=0; k<sp; k++)
               {
               clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))-ofs;
-              if (clc<0)
-                {
-                clc=clc*LNTOT;
-                clc=exp(clc);
-                clc=-clc;
-                clc++;
-                y[k+(j*zp)]=log(clc);
-                }
-              else
-                {
-                y[k+(j*zp)]=G_MININT;
-                }
+              clc=clc*LNTOT;
+              clc=exp(clc);
+              clc=-clc;
+              y[k+(j*zp)]=clc++;
               }
             }
           }
         }
-      else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
+      else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
         {
         for (j=0; j<=jdimx; j++)
           {
@@ -583,21 +1651,17 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
           sp=k-st;
           if (sp>zp)
             {
-            str=g_strdup("Some clipping occured. Increase zero padding.");
+            str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
             gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
             g_free(str);
             sp=zp;
             }
-          iv=g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st);
-          g_array_append_val(delx, iv);
-          for (k=0; k<sp; k++)
-            {
-            clc=ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl));
-            y[k+(j*zp)]=clc*0.1;
-            }
+          iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+          g_array_append_val(delf, iv);
+          for (k=0; k<sp; k++) y[k+(j*zp)]=exp(LNTOT*(ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl))));
           }
         }
-      else /* +RdBss+ */
+      else /* +RdB0+ */
         {
         for (j=0; j<=jdimx; j++)
           {
@@ -610,22 +1674,18 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
           sp=k-st;
           if (sp>zp)
             {
-            str=g_strdup("Some clipping occured. Increase zero padding.");
+            str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
             gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
             g_free(str);
             sp=zp;
             }
-          iv=g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st);
-          g_array_append_val(delx, iv);
-          for (k=0; k<sp; k++)
-            {
-            clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))-ofs;
-            y[k+(j*zp)]=clc*0.1;
-            }
+          iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+          g_array_append_val(delf, iv);
+          for (k=0; k<sp; k++) y[k+(j*zp)]=exp(LNTOT*(g_array_index(specs, gdouble, trc-1+((k+st)*satl))-ofs));
           }
         }
       }
-    else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
+    else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ and +Tl0+ */ 
       {
       for (j=0; j<=jdimx; j++)
         {
@@ -638,30 +1698,22 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
         sp=k-st;
         if (sp>zp)
           {
-          str=g_strdup("Some clipping occured. Increase zero padding.");
+          str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
           gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
           g_free(str);
           sp=zp;
           }
-        iv=g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st);
-        g_array_append_val(delx, iv);
+        iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+        g_array_append_val(delf, iv);
         for (k=0; k<sp; k++)
           {
           clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))/ofs;
           clc=-clc;
-          clc++;
-          if (clc>0)
-            {
-            y[k+(j*zp)]=log(clc);
-            }
-          else
-            {
-            y[k+(j*zp)]=G_MININT;
-            }
+          y[k+(j*zp)]=clc++;
           }
         }
       }
-    else /* -Rlss+ +Rlss+ */
+    else /* -Rl0+ and +Rl0+ */ 
       {
       for (j=0; j<=jdimx; j++)
         {
@@ -674,252 +1726,73 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
         sp=k-st;
         if (sp>zp)
           {
-          str=g_strdup("Some clipping occured. Increase zero padding.");
+          str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
           gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
           g_free(str);
           sp=zp;
           }
-        iv=g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st);
-        g_array_append_val(delx, iv);
-        for (k=0; k<sp; k++)
-          {
-          clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))/ofs;
-          if (clc>0)
-            {
-            y[k+(j*zp)]=log(clc);
-            }
-          else
-            {
-            y[k+(j*zp)]=G_MININT;
-            }
-          }
+        iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+        g_array_append_val(delf, iv);
+        for (k=0; k<sp; k++) y[k+(j*zp)]=g_array_index(specs, gdouble, trc-1+((k+st)*satl))/ofs;
         }
       }
-    }
-  else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
-    {
-    if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
+    star=fftw_malloc(sizeof(double)*n);
+    p=fftw_plan_many_r2r(1, &zp, (jdimx+1), y, NULL, 1, zp, star, NULL, 1, zp, &type, FFTW_ESTIMATE);
+    fftw_execute(p);
+    fftw_destroy_plan(p);
+    fftw_free(y);
+    stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+    for (j=0; j<n; j++)
       {
-      if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
-        {
-        for (j=0; j<=jdimx; j++)
-          {
-          iv=g_array_index(bsra, gdouble, j);
-          k=0;
-          while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-          st=k;
-          iv=g_array_index(bspa, gdouble, j);
-          while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-          sp=k-st;
-          if (sp>zp)
-            {
-            str=g_strdup("Some clipping occured. Increase zero padding.");
-            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-            g_free(str);
-            sp=zp;
-            }
-          iv=g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st);
-          g_array_append_val(delx, iv);
-          for (k=0; k<sp; k++)
-            {
-            clc=ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl));
-            clc=clc*LNTOT;
-            clc=exp(clc);
-            clc=-clc;
-            y[k+(j*zp)]=clc++;
-            }
-          }
-        }
-      else /* +TdB0+ */
-        {
-        j=0;
-        for (j=0; j<=jdimx; j++)
-          {
-          iv=g_array_index(bsra, gdouble, j);
-          k=0;
-          while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-          st=k;
-          iv=g_array_index(bspa, gdouble, j);
-          while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-          sp=k-st;
-          if (sp>zp)
-            {
-            str=g_strdup("Some clipping occured. Increase zero padding.");
-            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-            g_free(str);
-            sp=zp;
-            }
-          iv=g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st);
-          g_array_append_val(delx, iv);
-          for (k=0; k<sp; k++)
-            {
-            clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))-ofs;
-            clc=clc*LNTOT;
-            clc=exp(clc);
-            clc=-clc;
-            y[k+(j*zp)]=clc++;
-            }
-          }
-        }
+      iv=star[j];
+      g_array_append_val(stars, iv);
       }
-    else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
+    xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), zp/2);
+    for (j=0; j<zp/2; j++)
       {
-      for (j=0; j<=jdimx; j++)
-        {
-        iv=g_array_index(bsra, gdouble, j);
-        k=0;
-        while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-        st=k;
-        iv=g_array_index(bspa, gdouble, j);
-        while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-        sp=k-st;
-        if (sp>zp)
-          {
-          str=g_strdup("Some clipping occured. Increase zero padding.");
-          gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-          g_free(str);
-          sp=zp;
-          }
-        iv=g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st);
-        g_array_append_val(delx, iv);
-        for (k=0; k<sp; k++)
-          {
-          clc=ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl));
-          clc=clc*LNTOT;
-          y[k+(j*zp)]=exp(clc);
-          }
-        }
+      xx=j*g_array_index(delf, gdouble, 0);
+      g_array_append_val(xsb, xx);
       }
-    else /* +RdB0+ */
+    ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), zp/2);
+    yx=fabs(star[0]);
+    g_array_append_val(ysb, yx);
+    for (j=1; j<(zp/2); j++)
       {
-      for (j=0; j<=jdimx; j++)
-        {
-        iv=g_array_index(bsra, gdouble, j);
-        k=0;
-        while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-        st=k;
-        iv=g_array_index(bspa, gdouble, j);
-        while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-        sp=k-st;
-        if (sp>zp)
-          {
-          str=g_strdup("Some clipping occured. Increase zero padding.");
-          gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-          g_free(str);
-          sp=zp;
-          }
-        iv=g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st);
-        g_array_append_val(delx, iv);
-        for (k=0; k<sp; k++)
-          {
-          clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))-ofs;
-          clc=clc*LNTOT;
-          y[k+(j*zp)]=exp(clc);
-          }
-        }
+      iv=star[j];
+      iv*=iv;
+      clc=star[zp-j];
+      clc*=clc;
+      iv+=clc;
+      iv=sqrt(iv);
+      if (yx<iv) yx=iv;
+      g_array_append_val(ysb, iv);
       }
+    fftw_free(star);
+    plt2=PLOT_LINEAR(plot2);
+    (plt2->size)=zp/2;
+    (plt2->xdata)=xsb;
+    (plt2->ydata)=ysb;
+    plot_linear_update_scale_pretty(plot2, 0, xx, 0, yx);
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
+    adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, jdimx, 1.0, 5.0, 0.0);
+    gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(jind), adj);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), 0);
+    gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(jind2), adj);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), 0);
+    adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, (MXDM), 1.0, 5.0, 0.0);
+    gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(kind), adj);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
+    jdimxf=jdimx;
+    flags|=2;
+    pr_id=g_signal_connect(G_OBJECT(pr), "clicked", G_CALLBACK(prs), NULL);
     }
-  else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ and +Tl0+ */ 
+  else
     {
-    for (j=0; j<=jdimx; j++)
-      {
-      iv=g_array_index(bsra, gdouble, j);
-      k=0;
-      while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-      st=k;
-      iv=g_array_index(bspa, gdouble, j);
-      while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-      sp=k-st;
-      if (sp>zp)
-        {
-        str=g_strdup("Some clipping occured. Increase zero padding.");
-        gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-        g_free(str);
-        sp=zp;
-        }
-      iv=g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st);
-      g_array_append_val(delx, iv);
-      for (k=0; k<sp; k++)
-        {
-        clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))/ofs;
-        clc=-clc;
-        y[k+(j*zp)]=clc++;
-        }
-      }
+    str=g_strdup("Open a file for analysis first.");
+    gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+    g_free(str);
     }
-  else /* -Rl0+ and +Rl0+ */ 
-    {
-    for (j=0; j<=jdimx; j++)
-      {
-      iv=g_array_index(bsra, gdouble, j);
-      k=0;
-      while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
-      st=k;
-      iv=g_array_index(bspa, gdouble, j);
-      while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
-      sp=k-st;
-      if (sp>zp)
-        {
-        str=g_strdup("Some clipping occured. Increase zero padding.");
-        gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-        g_free(str);
-        sp=zp;
-        }
-      iv=g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st);
-      g_array_append_val(delx, iv);
-      for (k=0; k<sp; k++) y[k+(j*zp)]=g_array_index(specs, gdouble, trc-1+((k+st)*satl))/ofs;
-      }
-    }
-  star=fftw_malloc(sizeof(double)*n);
-  p=fftw_plan_many_r2r(1, &zp, (jdimx+1), y, NULL, 1, zp, star, NULL, 1, zp, &type, FFTW_ESTIMATE);
-  fftw_execute(p);
-  fftw_destroy_plan(p);
-  fftw_free(y);
-  stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-  for (j=0; j<n; j++)
-    {
-    iv=star[j];
-    g_array_append_val(stars, iv);
-    }
-  xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), zp/2);
-  for (j=0; j<zp/2; j++)
-    {
-    xx=j*(zp-1)/(zp*g_array_index(delx, gdouble, 0));
-    g_array_append_val(xsb, xx);
-    }
-  ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), zp/2);
-  yx=fabs(star[0]);
-  g_array_append_val(ysb, yx);
-  for (j=1; j<(zp/2); j++)
-    {
-    iv=star[j];
-    iv*=iv;
-    clc=star[zp-j];
-    clc*=clc;
-    iv+=clc;
-    iv=sqrt(iv);
-    if (yx<iv) yx=iv;
-    g_array_append_val(ysb, iv);
-    }
-  fftw_free(star);
-  plt2=PLOT_LINEAR(plot2);
-  plt2->size=zp/2;
-  plt2->xdata=xsb;
-  plt2->ydata=ysb;
-  plot_linear_update_scale_pretty(plot2, 0, xx, 0, yx);
-  gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
-  gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
-  adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, jdimx, 1.0, 5.0, 0.0);
-  gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(jind), adj);
-  gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), 0);
-  gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(jind2), adj);
-  gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), 0);
-  adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, (MXDM), 1.0, 5.0, 0.0);
-  gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(kind), adj);
-  gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
-  jdimxf=jdimx;
-  pr_id=g_signal_connect(G_OBJECT(pr), "activate", G_CALLBACK(prs), NULL);
-  sv_id=g_signal_connect(G_OBJECT(svg), "activate", G_CALLBACK(sav), NULL);
   }
 
 void upg(GtkWidget *widget, gpointer data)
@@ -927,8 +1800,16 @@ void upg(GtkWidget *widget, gpointer data)
   PlotLinear *plt;
   gdouble dt, xi, xf, mny, mxy;
   gint j;
+  GSList *list;
 
-  /* determine which trace button was clicked and update trc */
+  trc=satl;
+  list=group2;
+  while (list)
+    {
+    if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(list->data))) break;
+    list=list->next;
+    trc--;
+    }
   plt=PLOT_LINEAR(plot1);
   g_array_free(yb, TRUE);
   yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
@@ -949,19 +1830,30 @@ void upg(GtkWidget *widget, gpointer data)
   plot_linear_update_scale(plot1, xi, xf, mny, mxy);
   }
 
+void pltmv(PlotLinear *plot, gpointer data)
+  {
+  gchar *str;
+
+  str=g_strdup_printf("x: %f, y: %f", plot->xps, plot->yps);
+  gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+  g_free(str);
+  }
+
 void opd(GtkWidget *widget, gpointer data)
   {
   PlotLinear *plt;
-  GtkWidget *wfile, *trace;
+  GtkWidget *wfile, *trace, *table, *label;
   gdouble xi, xf, lcl, mny, mxy;
   guint j, k, l, sal;
   gchar s[5];
-  gchar *str, *fin=NULL;
+  gchar *contents, *str, *fin=NULL;
   gchar **strary, **strat;
+  GSList *list;
+  GError *Err;
 
   if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(bat)))
     {
-    if (!g_signal_handler_is_connected(G_OBJECT(pr), pr_id))
+    if ((flags&4)==0)
       {
       str=g_strdup("Perform an initial test of the parameters first");
       gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
@@ -969,17 +1861,30 @@ void opd(GtkWidget *widget, gpointer data)
       }
     else /* batch job processing mode */
       {
-      wfile=gtk_file_chooser_dialog_new("Select Config File", GTK_WINDOW(widget), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-      g_signal_connect(wfile, "destroy", G_CALLBACK(gtk_widget_destroy), wfile);
+      wfile=gtk_file_chooser_dialog_new("Select Config File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+      g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
       if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
         {
         fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-        gtk_widget_destroy (wfile);
+        gtk_widget_destroy(wfile);
         if (g_file_get_contents(fin, &contents, NULL, &Err))
           {
           str=g_strdup_printf("File: %s successfully loaded", fin);
           gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
           g_free(str);
+          if ((flags&8)==0)
+            {
+            gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
+            table=gtk_table_new(1, 1, FALSE);
+            gtk_widget_show(table);
+            plot3=plot_linear_new();
+            g_signal_connect(plot3, "moved", G_CALLBACK(pltmv), NULL);
+            gtk_widget_show(plot3);
+            gtk_table_attach(GTK_TABLE(table), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+            label=gtk_label_new("Analysis Results");
+            gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
+            }
+          flags|=9;
           gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
           gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 2);
           for (j=0; j<1; j++) /* add read from config file and update j */
@@ -1021,7 +1926,7 @@ void opd(GtkWidget *widget, gpointer data)
               }
             g_strfreev(strary);
             satl--;
-            trs(tr, NULL);
+            trs(tr, NULL);/* swap to more efficient routines for batch processing */
             prs(pr, NULL);
             }
           }
@@ -1031,17 +1936,19 @@ void opd(GtkWidget *widget, gpointer data)
           gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
           g_free(str);
           }
+        g_free(contents);
+        g_free(fin);
         }
       else
         {
-        gtk_widget_destroy (wfile);
+        gtk_widget_destroy(wfile);
         }
       }
     }
   else /* single file mode */
     {
-    wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(widget), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-    g_signal_connect(wfile, "destroy", G_CALLBACK(gtk_widget_destroy), wfile);
+    wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+    g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
     if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
       {
       fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
@@ -1052,6 +1959,28 @@ void opd(GtkWidget *widget, gpointer data)
         g_array_free(x, TRUE);
         g_array_free(yb, TRUE);
         g_array_free(specs, TRUE);
+        if ((flags&8)!=0)
+          {
+          gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
+          rest=gtk_table_new(4, 2, FALSE);
+          gtk_widget_show(rest);
+          label=gtk_label_new("Visibility");
+          gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+          gtk_widget_show(label);
+          visl=gtk_label_new("");
+          gtk_table_attach(GTK_TABLE(rest), visl, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+          gtk_widget_show(visl);
+          label=gtk_label_new("Domain Shift");
+          gtk_table_attach(GTK_TABLE(rest), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+          gtk_widget_show(label);
+          dsl=gtk_label_new("");
+          gtk_table_attach(GTK_TABLE(rest), dsl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+          gtk_widget_show(dsl);
+          label=gtk_label_new("Analysis Results");
+          gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
+          flags^=8;
+          }
+        flags|=1;
         x=g_array_new(FALSE, FALSE, sizeof(gdouble));
         yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
         specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
@@ -1096,41 +2025,35 @@ void opd(GtkWidget *widget, gpointer data)
           }
         g_strfreev(strary);
         satl--;
-        g_slist_free(group2);
-        gtk_menu_item_set_submenu(GTK_MENU_ITEM(trac), NULL);
-        gtk_widget_destroy(tracmenu);
-        tracmenu=gtk_menu_new();
-        gtk_menu_item_set_submenu(GTK_MENU_ITEM(trac), tracmenu);
-        group2=NULL;
-        trace=gtk_radio_menu_item_new_with_label(group2, "1");
-        group2=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(trace));
-        gtk_menu_shell_append(GTK_MENU_SHELL(tracmenu), trace);
-        gtk_widget_show(trace);
-        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(trace), TRUE);
-        for (j=2; j<=satl; j++)
+        j=g_slist_length(group2);
+        while (j<satl)
           {
+          j++;
           g_snprintf(s, 4, "%d", j);
           trace=gtk_radio_menu_item_new_with_label(group2, s);
-          g_signal_connect(G_OBJECT(trace), "clicked", G_CALLBACK(upg), NULL);
           group2=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(trace));
+          g_signal_connect(G_OBJECT(trace), "toggled", G_CALLBACK(upg), NULL);
           gtk_menu_shell_append(GTK_MENU_SHELL(tracmenu), trace);
           gtk_widget_show(trace);
+          }
+        while (j>satl)
+          {
+          list=group2->next;
+          gtk_widget_destroy(group2->data);
+          group2=list;
+          j--;
           }
         gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
         gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
         g_signal_connect(G_OBJECT(tr), "clicked", G_CALLBACK(trs), NULL);
-        if (g_signal_handler_is_connected(G_OBJECT(pr), pr_id))
-          {
-          g_signal_handler_disconnect(G_OBJECT(pr), pr_id);
-          g_signal_handler_disconnect(G_OBJECT(svg), sv_id);
-          }
+        if (g_signal_handler_is_connected(G_OBJECT(pr), pr_id)) g_signal_handler_disconnect(G_OBJECT(pr), pr_id);
         str=g_strdup_printf("File: %s successfully loaded", fin);
         gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
         g_free(str);
         plt=PLOT_LINEAR(plot1);
-        plt->size=lc;
-        plt->xdata=x;
-        plt->ydata=yb;
+        (plt->size)=lc;
+        (plt->xdata)=x;
+        (plt->ydata)=yb;
         xi=g_array_index(x, gdouble, 0);
         xf=g_array_index(x, gdouble, (lc-1));
         plot_linear_update_scale_pretty(plot1, xi, xf, mny, mxy);
@@ -1141,8 +2064,10 @@ void opd(GtkWidget *widget, gpointer data)
         gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
         g_free(str);
         }
+      g_free(contents);
+      g_free(fin);
       }
-    gtk_widget_destroy (wfile);
+    gtk_widget_destroy(wfile);
     }
   }
 
@@ -1151,12 +2076,14 @@ void upj(GtkWidget *widget, gpointer data)
   /*
    * Checks if j index spinner has increased to a new value and fills parameter array values accordingly
    * updates front panel to display parameters for new j,k values
-   * If transform has been performed, changes the graph in plot 2   
+   * If transform has been performed, changes the graph in plot 2
+   * If processing has been performed, updates the displayed value/plot
    */
   PlotLinear *plt2, *plt3;
   guint j, k;
   gdouble num, num2, num3, num4, num5, num6, num7;
   gdouble *ptr;
+  gchar s[10];
 
   jdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
   if (jdim>jdimx)
@@ -1208,36 +2135,60 @@ void upj(GtkWidget *widget, gpointer data)
     num6=g_array_index(bspa, gdouble, jdim);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(bsp), num6);
     }
-  if (g_signal_handler_is_connected(G_OBJECT(pr), pr_id))
+  if (jdim<=jdimxf)
     {
-    plt2=PLOT_LINEAR(plot2);
-    g_array_free(xsb, TRUE);
-    g_array_free(ysb, TRUE);
-    xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (plt2->size));
-    ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (plt2->size));
-    for (j=0; j<(plt2->size); j++)
+    if ((flags&2)!=0)
       {
-      num=j*((2*(plt2->size))-1)/(2*(plt2->size)*g_array_index(delx, gdouble, jdim));
-      g_array_append_val(xsb, num);
+      plt2=PLOT_LINEAR(plot2);
+      g_array_free(xsb, TRUE);
+      g_array_free(ysb, TRUE);
+      xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (plt2->size));
+      ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (plt2->size));
+      for (j=0; j<(plt2->size); j++)
+        {
+        num=j*g_array_index(delf, gdouble, jdim);
+        g_array_append_val(xsb, num);
+        }
+      j=(2*(jdim)*(plt2->size));
+      num2=fabs(g_array_index(stars, gdouble, j));
+      g_array_append_val(ysb, num2);
+      while (j<(((2*jdim)+1)*(plt2->size)))
+        {
+        num6=g_array_index(stars, gdouble, j);
+        num6*=num6;
+        num7=g_array_index(stars, gdouble, (2*(plt2->size))-j);
+        num7*=num7;
+        num6+=num7;
+        num6=sqrt(num6);
+        if (num2<num6) num2=num6;
+        g_array_append_val(ysb, num6);
+        j++;
+        }
+      plt2->xdata=xsb;
+      plt2->ydata=ysb;
+      plot_linear_update_scale_pretty(plot2, 0, num, 0, num2);
       }
-    j=(2*(jdim)*(plt2->size));
-    num2=fabs(g_array_index(stars, gdouble, j));
-    g_array_append_val(ysb, num2);
-    while (j<(((2*jdim)+1)*(plt2->size)))
+    if ((flags&4)!=0)
       {
-      num6=g_array_index(stars, gdouble, j);
-      num6*=num6;
-      num7=g_array_index(stars, gdouble, (2*(plt2->size))-j);
-      num7*=num7;
-      num6+=num7;
-      num6=sqrt(num6);
-      if (num2<num6) num2=num6;
-      g_array_append_val(ysb, num6);
-      j++;
+      if ((flags&8)!=0)
+        {
+        }
+      else
+        {
+        num=g_array_index(vis, gdouble, (jdim+(kdim*MXD)));
+        g_snprintf(s, 7, "%f", num);
+        gtk_label_set_text(GTK_LABEL(visl), s);
+        num=g_array_index(doms, gdouble, (jdim+(kdim*MXD)));
+        g_snprintf(s, 9, "%f", num);
+        gtk_label_set_text(GTK_LABEL(dsl), s);
+        if ((flags&16)!=0)
+          {
+          num=g_array_index(chp, gdouble, (jdim+(kdim*MXD)));
+          g_snprintf(s, 8, "%f", num);
+          gtk_label_set_text(GTK_LABEL(chil), s);
+          }
+        }
       }
-    plt2->xdata=xsb;
-    plt2->ydata=ysb;
-    plot_linear_update_scale_pretty(plot2, 0, num, 0, num2);
     }
   }
 
@@ -1246,10 +2197,12 @@ void upk(GtkWidget *widget, gpointer data)
   /*
    * Checks if k index spinner has increased to a new value and fills parameter array values accordingly
    * updates front panel to display parameters for new j,k values
+   * If processing has been performed, updates the displayed value/plot
    */
   PlotLinear *plt3;
   guint j;
   gdouble num, num2, num3, num4;
+  gchar s[10];
 
   kdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
   if (kdim>kdimx)
@@ -1265,90 +2218,59 @@ void upk(GtkWidget *widget, gpointer data)
       g_array_append_val(tca, num3);
       g_array_append_val(twa, num4);
       }
-    kdimx = kdim;
+    kdimx=kdim;
     }
   else
     {
-    num=g_array_index(isra, gint, (jdim+(kdim*MXD)));
+    num=g_array_index(isra, gdouble, (jdim+(kdim*MXD)));
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(isr), num);
-    num=g_array_index(ispa, gint, (jdim+(kdim*MXD)));
+    num=g_array_index(ispa, gdouble, (jdim+(kdim*MXD)));
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(isp), num);
-    num=g_array_index(tca, gint, (jdim+(kdim*MXD)));
+    num=g_array_index(tca, gdouble, (jdim+(kdim*MXD)));
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(tc), num);
-    num=g_array_index(twa, gint, (jdim+(kdim*MXD)));
+    num=g_array_index(twa, gdouble, (jdim+(kdim*MXD)));
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(tw), num);
+    }
+  if (kdim<=kdimxf)
+    {
+    if ((flags&4)!=0)
+      {
+      if ((flags&8)!=0)
+        {
+        }
+      else
+        {
+        num=g_array_index(vis, gdouble, (jdim+(kdim*MXD)));
+        g_snprintf(s, 7, "%f", num);
+        gtk_label_set_text(GTK_LABEL(visl), s);
+        num=g_array_index(doms, gdouble, (jdim+(kdim*MXD)));
+        g_snprintf(s, 9, "%f", num);
+        gtk_label_set_text(GTK_LABEL(dsl), s);
+        if ((flags&16)!=0)
+          {
+          num=g_array_index(chp, gdouble, (jdim+(kdim*MXD)));
+          g_snprintf(s, 8, "%f", num);
+          gtk_label_set_text(GTK_LABEL(chil), s);
+          }
+        }
+      }
     }
   }
 
-void pltmv(PlotLinear *plot, gpointer data)
-  {
-  gchar *str;
-
-  str=g_strdup_printf("x: %f, y: %f", plot->xps, plot->yps);
-  gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-  g_free(str);
-  }
-
-/* Functions for updating analysis parameters - COMPLETISH - combine into two int/double functions? coersion? */
-
-void uptwa(GtkWidget *widget, gpointer data)
+void upa2(GtkWidget *widget, gpointer data)
   {
   gdouble *ptr;
 
-  ptr=&g_array_index(twa, gdouble, jdim+(kdim*MXD));
+  ptr=&g_array_index((GArray*)data, gdouble, jdim+(kdim*MXD));
   *ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
   }
 
-void uptca(GtkWidget *widget, gpointer data)
+void upa1(GtkWidget *widget, gpointer data)
   {
   gdouble *ptr;
 
-  ptr=&g_array_index(tca, gdouble, jdim+(kdim*MXD));
+  ptr=&g_array_index((GArray*)data, gdouble, jdim);
   *ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-  }
-
-void upispa(GtkWidget *widget, gpointer data)
-  {
-  gdouble *ptr;
-
-  ptr=&g_array_index(ispa, gdouble, jdim+(kdim*MXD));
-  *ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-  /* coerce isr */
-  }
-
-void upisra(GtkWidget *widget, gpointer data)
-  {
-  gdouble *ptr;
-
-  ptr=&g_array_index(isra, gdouble, jdim+(kdim*MXD));
-  *ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-  /* coerce isp */
-  }
-
-void upzwa(GtkWidget *widget, gpointer data)
-  {
-  gdouble *ptr;
-
-  ptr=&g_array_index(zwa, gdouble, jdim);
-  *ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-  }
-
-void upbspa(GtkWidget *widget, gpointer data)
-  {
-  gdouble *ptr;
-
-  ptr=&g_array_index(bspa, gdouble, jdim);
-  *ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-  /* coerce bsr */
-  }
-
-void upbsra(GtkWidget *widget, gpointer data)
-  {
-  gdouble *ptr;
-
-  ptr=&g_array_index(bsra, gdouble, jdim);
-  *ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-  /* coerce bsp */
   }
 
 void reset(GtkWidget *widget, gpointer data)
@@ -1382,7 +2304,6 @@ void reset(GtkWidget *widget, gpointer data)
   ispa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
   tca=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
   twa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
-  /* deal with graphs? potential bugs */
   }
 
 void reset2(GtkWidget *widget, gpointer data)
@@ -1423,12 +2344,12 @@ void reset2(GtkWidget *widget, gpointer data)
     g_array_append_val(twa, num4);
     g_array_append_val(zwa, num5);
     }
-  /* deal with graphs? potential bugs */
   }
 
 int main( int argc, char *argv[])
   {
-  GtkWidget *window, *vbox, *mnb, *mnu, *smnu, *mni, *opttri, *hpane, *table, *label, *butt;
+  GtkAdjustment *adj;
+  GtkWidget *vbox, *mnb, *mnu, *smnu, *mni, *hpane, *table, *label, *butt;
   GtkAccelGroup *accel_group=NULL;
   GSList *group=NULL, *group3=NULL;
   gdouble fll=0;
@@ -1437,7 +2358,7 @@ int main( int argc, char *argv[])
   window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), "Harmonic Spectrum Analyser");
   g_signal_connect_swapped(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
-  vbox=gtk_vbox_new(FALSE, 0); 
+  vbox=gtk_vbox_new(FALSE, 0);
   gtk_container_add(GTK_CONTAINER(window), vbox);
   gtk_widget_show(vbox);
   mnb=gtk_menu_bar_new();
@@ -1451,10 +2372,16 @@ int main( int argc, char *argv[])
   g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(opd), NULL);
   gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
   gtk_widget_show(mni);
-  svg=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE, NULL);
-  gtk_widget_add_accelerator(svg, "activate", accel_group, GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-  gtk_menu_shell_append(GTK_MENU_SHELL(mnu), svg);
-  gtk_widget_show(svg);
+  mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE, NULL);
+  gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+  g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(sav), NULL);
+  gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
+  gtk_widget_show(mni);
+  mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT, NULL);
+  gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_p, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+  g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(prt), NULL);
+  gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
+  gtk_widget_show(mni);
   mni=gtk_separator_menu_item_new();
   gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
   gtk_widget_show(mni);
@@ -1548,6 +2475,10 @@ int main( int argc, char *argv[])
   gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(twopionx), FALSE);
   gtk_menu_shell_append(GTK_MENU_SHELL(mnu), twopionx);
   gtk_widget_show(twopionx);
+  chi=gtk_check_menu_item_new_with_label("Calculate Chirp?");
+  gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(chi), FALSE);
+  gtk_menu_shell_append(GTK_MENU_SHELL(mnu), chi);
+  gtk_widget_show(chi);
   opttri=gtk_check_menu_item_new_with_label("Optimise Triangle fit?");
   gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(opttri), FALSE);
   gtk_menu_shell_append(GTK_MENU_SHELL(mnu), opttri);
@@ -1562,7 +2493,7 @@ int main( int argc, char *argv[])
   g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(help), NULL);
   gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
   gtk_widget_show(mni);
-  mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_ABOUT, NULL);;
+  mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_ABOUT, NULL);
   g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(about), NULL);
   gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
   gtk_widget_show(mni);
@@ -1571,6 +2502,15 @@ int main( int argc, char *argv[])
   gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), mnu);
   gtk_menu_shell_append(GTK_MENU_SHELL(mnb), mni);
   gtk_menu_item_right_justify(GTK_MENU_ITEM(mni));
+  bsra=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXD);
+  g_array_append_val(bsra, fll);
+  bspa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXD);
+  g_array_append_val(bspa, fll);
+  zwa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXD);
+  isra=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+  ispa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+  tca=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+  twa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
   hpane=gtk_hpaned_new();
   gtk_widget_show(hpane);
   gtk_container_add(GTK_CONTAINER(vbox), hpane);
@@ -1583,7 +2523,7 @@ int main( int argc, char *argv[])
   gtk_widget_show(label);
   adj=(GtkAdjustment *) gtk_adjustment_new(0, -32767, 32768, 1.0, 5.0, 0.0);
   bsr=gtk_spin_button_new(adj, 0.5, 3);
-  g_signal_connect(G_OBJECT(bsr), "value-changed", G_CALLBACK(upbsra), NULL);
+  g_signal_connect(G_OBJECT(bsr), "value-changed", G_CALLBACK(upa1), (gpointer) bsra);
   gtk_table_attach(GTK_TABLE(table), bsr, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
   gtk_widget_show(bsr);
   label=gtk_label_new("Spectrum Stop:");
@@ -1591,7 +2531,7 @@ int main( int argc, char *argv[])
   gtk_widget_show(label);
   adj=(GtkAdjustment *) gtk_adjustment_new(0, -32767, 32768, 1.0, 5.0, 0.0);
   bsp=gtk_spin_button_new(adj, 0.5, 3);
-  g_signal_connect(G_OBJECT(bsp), "value-changed", G_CALLBACK(upbspa), NULL);
+  g_signal_connect(G_OBJECT(bsp), "value-changed", G_CALLBACK(upa2), (gpointer) bspa);
   gtk_table_attach(GTK_TABLE(table), bsp, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
   gtk_widget_show(bsp);
   label=gtk_label_new("Offset:");
@@ -1622,7 +2562,8 @@ int main( int argc, char *argv[])
   gtk_widget_show(butt);
   tr=gtk_button_new_with_label("Transform Spectrum");
   gtk_table_attach(GTK_TABLE(table), tr, 0, 3, 4, 5, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-  gtk_widget_show(tr);label = gtk_label_new("Spectrum");
+  gtk_widget_show(tr);
+  label=gtk_label_new("Spectrum");
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), table, label);
   table=gtk_table_new(6, 3, FALSE);
   gtk_widget_show(table);
@@ -1631,7 +2572,7 @@ int main( int argc, char *argv[])
   gtk_widget_show(label);
   adj=(GtkAdjustment *) gtk_adjustment_new(0, -32767, 32768, 1.0, 5.0, 0.0);
   isr=gtk_spin_button_new(adj, 0.5, 3);
-  g_signal_connect(G_OBJECT(isr), "value-changed", G_CALLBACK(upisra), NULL);
+  g_signal_connect(G_OBJECT(isr), "value-changed", G_CALLBACK(upa2), (gpointer) isra);
   gtk_table_attach(GTK_TABLE(table), isr, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
   gtk_widget_show(isr);
   label=gtk_label_new("Inverse Spectrum Stop:");
@@ -1639,7 +2580,7 @@ int main( int argc, char *argv[])
   gtk_widget_show(label);
   adj=(GtkAdjustment *) gtk_adjustment_new(0, -32767, 32768, 1.0, 5.0, 0.0);
   isp=gtk_spin_button_new(adj, 0.5, 3);
-  g_signal_connect(G_OBJECT(isp), "value-changed", G_CALLBACK(upispa), NULL);
+  g_signal_connect(G_OBJECT(isp), "value-changed", G_CALLBACK(upa2), (gpointer) ispa);
   gtk_table_attach(GTK_TABLE(table), isp, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
   gtk_widget_show(isp);
   label=gtk_label_new("Triangle Centre:");
@@ -1647,7 +2588,7 @@ int main( int argc, char *argv[])
   gtk_widget_show(label);
   adj=(GtkAdjustment *) gtk_adjustment_new(0, -32767, 32768, 1.0, 5.0, 0.0);
   tc=gtk_spin_button_new(adj, 0.5, 3);
-  g_signal_connect(G_OBJECT(tc), "value-changed", G_CALLBACK(uptca), NULL);
+  g_signal_connect(G_OBJECT(tc), "value-changed", G_CALLBACK(upa2), (gpointer) tca);
   gtk_table_attach(GTK_TABLE(table), tc, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
   gtk_widget_show(tc);
   label=gtk_label_new("Triangle Full Width:");
@@ -1655,7 +2596,7 @@ int main( int argc, char *argv[])
   gtk_widget_show(label);
   adj=(GtkAdjustment *) gtk_adjustment_new(2, 0, 65535, 1.0, 5.0, 0.0);
   tw=gtk_spin_button_new(adj, 0.5, 3);
-  g_signal_connect(G_OBJECT(tw), "value-changed", G_CALLBACK(uptwa), NULL);
+  g_signal_connect(G_OBJECT(tw), "value-changed", G_CALLBACK(upa2), (gpointer) twa);
   gtk_table_attach(GTK_TABLE(table), tw, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
   gtk_widget_show(tw);
   label=gtk_label_new("DC Peak Width:");
@@ -1663,7 +2604,7 @@ int main( int argc, char *argv[])
   gtk_widget_show(label);
   adj=(GtkAdjustment *) gtk_adjustment_new(2, 0, 65535, 1.0, 5.0, 0.0);
   zw=gtk_spin_button_new(adj, 0.5, 3);
-  g_signal_connect(G_OBJECT(zw), "value-changed", G_CALLBACK(upzwa), NULL);
+  g_signal_connect(G_OBJECT(zw), "value-changed", G_CALLBACK(upa1), (gpointer) zwa);
   gtk_table_attach(GTK_TABLE(table), zw, 1, 2, 5, 6, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
   gtk_widget_show(zw);
   label=gtk_label_new("j index:");
@@ -1712,35 +2653,37 @@ int main( int argc, char *argv[])
   gtk_table_attach(GTK_TABLE(table), plot2, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
   label=gtk_label_new("Inverse Spectrum");
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
-  table=gtk_table_new(1, 1, FALSE);
-  gtk_widget_show(table);
-  plot3=plot_linear_new();
-  g_signal_connect(plot3, "moved", G_CALLBACK(pltmv), NULL);
-  gtk_widget_show(plot3);
-  gtk_table_attach(GTK_TABLE(table), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+  rest=gtk_table_new(4, 2, FALSE);
+  gtk_widget_show(rest);
+  label=gtk_label_new("Visibility");
+  gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+  gtk_widget_show(label);
+  visl=gtk_label_new("");
+  gtk_table_attach(GTK_TABLE(rest), visl, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+  gtk_widget_show(visl);
+  label=gtk_label_new("Domain Shift");
+  gtk_table_attach(GTK_TABLE(rest), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+  gtk_widget_show(label);
+  dsl=gtk_label_new("");
+  gtk_table_attach(GTK_TABLE(rest), dsl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+  gtk_widget_show(dsl);
   label=gtk_label_new("Analysis Results");
-  gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
+  gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
   gtk_widget_show(notebook2);
   gtk_paned_add2(GTK_PANED(hpane), notebook2);
   statusbar=gtk_statusbar_new();
   gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 2);
   gtk_widget_show(statusbar);
-  bsra=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXD);
-  g_array_append_val(bsra, fll);
-  bspa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXD);
-  g_array_append_val(bspa, fll);
-  zwa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXD);
-  isra=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
-  ispa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
-  tca=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
-  twa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
   x=g_array_new(FALSE, FALSE, sizeof(gdouble));
   yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
   specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
   stars=g_array_new(FALSE, FALSE, sizeof(gdouble));
   xsb=g_array_new(FALSE, FALSE, sizeof(gdouble));
   ysb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-  delx=g_array_new(FALSE, FALSE, sizeof(gdouble));
+  delf=g_array_new(FALSE, FALSE, sizeof(gdouble));
+  vis=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+  doms=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+  chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
   gtk_widget_show(window);
   gtk_main();
   return 0;

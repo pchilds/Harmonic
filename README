@@ -9,7 +9,7 @@ Motivation; Technology; License
 ---------------------------------------------
 Harmonic is based on code I originally wrote and developed in Labview over 6 years to aid in my research. Due to a lack of reverse compatability with Labview and many unwanted saves in new versions I decided to rewrite the program using only free software to ensure its portability (and that of myself and my research).
 Harmonic uses the PlotLinear widget to visualise data. Transformation of the data is carried out using the fftw3 library developed by Matteo Frigo and Steven G. Johnson [1].
-The code compiles & works under gtk+2.
+The code compiles & works (more or less) under gtk+2.
 Harmonic is released under the GNU GPL version 2 or (at your option) any later versions. See the accompanying license file for details.
 
 Usage
@@ -20,6 +20,8 @@ To compile with gcc, for example, type at the command line:
 Known Bugs/Issues
 -----------------
 See associated bugs with PlotLinear.
+Divide by zero errors.
+Unfinished sections.
 
 References
 ----------
