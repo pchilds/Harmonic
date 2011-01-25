@@ -43,7 +43,7 @@
  * PLOT: signal connect jindex for displaying plot3
  * PLOT: still issues with data off the wiggle side
  * PLOT: check multitrace capability
- * PRT: ps conversion of graphs
+ * PLOT: zoom horizontal crashing
  * BATCH: read filename from config file
  * BATCH: config writer utility
  * FFT: implement invert to 2pi/x routine
@@ -103,6 +103,7 @@ void about(GtkWidget *widget, gpointer data)
 void prt(GtkWidget *widget, gpointer data)
   {
   GtkWidget *wfile;
+  GtkFileFilter *filter;
   gchar *str, *fout=NULL;
 
   switch (gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook2)))
@@ -113,12 +114,14 @@ void prt(GtkWidget *widget, gpointer data)
         wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
         g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        filter=gtk_file_filter_new();
+        gtk_file_filter_set_name(filter, "Encapsulated Postscript (EPS)");
+        gtk_file_filter_add_pattern(filter, "*.eps");
+        gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), filter);
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
-          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
-          /*
-          create image
-          */
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
+          plot_linear_print_eps(plot3, fout);
           g_free(fout);
           }
         gtk_widget_destroy(wfile);
@@ -128,12 +131,14 @@ void prt(GtkWidget *widget, gpointer data)
         wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
         g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        filter=gtk_file_filter_new();
+        gtk_file_filter_set_name(filter, "Encapsulated Postscript (EPS)");
+        gtk_file_filter_add_pattern(filter, "*.eps");
+        gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), filter);
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
-          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
-          /*
-          create image
-          */
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
+          plot_linear_print_eps(plot2, fout);
           g_free(fout);
           }
         gtk_widget_destroy(wfile);
@@ -143,12 +148,14 @@ void prt(GtkWidget *widget, gpointer data)
         wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
         g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        filter=gtk_file_filter_new();
+        gtk_file_filter_set_name(filter, "Encapsulated Postscript (EPS)");
+        gtk_file_filter_add_pattern(filter, "*.eps");
+        gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), filter);
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
-          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
-          /*
-          create image
-          */
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
+          plot_linear_print_eps(plot1, fout);
           g_free(fout);
           }
         gtk_widget_destroy(wfile);
@@ -167,12 +174,14 @@ void prt(GtkWidget *widget, gpointer data)
         wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
         g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        filter=gtk_file_filter_new();
+        gtk_file_filter_set_name(filter, "Encapsulated Postscript (EPS)");
+        gtk_file_filter_add_pattern(filter, "*.eps");
+        gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), filter);
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
-          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
-          /*
-          create image
-          */
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
+          plot_linear_print_eps(plot2, fout);
           g_free(fout);
           }
         gtk_widget_destroy(wfile);
@@ -182,12 +191,14 @@ void prt(GtkWidget *widget, gpointer data)
         wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
         g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        filter=gtk_file_filter_new();
+        gtk_file_filter_set_name(filter, "Encapsulated Postscript (EPS)");
+        gtk_file_filter_add_pattern(filter, "*.eps");
+        gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), filter);
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
-          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
-          /*
-          create image
-          */
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
+          plot_linear_print_eps(plot1, fout);
           g_free(fout);
           }
         gtk_widget_destroy(wfile);
@@ -206,12 +217,14 @@ void prt(GtkWidget *widget, gpointer data)
         wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
         g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+        filter=gtk_file_filter_new();
+        gtk_file_filter_set_name(filter, "Encapsulated Postscript (EPS)");
+        gtk_file_filter_add_pattern(filter, "*.eps");
+        gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), filter);
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
-          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
-          /*
-          create image
-          */
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
+          plot_linear_print_eps(plot1, fout);
           g_free(fout);
           }
         gtk_widget_destroy(wfile);
@@ -242,7 +255,7 @@ void prt(GtkWidget *widget, gpointer data)
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
-          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
           dialog=gtk_dialog_new_with_buttons("Parameter selection", GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Visibility", 1, "Domain Shift", 2, "Chirp", 3, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
           cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
           label=gtk_label_new("Select Parameter to save:");
@@ -285,7 +298,7 @@ void prt(GtkWidget *widget, gpointer data)
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
-          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
           dialog=gtk_dialog_new_with_buttons("Parameter selection", GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Visibility", 1, "Domain Shift", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
           cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
           label=gtk_label_new("Select Parameter to save:");
@@ -322,7 +335,7 @@ void prt(GtkWidget *widget, gpointer data)
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
-          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
           /*
           fill contents
           g_file_set_contents(fout, contents, -1, &Err);
@@ -348,7 +361,7 @@ void prt(GtkWidget *widget, gpointer data)
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
-          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
           /*
           fill contents
           g_file_set_contents(fout, contents, -1, &Err);
@@ -375,7 +388,7 @@ void prt(GtkWidget *widget, gpointer data)
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
-          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (wfile));
+          fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
           /*
           fill contents
           g_file_set_contents(fout, contents, -1, &Err);
