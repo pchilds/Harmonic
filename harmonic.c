@@ -37,7 +37,7 @@
  * brush up dynamic memory allocation with g_array
  * check divide by zero handling
  * HELP: build contents
- * ABOUT: build contents
+ * DPR: change to be nonmodal
  * OPD: better handling of the two modes - maybe inline fft and processing routines in a more optimal way
  * PLOT: signal connect kindex for displaying plot3
  * PLOT: signal connect jindex for displaying plot3
@@ -46,12 +46,13 @@
  * PLOT: zoom horizontal crashing
  * BATCH: read filename from config file
  * BATCH: config writer utility
+ * BATCH: add polar capability to OPD/SAV/PRT/DPR etc.
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
  * PRC: convert differentials to doms/chirp
  * PRC: output to plot3 for batch
  * PRC: nan for domain shift
- * SAVE: filling contents
+ * SAVE: case for batch processed data
  */
 
 #include <gtk/gtk.h>
@@ -60,7 +61,6 @@
 #include <math.h>
 #include "plotlinear0-1-0.h"
 /*#include "plotpolarboth0-1-0.h"*/
-/*#include "harmonicconf.h"*/
 
 #define DZE 0.00001 /* divide by zero threshold */
 #define NZE -0.00001 /* negative of this */
@@ -78,7 +78,7 @@ gint lc; /* number of data points */
 guint jdim=0, kdim=0, jdimx=0, kdimx=0, jdimxf=0, kdimxf=0, satl=0, trc=1, flags=0; /* array indices, #of traces, trace number, and current processing state flags */
 gulong pr_id; /* id for disabling/enabling post-transform processing */
 
-void help(GtkWidget *widget, gpointer data)
+void static help(GtkWidget *widget, gpointer data)
   {
   GtkWidget *helpwin;
 
@@ -87,7 +87,7 @@ void help(GtkWidget *widget, gpointer data)
   gtk_widget_show(helpwin);
   }
 
-void about(GtkWidget *widget, gpointer data)
+void static about(GtkWidget *widget, gpointer data)
   {
   GtkWidget *helpwin;
 
@@ -100,7 +100,129 @@ void about(GtkWidget *widget, gpointer data)
   g_signal_connect_swapped(G_OBJECT(helpwin), "response", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
   }
 
-void prt(GtkWidget *widget, gpointer data)
+void static dpr(GtkWidget *widget, gpointer data)
+  {
+  GtkWidget *helpwin, *content, *table, *entry1, *entry2, *label, *spin1, *spin2;
+  GtkAdjustment *adj1, *adj2;
+  PlotLinear *plt;
+  gdouble xi, xf, mny, mxy;
+  /*
+  PlotPolarBoth *plt2;
+  */
+
+  helpwin=gtk_dialog_new_with_buttons("Dsiplay Properties", GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, GTK_STOCK_APPLY, GTK_RESPONSE_APPLY, NULL);
+  g_signal_connect_swapped(G_OBJECT(helpwin), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
+  gtk_widget_show(helpwin);
+  content=gtk_dialog_get_content_area(GTK_DIALOG(helpwin));
+  table=gtk_table_new(4, 2, FALSE);
+  gtk_widget_show(table);
+  label=gtk_label_new("X axis text:");
+  gtk_widget_show(label);
+  gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+  label=gtk_label_new("Text size:");
+  gtk_widget_show(label);
+  gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+  label=gtk_label_new("Y axis text:");
+  gtk_widget_show(label);
+  gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+  label=gtk_label_new("Tick label size:");
+  gtk_widget_show(label);
+  gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+  entry1=gtk_entry_new();
+  entry2=gtk_entry_new();
+  switch (gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook2)))
+    {
+    case 2:
+      if ((flags&9)==9)
+        { /* need to add polar capability */
+        plt=PLOT_LINEAR(plot3);
+        gtk_entry_set_text(GTK_ENTRY(entry1), g_strdup(plt->xlab));
+        gtk_entry_set_text(GTK_ENTRY(entry2), g_strdup(plt->ylab));
+        adj1=(GtkAdjustment *) gtk_adjustment_new((plt->lfsize), 8, 64, 1.0, 5.0, 0.0);
+        adj2=(GtkAdjustment *) gtk_adjustment_new((plt->afsize), 8, 64, 1.0, 5.0, 0.0);
+        spin1=gtk_spin_button_new(adj1, 0, 0);
+        spin2=gtk_spin_button_new(adj2, 0, 0);
+        gtk_widget_show(entry1);
+        gtk_widget_show(entry2);
+        gtk_widget_show(spin1);
+        gtk_widget_show(spin2);
+        gtk_table_attach(GTK_TABLE(table), entry1, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+        gtk_table_attach(GTK_TABLE(table), entry2, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+        gtk_table_attach(GTK_TABLE(table), spin1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+        gtk_table_attach(GTK_TABLE(table), spin2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+        gtk_container_add(GTK_CONTAINER(content), table);
+        if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
+          {
+          (plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
+          (plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
+          (plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
+          (plt->afsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin2));
+          g_object_get(G_OBJECT(plot3), "xmin", &xi, "xmax", &xf, "ymin", &mny, "ymax", &mxy, NULL);
+          plot_linear_update_scale(plot3, xi, xf, mny, mxy);
+          }
+        }
+      gtk_widget_destroy(helpwin);
+      break;
+    case 1:
+      plt=PLOT_LINEAR(plot2);
+      gtk_entry_set_text(GTK_ENTRY(entry1), g_strdup(plt->xlab));
+      gtk_entry_set_text(GTK_ENTRY(entry2), g_strdup(plt->ylab));
+      adj1=(GtkAdjustment *) gtk_adjustment_new((plt->lfsize), 8, 64, 1.0, 5.0, 0.0);
+      adj2=(GtkAdjustment *) gtk_adjustment_new((plt->afsize), 8, 64, 1.0, 5.0, 0.0);
+      spin1=gtk_spin_button_new(adj1, 0, 0);
+      spin2=gtk_spin_button_new(adj2, 0, 0);
+      gtk_widget_show(entry1);
+      gtk_widget_show(entry2);
+      gtk_widget_show(spin1);
+      gtk_widget_show(spin2);
+      gtk_table_attach(GTK_TABLE(table), entry1, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+      gtk_table_attach(GTK_TABLE(table), entry2, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+      gtk_table_attach(GTK_TABLE(table), spin1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+      gtk_table_attach(GTK_TABLE(table), spin2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+      gtk_container_add(GTK_CONTAINER(content), table);
+      if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
+        {
+        (plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
+        (plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
+        (plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
+        (plt->afsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin2));
+        g_object_get(G_OBJECT(plot2), "xmin", &xi, "xmax", &xf, "ymin", &mny, "ymax", &mxy, NULL);
+        plot_linear_update_scale(plot2, xi, xf, mny, mxy);
+        }
+      gtk_widget_destroy(helpwin);
+      break;
+    default:
+      plt=PLOT_LINEAR(plot1);
+      gtk_entry_set_text(GTK_ENTRY(entry1), g_strdup(plt->xlab));
+      gtk_entry_set_text(GTK_ENTRY(entry2), g_strdup(plt->ylab));
+      adj1=(GtkAdjustment *) gtk_adjustment_new((plt->lfsize), 8, 64, 1.0, 5.0, 0.0);
+      adj2=(GtkAdjustment *) gtk_adjustment_new((plt->afsize), 8, 64, 1.0, 5.0, 0.0);
+      spin1=gtk_spin_button_new(adj1, 0, 0);
+      spin2=gtk_spin_button_new(adj2, 0, 0);
+      gtk_widget_show(entry1);
+      gtk_widget_show(entry2);
+      gtk_widget_show(spin1);
+      gtk_widget_show(spin2);
+      gtk_table_attach(GTK_TABLE(table), entry1, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+      gtk_table_attach(GTK_TABLE(table), entry2, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+      gtk_table_attach(GTK_TABLE(table), spin1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+      gtk_table_attach(GTK_TABLE(table), spin2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+      gtk_container_add(GTK_CONTAINER(content), table);
+      if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
+        {
+        (plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
+        (plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
+        (plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
+        (plt->afsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin2));
+        g_object_get(G_OBJECT(plot1), "xmin", &xi, "xmax", &xf, "ymin", &mny, "ymax", &mxy, NULL);
+        plot_linear_update_scale(plot1, xi, xf, mny, mxy);
+        }
+      gtk_widget_destroy(helpwin);
+      break;
+    }
+  }
+
+void static prt(GtkWidget *widget, gpointer data)
   {
   GtkWidget *wfile;
   GtkFileFilter *filter;
@@ -110,7 +232,7 @@ void prt(GtkWidget *widget, gpointer data)
     {
     case 2:
       if ((flags&12)==12)
-        {
+        { /* need to add polar capability */
         wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
         g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
@@ -239,11 +361,14 @@ void prt(GtkWidget *widget, gpointer data)
     }
   }
 
-  void sav(GtkWidget *widget, gpointer data)
+void static sav(GtkWidget *widget, gpointer data)
   {
   GtkWidget *wfile, *dialog, *cont, *label;
-  gchar *contents, *str, *fout=NULL;
-  GError *Err;
+  PlotLinear *plt;
+  gchar *contents, *str, *str2, *fout=NULL;
+  gchar s1[10], s2[10], s3[10];
+  gint j, k;
+  GError *Err=NULL;
 
   switch (gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook2)))
     {
@@ -267,6 +392,13 @@ void prt(GtkWidget *widget, gpointer data)
               fill contents
               g_file_set_contents(fout, contents, -1, &Err);
               g_free(contents);
+              if (Err)
+                {
+                str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+                gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+                g_free(str);
+                g_error_free(Err);
+                }
               */
               break;
             case 2:
@@ -274,6 +406,13 @@ void prt(GtkWidget *widget, gpointer data)
               fill contents
               g_file_set_contents(fout, contents, -1, &Err);
               g_free(contents);
+              if (Err)
+                {
+                str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+                gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+                g_free(str);
+                g_error_free(Err);
+                }
               */
               break;
             case 3:
@@ -281,6 +420,13 @@ void prt(GtkWidget *widget, gpointer data)
               fill contents
               g_file_set_contents(fout, contents, -1, &Err);
               g_free(contents);
+              if (Err)
+                {
+                str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+                gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+                g_free(str);
+                g_error_free(Err);
+                }
               */
               break;
             default:
@@ -310,6 +456,13 @@ void prt(GtkWidget *widget, gpointer data)
               fill contents
               g_file_set_contents(fout, contents, -1, &Err);
               g_free(contents);
+              if (Err)
+                {
+                str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+                gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+                g_free(str);
+                g_error_free(Err);
+                }
               */
               break;
             case 2:
@@ -317,6 +470,13 @@ void prt(GtkWidget *widget, gpointer data)
               fill contents
               g_file_set_contents(fout, contents, -1, &Err);
               g_free(contents);
+              if (Err)
+                {
+                str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+                gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+                g_free(str);
+                g_error_free(Err);
+                }
               */
               break;
             default:
@@ -336,11 +496,63 @@ void prt(GtkWidget *widget, gpointer data)
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
           fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-          /*
-          fill contents
+          str2=g_strdup("INVERSE_D\tREAL_VAL \tIMAG_VAL ");
+          contents=g_strdup(str2);
+          for (k=1; k<=jdimxf; k++)
+            {
+            str=g_strjoin("\t", contents, str2, NULL);
+            g_free(contents);
+            contents=g_strdup(str);
+            }
+          plt=PLOT_LINEAR(plot2);
+          g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
+          str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
+          for (k=1; k<=jdimxf; k++)
+            {
+            g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*(plt->size)));
+            str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
+            g_free(str2);
+            str2=g_strdup(str);
+            g_free(str);
+            }
+          str=g_strdup(contents);
+          g_free(contents);
+          contents=g_strjoin("\n", str, str2, NULL);
+          g_free(str);
+          g_free(str2);
+          for (j=1; j<(plt->size); j++)
+            {
+            g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
+            g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, j));
+            g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(plt->size))-j));
+            str2=g_strjoin("\t", s1, s2, s3, NULL);
+            k=1;
+            while (k<=jdimxf)
+              {
+              g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
+              g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*(plt->size))+j));
+              k++;
+              g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*k*(plt->size))-j));
+              str=g_strjoin("\t", str2, s1, s2, s3, NULL);
+              g_free(str2);
+              str2=g_strdup(str);
+              g_free(str);
+              }
+            str=g_strdup(contents);
+            g_free(contents);
+            contents=g_strjoin("\n", str, str2, NULL);
+            g_free(str);
+            g_free(str2);
+            }
           g_file_set_contents(fout, contents, -1, &Err);
           g_free(contents);
-          */
+          if (Err)
+            {
+            str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+            g_free(str);
+            g_error_free(Err);
+            }
           g_free(fout);
           }
         gtk_widget_destroy(wfile);
@@ -362,11 +574,63 @@ void prt(GtkWidget *widget, gpointer data)
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
           fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-          /*
-          fill contents
+          str2=g_strdup("INVERSE_D\tREAL_VAL \tIMAG_VAL ");
+          contents=g_strdup(str2);
+          for (k=1; k<=jdimxf; k++)
+            {
+            str=g_strjoin("\t", contents, str2, NULL);
+            g_free(contents);
+            contents=g_strdup(str);
+            }
+          plt=PLOT_LINEAR(plot2);
+          g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
+          str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
+          for (k=1; k<=jdimxf; k++)
+            {
+            g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*(plt->size)));
+            str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
+            g_free(str2);
+            str2=g_strdup(str);
+            g_free(str);
+            }
+          str=g_strdup(contents);
+          g_free(contents);
+          contents=g_strjoin("\n", str, str2, NULL);
+          g_free(str);
+          g_free(str2);
+          for (j=1; j<(plt->size); j++)
+            {
+            g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
+            g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, j));
+            g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(plt->size))-j));
+            str2=g_strjoin("\t", s1, s2, s3, NULL);
+            k=1;
+            while (k<=jdimxf)
+              {
+              g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
+              g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*(plt->size))+j));
+              k++;
+              g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*k*(plt->size))-j));
+              str=g_strjoin("\t", str2, s1, s2, s3, NULL);
+              g_free(str2);
+              str2=g_strdup(str);
+              g_free(str);
+              }
+            str=g_strdup(contents);
+            g_free(contents);
+            contents=g_strjoin("\n", str, str2, NULL);
+            g_free(str);
+            g_free(str2);
+            }
           g_file_set_contents(fout, contents, -1, &Err);
           g_free(contents);
-          */
+          if (Err)
+            {
+            str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+            g_free(str);
+            g_error_free(Err);
+            }
           g_free(fout);
           }
         gtk_widget_destroy(wfile);
@@ -389,11 +653,63 @@ void prt(GtkWidget *widget, gpointer data)
         if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
           {
           fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-          /*
-          fill contents
+          str2=g_strdup("INVERSE_D\tREAL_VAL \tIMAG_VAL ");
+          contents=g_strdup(str2);
+          for (k=1; k<=jdimxf; k++)
+            {
+            str=g_strjoin("\t", contents, str2, NULL);
+            g_free(contents);
+            contents=g_strdup(str);
+            }
+          plt=PLOT_LINEAR(plot2);
+          g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
+          str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
+          for (k=1; k<=jdimxf; k++)
+            {
+            g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*(plt->size)));
+            str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
+            g_free(str2);
+            str2=g_strdup(str);
+            g_free(str);
+            }
+          str=g_strdup(contents);
+          g_free(contents);
+          contents=g_strjoin("\n", str, str2, NULL);
+          g_free(str);
+          g_free(str2);
+          for (j=1; j<(plt->size); j++)
+            {
+            g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
+            g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, j));
+            g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(plt->size))-j));
+            str2=g_strjoin("\t", s1, s2, s3, NULL);
+            k=1;
+            while (k<=jdimxf)
+              {
+              g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
+              g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*(plt->size))+j));
+              k++;
+              g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*k*(plt->size))-j));
+              str=g_strjoin("\t", str2, s1, s2, s3, NULL);
+              g_free(str2);
+              str2=g_strdup(str);
+              g_free(str);
+              }
+            str=g_strdup(contents);
+            g_free(contents);
+            contents=g_strjoin("\n", str, str2, NULL);
+            g_free(str);
+            g_free(str2);
+            }
           g_file_set_contents(fout, contents, -1, &Err);
           g_free(contents);
-          */
+          if (Err)
+            {
+            str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+            gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+            g_free(str);
+            g_error_free(Err);
+            }
           g_free(fout);
           }
         gtk_widget_destroy(wfile);
@@ -408,10 +724,10 @@ void prt(GtkWidget *widget, gpointer data)
     }
   }
 
-void prs(GtkWidget *widget, gpointer data)
+void static prs(GtkWidget *widget, gpointer data)
   {
   GtkWidget *label;
-  PlotLinear *plt2;
+  PlotLinear *plt;
   gint j, k, l, st, sp;
   gdouble idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct;
   gchar *str;
@@ -419,7 +735,7 @@ void prs(GtkWidget *widget, gpointer data)
 
   if ((flags&2)!=0)
     {
-    plt2=PLOT_LINEAR(plot2);
+    plt=PLOT_LINEAR(plot2);
     g_array_free(vis, TRUE);
     g_array_free(doms, TRUE);
     vis=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
@@ -440,9 +756,9 @@ void prs(GtkWidget *widget, gpointer data)
           vzt=0;
           for (l=0; l<iv; l++)
             {
-            ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
+            ivd=g_array_index(stars, gdouble, l+(2*j*(plt->size)));
             ivd*=ivd;
-            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-l);
             ivdt*=ivdt;
             ivd+=ivdt;
             ivd=sqrt(ivd);
@@ -458,10 +774,10 @@ void prs(GtkWidget *widget, gpointer data)
             */
             tcn=g_array_index(tca, gdouble, j+(k*MXD))*idelf;
             twd=g_array_index(twa, gdouble, j+(k*MXD))*idelf/2;
-            if ((st<((plt2->size)-2))&&(sp<(plt2->size))&&((sp-st)>1))
+            if ((st<((plt->size)-2))&&(sp<(plt->size))&&((sp-st)>1))
               {
-              vt=g_array_index(stars, gdouble, st+(2*j*(plt2->size)));
-              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-st);
+              vt=g_array_index(stars, gdouble, st+(2*j*(plt->size)));
+              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-st);
               if (vt<DZE)
                 {
                 if (vt>NZE)
@@ -476,8 +792,8 @@ void prs(GtkWidget *widget, gpointer data)
               ivdt*=ivdt;
               vt+=ivdt;
               vt=sqrt(vt);
-              ivd=g_array_index(stars, gdouble, st+1+(2*j*(plt2->size)));
-              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-st-1);
+              ivd=g_array_index(stars, gdouble, st+1+(2*j*(plt->size)));
+              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-st-1);
               if (ivd<DZE)
                 {
                 if (ivd>NZE)
@@ -500,8 +816,8 @@ void prs(GtkWidget *widget, gpointer data)
               ddp=0;
               for (l=st+2; l<=sp; l++)
                 {
-                ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
-                ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+                ivd=g_array_index(stars, gdouble, l+(2*j*(plt->size)));
+                ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-l);
                 if (ivd<DZE)
                   {
                   if (ivd>NZE)
@@ -638,9 +954,9 @@ void prs(GtkWidget *widget, gpointer data)
           vzt=0;
           for (l=0; l<iv; l++)
             {
-            ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
+            ivd=g_array_index(stars, gdouble, l+(2*j*(plt->size)));
             ivd*=ivd;
-            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-l);
             ivdt*=ivdt;
             ivd+=ivdt;
             ivd=sqrt(ivd);
@@ -656,10 +972,10 @@ void prs(GtkWidget *widget, gpointer data)
             */
             tcn=g_array_index(tca, gdouble, j+(k*MXD))*idelf;
             twd=g_array_index(twa, gdouble, j+(k*MXD))*idelf/2;
-            if ((st<((plt2->size)-1))&&(sp<(plt2->size))&&((sp-st)>0))
+            if ((st<((plt->size)-1))&&(sp<(plt->size))&&((sp-st)>0))
               {
-              vt=g_array_index(stars, gdouble, st+(2*j*(plt2->size)));
-              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-st);
+              vt=g_array_index(stars, gdouble, st+(2*j*(plt->size)));
+              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-st);
               if (vt<DZE)
                 {
                 if (vt>NZE)
@@ -678,8 +994,8 @@ void prs(GtkWidget *widget, gpointer data)
               pn=0;
               for (l=st+1; l<=sp; l++)
                 {
-                ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
-                ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+                ivd=g_array_index(stars, gdouble, l+(2*j*(plt->size)));
+                ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-l);
                 if (ivd<DZE)
                   {
                   if (ivd>NZE)
@@ -758,9 +1074,9 @@ void prs(GtkWidget *widget, gpointer data)
         vzt=0;
         for (l=0; l<iv; l++)
           {
-          ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
+          ivd=g_array_index(stars, gdouble, l+(2*j*(plt->size)));
           ivd*=ivd;
-          ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+          ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-l);
           ivdt*=ivdt;
           ivd+=ivdt;
           ivd=sqrt(ivd);
@@ -773,10 +1089,10 @@ void prs(GtkWidget *widget, gpointer data)
           sp=floor(g_array_index(ispa, gdouble, j)*idelf);
           tcn=g_array_index(tca, gdouble, j+(k*MXD))*idelf;
           twd=g_array_index(twa, gdouble, j+(k*MXD))*idelf/2;
-          if ((st<((plt2->size)-2))&&(sp<(plt2->size))&&((sp-st)>1))
+          if ((st<((plt->size)-2))&&(sp<(plt->size))&&((sp-st)>1))
             {
-            vt=g_array_index(stars, gdouble, st+(2*j*(plt2->size)));
-            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-st);
+            vt=g_array_index(stars, gdouble, st+(2*j*(plt->size)));
+            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-st);
             if (vt<DZE)
               {
               if (vt>NZE)
@@ -791,8 +1107,8 @@ void prs(GtkWidget *widget, gpointer data)
             ivdt*=ivdt;
             vt+=ivdt;
             vt=sqrt(vt);
-            ivd=g_array_index(stars, gdouble, st+1+(2*j*(plt2->size)));
-            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-st-1);
+            ivd=g_array_index(stars, gdouble, st+1+(2*j*(plt->size)));
+            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-st-1);
             if (ivd<DZE)
               {
               if (ivd>NZE)
@@ -815,8 +1131,8 @@ void prs(GtkWidget *widget, gpointer data)
             ddp=0;
             for (l=st+2; l<=sp; l++)
               {
-              ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
-              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+              ivd=g_array_index(stars, gdouble, l+(2*j*(plt->size)));
+              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-l);
               if (ivd<DZE)
                 {
                 if (ivd>NZE)
@@ -950,9 +1266,9 @@ void prs(GtkWidget *widget, gpointer data)
         vzt=0;
         for (l=0; l<iv; l++)
           {
-          ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
+          ivd=g_array_index(stars, gdouble, l+(2*j*(plt->size)));
           ivd*=ivd;
-          ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+          ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-l);
           ivdt*=ivdt;
           ivd+=ivdt;
           ivd=sqrt(ivd);
@@ -965,10 +1281,10 @@ void prs(GtkWidget *widget, gpointer data)
           sp=floor(g_array_index(ispa, gdouble, j)*idelf);
           tcn=g_array_index(tca, gdouble, j+(k*MXD))*idelf;
           twd=g_array_index(twa, gdouble, j+(k*MXD))*idelf/2;
-          if ((st<((plt2->size)-1))&&(sp<(plt2->size))&&((sp-st)>0))
+          if ((st<((plt->size)-1))&&(sp<(plt->size))&&((sp-st)>0))
             {
-            vt=g_array_index(stars, gdouble, st+(2*j*(plt2->size)));
-            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-st);
+            vt=g_array_index(stars, gdouble, st+(2*j*(plt->size)));
+            ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-st);
             if (vt<DZE)
               {
               if (vt>NZE)
@@ -987,8 +1303,8 @@ void prs(GtkWidget *widget, gpointer data)
             pn=0;
             for (l=st+1; l<=sp; l++)
               {
-              ivd=g_array_index(stars, gdouble, l+(2*j*(plt2->size)));
-              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt2->size))-l);
+              ivd=g_array_index(stars, gdouble, l+(2*j*(plt->size)));
+              ivdt=g_array_index(stars, gdouble, (2*(j+1)*(plt->size))-l);
               if (ivd<DZE)
                 {
                 if (ivd>NZE)
@@ -1066,10 +1382,10 @@ void prs(GtkWidget *widget, gpointer data)
     }
   }
 
-void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inversion to 2pi/x */
+void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inversion to 2pi/x */
   {
   GtkAdjustment *adj;
-  PlotLinear *plt2;
+  PlotLinear *plt;
   guint j, k, st, sp;
   gint n, zp;
   gdouble iv, clc, ofs, xx, yx;
@@ -1615,7 +1931,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
               clc=clc*LNTOT;
               clc=exp(clc);
               clc=-clc;
-              y[k+(j*zp)]=clc++;
+              y[k+(j*zp)]=++clc;
               }
             }
           }
@@ -1646,7 +1962,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
               clc=clc*LNTOT;
               clc=exp(clc);
               clc=-clc;
-              y[k+(j*zp)]=clc++;
+              y[k+(j*zp)]=++clc;
               }
             }
           }
@@ -1722,7 +2038,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
           {
           clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))/ofs;
           clc=-clc;
-          y[k+(j*zp)]=clc++;
+          y[k+(j*zp)]=++clc;
           }
         }
       }
@@ -1781,10 +2097,10 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
       g_array_append_val(ysb, iv);
       }
     fftw_free(star);
-    plt2=PLOT_LINEAR(plot2);
-    (plt2->size)=zp/2;
-    (plt2->xdata)=xsb;
-    (plt2->ydata)=ysb;
+    plt=PLOT_LINEAR(plot2);
+    (plt->size)=zp/2;
+    (plt->xdata)=xsb;
+    (plt->ydata)=ysb;
     plot_linear_update_scale_pretty(plot2, 0, xx, 0, yx);
     gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
     gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
@@ -1808,7 +2124,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
     }
   }
 
-void upg(GtkWidget *widget, gpointer data)
+void static upg(GtkWidget *widget, gpointer data)
   {
   PlotLinear *plt;
   gdouble dt, xi, xf, mny, mxy;
@@ -1843,16 +2159,27 @@ void upg(GtkWidget *widget, gpointer data)
   plot_linear_update_scale(plot1, xi, xf, mny, mxy);
   }
 
-void pltmv(PlotLinear *plot, gpointer data)
+void static pltmv(PlotLinear *plot, gpointer data)
   {
   gchar *str;
 
-  str=g_strdup_printf("x: %f, y: %f", plot->xps, plot->yps);
+  str=g_strdup_printf("x: %f, y: %f", (plot->xps), (plot->yps));
   gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
   g_free(str);
   }
 
-void opd(GtkWidget *widget, gpointer data)
+/*
+void static pltmvp(PlotPolarBoth *plot, gpointer data)
+  {
+  gchar *str;
+
+  str=g_strdup_printf("x: %f, y: %f", (plot->rps), (plot->thps));
+  gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+  g_free(str);
+  }
+  */
+
+void static opd(GtkWidget *widget, gpointer data)
   {
   PlotLinear *plt;
   GtkWidget *wfile, *trace, *table, *label;
@@ -1862,7 +2189,7 @@ void opd(GtkWidget *widget, gpointer data)
   gchar *contents, *str, *fin=NULL;
   gchar **strary, **strat;
   GSList *list;
-  GError *Err;
+  GError *Err=NULL;
 
   if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(bat)))
     {
@@ -1945,9 +2272,10 @@ void opd(GtkWidget *widget, gpointer data)
           }
         else
           {
-          str=g_strdup_printf("Loading failed for file: %s", fin);
+          str=g_strdup_printf("Loading failed for file: %s, Errr: %s", fin, (gchar *) Err);
           gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
           g_free(str);
+          g_error_free(Err);
           }
         g_free(contents);
         g_free(fin);
@@ -2073,9 +2401,10 @@ void opd(GtkWidget *widget, gpointer data)
         }
       else
         {
-        str=g_strdup_printf("Loading failed for file: %s", fin);
+        str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
         gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
         g_free(str);
+        g_error_free(Err);
         }
       g_free(contents);
       g_free(fin);
@@ -2084,7 +2413,7 @@ void opd(GtkWidget *widget, gpointer data)
     }
   }
 
-void upj(GtkWidget *widget, gpointer data)
+void static upj(GtkWidget *widget, gpointer data)
   {
   /*
    * Checks if j index spinner has increased to a new value and fills parameter array values accordingly
@@ -2205,7 +2534,7 @@ void upj(GtkWidget *widget, gpointer data)
     }
   }
 
-void upk(GtkWidget *widget, gpointer data)
+void static upk(GtkWidget *widget, gpointer data)
   {
   /*
    * Checks if k index spinner has increased to a new value and fills parameter array values accordingly
@@ -2270,7 +2599,7 @@ void upk(GtkWidget *widget, gpointer data)
     }
   }
 
-void upa2(GtkWidget *widget, gpointer data)
+void static upa2(GtkWidget *widget, gpointer data)
   {
   gdouble *ptr;
 
@@ -2278,7 +2607,7 @@ void upa2(GtkWidget *widget, gpointer data)
   *ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
   }
 
-void upa1(GtkWidget *widget, gpointer data)
+void static upa1(GtkWidget *widget, gpointer data)
   {
   gdouble *ptr;
 
@@ -2286,7 +2615,7 @@ void upa1(GtkWidget *widget, gpointer data)
   *ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
   }
 
-void reset(GtkWidget *widget, gpointer data)
+void static reset(GtkWidget *widget, gpointer data)
   {
   gdouble num;
 
@@ -2319,7 +2648,7 @@ void reset(GtkWidget *widget, gpointer data)
   twa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
   }
 
-void reset2(GtkWidget *widget, gpointer data)
+void static reset2(GtkWidget *widget, gpointer data)
   {
   gdouble num, num2, num3, num4, num5;
   guint j;
@@ -2451,6 +2780,11 @@ int main( int argc, char *argv[])
   gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(neg), FALSE);
   gtk_menu_shell_append(GTK_MENU_SHELL(mnu), neg);
   gtk_widget_show(neg);
+  mni=gtk_menu_item_new_with_label("Display Properties:");
+  gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_F2, 0, GTK_ACCEL_VISIBLE);
+  g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(dpr), NULL);
+  gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
+  gtk_widget_show(mni);
   mni=gtk_menu_item_new_with_mnemonic("_Properties");
   gtk_widget_show(mni);
   gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), mnu);
