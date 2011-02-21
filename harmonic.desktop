@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Harmonic
+Comment=A program for performing harmonic analysis (e.g. Fourier). 
+Exec=Harmonic
+Terminal=0
+Type=Application
