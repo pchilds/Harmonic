@@ -41,7 +41,6 @@
  * OPD: better handling of the two modes - maybe inline fft and processing routines in a more optimal way
  * PLOT: signal connect kindex for displaying plot3
  * PLOT: signal connect jindex for displaying plot3
- * PLOT: still issues with data off the wiggle side
  * PLOT: check multitrace capability
  * BATCH: config writer utility
  * BATCH: add polar capability to OPD/SAV/PRT/DPR etc.

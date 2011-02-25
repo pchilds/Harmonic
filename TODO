@@ -1,6 +1,5 @@
 Known Bugs/Issues
 -----------------
-* As g_snprintf truncates rather than rounds to nearest (axes that should say "0.5" display "0.4").
 
 Future Proposals
 ----------------
