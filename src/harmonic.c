@@ -9295,17 +9295,17 @@ int main( int argc, char *argv[])
 	accel_group=gtk_accel_group_new();
 	gtk_window_add_accel_group(GTK_WINDOW(window), accel_group);
 	mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN, NULL);
-	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_o, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_KEY_o, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(opd), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
 	mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE, NULL);
-	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_KEY_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(sav), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
 	mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT, NULL);
-	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_p, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_KEY_p, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(prt), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
@@ -9313,7 +9313,7 @@ int main( int argc, char *argv[])
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
 	mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_QUIT, accel_group);
-	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_KEY_q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(gtk_main_quit), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
@@ -9366,7 +9366,7 @@ int main( int argc, char *argv[])
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), neg);
 	gtk_widget_show(neg);
 	mni=gtk_menu_item_new_with_label("Display Properties:");
-	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_F2, 0, GTK_ACCEL_VISIBLE);
+	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_KEY_F2, 0, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(dpr), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
@@ -9421,7 +9421,7 @@ int main( int argc, char *argv[])
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnb), mni);
 	mnu=gtk_menu_new();
 	mni=gtk_menu_item_new_with_label("Instructions");
-	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_F1, 0, GTK_ACCEL_VISIBLE);
+	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_KEY_F1, 0, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(help), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);

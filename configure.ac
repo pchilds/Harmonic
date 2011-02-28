@@ -4,6 +4,7 @@ AC_CONFIG_SRCDIR([src/harmonic.h])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CC([gcc cc])
 AC_CONFIG_HEADERS([config.h])
-PKG_CHECK_MODULES([HARM], [gtk+-2.0 >= 2.14 fftw3])
+gtk_rqr="gtk+-2.0 >= 2.14"
+PKG_CHECK_MODULES([HARM], [$gtk_rqr fftw3])
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT()
