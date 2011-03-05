@@ -44,7 +44,6 @@ typedef struct _PlotLinearClass PlotLinearClass;
 struct _PlotLinear
 {
 	GtkDrawingArea parent;
-<<<<<<< HEAD
 	GArray *xdata, *ydata; /* x and y data sets */
 	GArray *ind, *sizes; /* indices of first element and number of elements for each trace */
 	gchar *xlab, *ylab; /* labels for the x and y axes */
@@ -52,20 +51,6 @@ struct _PlotLinear
 	guint ptsize, linew; /* radii of the points and line width of the plot line */
 	gint zmode; /* zoom mode flags xxx0b/xxx1b = zoom in/out, 001xb = zoom horizontal only, 010xb = zoom vertical only, 011xb = zoom both, 1xxxb = single click zoom */
 	gdouble xps, yps; /* x and y position of mouse */
-=======
-	GArray *xdata; /* x data set */
-	GArray *ydata; /* y data set */
-	gint size; /* number of data points to display */
-	gchar *xlab; /* label for the x axis */
-	gchar *ylab; /* label for the y axis */
-	guint afsize; /* font size for the tick mark labels */
-	guint lfsize; /* font size for the axis labels */
-	guint ptsize; /* radii of the points */
-	guint linew; /* line width of the plot line */
-	gint zmode; /* zoom mode flags xxx0b/xxx1b = zoom in/out, 001xb = zoom horizontal only, 010xb = zoom vertical only, 011xb = zoom both, 1xxxb = single click zoom */
-	gdouble xps; /* x position of mouse */
-	gdouble yps; /* y position of mouse */
->>>>>>> 32a1202ca6174916579119d601dee109073bc9a4
 	guint flagd; /* data display flags 1=lines only, 2=points only, 3=both */
 };
 
