@@ -20,7 +20,6 @@ To compile with gcc, for example, type at the command line:
 Known Bugs/Issues
 -----------------
 See associated bugs with PlotLinear.
-Divide by zero errors.
 Unfinished sections.
 
 References

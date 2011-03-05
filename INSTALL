@@ -17,21 +17,26 @@ to figure out how `configure' could check whether to do them, and mail
 diffs or instructions to the address given in the `README' so they can
 be considered for the next release.
 
-   The file `configure.in' is used to create `configure' by a program
-called `autoconf'.  You only need `configure.in' if you want to change
-it or regenerate `configure' using a newer version of `autoconf'.
+   The file `configure.ac' is used to create `configure' by a program
+called `autoconf'.  You only need `configure.ac' if you want to change
+it or regenerate `configure' using a newer version of `autoconf' (see
+the optional part of step 1 below).
 
 The simplest way to compile this package is:
 
-  1. `cd' to the directory named according to the desired plotting
-     function (e.g. /PlotPolar) and type `autoreconf --install' to
-     create the configure and Makefile appropriate for your system.
+  1. `cd' to the directory of the package (it should contain this file
+     and (optionally) type `autoreconf --install' to create the
+     appropriate scripts and convert the configure and Makefile to
+     something appropriate for your system.
 
   2. Type `./configure' to configure the package for your system.  If
      you're using `csh' on an old version of System V, you might need
      to type `sh ./configure' instead to prevent `csh' from trying to
      execute `configure' itself.  While running, configure prints some
-     messages telling which features it is checking for.
+     messages telling which features it is checking for. If it tells
+     you that dependenceies aren't met, then you will need to install
+     the -dev package corresponding to them, e.g. libfftw3-dev is
+     required by this program.
 
   3. Type `make' to compile the package.
 
@@ -39,12 +44,13 @@ The simplest way to compile this package is:
      the package.
 
   5. Type `make install' to install the programs and any data files and
-     documentation.
+     documentation. Keep the package in its current directory so you can
+     later uninstall it with `make uninstall'. 
 
-  6. You can remove the program binaries and object files from the
-     source code directory by typing `make clean'.  To also remove the
-     files that `configure' created (so you can compile the package for
-     a different kind of computer), type `make distclean'.  There is
+  6. You can, however, remove the program binaries and object files from
+     the source code directory by typing `make clean'.  To also remove
+     the files that `configure' created (so you can compile the package
+     for a different kind of computer), type `make distclean'.  There is
      also a `make maintainer-clean' target, but that is intended mainly
      for the package's developers.  If you use it, you may have to get
      all sorts of other programs in order to regenerate files that came
