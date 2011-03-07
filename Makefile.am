@@ -8,4 +8,3 @@ EXTRA_DIST= AUTHORS COPYING INSTALL NEWS README TODO \
 	$(pixmap_DATA) \
 	$(Applications_DATA) \
 	configure.ac
-

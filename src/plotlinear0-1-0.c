@@ -2453,7 +2453,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					lt=g_array_index((priv->gr), gdouble, dtt);
 					xv=g_array_index((priv->bl), gdouble, dtt);
 					yv=g_array_index((priv->al), gdouble, dtt);
-					cairo_set_source_rgba(cr, ft, lt, xv, 1);
+					cairo_set_source_rgba(cr, ft, lt, xv, 0.8);
 					ft=g_array_index((plot->ind), gint, k);
 					lt=g_array_index((plot->sizes), gint, k)+ft;
 					xv=xl+((xu-xl)*(g_array_index((plot->xdata), gdouble, ft)-(priv->bounds.xmin))/((priv->bounds.xmax)-(priv->bounds.xmin)));
@@ -2806,7 +2806,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					lt=g_array_index((priv->gr), gdouble, dtt);
 					xv=g_array_index((priv->bl), gdouble, dtt);
 					yv=g_array_index((priv->al), gdouble, dtt);
-					cairo_set_source_rgba(cr, ft, lt, xv, 1);
+					cairo_set_source_rgba(cr, ft, lt, xv, 0.8);
 					ft=g_array_index((plot->ind), gint, k);
 					lt=g_array_index((plot->sizes), gint, k)+ft;
 					xv=xl+((xu-xl)*(g_array_index((plot->xdata), gdouble, ft)-(priv->bounds.xmin))/((priv->bounds.xmax)-(priv->bounds.xmin)));
@@ -3166,7 +3166,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				lt=g_array_index((priv->gr), gdouble, dtt);
 				xv=g_array_index((priv->bl), gdouble, dtt);
 				yv=g_array_index((priv->al), gdouble, dtt);
-				cairo_set_source_rgba(cr, ft, lt, xv, 1);
+				cairo_set_source_rgba(cr, ft, lt, xv, 0.8);
 				ft=g_array_index((plot->ind), gint, k);
 				lt=g_array_index((plot->sizes), gint, k)+ft;
 				xv=xl+((xu-xl)*(g_array_index(plot->xdata, gdouble, ft)-(priv->bounds.xmin))/((priv->bounds.xmax)-(priv->bounds.xmin)));

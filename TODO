@@ -1,6 +1,6 @@
 Known Bugs/Issues
 -----------------
-Unable to vary the colour and alpha of plots
+Unable to vary the alpha of plots
 
 Future Proposals
 ----------------
@@ -9,3 +9,4 @@ Future Proposals
 * config writer
 * invert to 2pi/
 * triangle optimisation
+* translations
