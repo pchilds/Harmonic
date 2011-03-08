@@ -1,5 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 AM_CFLAGS=$(HARM_CFLAGS)
+AM_CPPFLAGS= -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
 bin_PROGRAMS=Harmonic
 Harmonic_SOURCES=	\
 	harmonic.c	\

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Harmonic
+Name[it]=Armonico
 Comment=A program for performing harmonic analysis (e.g. Fourier). 
+Comment[it]=Un programma per effettuare l'analisi armonica (per esempio Fourier).
 Exec=Harmonic
 Icon=db8
 Terminal=0

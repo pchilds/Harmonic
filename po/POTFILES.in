@@ -1,0 +1,5 @@
+# List of source files which contain translatable strings.
+
+# Package source files
+src/harmonic.c
+

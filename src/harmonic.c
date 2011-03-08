@@ -50,11 +50,12 @@
  */
 
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <gdk/gdkkeysyms.h>
 #include <fftw3.h>
 #include <math.h>
 #include "plotlinear0-1-0.h"
-/*#include "plotpolarboth0-1-0.h"*/
+/*#include "plotpolar0-1-0.h"*/
 
 #define DZE 0.00001 /* divide by zero threshold */
 #define NZE -0.00001 /* negative of this */
@@ -78,7 +79,7 @@ void static help(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *helpwin;
 
-	helpwin=gtk_dialog_new_with_buttons("Instructions", GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+	helpwin=gtk_dialog_new_with_buttons(_("Instructions"), GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
 	g_signal_connect_swapped(G_OBJECT(helpwin), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
 	gtk_widget_show(helpwin);
 }
@@ -91,7 +92,7 @@ void static about(GtkWidget *widget, gpointer data)
 	g_signal_connect_swapped(G_OBJECT(helpwin), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
 	gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(helpwin), "0.1.0");
 	gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(helpwin), "(c) Paul Childs, 2011");
-	gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(helpwin), "Harmonic is a program for performing harmonic analysis (e.g. Fourier analysis) and obtaining visibility of fringes, domain shift and chirp measurements.");
+	gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(helpwin), _("Harmonic is a program for performing harmonic analysis (e.g. Fourier analysis) and obtaining visibility of fringes, domain shift and chirp measurements."));
 	gtk_widget_show(helpwin);
 	g_signal_connect_swapped(G_OBJECT(helpwin), "response", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
 }
@@ -105,7 +106,7 @@ void static dpr(GtkWidget *widget, gpointer data)
 	gint dx, dx2, j, k;
 	/*PlotPolarBoth *plt2;*/
 	
-	helpwin=gtk_dialog_new_with_buttons("Dsiplay Properties", GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, GTK_STOCK_APPLY, GTK_RESPONSE_APPLY, NULL);
+	helpwin=gtk_dialog_new_with_buttons(_("Display Properties"), GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, GTK_STOCK_APPLY, GTK_RESPONSE_APPLY, NULL);
 	g_signal_connect_swapped(G_OBJECT(helpwin), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
 	gtk_widget_show(helpwin);
 	content=gtk_dialog_get_content_area(GTK_DIALOG(helpwin));
@@ -118,10 +119,10 @@ void static dpr(GtkWidget *widget, gpointer data)
 		{
 			table=gtk_table_new(4, 2, FALSE);
 			gtk_widget_show(table);
-			label=gtk_label_new("Text size:");
+			label=gtk_label_new(_("Text size:"));
 			gtk_widget_show(label);
 			gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			label=gtk_label_new("Tick label size:");
+			label=gtk_label_new(_("Tick label size:"));
 			gtk_widget_show(label);
 			gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			entry1=gtk_entry_new();
@@ -130,10 +131,10 @@ void static dpr(GtkWidget *widget, gpointer data)
 			gtk_widget_show(hsp);
 			if ((flags&32)!=0) /* polar case */
 			{
-				label=gtk_label_new("Radial axis text:");
+				label=gtk_label_new(_("Radial axis text:"));
 				gtk_widget_show(label);
 				gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-				label=gtk_label_new("Azimuthal axis text:");
+				label=gtk_label_new(_("Azimuthal axis text:"));
 				gtk_widget_show(label);
 				gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				/*plt2=PLOT_POLAR(plot3);
@@ -153,11 +154,11 @@ void static dpr(GtkWidget *widget, gpointer data)
 				gtk_table_attach(GTK_TABLE(table), spin2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 				gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
-				ck2=gtk_check_button_new_with_label("Multiple plots for Results over j");
+				ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck2), (flagd&2));
 				gtk_widget_show(ck2);
 				gtk_box_pack_start(GTK_BOX(vbox), ck2, FALSE, FALSE, 2);
-				ck3=gtk_check_button_new_with_label("Multiple plots for Results over k");
+				ck3=gtk_check_button_new_with_label(_("Multiple plots for Results over index k"));
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&4));
 				gtk_widget_show(ck3);
 				gtk_box_pack_start(GTK_BOX(vbox), ck3, FALSE, FALSE, 2);
@@ -208,10 +209,10 @@ void static dpr(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				label=gtk_label_new("X axis text:");
+				label=gtk_label_new(_("X axis text:"));
 				gtk_widget_show(label);
 				gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-				label=gtk_label_new("Y axis text:");
+				label=gtk_label_new(_("Y axis text:"));
 				gtk_widget_show(label);
 				gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				plt=PLOT_LINEAR(plot3);
@@ -231,11 +232,11 @@ void static dpr(GtkWidget *widget, gpointer data)
 				gtk_table_attach(GTK_TABLE(table), spin2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 				gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
-				ck2=gtk_check_button_new_with_label("Multiple plots for Results over j");
+				ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck2), (flagd&2));
 				gtk_widget_show(ck2);
 				gtk_box_pack_start(GTK_BOX(vbox), ck2, FALSE, FALSE, 2);
-				ck3=gtk_check_button_new_with_label("Multiple plots for Results over k");
+				ck3=gtk_check_button_new_with_label(_("Multiple plots for Results over index k"));
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&4));
 				gtk_widget_show(ck3);
 				gtk_box_pack_start(GTK_BOX(vbox), ck3, FALSE, FALSE, 2);
@@ -287,11 +288,11 @@ void static dpr(GtkWidget *widget, gpointer data)
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(bat)))
 		{
-			ck2=gtk_check_button_new_with_label("Multiple plots for Results over j");
+			ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck2), (flagd&2));
 			gtk_widget_show(ck2);
 			gtk_box_pack_start(GTK_BOX(vbox), ck2, FALSE, FALSE, 2);
-			ck3=gtk_check_button_new_with_label("Multiple plots for Results over k");
+			ck3=gtk_check_button_new_with_label(_("Multiple plots for Results over index k"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&4));
 			gtk_widget_show(ck3);
 			gtk_box_pack_start(GTK_BOX(vbox), ck3, FALSE, FALSE, 2);
@@ -309,20 +310,20 @@ void static dpr(GtkWidget *widget, gpointer data)
 		case 1:
 		table=gtk_table_new(4, 2, FALSE);
 		gtk_widget_show(table);
-		label=gtk_label_new("Text size:");
+		label=gtk_label_new(_("Text size:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		label=gtk_label_new("Tick label size:");
+		label=gtk_label_new(_("Tick label size:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		entry1=gtk_entry_new();
 		entry2=gtk_entry_new();
 		hsp=gtk_hseparator_new();
 		gtk_widget_show(hsp);
-		label=gtk_label_new("X axis text:");
+		label=gtk_label_new(_("X axis text:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		label=gtk_label_new("Y axis text:");
+		label=gtk_label_new(_("Y axis text:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		plt=PLOT_LINEAR(plot2);
@@ -344,11 +345,11 @@ void static dpr(GtkWidget *widget, gpointer data)
 		gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
 		if ((flags&8)!=0)
 		{
-			ck2=gtk_check_button_new_with_label("Multiple plots for Results over j");
+			ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck2), (flagd&2));
 			gtk_widget_show(ck2);
 			gtk_box_pack_start(GTK_BOX(vbox), ck2, FALSE, FALSE, 2);
-			ck3=gtk_check_button_new_with_label("Multiple plots for Results over k");
+			ck3=gtk_check_button_new_with_label(_("Multiple plots for Results over index k"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&4));
 			gtk_widget_show(ck3);
 			gtk_box_pack_start(GTK_BOX(vbox), ck3, FALSE, FALSE, 2);
@@ -387,14 +388,14 @@ void static dpr(GtkWidget *widget, gpointer data)
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(bat)))
 		{
-			ck=gtk_check_button_new_with_label("Multiple plots for Inverse Domain");
+			ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck), (flagd&1));
 			gtk_widget_show(ck);
-			ck2=gtk_check_button_new_with_label("Multiple plots for Results over j");
+			ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck2), (flagd&2));
 			gtk_widget_show(ck2);
 			gtk_box_pack_start(GTK_BOX(vbox), ck2, FALSE, FALSE, 2);
-			ck3=gtk_check_button_new_with_label("Multiple plots for Results over k");
+			ck3=gtk_check_button_new_with_label(_("Multiple plots for Results over index k"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&4));
 			gtk_widget_show(ck3);
 			gtk_box_pack_start(GTK_BOX(vbox), ck3, FALSE, FALSE, 2);
@@ -504,7 +505,7 @@ void static dpr(GtkWidget *widget, gpointer data)
 		}
 		else
 		{
-			ck=gtk_check_button_new_with_label("Multiple plots for Inverse Domain");
+			ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck), (flagd&1));
 			gtk_widget_show(ck);
 			gtk_box_pack_start(GTK_BOX(vbox), ck, FALSE, FALSE, 2);
@@ -613,20 +614,20 @@ void static dpr(GtkWidget *widget, gpointer data)
 		default:
 		table=gtk_table_new(4, 2, FALSE);
 		gtk_widget_show(table);
-		label=gtk_label_new("Text size:");
+		label=gtk_label_new(_("Text size:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		label=gtk_label_new("Tick label size:");
+		label=gtk_label_new(_("Tick label size:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		entry1=gtk_entry_new();
 		entry2=gtk_entry_new();
 		hsp=gtk_hseparator_new();
 		gtk_widget_show(hsp);
-		label=gtk_label_new("X axis text:");
+		label=gtk_label_new(_("X axis text:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		label=gtk_label_new("Y axis text:");
+		label=gtk_label_new(_("Y axis text:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		plt=PLOT_LINEAR(plot1);
@@ -648,11 +649,11 @@ void static dpr(GtkWidget *widget, gpointer data)
 		gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
 		if ((flags&8)!=0)
 		{
-			ck2=gtk_check_button_new_with_label("Multiple plots for Results over j");
+			ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck2), (flagd&2));
 			gtk_widget_show(ck2);
 			gtk_box_pack_start(GTK_BOX(vbox), ck2, FALSE, FALSE, 2);
-			ck3=gtk_check_button_new_with_label("Multiple plots for Results over k");
+			ck3=gtk_check_button_new_with_label(_("Multiple plots for Results over index k"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&4));
 			gtk_widget_show(ck3);
 			gtk_box_pack_start(GTK_BOX(vbox), ck3, FALSE, FALSE, 2);
@@ -691,15 +692,15 @@ void static dpr(GtkWidget *widget, gpointer data)
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(bat)))
 		{
-			ck=gtk_check_button_new_with_label("Multiple plots for Inverse Domain");
+			ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck), (flagd&1));
 			gtk_widget_show(ck);
 			gtk_box_pack_start(GTK_BOX(vbox), ck, FALSE, FALSE, 2);
-			ck2=gtk_check_button_new_with_label("Multiple plots for Results over j");
+			ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck2), (flagd&2));
 			gtk_widget_show(ck2);
 			gtk_box_pack_start(GTK_BOX(vbox), ck2, FALSE, FALSE, 2);
-			ck3=gtk_check_button_new_with_label("Multiple plots for Results over k");
+			ck3=gtk_check_button_new_with_label(_("Multiple plots for Results over index k"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&4));
 			gtk_widget_show(ck3);
 			gtk_box_pack_start(GTK_BOX(vbox), ck3, FALSE, FALSE, 2);
@@ -813,7 +814,7 @@ void static dpr(GtkWidget *widget, gpointer data)
 		}
 		else
 		{
-			ck=gtk_check_button_new_with_label("Multiple plots for Inverse Domain");
+			ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck), (flagd&1));
 			gtk_widget_show(ck);
 			gtk_box_pack_start(GTK_BOX(vbox), ck, FALSE, FALSE, 2);
@@ -937,7 +938,7 @@ void static prt(GtkWidget *widget, gpointer data)
 		case 2:
 		if ((flags&12)==12)
 		{ /* need to add polar capability */
-			wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
 			filter=gtk_file_filter_new();
@@ -954,7 +955,7 @@ void static prt(GtkWidget *widget, gpointer data)
 		}
 		else if ((flags&2)!=0)
 		{
-			wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
 			filter=gtk_file_filter_new();
@@ -971,7 +972,7 @@ void static prt(GtkWidget *widget, gpointer data)
 		}
 		else if ((flags&1)!=0)
 		{
-			wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
 			filter=gtk_file_filter_new();
@@ -989,7 +990,7 @@ void static prt(GtkWidget *widget, gpointer data)
 		else
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
-			str=g_strdup("No available image.");
+			str=g_strdup(_("No available image."));
 			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 			g_free(str);
 		}
@@ -997,7 +998,7 @@ void static prt(GtkWidget *widget, gpointer data)
 		case 1:
 		if ((flags&2)!=0)
 		{
-			wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
 			filter=gtk_file_filter_new();
@@ -1014,7 +1015,7 @@ void static prt(GtkWidget *widget, gpointer data)
 		}
 		else if ((flags&1)!=0)
 		{
-			wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
 			filter=gtk_file_filter_new();
@@ -1032,7 +1033,7 @@ void static prt(GtkWidget *widget, gpointer data)
 		else
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
-			str=g_strdup("No available image.");
+			str=g_strdup(_("No available image."));
 			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 			g_free(str);
 		}
@@ -1040,7 +1041,7 @@ void static prt(GtkWidget *widget, gpointer data)
 		default:
 		if ((flags&1)!=0)
 		{
-			wfile=gtk_file_chooser_dialog_new("Select Image File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
 			filter=gtk_file_filter_new();
@@ -1057,7 +1058,7 @@ void static prt(GtkWidget *widget, gpointer data)
 		}
 		else
 		{
-			str=g_strdup("No available image.");
+			str=g_strdup(_("No available image."));
 			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 			g_free(str);
 		}
@@ -1071,7 +1072,7 @@ void static sav(GtkWidget *widget, gpointer data)
 	PlotLinear *plt;
 	gchar *contents, *str, *str2, *fout=NULL;
 	gchar s1[10], s2[10], s3[10];
-	gint j, k, sz;
+	gint j, k, sz2;
 	gdouble num, num2;
 	GError *Err=NULL;
 
@@ -1080,15 +1081,15 @@ void static sav(GtkWidget *widget, gpointer data)
 		case 2:
 		if ((flags&28)==28)
 		{
-			wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				dialog=gtk_dialog_new_with_buttons("Parameter selection", GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Visibility", 1, "Domain Shift", 2, "Chirp", 3, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Visibility", 1, "Domain Shift", 2, "Chirp", 3, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 				cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
-				label=gtk_label_new("Select Parameter to save:");
+				label=gtk_label_new(_("Select Parameter to save:"));
 				gtk_container_add(GTK_CONTAINER(cont), label);
 				switch (gtk_dialog_run(GTK_DIALOG(dialog)))
 				{
@@ -1099,7 +1100,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s"), (gchar *) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1113,7 +1114,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s"), (gchar *) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1127,7 +1128,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s"), (gchar *) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1144,15 +1145,15 @@ void static sav(GtkWidget *widget, gpointer data)
 		}
 		else if ((flags&12)==12)
 		{
-			wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				dialog=gtk_dialog_new_with_buttons("Parameter selection", GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Visibility", 1, "Domain Shift", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Visibility", 1, "Domain Shift", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 				cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
-				label=gtk_label_new("Select Parameter to save:");
+				label=gtk_label_new(_("Select Parameter to save:"));
 				gtk_container_add(GTK_CONTAINER(cont), label);
 				switch (gtk_dialog_run(GTK_DIALOG(dialog)))
 				{
@@ -1163,7 +1164,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s"), (gchar *) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1177,7 +1178,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s"), (gchar *) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1195,20 +1196,20 @@ void static sav(GtkWidget *widget, gpointer data)
 		else if ((flags&2)!=0)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
-			wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				dialog=gtk_dialog_new_with_buttons("Parameter selection", GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Real/Imaginary", 1, "Magnitude/Phase", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Real/Imaginary", 1, "Magnitude/Phase", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 				cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
-				label=gtk_label_new("Select Parameter to save:");
+				label=gtk_label_new(_("Select Parameter to save:"));
 				gtk_container_add(GTK_CONTAINER(cont), label);
 				switch (gtk_dialog_run(GTK_DIALOG(dialog)))
 				{
 					case 1:
-					str2=g_strdup("INVERSE_D\tREAL_VAL \tIMAG_VAL ");
+					str2=g_strdup(_("INVERSE_D\tREAL_VAL \tIMAG_VAL "));
 					contents=g_strdup(str2);
 					for (k=1; k<=jdimxf; k++)
 					{
@@ -1217,12 +1218,12 @@ void static sav(GtkWidget *widget, gpointer data)
 						contents=g_strdup(str);
 					}
 					plt=PLOT_LINEAR(plot2);
-					sz=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
+					sz2=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
 					for (k=1; k<=jdimxf; k++)
 					{
-						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz));
+						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
 						g_free(str2);
 						str2=g_strdup(str);
@@ -1233,18 +1234,18 @@ void static sav(GtkWidget *widget, gpointer data)
 					contents=g_strjoin("\n", str, str2, NULL);
 					g_free(str);
 					g_free(str2);
-					for (j=1; j<sz; j++)
+					for (j=1; j<sz2; j++)
 					{
 						g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 						g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, j));
-						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz)-j));
+						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz2)-j));
 						str2=g_strjoin("\t", s1, s2, s3, NULL);
 						k=1;
 						while (k<=jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
-							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz)+j));
-							g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(++k)*sz)-j));
+							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz2)+j));
+							g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(++k)*sz2)-j));
 							str=g_strjoin("\t", str2, s1, s2, s3, NULL);
 							g_free(str2);
 							str2=g_strdup(str);
@@ -1260,7 +1261,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s"), (gchar *) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1268,7 +1269,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(fout);
 					break;
 					case 2:
-					str2=g_strdup("INVERSE_D\tMAGNITUDE\tPHASE    ");
+					str2=g_strdup(_("INVERSE_D\tMAGNITUDE\tPHASE    "));
 					contents=g_strdup(str2);
 					for (k=1; k<=jdimxf; k++)
 					{
@@ -1277,12 +1278,12 @@ void static sav(GtkWidget *widget, gpointer data)
 						contents=g_strdup(str);
 					}
 					plt=PLOT_LINEAR(plot2);
-					sz=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
+					sz2=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
 					for (k=1; k<=jdimxf; k++)
 					{
-						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz));
+						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
 						g_free(str2);
 						str2=g_strdup(str);
@@ -1293,11 +1294,11 @@ void static sav(GtkWidget *widget, gpointer data)
 					contents=g_strjoin("\n", str, str2, NULL);
 					g_free(str);
 					g_free(str2);
-					for (j=1; j<sz; j++)
+					for (j=1; j<sz2; j++)
 					{
 						g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 						num=g_array_index(stars, gdouble, j);
-						num2=g_array_index(stars, gdouble, (2*sz)-j);
+						num2=g_array_index(stars, gdouble, (2*sz2)-j);
 						g_snprintf(s3, 10, "%f", atan2(num2, num));
 						num*=num;
 						num2*=num2;
@@ -1309,8 +1310,8 @@ void static sav(GtkWidget *widget, gpointer data)
 						while (k<=jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
-							num=g_array_index(stars, gdouble, (2*k*sz)+j);
-							num2=g_array_index(stars, gdouble, (2*(++k)*sz)-j);
+							num=g_array_index(stars, gdouble, (2*k*sz2)+j);
+							num2=g_array_index(stars, gdouble, (2*(++k)*sz2)-j);
 							g_snprintf(s3, 10, "%f", atan2(num2, num));
 							num*=num;
 							num2*=num2;
@@ -1332,7 +1333,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s"), (gchar *) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1348,7 +1349,7 @@ void static sav(GtkWidget *widget, gpointer data)
 		else
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
-			str=g_strdup("No available processed data.");
+			str=g_strdup(_("No available processed data."));
 			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 			g_free(str);
 		}
@@ -1356,20 +1357,20 @@ void static sav(GtkWidget *widget, gpointer data)
 		case 1:
 		if ((flags&2)!=0)
 		{
-			wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				dialog=gtk_dialog_new_with_buttons("Parameter selection", GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Real/Imaginary", 1, "Magnitude/Phase", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Real/Imaginary", 1, "Magnitude/Phase", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 				cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
-				label=gtk_label_new("Select Parameter to save:");
+				label=gtk_label_new(_("Select Parameter to save:"));
 				gtk_container_add(GTK_CONTAINER(cont), label);
 				switch (gtk_dialog_run(GTK_DIALOG(dialog)))
 				{
 					case 1:
-					str2=g_strdup("INVERSE_D\tREAL_VAL \tIMAG_VAL ");
+					str2=g_strdup(_("INVERSE_D\tREAL_VAL \tIMAG_VAL "));
 					contents=g_strdup(str2);
 					for (k=1; k<=jdimxf; k++)
 					{
@@ -1378,12 +1379,12 @@ void static sav(GtkWidget *widget, gpointer data)
 						contents=g_strdup(str);
 					}
 					plt=PLOT_LINEAR(plot2);
-					sz=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
+					sz2=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
 					for (k=1; k<=jdimxf; k++)
 					{
-						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz));
+						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
 						g_free(str2);
 						str2=g_strdup(str);
@@ -1394,18 +1395,18 @@ void static sav(GtkWidget *widget, gpointer data)
 					contents=g_strjoin("\n", str, str2, NULL);
 					g_free(str);
 					g_free(str2);
-					for (j=1; j<sz; j++)
+					for (j=1; j<sz2; j++)
 					{
 						g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 						g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, j));
-						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz)-j));
+						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz2)-j));
 						str2=g_strjoin("\t", s1, s2, s3, NULL);
 						k=1;
 						while (k<=jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
-							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz)+j));
-							g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(++k)*sz)-j));
+							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz2)+j));
+							g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(++k)*sz2)-j));
 							str=g_strjoin("\t", str2, s1, s2, s3, NULL);
 							g_free(str2);
 							str2=g_strdup(str);
@@ -1421,7 +1422,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s"), (gchar *) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1429,7 +1430,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(fout);
 					break;
 					case 2:
-					str2=g_strdup("INVERSE_D\tMAGNITUDE\tPHASE    ");
+					str2=g_strdup(_("INVERSE_D\tMAGNITUDE\tPHASE    "));
 					contents=g_strdup(str2);
 					for (k=1; k<=jdimxf; k++)
 					{
@@ -1438,12 +1439,12 @@ void static sav(GtkWidget *widget, gpointer data)
 						contents=g_strdup(str);
 					}
 					plt=PLOT_LINEAR(plot2);
-					sz=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
+					sz2=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
 					for (k=1; k<=jdimxf; k++)
 					{
-						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz));
+						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
 						g_free(str2);
 						str2=g_strdup(str);
@@ -1454,11 +1455,11 @@ void static sav(GtkWidget *widget, gpointer data)
 					contents=g_strjoin("\n", str, str2, NULL);
 					g_free(str);
 					g_free(str2);
-					for (j=1; j<sz; j++)
+					for (j=1; j<sz2; j++)
 					{
 						g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 						num=g_array_index(stars, gdouble, j);
-						num2=g_array_index(stars, gdouble, (2*sz)-j);
+						num2=g_array_index(stars, gdouble, (2*sz2)-j);
 						g_snprintf(s3, 10, "%f", atan2(num2, num));
 						num*=num;
 						num2*=num2;
@@ -1470,8 +1471,8 @@ void static sav(GtkWidget *widget, gpointer data)
 						while (k<=jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
-							num=g_array_index(stars, gdouble, (2*k*sz)+j);
-							num2=g_array_index(stars, gdouble, (2*(++k)*sz)-j);
+							num=g_array_index(stars, gdouble, (2*k*sz2)+j);
+							num2=g_array_index(stars, gdouble, (2*(++k)*sz2)-j);
 							g_snprintf(s3, 10, "%f", atan2(num2, num));
 							num*=num;
 							num2*=num2;
@@ -1493,7 +1494,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s"), (gchar *) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1509,7 +1510,7 @@ void static sav(GtkWidget *widget, gpointer data)
 		else
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
-			str=g_strdup("No available processed data.");
+			str=g_strdup(_("No available processed data."));
 			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 			g_free(str);
 		}
@@ -1518,20 +1519,20 @@ void static sav(GtkWidget *widget, gpointer data)
 		if ((flags&2)!=0)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
-			wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				dialog=gtk_dialog_new_with_buttons("Parameter selection", GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Real/Imaginary", 1, "Magnitude/Phase", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Real/Imaginary", 1, "Magnitude/Phase", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 				cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
-				label=gtk_label_new("Select Parameter to save:");
+				label=gtk_label_new(_("Select Parameter to save:"));
 				gtk_container_add(GTK_CONTAINER(cont), label);
 				switch (gtk_dialog_run(GTK_DIALOG(dialog)))
 				{
 					case 1:
-					str2=g_strdup("INVERSE_D\tREAL_VAL \tIMAG_VAL ");
+					str2=g_strdup(_("INVERSE_D\tREAL_VAL \tIMAG_VAL "));
 					contents=g_strdup(str2);
 					for (k=1; k<=jdimxf; k++)
 					{
@@ -1540,12 +1541,12 @@ void static sav(GtkWidget *widget, gpointer data)
 						contents=g_strdup(str);
 					}
 					plt=PLOT_LINEAR(plot2);
-					sz=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
+					sz2=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
 					for (k=1; k<=jdimxf; k++)
 					{
-						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz));
+						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
 						g_free(str2);
 						str2=g_strdup(str);
@@ -1556,18 +1557,18 @@ void static sav(GtkWidget *widget, gpointer data)
 					contents=g_strjoin("\n", str, str2, NULL);
 					g_free(str);
 					g_free(str2);
-					for (j=1; j<sz; j++)
+					for (j=1; j<sz2; j++)
 					{
 						g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 						g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, j));
-						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz)-j));
+						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz2)-j));
 						str2=g_strjoin("\t", s1, s2, s3, NULL);
 						k=1;
 						while (k<=jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
-							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz)+j));
-							g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(++k)*sz)-j));
+							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz2)+j));
+							g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(++k)*sz2)-j));
 							str=g_strjoin("\t", str2, s1, s2, s3, NULL);
 							g_free(str2);
 							str2=g_strdup(str);
@@ -1583,7 +1584,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s"), (gchar *) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1591,7 +1592,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(fout);
 					break;
 					case 2:
-					str2=g_strdup("INVERSE_D\tMAGNITUDE\tPHASE    ");
+					str2=g_strdup(_("INVERSE_D\tMAGNITUDE\tPHASE    "));
 					contents=g_strdup(str2);
 					for (k=1; k<=jdimxf; k++)
 					{
@@ -1600,12 +1601,12 @@ void static sav(GtkWidget *widget, gpointer data)
 						contents=g_strdup(str);
 					}
 					plt=PLOT_LINEAR(plot2);
-					sz=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
+					sz2=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
 					for (k=1; k<=jdimxf; k++)
 					{
-						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz));
+						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
 						g_free(str2);
 						str2=g_strdup(str);
@@ -1616,11 +1617,11 @@ void static sav(GtkWidget *widget, gpointer data)
 					contents=g_strjoin("\n", str, str2, NULL);
 					g_free(str);
 					g_free(str2);
-					for (j=1; j<sz; j++)
+					for (j=1; j<sz2; j++)
 					{
 						g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 						num=g_array_index(stars, gdouble, j);
-						num2=g_array_index(stars, gdouble, (2*sz)-j);
+						num2=g_array_index(stars, gdouble, (2*sz2)-j);
 						g_snprintf(s3, 10, "%f", atan2(num2, num));
 						num*=num;
 						num2*=num2;
@@ -1632,8 +1633,8 @@ void static sav(GtkWidget *widget, gpointer data)
 						while (k<=jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
-							num=g_array_index(stars, gdouble, (2*k*sz)+j);
-							num2=g_array_index(stars, gdouble, (2*(++k)*sz)-j);
+							num=g_array_index(stars, gdouble, (2*k*sz2)+j);
+							num2=g_array_index(stars, gdouble, (2*(++k)*sz2)-j);
 							g_snprintf(s3, 10, "%f", atan2(num2, num));
 							num*=num;
 							num2*=num2;
@@ -1655,7 +1656,7 @@ void static sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf("Error Saving file: %s", (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s"), (gchar *) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1670,7 +1671,7 @@ void static sav(GtkWidget *widget, gpointer data)
 		}
 		else
 		{
-			str=g_strdup("No available processed data.");
+			str=g_strdup(_("No available processed data."));
 			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 			g_free(str);
 		}
@@ -1832,7 +1833,7 @@ void static prs(GtkWidget *widget, gpointer data)
 						}
 						else
 						{
-							str=g_strdup_printf("Insufficient windowing range in channel %d, %d.", j, k);
+							str=g_strdup_printf(_("Insufficient windowing range in channel %d, %d."), j, k);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							vt=0;
@@ -1854,7 +1855,7 @@ void static prs(GtkWidget *widget, gpointer data)
 				vt=g_array_index(doms, gdouble, (jdim+(kdim*MXD)));
 				g_snprintf(s, 9, "%f", vt);
 				gtk_label_set_text(GTK_LABEL(dsl), s);
-				label=gtk_label_new("Chirp");
+				label=gtk_label_new(_("Chirp"));
 				gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				gtk_widget_show(label);
 				vt=g_array_index(chp, gdouble, (jdim+(kdim*MXD)));
@@ -1944,7 +1945,7 @@ void static prs(GtkWidget *widget, gpointer data)
 						}
 						else
 						{
-							str=g_strdup_printf("Insufficient windowing range in channel %d, %d.", j, k);
+							str=g_strdup_printf(_("Insufficient windowing range in channel %d, %d."), j, k);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							vt=0;
@@ -2095,7 +2096,7 @@ void static prs(GtkWidget *widget, gpointer data)
 					}
 					else
 					{
-						str=g_strdup_printf("Insufficient windowing range in channel %d, %d.", j, k);
+						str=g_strdup_printf(_("Insufficient windowing range in channel %d, %d."), j, k);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						vt=0;
@@ -2117,7 +2118,7 @@ void static prs(GtkWidget *widget, gpointer data)
 			vt=g_array_index(doms, gdouble, (jdim+(kdim*MXD)));
 			g_snprintf(s, 9, "%f", vt);
 			gtk_label_set_text(GTK_LABEL(dsl), s);
-			label=gtk_label_new("Chirp");
+			label=gtk_label_new(_("Chirp"));
 			gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_widget_show(label);
 			vt=g_array_index(chp, gdouble, (jdim+(kdim*MXD)));
@@ -2201,7 +2202,7 @@ void static prs(GtkWidget *widget, gpointer data)
 					}
 					else
 					{
-						str=g_strdup_printf("Insufficient windowing range in channel %d, %d.", j, k);
+						str=g_strdup_printf(_("Insufficient windowing range in channel %d, %d."), j, k);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						vt=0;
@@ -2227,7 +2228,7 @@ void static prs(GtkWidget *widget, gpointer data)
 	}
 	else
 	{
-		str=g_strdup("No transform for analysis exists yet.");
+		str=g_strdup(_("No transform for analysis exists yet."));
 		gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 		g_free(str);
 	}
@@ -2278,7 +2279,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 								sp=k-st;
 								if (sp>zp)
 								{
-									str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+									str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									sp=zp;
@@ -2299,7 +2300,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 								sp=k-st;
 								if (sp>zp)
 								{
-									str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+									str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									sp=zp;
@@ -2321,7 +2322,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 							sp=k-st;
 							if (sp>zp)
 							{
-								str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+								str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								sp=zp;
@@ -2342,7 +2343,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 							sp=k-st;
 							if (sp>zp)
 							{
-								str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+								str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								sp=zp;
@@ -2364,7 +2365,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 						sp=k-st;
 						if (sp>zp)
 						{
-							str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+							str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							sp=zp;
@@ -2385,7 +2386,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 						sp=k-st;
 						if (sp>zp)
 						{
-							str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+							str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							sp=zp;
@@ -2406,7 +2407,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 						sp=k-st;
 						if (sp>zp)
 						{
-							str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+							str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							sp=zp;
@@ -2432,7 +2433,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 							sp=k-st;
 							if (sp>zp)
 							{
-								str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+								str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								sp=zp;
@@ -2453,7 +2454,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 							sp=k-st;
 							if (sp>zp)
 							{
-								str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+								str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								sp=zp;
@@ -2475,7 +2476,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 						sp=k-st;
 						if (sp>zp)
 						{
-							str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+							str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							sp=zp;
@@ -2496,7 +2497,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 						sp=k-st;
 						if (sp>zp)
 						{
-							str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+							str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							sp=zp;
@@ -2518,7 +2519,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 					sp=k-st;
 					if (sp>zp)
 					{
-						str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+						str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						sp=zp;
@@ -2539,7 +2540,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 					sp=k-st;
 					if (sp>zp)
 					{
-						str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+						str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						sp=zp;
@@ -2560,7 +2561,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 					sp=k-st;
 					if (sp>zp)
 					{
-						str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+						str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						sp=zp;
@@ -2588,7 +2589,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 							sp=k-st;
 							if (sp>zp)
 							{
-								str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+								str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								sp=zp;
@@ -2620,7 +2621,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 							sp=k-st;
 							if (sp>zp)
 							{
-								str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+								str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								sp=zp;
@@ -2653,7 +2654,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 						sp=k-st;
 						if (sp>zp)
 						{
-							str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+							str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							sp=zp;
@@ -2676,7 +2677,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 						sp=k-st;
 						if (sp>zp)
 						{
-							str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+							str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							sp=zp;
@@ -2700,7 +2701,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 					sp=k-st;
 					if (sp>zp)
 					{
-						str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+						str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						sp=zp;
@@ -2729,7 +2730,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 					sp=k-st;
 					if (sp>zp)
 					{
-						str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+						str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						sp=zp;
@@ -2762,7 +2763,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 						sp=k-st;
 						if (sp>zp)
 						{
-							str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+							str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							sp=zp;
@@ -2791,7 +2792,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 						sp=k-st;
 						if (sp>zp)
 						{
-							str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+							str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							sp=zp;
@@ -2820,7 +2821,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 					sp=k-st;
 					if (sp>zp)
 					{
-						str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+						str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						sp=zp;
@@ -2843,7 +2844,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 					sp=k-st;
 					if (sp>zp)
 					{
-						str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+						str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						sp=zp;
@@ -2867,7 +2868,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 				sp=k-st;
 				if (sp>zp)
 				{
-					str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+					str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 					gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 					g_free(str);
 					sp=zp;
@@ -2894,7 +2895,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 				sp=k-st;
 				if (sp>zp)
 				{
-					str=g_strdup_printf("Some clipping occured in channel %d. Increase zero padding.", j);
+					str=g_strdup_printf(_("Some clipping occured in channel %d. Increase zero padding."), j);
 					gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 					g_free(str);
 					sp=zp;
@@ -3011,7 +3012,7 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 	}
 	else
 	{
-		str=g_strdup("Open a file for analysis first.");
+		str=g_strdup(_("Open a file for analysis first."));
 		gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 		g_free(str);
 	}
@@ -3057,7 +3058,7 @@ void static pltmv(PlotLinear *plot, gpointer data)
 {
 	gchar *str;
 
-	str=g_strdup_printf("x: %f, y: %f", (plot->xps), (plot->yps));
+	str=g_strdup_printf(_("x: %f, y: %f"), (plot->xps), (plot->yps));
 	gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 	g_free(str);
 }
@@ -3067,7 +3068,7 @@ void static pltmvp(PlotPolarBoth *plot, gpointer data)
 {
 	gchar *str;
 
-	str=g_strdup_printf("x: %f, y: %f", (plot->rps), (plot->thps));
+	str=g_strdup_printf(_("x: %f, y: %f"), (plot->rps), (plot->thps));
 	gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 	g_free(str);
 }
@@ -3093,13 +3094,13 @@ void static opd(GtkWidget *widget, gpointer data)
 	{
 		if ((flags&4)==0)
 		{
-			str=g_strdup("Perform an initial test of the parameters first");
+			str=g_strdup(_("Perform an initial test of the parameters first"));
 			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 			g_free(str);
 		}
 		else /* batch job processing mode */
 		{
-			wfile=gtk_file_chooser_dialog_new("Select Config File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Config File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
@@ -3107,9 +3108,9 @@ void static opd(GtkWidget *widget, gpointer data)
 				gtk_widget_destroy(wfile);
 				if (g_file_get_contents(fin, &contents2, NULL, &Err))
 				{
-					dialog=gtk_dialog_new_with_buttons("Variable Parameter", GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Linear", 1, "Polar", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+					dialog=gtk_dialog_new_with_buttons(_("Variable Parameter"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Linear", 1, "Polar", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 					cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
-					label=gtk_label_new("Select Parameter to save:");
+					label=gtk_label_new(_("Select Parameter to save:"));
 					gtk_container_add(GTK_CONTAINER(cont), label);
 					switch (gtk_dialog_run(GTK_DIALOG(dialog)))
 					{
@@ -3123,7 +3124,7 @@ void static opd(GtkWidget *widget, gpointer data)
 							g_signal_connect(plot3, "moved", G_CALLBACK(pltmv), NULL);
 							gtk_widget_show(plot3);
 							gtk_table_attach(GTK_TABLE(table), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-							label=gtk_label_new("Analysis Results");
+							label=gtk_label_new(_("Analysis Results"));
 							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
 						}
 						else if ((flags&32)!=0)
@@ -3135,7 +3136,7 @@ void static opd(GtkWidget *widget, gpointer data)
 							g_signal_connect(plot3, "moved", G_CALLBACK(pltmv), NULL);
 							gtk_widget_show(plot3);
 							gtk_table_attach(GTK_TABLE(table), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-							label=gtk_label_new("Analysis Results");
+							label=gtk_label_new(_("Analysis Results"));
 							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
 							flags^=32;
 						}
@@ -3161,7 +3162,7 @@ void static opd(GtkWidget *widget, gpointer data)
 													strat2=g_strsplit_set(strary2[m], "\t,", 0);
 													if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 													{
-														str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+														str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 														gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 														g_free(str);
 														strary=g_strsplit_set(contents, "\r\n", 0);
@@ -3339,7 +3340,7 @@ void static opd(GtkWidget *widget, gpointer data)
 													}
 													else
 													{
-														str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+														str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 														gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 														g_free(str);
 														g_error_free(Err);
@@ -3356,7 +3357,7 @@ void static opd(GtkWidget *widget, gpointer data)
 													strat2=g_strsplit_set(strary2[m], "\t,", 0);
 													if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 													{
-														str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+														str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 														gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 														g_free(str);
 														strary=g_strsplit_set(contents, "\r\n", 0);
@@ -3534,7 +3535,7 @@ void static opd(GtkWidget *widget, gpointer data)
 													}
 													else
 													{
-														str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+														str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 														gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 														g_free(str);
 														g_error_free(Err);
@@ -3552,7 +3553,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 												{
-													str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+													str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													strary=g_strsplit_set(contents, "\r\n", 0);
@@ -3730,7 +3731,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												}
 												else
 												{
-													str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													g_error_free(Err);
@@ -3747,7 +3748,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 												{
-													str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+													str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													strary=g_strsplit_set(contents, "\r\n", 0);
@@ -3925,7 +3926,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												}
 												else
 												{
-													str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													g_error_free(Err);
@@ -3945,7 +3946,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 												{
-													str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+													str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													strary=g_strsplit_set(contents, "\r\n", 0);
@@ -4123,7 +4124,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												}
 												else
 												{
-													str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													g_error_free(Err);
@@ -4140,7 +4141,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 												{
-													str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+													str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													strary=g_strsplit_set(contents, "\r\n", 0);
@@ -4318,7 +4319,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												}
 												else
 												{
-													str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													g_error_free(Err);
@@ -4336,7 +4337,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
@@ -4514,7 +4515,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											}
 											else
 											{
-												str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												g_error_free(Err);
@@ -4531,7 +4532,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
@@ -4709,7 +4710,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											}
 											else
 											{
-												str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												g_error_free(Err);
@@ -4731,7 +4732,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 												{
-													str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+													str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													strary=g_strsplit_set(contents, "\r\n", 0);
@@ -4909,7 +4910,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												}
 												else
 												{
-													str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													g_error_free(Err);
@@ -4926,7 +4927,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 												{
-													str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+													str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													strary=g_strsplit_set(contents, "\r\n", 0);
@@ -5104,7 +5105,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												}
 												else
 												{
-													str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													g_error_free(Err);
@@ -5122,7 +5123,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
@@ -5300,7 +5301,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											}
 											else
 											{
-												str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												g_error_free(Err);
@@ -5317,7 +5318,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
@@ -5495,7 +5496,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											}
 											else
 											{
-												str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												g_error_free(Err);
@@ -5515,7 +5516,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
@@ -5693,7 +5694,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											}
 											else
 											{
-												str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												g_error_free(Err);
@@ -5710,7 +5711,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
@@ -5888,7 +5889,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											}
 											else
 											{
-												str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												g_error_free(Err);
@@ -5906,7 +5907,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
@@ -6084,7 +6085,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										}
 										else
 										{
-											str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											g_error_free(Err);
@@ -6101,7 +6102,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
@@ -6279,7 +6280,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										}
 										else
 										{
-											str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											g_error_free(Err);
@@ -6303,7 +6304,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 												{
-													str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+													str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													strary=g_strsplit_set(contents, "\r\n", 0);
@@ -6481,7 +6482,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												}
 												else
 												{
-													str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													g_error_free(Err);
@@ -6498,7 +6499,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 												{
-													str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+													str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													strary=g_strsplit_set(contents, "\r\n", 0);
@@ -6676,7 +6677,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												}
 												else
 												{
-													str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													g_error_free(Err);
@@ -6694,7 +6695,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
@@ -6872,7 +6873,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											}
 											else
 											{
-												str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												g_error_free(Err);
@@ -6889,7 +6890,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
@@ -7067,7 +7068,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											}
 											else
 											{
-												str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												g_error_free(Err);
@@ -7087,7 +7088,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
@@ -7265,7 +7266,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											}
 											else
 											{
-												str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												g_error_free(Err);
@@ -7282,7 +7283,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
@@ -7460,7 +7461,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											}
 											else
 											{
-												str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												g_error_free(Err);
@@ -7478,7 +7479,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
@@ -7656,7 +7657,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										}
 										else
 										{
-											str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											g_error_free(Err);
@@ -7673,7 +7674,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
@@ -7851,7 +7852,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										}
 										else
 										{
-											str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											g_error_free(Err);
@@ -7873,7 +7874,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
@@ -8051,7 +8052,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											}
 											else
 											{
-												str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												g_error_free(Err);
@@ -8068,7 +8069,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
@@ -8246,7 +8247,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											}
 											else
 											{
-												str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												g_error_free(Err);
@@ -8264,7 +8265,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
@@ -8442,7 +8443,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										}
 										else
 										{
-											str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											g_error_free(Err);
@@ -8459,7 +8460,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
@@ -8637,7 +8638,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										}
 										else
 										{
-											str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											g_error_free(Err);
@@ -8657,7 +8658,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
@@ -8835,7 +8836,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										}
 										else
 										{
-											str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											g_error_free(Err);
@@ -8852,7 +8853,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
@@ -9030,7 +9031,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										}
 										else
 										{
-											str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											g_error_free(Err);
@@ -9048,7 +9049,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
@@ -9226,7 +9227,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									}
 									else
 									{
-										str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										g_error_free(Err);
@@ -9243,7 +9244,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
@@ -9421,7 +9422,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									}
 									else
 									{
-										str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										g_error_free(Err);
@@ -9439,7 +9440,7 @@ void static opd(GtkWidget *widget, gpointer data)
 								strat2=g_strsplit_set(strary2[j], "\t,", 0);
 								if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 								{
-									str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+									str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									strary=g_strsplit_set(contents, "\r\n", 0);
@@ -9561,7 +9562,7 @@ void static opd(GtkWidget *widget, gpointer data)
 								}
 								else
 								{
-									str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									g_error_free(Err);
@@ -9583,7 +9584,7 @@ void static opd(GtkWidget *widget, gpointer data)
 							g_signal_connect(plot3, "moved", G_CALLBACK(pltmv), NULL); /* change to pltmvp */
 							gtk_widget_show(plot3);
 							gtk_table_attach(GTK_TABLE(table), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-							label=gtk_label_new("Analysis Results");
+							label=gtk_label_new(_("Analysis Results"));
 							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
 						}
 						flags|=41;
@@ -9597,7 +9598,7 @@ void static opd(GtkWidget *widget, gpointer data)
 							strat2=g_strsplit_set(strary2[j], "\t,", 0);
 							if (g_file_get_contents(strat[1], &contents, NULL, &Err))
 							{
-								str=g_strdup_printf("File: %s successfully loaded", strat[1]);
+								str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								strary=g_strsplit_set(contents, "\r\n", 0);
@@ -9643,7 +9644,7 @@ void static opd(GtkWidget *widget, gpointer data)
 							}
 							else
 							{
-								str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+								str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -9659,7 +9660,7 @@ void static opd(GtkWidget *widget, gpointer data)
 				}
 				else
 				{
-					str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+					str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 					gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 					g_free(str);
 					g_error_free(Err);
@@ -9675,7 +9676,7 @@ void static opd(GtkWidget *widget, gpointer data)
 	}
 	else /* single file mode */
 	{
-		wfile=gtk_file_chooser_dialog_new("Select Data File", GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+		wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 		g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 		if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 		{
@@ -9692,19 +9693,19 @@ void static opd(GtkWidget *widget, gpointer data)
 					gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
 					rest=gtk_table_new(4, 2, FALSE);
 					gtk_widget_show(rest);
-					label=gtk_label_new("Visibility");
+					label=gtk_label_new(_("Visibility"));
 					gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 					gtk_widget_show(label);
 					visl=gtk_label_new("");
 					gtk_table_attach(GTK_TABLE(rest), visl, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 					gtk_widget_show(visl);
-					label=gtk_label_new("Domain Shift");
+					label=gtk_label_new(_("Domain Shift"));
 					gtk_table_attach(GTK_TABLE(rest), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 					gtk_widget_show(label);
 					dsl=gtk_label_new("");
 					gtk_table_attach(GTK_TABLE(rest), dsl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 					gtk_widget_show(dsl);
-					label=gtk_label_new("Analysis Results");
+					label=gtk_label_new(_("Analysis Results"));
 					gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
 					flags^=8;
 				}
@@ -9776,7 +9777,7 @@ void static opd(GtkWidget *widget, gpointer data)
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
 				g_signal_connect(G_OBJECT(tr), "clicked", G_CALLBACK(trs), NULL);
 				if (g_signal_handler_is_connected(G_OBJECT(pr), pr_id)) g_signal_handler_disconnect(G_OBJECT(pr), pr_id);
-				str=g_strdup_printf("File: %s successfully loaded", fin);
+				str=g_strdup_printf(_("File: %s successfully loaded"), fin);
 				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 				g_free(str);
 				plt=PLOT_LINEAR(plot1);
@@ -9795,7 +9796,7 @@ void static opd(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				str=g_strdup_printf("Loading failed for file: %s, Error: %s", fin, (gchar *) Err);
+				str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
 				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 				g_free(str);
 				g_error_free(Err);
@@ -10133,9 +10134,12 @@ int main( int argc, char *argv[])
 	GSList *group=NULL, *group3=NULL;
 	gdouble fll=0;
 
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	bind_textdomain_codeset(PACKAGE, "UTF-8");
+	textdomain(PACKAGE);
 	gtk_init(&argc, &argv);
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(window), "Harmonic Spectrum Analyser");
+	gtk_window_set_title(GTK_WINDOW(window), _("Harmonic Spectrum Analyser"));
 	g_signal_connect_swapped(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
 	vbox=gtk_vbox_new(FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(window), vbox);
@@ -10169,7 +10173,7 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(gtk_main_quit), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
-	mni=gtk_menu_item_new_with_mnemonic("_File");
+	mni=gtk_menu_item_new_with_mnemonic(_("_File"));
 	gtk_widget_show(mni);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), mnu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnb), mni);
@@ -10192,55 +10196,55 @@ int main( int argc, char *argv[])
 	group=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(sws));
 	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), sws);
 	gtk_widget_show(sws);
-	dlm=gtk_radio_menu_item_new_with_label(group, "Raw Delimited Data");
+	dlm=gtk_radio_menu_item_new_with_label(group, _("Raw Delimited Data"));
 	group=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(dlm));
 	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), dlm);
 	gtk_widget_show(dlm);
-	mni=gtk_menu_item_new_with_label("Data Format:");
+	mni=gtk_menu_item_new_with_label(_("Data Format:"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), smnu);
 	tracmenu=gtk_menu_new();
-	trac=gtk_menu_item_new_with_label("Trace:");
+	trac=gtk_menu_item_new_with_label(_("Trace:"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), trac);
 	gtk_widget_show(trac);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(trac), tracmenu);
-	trans=gtk_check_menu_item_new_with_label("Transmission Measurement?");
+	trans=gtk_check_menu_item_new_with_label(_("Transmission Measurement?"));
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(trans), TRUE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), trans);
 	gtk_widget_show(trans);
-	dBs=gtk_check_menu_item_new_with_label("Data in dBs?");
+	dBs=gtk_check_menu_item_new_with_label(_("Data in dBs?"));
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(dBs), TRUE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), dBs);
 	gtk_widget_show(dBs);
-	neg=gtk_check_menu_item_new_with_label("Negate?");
+	neg=gtk_check_menu_item_new_with_label(_("Negate?"));
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(neg), FALSE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), neg);
 	gtk_widget_show(neg);
-	mni=gtk_menu_item_new_with_label("Display Properties:");
+	mni=gtk_menu_item_new_with_label(_("Display Properties:"));
 	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_F2, 0, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(dpr), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
-	mni=gtk_menu_item_new_with_mnemonic("_Properties");
+	mni=gtk_menu_item_new_with_mnemonic(_("_Properties"));
 	gtk_widget_show(mni);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), mnu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnb), mni);
 	mnu=gtk_menu_new();
 	smnu=gtk_menu_new();
-	ncmp=gtk_radio_menu_item_new_with_label(group3, "None");
+	ncmp=gtk_radio_menu_item_new_with_label(group3, _("None"));
 	group3=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(ncmp));
 	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), ncmp);
 	gtk_widget_show(ncmp);
-	lcmp=gtk_radio_menu_item_new_with_label(group3, "1st order\nspectral shadowing");
+	lcmp=gtk_radio_menu_item_new_with_label(group3, _("1st order\nspectral shadowing"));
 	group3=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(lcmp));
 	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), lcmp);
 	gtk_widget_show(lcmp);
-	mni=gtk_menu_item_new_with_label("Nonlinear\nCompensation:");
+	mni=gtk_menu_item_new_with_label(_("Nonlinear\nCompensation:"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), smnu);
-	bat=gtk_check_menu_item_new_with_label("Batch Process Data?");
+	bat=gtk_check_menu_item_new_with_label(_("Batch Process Data?"));
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(bat), FALSE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), bat);
 	gtk_widget_show(bat);
@@ -10248,31 +10252,31 @@ int main( int argc, char *argv[])
 	if (check if harmonicconf is installed)
 	{
 		smnu=gtk_menu_new();
-		mni=gtk_menu_item_new_with_label("Create File");
+		mni=gtk_menu_item_new_with_label(_("Create File"));
 		g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(btc), NULL); change to run executable
 		gtk_menu_shell_append(GTK_MENU_SHELL(smnu), mni);
 		gtk_widget_show(mni);
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(bat), smnu);
 	}
 	*/
-	twopionx=gtk_check_menu_item_new_with_label("Invert domain?");
+	twopionx=gtk_check_menu_item_new_with_label(_("Invert domain?"));
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(twopionx), FALSE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), twopionx);
 	gtk_widget_show(twopionx);
-	chi=gtk_check_menu_item_new_with_label("Calculate Chirp?");
+	chi=gtk_check_menu_item_new_with_label(_("Calculate Chirp?"));
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(chi), FALSE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), chi);
 	gtk_widget_show(chi);
-	opttri=gtk_check_menu_item_new_with_label("Optimise Triangle fit?");
+	opttri=gtk_check_menu_item_new_with_label(_("Optimise Triangle fit?"));
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(opttri), FALSE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), opttri);
 	gtk_widget_show(opttri);
-	mni=gtk_menu_item_new_with_mnemonic("_Advanced");
+	mni=gtk_menu_item_new_with_mnemonic(_("_Advanced"));
 	gtk_widget_show(mni);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), mnu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnb), mni);
 	mnu=gtk_menu_new();
-	mni=gtk_menu_item_new_with_label("Instructions");
+	mni=gtk_menu_item_new_with_label(_("Instructions"));
 	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_F1, 0, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(help), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
@@ -10281,7 +10285,7 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(about), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
-	mni=gtk_menu_item_new_with_mnemonic("_Help");
+	mni=gtk_menu_item_new_with_mnemonic(_("_Help"));
 	gtk_widget_show(mni);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), mnu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnb), mni);
@@ -10302,7 +10306,7 @@ int main( int argc, char *argv[])
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(notebook), GTK_POS_TOP);
 	table=gtk_table_new(5, 3, FALSE);
 	gtk_widget_show(table);
-	label=gtk_label_new("Spectrum Start:");
+	label=gtk_label_new(_("Spectrum Start:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	adj=(GtkAdjustment *) gtk_adjustment_new(0, -32767, 32768, 1.0, 5.0, 0.0);
@@ -10310,7 +10314,7 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(bsr), "value-changed", G_CALLBACK(upa1), (gpointer) bsra);
 	gtk_table_attach(GTK_TABLE(table), bsr, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(bsr);
-	label=gtk_label_new("Spectrum Stop:");
+	label=gtk_label_new(_("Spectrum Stop:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	adj=(GtkAdjustment *) gtk_adjustment_new(0, -32767, 32768, 1.0, 5.0, 0.0);
@@ -10318,14 +10322,14 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(bsp), "value-changed", G_CALLBACK(upa2), (gpointer) bspa);
 	gtk_table_attach(GTK_TABLE(table), bsp, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(bsp);
-	label=gtk_label_new("Offset:");
+	label=gtk_label_new(_("Offset:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	adj=(GtkAdjustment *) gtk_adjustment_new(0, -32767, 32768, 1.0, 5.0, 0.0);
 	fst=gtk_spin_button_new(adj, 0.5, 2);
 	gtk_table_attach(GTK_TABLE(table), fst, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(fst);
-	label=gtk_label_new("j index:");
+	label=gtk_label_new(_("j index:"));
 	gtk_table_attach(GTK_TABLE(table), label, 2, 3, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, MXDM, 1.0, 5.0, 0.0);
@@ -10333,25 +10337,25 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(jind), "value-changed", G_CALLBACK(upj), NULL);
 	gtk_table_attach(GTK_TABLE(table), jind, 2, 3, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(jind);
-	label=gtk_label_new("Zero Padding 2^:");
+	label=gtk_label_new(_("Zero Padding 2^:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	adj=(GtkAdjustment *) gtk_adjustment_new(12, 0, 31, 1.0, 5.0, 0.0);
 	zpd=gtk_spin_button_new(adj, 0, 0);
 	gtk_table_attach(GTK_TABLE(table), zpd, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(zpd);
-	butt=gtk_button_new_with_label("Reset\nArrays");
+	butt=gtk_button_new_with_label(_("Reset\nArrays"));
 	g_signal_connect(G_OBJECT(butt), "clicked", G_CALLBACK(reset), NULL);
 	gtk_table_attach(GTK_TABLE(table), butt, 2, 3, 2, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(butt);
-	tr=gtk_button_new_with_label("Transform Spectrum");
+	tr=gtk_button_new_with_label(_("Transform Spectrum"));
 	gtk_table_attach(GTK_TABLE(table), tr, 0, 3, 4, 5, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(tr);
-	label=gtk_label_new("Spectrum");
+	label=gtk_label_new(_("Spectrum"));
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), table, label);
 	table=gtk_table_new(6, 3, FALSE);
 	gtk_widget_show(table);
-	label=gtk_label_new("Inverse Spectrum Start:");
+	label=gtk_label_new(_("Inverse Spectrum Start:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	adj=(GtkAdjustment *) gtk_adjustment_new(0, -32767, 32768, 1.0, 5.0, 0.0);
@@ -10359,7 +10363,7 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(isr), "value-changed", G_CALLBACK(upa2), (gpointer) isra);
 	gtk_table_attach(GTK_TABLE(table), isr, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(isr);
-	label=gtk_label_new("Inverse Spectrum Stop:");
+	label=gtk_label_new(_("Inverse Spectrum Stop:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	adj=(GtkAdjustment *) gtk_adjustment_new(0, -32767, 32768, 1.0, 5.0, 0.0);
@@ -10367,7 +10371,7 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(isp), "value-changed", G_CALLBACK(upa2), (gpointer) ispa);
 	gtk_table_attach(GTK_TABLE(table), isp, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(isp);
-	label=gtk_label_new("Triangle Centre:");
+	label=gtk_label_new(_("Triangle Centre:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	adj=(GtkAdjustment *) gtk_adjustment_new(0, -32767, 32768, 1.0, 5.0, 0.0);
@@ -10375,7 +10379,7 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(tc), "value-changed", G_CALLBACK(upa2), (gpointer) tca);
 	gtk_table_attach(GTK_TABLE(table), tc, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(tc);
-	label=gtk_label_new("Triangle Full Width:");
+	label=gtk_label_new(_("Triangle Full Width:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	adj=(GtkAdjustment *) gtk_adjustment_new(2, 0, 65535, 1.0, 5.0, 0.0);
@@ -10383,7 +10387,7 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(tw), "value-changed", G_CALLBACK(upa2), (gpointer) twa);
 	gtk_table_attach(GTK_TABLE(table), tw, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(tw);
-	label=gtk_label_new("DC Peak Width:");
+	label=gtk_label_new(_("DC Peak Width:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 4, 5, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	adj=(GtkAdjustment *) gtk_adjustment_new(2, 0, 65535, 1.0, 5.0, 0.0);
@@ -10391,7 +10395,7 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(zw), "value-changed", G_CALLBACK(upa1), (gpointer) zwa);
 	gtk_table_attach(GTK_TABLE(table), zw, 1, 2, 5, 6, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(zw);
-	label=gtk_label_new("j index:");
+	label=gtk_label_new(_("j index:"));
 	gtk_table_attach(GTK_TABLE(table), label, 2, 3, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, 0, 1.0, 5.0, 0.0);
@@ -10399,7 +10403,7 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(jind2), "value-changed", G_CALLBACK(upj), NULL);
 	gtk_table_attach(GTK_TABLE(table), jind2, 2, 3, 1, 2, GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 2, 2);
 	gtk_widget_show(jind2);
-	label=gtk_label_new("k index:");
+	label=gtk_label_new(_("k index:"));
 	gtk_table_attach(GTK_TABLE(table), label, 2, 3, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, 0, 1.0, 5.0, 0.0);
@@ -10407,14 +10411,14 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(kind), "value-changed", G_CALLBACK(upk), NULL);
 	gtk_table_attach(GTK_TABLE(table), kind, 2, 3, 3, 4, GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 2, 2);
 	gtk_widget_show(kind);
-	butt=gtk_button_new_with_label("Reset\nArrays");
+	butt=gtk_button_new_with_label(_("Reset\nArrays"));
 	g_signal_connect(G_OBJECT(butt), "clicked", G_CALLBACK(reset2), NULL);
 	gtk_table_attach(GTK_TABLE(table), butt, 2, 3, 4, 6, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(butt);
-	pr=gtk_button_new_with_label("Process\nSpectrum");
+	pr=gtk_button_new_with_label(_("Process\nSpectrum"));
 	gtk_table_attach(GTK_TABLE(table), pr, 0, 1, 4, 6, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(pr);
-	label=gtk_label_new("Inverse Spectrum");
+	label=gtk_label_new(_("Inverse Spectrum"));
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), table, label);
 	gtk_widget_show(notebook);
 	gtk_paned_add1(GTK_PANED(hpane), notebook);
@@ -10426,32 +10430,32 @@ int main( int argc, char *argv[])
 	g_signal_connect(plot1, "moved", G_CALLBACK(pltmv), NULL);
 	gtk_widget_show(plot1);
 	gtk_table_attach(GTK_TABLE(table), plot1, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK |GTK_EXPAND, 2, 2);
-	label=gtk_label_new("Spectrum");
+	label=gtk_label_new(_("Spectrum"));
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
 	table=gtk_table_new(1, 1, FALSE);
 	gtk_widget_show(table);
 	plot2=plot_linear_new();
-	((PLOT_LINEAR(plot2))->xlab)=g_strdup("Inverse Domain");
+	((PLOT_LINEAR(plot2))->xlab)=g_strdup(_("Inverse Domain"));
 	g_signal_connect(plot2, "moved", G_CALLBACK(pltmv), NULL);
 	gtk_widget_show(plot2);
 	gtk_table_attach(GTK_TABLE(table), plot2, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-	label=gtk_label_new("Inverse Spectrum");
+	label=gtk_label_new(_("Inverse Spectrum"));
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
 	rest=gtk_table_new(4, 2, FALSE);
 	gtk_widget_show(rest);
-	label=gtk_label_new("Visibility");
+	label=gtk_label_new(_("Visibility"));
 	gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	visl=gtk_label_new("");
 	gtk_table_attach(GTK_TABLE(rest), visl, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(visl);
-	label=gtk_label_new("Domain Shift");
+	label=gtk_label_new(_("Domain Shift"));
 	gtk_table_attach(GTK_TABLE(rest), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
 	dsl=gtk_label_new("");
 	gtk_table_attach(GTK_TABLE(rest), dsl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(dsl);
-	label=gtk_label_new("Analysis Results");
+	label=gtk_label_new(_("Analysis Results"));
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
 	gtk_widget_show(notebook2);
 	gtk_paned_add2(GTK_PANED(hpane), notebook2);
