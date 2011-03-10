@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
 "POT-Creation-Date: 2011-03-08 10:10+0200\n"
-"PO-Revision-Date: 2011-03-08 14:05+0200\n"
+"PO-Revision-Date: 2011-03-09 10:21+0200\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
@@ -29,10 +29,12 @@ msgid ""
 "analysis) and obtaining visibility of fringes, domain shift and chirp "
 "measurements."
 msgstr ""
+"Гармоника программы для выполнения гармонического анализа (например, анализ "
+"Фурье) и получения видимость полос, сдвига области и измерение ЛЧМ."
 
 #: src/harmonic.c:109
 msgid "Display Properties"
-msgstr ""
+msgstr "Визуального свойство"
 
 #: src/harmonic.c:122 src/harmonic.c:313 src/harmonic.c:617
 msgid "Text size:"
@@ -40,37 +42,37 @@ msgstr "Размер Шрифта:"
 
 #: src/harmonic.c:125 src/harmonic.c:316 src/harmonic.c:620
 msgid "Tick label size:"
-msgstr ""
+msgstr "Размер галочкой этикетки:"
 
 #: src/harmonic.c:134
 msgid "Radial axis text:"
-msgstr ""
+msgstr "Текст радиальном оси:"
 
 #: src/harmonic.c:137
 msgid "Azimuthal axis text:"
-msgstr ""
+msgstr "Текст азимутальной оси:"
 
 #: src/harmonic.c:157 src/harmonic.c:235 src/harmonic.c:291 src/harmonic.c:348
 #: src/harmonic.c:394 src/harmonic.c:652 src/harmonic.c:699
 msgid "Multiple plots for Results over index j"
-msgstr ""
+msgstr "Несколько участков результаты за индексом J"
 
 #: src/harmonic.c:161 src/harmonic.c:239 src/harmonic.c:295 src/harmonic.c:352
 #: src/harmonic.c:398 src/harmonic.c:656 src/harmonic.c:703
 msgid "Multiple plots for Results over index k"
-msgstr ""
+msgstr "Несколько участков результаты за индексом K"
 
 #: src/harmonic.c:212 src/harmonic.c:323 src/harmonic.c:627
 msgid "X axis text:"
-msgstr ""
+msgstr "Текст оси x:"
 
 #: src/harmonic.c:215 src/harmonic.c:326 src/harmonic.c:630
 msgid "Y axis text:"
-msgstr ""
+msgstr "Текст оси y:"
 
 #: src/harmonic.c:391 src/harmonic.c:508 src/harmonic.c:695 src/harmonic.c:817
 msgid "Multiple plots for Inverse Domain"
-msgstr ""
+msgstr "Несколько участков для обратной области"
 
 #: src/harmonic.c:941 src/harmonic.c:958 src/harmonic.c:975
 #: src/harmonic.c:1001 src/harmonic.c:1018 src/harmonic.c:1044
@@ -89,44 +91,44 @@ msgstr "Выберите файл изображения"
 #: src/harmonic.c:1090 src/harmonic.c:1154 src/harmonic.c:1205
 #: src/harmonic.c:1366 src/harmonic.c:1528
 msgid "Parameter selection"
-msgstr ""
+msgstr "Выбор параметр"
 
 #: src/harmonic.c:1092 src/harmonic.c:1156 src/harmonic.c:1207
 #: src/harmonic.c:1368 src/harmonic.c:1530 src/harmonic.c:3113
 msgid "Select Parameter to save:"
-msgstr ""
+msgstr "Выберите параметр сохранить:"
 
 #: src/harmonic.c:1212 src/harmonic.c:1373 src/harmonic.c:1535
 msgid "INVERSE_D\tREAL_VAL \tIMAG_VAL "
-msgstr ""
+msgstr "ОБРАТ_ОБЛ\tРЕАЛ_ЗНАЧ\tМНИМ_ЗНАЧ"
 
 #: src/harmonic.c:1264 src/harmonic.c:1336 src/harmonic.c:1425
 #: src/harmonic.c:1497 src/harmonic.c:1587 src/harmonic.c:1659
 #, c-format
 msgid "Error Saving file: %s"
-msgstr "Ошыбка при сохранении файла: %s"
+msgstr "Ошибка при сохранении файла: %s"
 
 #: src/harmonic.c:1272 src/harmonic.c:1433 src/harmonic.c:1595
 msgid "INVERSE_D\tMAGNITUDE\tPHASE    "
-msgstr ""
+msgstr "ОБРАТ_ОБЛ\tАМПЛИТУДЫ\tФАЗЫ     "
 
 #: src/harmonic.c:1352 src/harmonic.c:1513 src/harmonic.c:1674
 msgid "No available processed data."
-msgstr ""
+msgstr "Нет доступных обрабатываемых данных."
 
 #: src/harmonic.c:1836 src/harmonic.c:1948 src/harmonic.c:2099
 #: src/harmonic.c:2205
 #, c-format
 msgid "Insufficient windowing range in channel %d, %d."
-msgstr ""
+msgstr "Недостаточное оконной диапазон в канале %d, %d."
 
 #: src/harmonic.c:1858 src/harmonic.c:2121
 msgid "Chirp"
-msgstr ""
+msgstr "ЛЧМ"
 
 #: src/harmonic.c:2231
 msgid "No transform for analysis exists yet."
-msgstr ""
+msgstr "Нет преобразования для анализа еще не существует."
 
 #: src/harmonic.c:2282 src/harmonic.c:2303 src/harmonic.c:2325
 #: src/harmonic.c:2346 src/harmonic.c:2368 src/harmonic.c:2389
@@ -140,27 +142,28 @@ msgstr ""
 #, c-format
 msgid "Some clipping occured in channel %d. Increase zero padding."
 msgstr ""
+"Некоторые отсечения произошло в канале %d. Увеличите заполнение нулями."
 
 #: src/harmonic.c:3015
 msgid "Open a file for analysis first."
-msgstr ""
+msgstr "Откройте файл для анализа в первую очередь."
 
 #: src/harmonic.c:3061
 #, c-format
 msgid "x: %f, y: %f"
-msgstr ""
+msgstr "x: %f, y: %f"
 
 #: src/harmonic.c:3097
 msgid "Perform an initial test of the parameters first"
-msgstr ""
+msgstr "Выполните первоначальное испытание параметров первого"
 
 #: src/harmonic.c:3103
 msgid "Select Config File"
-msgstr ""
+msgstr "Выберите файл конфигурации"
 
 #: src/harmonic.c:3111
 msgid "Variable Parameter"
-msgstr ""
+msgstr "Параметр интерес"
 
 #: src/harmonic.c:3127 src/harmonic.c:3139 src/harmonic.c:9587
 #: src/harmonic.c:9708 src/harmonic.c:10458
@@ -181,7 +184,7 @@ msgstr "Результаты анализа"
 #: src/harmonic.c:9601 src/harmonic.c:9780
 #, c-format
 msgid "File: %s successfully loaded"
-msgstr ""
+msgstr "Файл: %s успешно загружены"
 
 #: src/harmonic.c:3343 src/harmonic.c:3538 src/harmonic.c:3734
 #: src/harmonic.c:3929 src/harmonic.c:4127 src/harmonic.c:4322
@@ -197,19 +200,19 @@ msgstr ""
 #: src/harmonic.c:9647 src/harmonic.c:9663 src/harmonic.c:9799
 #, c-format
 msgid "Loading failed for file: %s, Error: %s"
-msgstr ""
+msgstr "Загрузка не удалась по файл: %s, ошибка: %s"
 
 #: src/harmonic.c:9696 src/harmonic.c:10446
 msgid "Visibility"
-msgstr ""
+msgstr "Выдимость"
 
 #: src/harmonic.c:9702 src/harmonic.c:10452
 msgid "Domain Shift"
-msgstr ""
+msgstr "Сдвига области"
 
 #: src/harmonic.c:10142
 msgid "Harmonic Spectrum Analyser"
-msgstr ""
+msgstr "Гармонического анализатора спектра"
 
 #: src/harmonic.c:10176
 msgid "_File"
@@ -217,31 +220,31 @@ msgstr "_Файл"
 
 #: src/harmonic.c:10199
 msgid "Raw Delimited Data"
-msgstr ""
+msgstr "сырья данных с разделителями?"
 
 #: src/harmonic.c:10203
 msgid "Data Format:"
-msgstr ""
+msgstr "Формат данных:"
 
 #: src/harmonic.c:10208
 msgid "Trace:"
-msgstr ""
+msgstr "След:"
 
 #: src/harmonic.c:10212
 msgid "Transmission Measurement?"
-msgstr ""
+msgstr "Передачи измерения?"
 
 #: src/harmonic.c:10216
 msgid "Data in dBs?"
-msgstr ""
+msgstr "Данных в децибелах?"
 
 #: src/harmonic.c:10220
 msgid "Negate?"
-msgstr ""
+msgstr "Отрицайте."
 
 #: src/harmonic.c:10224
 msgid "Display Properties:"
-msgstr ""
+msgstr "Визуального свойство:"
 
 #: src/harmonic.c:10229
 msgid "_Properties"
@@ -249,35 +252,39 @@ msgstr "_Свойство"
 
 #: src/harmonic.c:10235
 msgid "None"
-msgstr ""
+msgstr "Ничего"
 
 #: src/harmonic.c:10239
 msgid ""
 "1st order\n"
 "spectral shadowing"
 msgstr ""
+"Первого порядка\n"
+"спектральной слеъжка"
 
 #: src/harmonic.c:10243
 msgid ""
 "Nonlinear\n"
 "Compensation:"
 msgstr ""
+"Нелинейной\n"
+"компенсации:"
 
 #: src/harmonic.c:10247
 msgid "Batch Process Data?"
-msgstr ""
+msgstr "пакетной обработки данных."
 
 #: src/harmonic.c:10262
 msgid "Invert domain?"
-msgstr ""
+msgstr "Обратите области."
 
 #: src/harmonic.c:10266
 msgid "Calculate Chirp?"
-msgstr ""
+msgstr "Измерите ЛЧМ."
 
 #: src/harmonic.c:10270
 msgid "Optimise Triangle fit?"
-msgstr ""
+msgstr "Оптимизировайте припадке треугольников."
 
 #: src/harmonic.c:10274
 msgid "_Advanced"
@@ -305,17 +312,19 @@ msgstr "З Индекс:"
 
 #: src/harmonic.c:10340
 msgid "Zero Padding 2^:"
-msgstr ""
+msgstr "Заполнение нулями 2^:"
 
 #: src/harmonic.c:10347 src/harmonic.c:10414
 msgid ""
 "Reset\n"
 "Arrays"
 msgstr ""
+"Сбросите\n"
+"массивов"
 
 #: src/harmonic.c:10351
 msgid "Transform Spectrum"
-msgstr "Преобразование Спектра"
+msgstr "Преобразите Спектра."
 
 #: src/harmonic.c:10354 src/harmonic.c:10433
 msgid "Spectrum"
@@ -323,11 +332,11 @@ msgstr "Спектра"
 
 #: src/harmonic.c:10358
 msgid "Inverse Spectrum Start:"
-msgstr "Начала обратный спектр"
+msgstr "Начала обратный спектр:"
 
 #: src/harmonic.c:10366
 msgid "Inverse Spectrum Stop:"
-msgstr "Конце обратный спектр"
+msgstr "Конце обратный спектр:"
 
 #: src/harmonic.c:10374
 msgid "Triangle Centre:"
@@ -335,11 +344,11 @@ msgstr "Центре Треугольника:"
 
 #: src/harmonic.c:10382
 msgid "Triangle Full Width:"
-msgstr ""
+msgstr "Полная ширина треугольника:"
 
 #: src/harmonic.c:10390
 msgid "DC Peak Width:"
-msgstr ""
+msgstr "Ширина пика DC:"
 
 #: src/harmonic.c:10406
 msgid "k index:"
@@ -350,7 +359,7 @@ msgid ""
 "Process\n"
 "Spectrum"
 msgstr ""
-"Процесс\n"
+"Обработайте\n"
 "Спектра"
 
 #: src/harmonic.c:10421 src/harmonic.c:10442
@@ -359,4 +368,4 @@ msgstr "Обратный спектр"
 
 #: src/harmonic.c:10438
 msgid "Inverse Domain"
-msgstr ""
+msgstr "Обратная области"

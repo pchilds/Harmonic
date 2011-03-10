@@ -1,8 +1,16 @@
 [Desktop Entry]
 Name=Harmonic
+Name[el]=Αρμονική
+Name[fr]=Harmonique
 Name[it]=Armonico
-Comment=A program for performing harmonic analysis (e.g. Fourier). 
+Name[ru]=Гармоника
+Name[zh_CN]=谐波
+Comment=A program for performing harmonic analysis (e.g. Fourier).
+Comment[el]=Αρμονική είναι ένα πρόγραμμα για την εκτέλεση αρμονική ανάλυση (π.χ. ανάλυση Φουριερ).
+Comment[fr]=Harmonique est un programme pour effectuer l'analyse harmonique (par exemple l'analyse de Fourier).
 Comment[it]=Un programma per effettuare l'analisi armonica (per esempio Fourier).
+Comment[ru]=Гармоника программы для выполнения гармонического анализа (например, анализ Фурье).
+Comment[zh_CN]=谐波是一个程序执行谐波分析（如傅立叶分析）。
 Exec=Harmonic
 Icon=db8
 Terminal=0
