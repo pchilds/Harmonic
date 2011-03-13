@@ -1,0 +1,1 @@
+/usr/share/gnome-doc-utils/gnome-doc-utils.make

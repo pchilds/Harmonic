@@ -1,0 +1,83 @@
+<?xml version="1.0"?> 
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY appname "Harmonic">
+<!ENTITY app "<application>Harmonic</application>">
+<!ENTITY appversion "0.1.0">
+<!ENTITY manrevision "0.1.0">
+<!ENTITY date "March 2011">
+]>
+<article id="index" lang="en">
+  <articleinfo>
+    <title>&appname; Manual</title>
+    <abstract role="description">
+      <para>
+        &app; is a program for performing harmonic analysis (e.g. Fourier Analysis).
+      </para>
+    </abstract>
+    <copyright>
+      <year>2011</year>
+      <holder>Paul Childs</holder>
+    </copyright>
+    <author role="maintainer">
+      <firstname>Paul</firstname>
+      <surname>Childs</surname>
+      <affiliation>
+        <orgname>Foundation for Research and Technology--Hellas</orgname>
+        <address>
+          <email>pchilds@physics.org</email>
+        </address>
+      </affiliation>
+    </author>
+    <revhistory>
+      <revision>
+        <revnumber>&appname; Manual &manrevision;</revnumber>
+        <date>13-03-2011</date>
+      </revision>
+    </revhistory>
+    <releaseinfo>
+      Version &manrevision; documenting &appname; version &appversion;.
+    </releaseinfo>
+    <legalnotice>
+      <title>Copyright</title>
+      <para>
+        Copyright (C)  2011  Paul Childs.
+        Permission is granted to copy, distribute and/or modify this document
+        under the terms of the GNU Free Documentation License, Version 1.3
+        or any later version published by the Free Software Foundation;
+        with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+        A copy of the license is included in the section entitled "GNU
+        Free Documentation License".
+      </para>
+    </legalnotice>
+  </articleinfo>
+  <sect1 id="introduction">
+    <title>Introduction</title>
+    <para>
+      Use &app; to transform spectral data into the dual domain and analyse the resultant invere spectrum to extract properties such as fringe visibility, domain shifts and chirp.
+    </para>
+    <para>
+      For updates please visit <ulink type="http" url="https://www.github.com/pchilds/Harmonic">Harmonic's Github repository</ulink>
+    </para>
+  </sect1>
+  <sect1 id="base-domain">
+    <title>The Base Domain</title>
+    <para>
+    </para>
+  </sect1>
+  <sect1 id="inverse-domain">
+    <title>The Inverse Domain</title>
+    <para>
+    </para>
+  </sect1>
+  <sect1 id="batch">
+    <title>Batch Processing</title>
+    <para>
+    </para>
+  </sect1>
+  <sect1 id="save">
+    <title>Exporting Results</title>
+    <para>
+    </para>
+  </sect1>
+</article>
