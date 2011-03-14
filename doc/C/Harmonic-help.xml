@@ -8,8 +8,7 @@
 <!ENTITY date "March 2011">
 ]>
 <article id="index" lang="en">
-  <articleinfo>
-    <title>&appname; Manual</title>
+  <articleinfo><title>&appname; Manual</title>
     <abstract role="description">
       <para>
         &app; is a program for performing harmonic analysis (e.g. Fourier Analysis).
@@ -38,8 +37,7 @@
     <releaseinfo>
       Version &manrevision; documenting &appname; version &appversion;.
     </releaseinfo>
-    <legalnotice>
-      <title>Copyright</title>
+    <legalnotice><title>Copyright</title>
       <para>
         Copyright (C)  2011  Paul Childs.
         Permission is granted to copy, distribute and/or modify this document
@@ -51,8 +49,7 @@
       </para>
     </legalnotice>
   </articleinfo>
-  <sect1 id="introduction">
-    <title>Introduction</title>
+  <sect1 id="introduction"><title>Introduction</title>
     <para>
       Use &app; to transform spectral data into the dual domain and analyse the resultant invere spectrum to extract properties such as fringe visibility, domain shifts and chirp.
     </para>
@@ -60,24 +57,83 @@
       For updates please visit <ulink type="http" url="https://www.github.com/pchilds/Harmonic">Harmonic's Github repository</ulink>
     </para>
   </sect1>
-  <sect1 id="base-domain">
-    <title>The Base Domain</title>
-    <para>
-    </para>
+  <sect1 id="base-domain"><title>The Base Domain</title>
+    <sect2><title>Loading Data</title>
+      <para>
+      </para>
+    </sect2>
+    <sect2><title>Navigating the Plots</title>
+      <para>
+        Harmonic uses a customised plotting widget for displaying data. For further information see the documentation given in its <ulink type="http" url="https://www.github.com/pchilds/GtkPlot">repository</ulink>.
+      </para>
+      <para>
+        The range of the plot can be zoomed in and out (horizontally and/or vertically) according to the zoom mode selected by clicking on the two boxes in the top right corner of each plot. The box on the left controls whether zooming is to be performed in the horizontal direction only (when two dotted vertical lines are shown), in the vertical direction only (when two dotted horizontal lines are shown) or both horzontally and vertically (A dashed rectangle is shown). The range to zoom over is selecting by clicking at one corner/edge and draggin and releasing at the opposite corner/edge. For convenience, zooming can alternately be perfomed with a single click by toggling the setting in the left box until an X is displayed.
+      </para>
+      <para>
+        The box on the right controls whether to zoom in or out (arrows pointing out or in respectively). For the case of zooming in, the resultant image displayed in the plot is the image loosely fitted to the bounding click-drag-release box (loosely as the plot tries to fit the axes range to sensible power of ten multiples of 1, 2 and 5). For the case of zooming out, the resultant image is the extrapolation of shrinking the original entire plot into the bounding click-drag-release box.
+      </para>
+      <tip><title>tip</title>
+        <para>
+          If e.g you wanted to display more range to the top left of the graph then (with zoom out mode set) you would select a bounding box in the bottom right of the plot.
+        </para>
+      </tip>
+    </sect2>
+    <sect2><title>Selecting windowed regions for transformation</title>
+      <para>
+      </para>
+    </sect2>
+    <sect2><title>Nonlinear compensation</title>
+      <para>
+        The Fourier transformation is a linear functional and as such requires the spectrum to also be a linear functional of its constiuent elements in order to perform accurate reconstruction. Apart from the trivial case where only one element is analysed, most systems are in fact nonlinear.
+      </para>
+      <para>
+        Measuring the tranmission of several elements in series is the product of their individual transmissions. Where transmission of the elements is defined by a matrix, this product will be a matrix product. This nonlinearity will cause a mixing of the individual harmonic terms of the elements to enter the Fourier transform; which can result in crosstalk occuring between two individually distinct elements.
+      </para>
+      <para>
+        The logarithm provides an isomorphism between scalar multiplication and linear addition:
+        <inlineequation>log(AB)=log(A)+log(B).</inlineequation>
+        It is thus possible to transform a (scalar) nonlinear system to the linear functional required by the Fourier transform by using the logarithmic mapping. This is what is done when selecting "1st order spectral shadowing" for Nonlinear compensation from the advanced menu. This method is, however, a scalar approximation and fails to account for effects such as multiple reflections between elements that occur when the transmission is matrix valued
+        <footnote><para>
+          For a study on the errors of the linear and scalar approximations in the context of optical Bragg reflectors see P. Childs, and Y.B. Liao "On the multiplexed limit capacity of spectrally overlapped continuous wave fibre Bragg grating sensor networks" in J. Opt., Vol. 12, Iss. 1, Jan. (2010) paper 015404.
+        </para></footnote>
+        . Also, as it introduces more computational steps it should be avoided for the simple cases where there is only a single element or situations where the spectrum is actually linear.
+      </para>
+    </sect2>
   </sect1>
-  <sect1 id="inverse-domain">
-    <title>The Inverse Domain</title>
-    <para>
-    </para>
+  <sect1 id="inverse-domain"><title>The Inverse Domain</title>
+    <sect2><title>Selecting windowed regions for transformation</title>
+      <para>
+      </para>
+    </sect2>
+    <sect2><title>Interpreting results</title>
+      <para>
+      </para>
+    </sect2>
   </sect1>
-  <sect1 id="batch">
-    <title>Batch Processing</title>
-    <para>
-    </para>
+  <sect1 id="batch"><title>Batch Processing</title>
+    <sect2><title>The configuration file</title>
+      <para>
+      </para>
+    </sect2>
   </sect1>
-  <sect1 id="save">
-    <title>Exporting Results</title>
-    <para>
-    </para>
+  <sect1 id="save"><title>Exporting Results</title>
+    <sect2><title>Saving data</title>
+      <para>
+      </para>
+    </sect2>
+    <sect2><title>Saving graphs</title>
+      <para>
+      </para>
+    </sect2>
   </sect1>
+  <glossary>
+    <glossdiv><title>S</title>
+      <glossentry>
+        <glossterm>Spectral Shadowing</glossterm>
+        <glossdef><para>
+          When Upstream elements remove a portion of the spectrum available to downstream elements.
+        </para></glossdef>
+      </glossentry>
+    </glossdiv>
+  </glossary>
 </article>

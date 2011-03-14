@@ -80,12 +80,12 @@ void static help(GtkWidget *widget, gpointer data)
 	gchar *uri, *str;
 	GError *Err=NULL;
 
-	if (data) uri=g_strdup_printf("ghelp:Harmonic?%s", (gchar *) data);
-	else uri=g_strdup("ghelp:Harmonic");
+	if (data) uri=g_strdup_printf("ghelp:Harmonic-help?%s", (gchar *) data);
+	else uri=g_strdup("ghelp:Harmonic-help");
 	gtk_show_uri(NULL, uri, gtk_get_current_event_time (), &Err);
 	if (Err)
 	{
-		str=g_strdup("Could not load help files.");
+		str=g_strdup(_("Could not load help files."));
 		gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 		g_free(str);
 		g_error_free(Err);
