@@ -60,11 +60,15 @@
   <sect1 id="base-domain"><title>The Base Domain</title>
     <sect2><title>Loading Data</title>
       <para>
+        From the properties menu select the appropriate data format (The list corresponds to the device from which measurements were made). If your device is not listed, send an email of a few sample measurements to the author (listed in the AUTHOR file included with this software) so that future versions may include this device. Also try a number of existing devices listed in case the format is compatible.
+      </para>
+      <para>
+        From the file menu select open and choose your file. If the format is correct, the spectrum should display on the plot as expected. If there is irregulaties such as lines that go to (0,0) it is likely that the software is not interpreting the format of the data correctly. Please send a copy of the data file to the author and state which format you had selected. It may still be possible to process the data in spite of irregularities.
       </para>
     </sect2>
     <sect2><title>Navigating the Plots</title>
       <para>
-        Harmonic uses a customised plotting widget for displaying data. For further information see the documentation given in its <ulink type="http" url="https://www.github.com/pchilds/GtkPlot">repository</ulink>.
+        Harmonic uses a customised plotting widget for displaying data. For further information and/or feedback see the documentation given in its <ulink type="http" url="https://www.github.com/pchilds/GtkPlot">repository</ulink>.
       </para>
       <para>
         The range of the plot can be zoomed in and out (horizontally and/or vertically) according to the zoom mode selected by clicking on the two boxes in the top right corner of each plot. The box on the left controls whether zooming is to be performed in the horizontal direction only (when two dotted vertical lines are shown), in the vertical direction only (when two dotted horizontal lines are shown) or both horzontally and vertically (A dashed rectangle is shown). The range to zoom over is selecting by clicking at one corner/edge and draggin and releasing at the opposite corner/edge. For convenience, zooming can alternately be perfomed with a single click by toggling the setting in the left box until an X is displayed.
@@ -80,6 +84,13 @@
     </sect2>
     <sect2><title>Selecting windowed regions for transformation</title>
       <para>
+        Windows are defined by the Spectrum Start and Stop values. Multiple windows can be selected by incrementing the j index value to add a new window. If you have inadvertantly added a window that isn't desired you will have to press reset arrays to remove these additional windows and start again. Accurate values for the Start and Stop values can be determined based on the coordinates displayed in the statusbar when holding the mouse over a particular point in the spectrum displayed in the plot.
+      </para>
+      <para>
+        If you want to see the transformed results of all the windows on the one plot at the same time select "Multiple plots for Inverse Domain" from Display Properties in the Properties menu.
+      </para>
+      <para>
+        The Fourier transform works most efficiently when acting on a data set with points numbering a power of 2. As such the program will add zero values to either side of the selected windows to reach this. The total number of points is given by 2 to the power of the value entered in "Zero Padding". An added advantage of this approach is that the zero padding acts to interpolate the data in the transformed domain, giving more data points for analysis (of particular importance for accurately determining domain shifts when the peak in the inverse domain is narrow). The drawback to this approach is that if the selected window does not go to zero at its start and stop values, the jump will cause ringing in the transformed spectrum. This effect can be reduced using the Offset parameter to subtract from the spectrum prior to zero padding. The offset should be set to the value to which the spectrum goes to at start and stop for the case of devices measured in transmission, or the peak value of the spectrum for the case of devices measured in reflection.
       </para>
     </sect2>
     <sect2><title>Nonlinear compensation</title>
@@ -103,35 +114,95 @@
   <sect1 id="inverse-domain"><title>The Inverse Domain</title>
     <sect2><title>Selecting windowed regions for transformation</title>
       <para>
+        Similar to the case of the base domain, regions of data can be defined with the "Inverse Spectrum Start" and "Inverse Spectrum Stop" parameters. Values should be given for each window defined by the j index. Multiple windows in the inverse spectrum can be selected with the k index.
+      </para>
+      <para>
+        Differences for this case are mainly seen in the triangles parameters. Calculation of phase based values such as domain shifts and chirp is performed as a weighted average over these triangles, which are designed as the best fit to the peaks being analysed (in terms of centre value and width). In this way data at the edge of the triangles, where the magnitude is low (and hence noise in the phase is high), contributes less to the overall result and the reliable data in the centre contributes more.
+      </para>
+      <para>
+        Phase shifts in the spectrum can also cause large errors. In this case it may be necessary to limit the start stop values to a narrower range so as to exclude regions of high phase error rather than unnaturally distorting the triangles.
+      </para>
+      <para>
+        The visibility of fringes is referenced against the area given by the peak at zero frequency (DC peak), hence you will have to specify the width of this peak over which to calculate its area (To be consistent with the way in which the triangles are defined, this is the full width which can be determined as twice the frequency at which a line fitted to the DC peak cuts the horizontal axis).
       </para>
     </sect2>
     <sect2><title>Interpreting results</title>
       <para>
+        The program will give values for the visibility of fringes and the domain shift (If calculate chirp was selected from the advanced menu, then this will be shown as well).
+      </para>
+      <para>
+        The visibility is calculated as the area of the peak selected by the Inverse Spectrum Start and Stop parameters divided by half of the area of the DC peak. This is not the same as the way in which the visibility is defined on a spectrum, but nevertheless provides a more stable reliable meaure of it particularly on heavily modulated signals.
+      </para>
+      <para>
+        For real positive valued spectra the visibility takes values between 0 and 1 for zero and full visibility respectively. The measured value is generally lower than the actual value of the device due to factors such as detector bandwidths reducing the magnitude of higher frequency components. Other errors can be introduced, e.g. if the offset isn't correctly set a sinc+delta signal will be added to the transformed signal which will increase the area of the DC peak and reduce the visibility
+        <footnote><para>
+          In cases where the offset is not stable an analysis of just the area of the harmonic peak may be better. Future versions will look to include this option.
+        </para></footnote>
+        .
       </para>
     </sect2>
   </sect1>
   <sect1 id="batch"><title>Batch Processing</title>
     <sect2><title>The configuration file</title>
       <para>
+        Batch processing is not completely implemented in the software yet. This will be addressed soon in future releases.
       </para>
     </sect2>
   </sect1>
   <sect1 id="save"><title>Exporting Results</title>
     <sect2><title>Saving data</title>
       <para>
+        Saving data is also unfortunatley not completely implemented yet.
       </para>
     </sect2>
     <sect2><title>Saving graphs</title>
       <para>
+        Having selected the tab of the desired graph to save, from the file menu choose print and type in a file name ending in .eps for Encapsulated Postscript. EPS is a vector image format that allows for easy scaling without loss of image quality. EPS is the format used for publication by LaTEX and is chosen here to allow the smooth transfer of data results to a publication ready format without the need of an intermediary step of editing figures.
+      </para>
+      <para>
+        To convert to another format, such as tiff, use GIMP to first scale the image to the desired size and then save in the new format.
       </para>
     </sect2>
   </sect1>
   <glossary>
+    <glossdiv><title>C</title>
+      <glossentry>
+        <glossterm>Chirp</glossterm>
+        <glossdef><para>
+          The change in periodicity of a signal over its duration/spectrum. Chirp is seen in nonlinearity in the phase and often described in terms of constituent orders; linear chirp being due to quadratic phase terms, quadratic chirp being due to cubic phase terms, etc.
+        </para></glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv><title>M</title>
+      <glossentry>
+        <glossterm>Multiple Scattering</glossterm>
+        <glossdef><para>
+          When a signal reflects off more than one element prior to detection.
+        </para></glossdef>
+      </glossentry>
+    </glossdiv>
     <glossdiv><title>S</title>
       <glossentry>
         <glossterm>Spectral Shadowing</glossterm>
         <glossdef><para>
           When Upstream elements remove a portion of the spectrum available to downstream elements.
+        </para></glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv><title>V</title>
+      <glossentry>
+        <glossterm>Visibility of Fringes</glossterm>
+        <glossdef><para>
+          For a pure unmodulated sinusodal waveform, the visibility is defined as half of the peak to peak amplitude divided by the average value:
+          <inlineequation>V=(max-min)/(max+min).</inlineequation>
+        </para></glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv><title>Z</title>
+      <glossentry>
+        <glossterm>Zero Padding</glossterm>
+        <glossdef><para>
+          Adding zero values to either end of a data set prior to transformation. Extending the data set in this way provides a finer resolution in the inverse domain.
         </para></glossdef>
       </glossentry>
     </glossdiv>
