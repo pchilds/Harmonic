@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
 "POT-Creation-Date: 2011-03-14 14:33+0200\n"
-"PO-Revision-Date: 2011-03-14 14:37+0200\n"
+"PO-Revision-Date: 2011-03-16 16:39+0200\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Greek\n"
 "Language: el\n"
@@ -37,19 +37,19 @@ msgstr "Ιδιότητες εμφάνισης"
 
 #: src/harmonic.c:130 src/harmonic.c:321 src/harmonic.c:625
 msgid "Text size:"
-msgstr "Το μέγεθος του κειμένου:"
+msgstr "Μέγεθος κειμένου:"
 
 #: src/harmonic.c:133 src/harmonic.c:324 src/harmonic.c:628
 msgid "Tick label size:"
-msgstr "Τσιμπούρι μέγεθος της ετικέτας:"
+msgstr "Μέγεθος ετικέτας:"
 
 #: src/harmonic.c:142
 msgid "Radial axis text:"
-msgstr "Κείμενο για την ακτινική άξονα:"
+msgstr "Κείμενο για τον ακτινικό άξονα:"
 
 #: src/harmonic.c:145
 msgid "Azimuthal axis text:"
-msgstr "Κείμενο για την αζιμουθιακή άξονα:"
+msgstr "Κείμενο για τον αζιμουθιακό άξονα:"
 
 #: src/harmonic.c:165 src/harmonic.c:243 src/harmonic.c:299 src/harmonic.c:356
 #: src/harmonic.c:402 src/harmonic.c:660 src/harmonic.c:707

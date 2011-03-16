@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
 "POT-Creation-Date: 2011-03-14 14:33+0200\n"
-"PO-Revision-Date: 2011-03-14 14:38+0200\n"
+"PO-Revision-Date: 2011-03-16 16:35+0200\n"
 "Last-Translator: Matthieu Bellec <>\n"
 "Language-Team: French <>\n"
 "Language: fr\n"
@@ -29,12 +29,12 @@ msgid ""
 "measurements."
 msgstr ""
 "Harmonique est un programme pour effectuer l'analyse harmonique (par exemple "
-"l'analyse de Fourier) et l'obtention de la visibilite des franges, du "
+"l'analyse de Fourier) et l'obtention de la visibilité des franges, du "
 "changement de domaine et des mesures de chirp."
 
 #: src/harmonic.c:117
 msgid "Display Properties"
-msgstr "Proprietes d'affichage"
+msgstr "Propriétés d'affichage"
 
 #: src/harmonic.c:130 src/harmonic.c:321 src/harmonic.c:625
 msgid "Text size:"
@@ -42,7 +42,7 @@ msgstr "Taille du texte:"
 
 #: src/harmonic.c:133 src/harmonic.c:324 src/harmonic.c:628
 msgid "Tick label size:"
-msgstr "Taille de l'etiquette:"
+msgstr "Taille de l’étiquette:"
 
 #: src/harmonic.c:142
 msgid "Radial axis text:"
@@ -55,12 +55,12 @@ msgstr "Texte de l'axe azimutal:"
 #: src/harmonic.c:165 src/harmonic.c:243 src/harmonic.c:299 src/harmonic.c:356
 #: src/harmonic.c:402 src/harmonic.c:660 src/harmonic.c:707
 msgid "Multiple plots for Results over index j"
-msgstr "Traces multiples des resultats au-dessus de l'index j"
+msgstr "Traces multiples des résultats au-dessus de l'index j"
 
 #: src/harmonic.c:169 src/harmonic.c:247 src/harmonic.c:303 src/harmonic.c:360
 #: src/harmonic.c:406 src/harmonic.c:664 src/harmonic.c:711
 msgid "Multiple plots for Results over index k"
-msgstr "Traces multiples pour des resultats au-dessus de l'index k"
+msgstr "Traces multiples pour des résultats au-dessus de l'index k"
 
 #: src/harmonic.c:220 src/harmonic.c:331 src/harmonic.c:635
 msgid "X axis text:"
@@ -86,17 +86,17 @@ msgstr "Aucune image disponible"
 #: src/harmonic.c:1092 src/harmonic.c:1156 src/harmonic.c:1207
 #: src/harmonic.c:1368 src/harmonic.c:1530 src/harmonic.c:12038
 msgid "Select Data File"
-msgstr "Choisissez le fichier de donnees"
+msgstr "Choisissez le fichier de données"
 
 #: src/harmonic.c:1098 src/harmonic.c:1162 src/harmonic.c:1213
 #: src/harmonic.c:1374 src/harmonic.c:1536
 msgid "Parameter selection"
-msgstr "Choix du parametre"
+msgstr "Choix du paramètre"
 
 #: src/harmonic.c:1100 src/harmonic.c:1164 src/harmonic.c:1215
 #: src/harmonic.c:1376 src/harmonic.c:1538 src/harmonic.c:11966
 msgid "Select Parameter to save:"
-msgstr "Choisissez le parametre a sauver:"
+msgstr "Choisissez le paramètre a sauver:"
 
 #: src/harmonic.c:1220 src/harmonic.c:1381 src/harmonic.c:1543
 msgid "INVERSE_D\tREAL_VAL \tIMAG_VAL "
@@ -106,7 +106,7 @@ msgstr "D_INVERSE\tVAL_REELL\tVAL_IMAG "
 #: src/harmonic.c:1505 src/harmonic.c:1595 src/harmonic.c:1667
 #, c-format
 msgid "Error Saving file: %s"
-msgstr "Fichier d'erreur sauvee: %s"
+msgstr "Fichier d'erreur sauvée: %s"
 
 #: src/harmonic.c:1280 src/harmonic.c:1441 src/harmonic.c:1603
 msgid "INVERSE_D\tMAGNITUDE\tPHASE    "
@@ -114,13 +114,13 @@ msgstr "D_INVERSE\tGRANDEUR \tPHASE    "
 
 #: src/harmonic.c:1360 src/harmonic.c:1521 src/harmonic.c:1682
 msgid "No available processed data."
-msgstr "Aucunes donnees traitees disponibles."
+msgstr "Aucunes données traitées disponibles."
 
 #: src/harmonic.c:1844 src/harmonic.c:1956 src/harmonic.c:2107
 #: src/harmonic.c:2213
 #, c-format
 msgid "Insufficient windowing range in channel %d, %d."
-msgstr "Largeur de fenetre insuffisante dans le canal %d, %d."
+msgstr "Largeur de fenêtre insuffisante dans le canal %d, %d."
 
 #: src/harmonic.c:1866 src/harmonic.c:2129
 msgid "Chirp"
@@ -155,7 +155,7 @@ msgstr "x: %f, y: %f"
 
 #: src/harmonic.c:3105
 msgid "Perform an initial test of the parameters first"
-msgstr "Realisez un premier essai des parametres d'abord."
+msgstr "Réalisez un premier essai des paramètres d'abord."
 
 #: src/harmonic.c:3111
 msgid "Select Config File"
@@ -207,24 +207,24 @@ msgstr "Fichier: %s charge avec succes"
 #: src/harmonic.c:12022 src/harmonic.c:12158
 #, c-format
 msgid "Loading failed for file: %s, Error: %s"
-msgstr "Echec du chargement du fichier: %s, Erreur: %s"
+msgstr "Échec du chargement du fichier: %s, Erreur: %s"
 
 #: src/harmonic.c:11964
 msgid "Variable Parameter"
-msgstr "Parametre variable"
+msgstr "Paramètre variable"
 
 #: src/harmonic.c:11980 src/harmonic.c:11992 src/harmonic.c:12009
 #: src/harmonic.c:12067 src/harmonic.c:12817
 msgid "Analysis Results"
-msgstr "Resultats de l'analyse"
+msgstr "Résultats de l'analyse"
 
 #: src/harmonic.c:12055 src/harmonic.c:12805
 msgid "Visibility"
-msgstr "Visibilite"
+msgstr "Visibilité"
 
 #: src/harmonic.c:12061 src/harmonic.c:12811
 msgid "Domain Shift"
-msgstr "Decalage du domaine"
+msgstr "Décalage du domaine"
 
 #: src/harmonic.c:12501
 msgid "Harmonic Spectrum Analyser"
@@ -236,11 +236,11 @@ msgstr "_Fichier"
 
 #: src/harmonic.c:12558
 msgid "Raw Delimited Data"
-msgstr "Donnees delimitees brutes"
+msgstr "Données délimitées brutes"
 
 #: src/harmonic.c:12562
 msgid "Data Format:"
-msgstr "Format de donnees:"
+msgstr "Format de données:"
 
 #: src/harmonic.c:12567
 msgid "Trace:"
@@ -252,15 +252,15 @@ msgstr "Mesure par transmission?"
 
 #: src/harmonic.c:12575
 msgid "Data in dBs?"
-msgstr "Donnees en dBs?"
+msgstr "Données en dBs?"
 
 #: src/harmonic.c:12579
 msgid "Negate?"
-msgstr "Mettre au negatif?"
+msgstr "Mettre au négatif?"
 
 #: src/harmonic.c:12583
 msgid "Display Properties:"
-msgstr "Proprietes d'affichage:"
+msgstr "Propriétés d'affichage:"
 
 #: src/harmonic.c:12588
 msgid "_Properties"
@@ -284,11 +284,11 @@ msgid ""
 "Compensation:"
 msgstr ""
 "Compensation\n"
-"non lineaire:"
+"non linéaire:"
 
 #: src/harmonic.c:12606
 msgid "Batch Process Data?"
-msgstr "Donnees de traitement par lots?"
+msgstr "Données de traitement par lots?"
 
 #: src/harmonic.c:12621
 msgid "Invert domain?"
@@ -316,7 +316,7 @@ msgstr "_Aide"
 
 #: src/harmonic.c:12668
 msgid "Spectrum Start:"
-msgstr "Debut du spectre:"
+msgstr "Début du spectre:"
 
 #: src/harmonic.c:12676
 msgid "Spectrum Stop:"
@@ -324,7 +324,7 @@ msgstr "Fin du spectre:"
 
 #: src/harmonic.c:12684
 msgid "Offset:"
-msgstr "Decalage:"
+msgstr "Décalage:"
 
 #: src/harmonic.c:12691 src/harmonic.c:12757
 msgid "j index:"
@@ -339,7 +339,7 @@ msgid ""
 "Reset\n"
 "Arrays"
 msgstr ""
-"Reinitialiser\n"
+"Réinitialiser\n"
 "les rangees"
 
 #: src/harmonic.c:12710
@@ -352,7 +352,7 @@ msgstr "Spectre"
 
 #: src/harmonic.c:12717
 msgid "Inverse Spectrum Start:"
-msgstr "Debut du spectre inverse:"
+msgstr "Début du spectre inverse:"
 
 #: src/harmonic.c:12725
 msgid "Inverse Spectrum Stop:"
