@@ -6,9 +6,8 @@ pixmapdir=$(datadir)/pixmaps
 pixmap_DATA=pixmaps/db8.png
 EXTRA_DIST=confsupp/gnome-doc-utils.make \
 	ABOUT-NLS confsupp/config.rpath m4/ChangeLog \
-	AUTHORS ChangeLog COPYING INSTALL NEWS README TODO \
-	$(pixmap_DATA) \
-	$(Applications_DATA) \
+	AUTHORS ChangeLog COPYING COPYING-DOCS INSTALL NEWS README TODO \
+	$(pixmap_DATA) $(Applications_DATA) \
 	configure.ac
-
+DISTCHECK_CONFIGURE_FLAGS= --disable-scrollkeeper
 ACLOCAL_AMFLAGS = -I m4

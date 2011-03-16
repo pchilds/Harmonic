@@ -2,268 +2,282 @@
 # Copyright (C) 2011 Paul Childs
 # This file is distributed under the same license as the Harmonic package.
 # Paul Childs <pchilds@physics.org>, 2011.
-# Iona Childs <pchilds@physics.org>, 2011.
+# Alessandro Candiani <>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-03-08 10:10+0200\n"
-"PO-Revision-Date: 2011-03-08 11:48+0200\n"
-"Last-Translator: Iona Childs <pchilds@physics.org>\n"
+"POT-Creation-Date: 2011-03-14 14:33+0200\n"
+"PO-Revision-Date: 2011-03-15 18:27+0200\n"
+"Last-Translator: Alessandro Candiani <>\n"
 "Language-Team: Italian <>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/harmonic.c:82 src/harmonic.c:10279
-msgid "Instructions"
-msgstr "Istruzioni"
+#: src/harmonic.c:88
+msgid "Could not load help files."
+msgstr "Impossibile caricare il file di aiuto."
 
-#: src/harmonic.c:95
+#: src/harmonic.c:103
 msgid ""
 "Harmonic is a program for performing harmonic analysis (e.g. Fourier "
 "analysis) and obtaining visibility of fringes, domain shift and chirp "
 "measurements."
 msgstr ""
-"Armonico  un programma per effettuare l'analisi armonica (per esempio "
-"analisi di Fourier) e di ottenere la visibilit delle frange, lo spostamento "
-"del dominio e misure cinguettare."
+"Armonico è un programma che effettua l'analisi armonica (per esempio "
+"l'analisi di Fourier) e che permette di ottenere la visibilità delle frange, "
+"lo spostamento del dominio e misure di chirp."
 
-#: src/harmonic.c:109
+#: src/harmonic.c:117
 msgid "Display Properties"
-msgstr "Propriet dell'esposizione"
+msgstr "Proprietà di visualizzazione"
 
-#: src/harmonic.c:122 src/harmonic.c:313 src/harmonic.c:617
+#: src/harmonic.c:130 src/harmonic.c:321 src/harmonic.c:625
 msgid "Text size:"
 msgstr "Formato del testo:"
 
-#: src/harmonic.c:125 src/harmonic.c:316 src/harmonic.c:620
+#: src/harmonic.c:133 src/harmonic.c:324 src/harmonic.c:628
 msgid "Tick label size:"
-msgstr "Formato delle etichette del battito"
+msgstr "Formato numerico degli assi"
 
-#: src/harmonic.c:134
+#: src/harmonic.c:142
 msgid "Radial axis text:"
 msgstr "Testo per l'asse radiale"
 
-#: src/harmonic.c:137
+#: src/harmonic.c:145
 msgid "Azimuthal axis text:"
 msgstr "Testo per l'asse azimutale"
 
-#: src/harmonic.c:157 src/harmonic.c:235 src/harmonic.c:291 src/harmonic.c:348
-#: src/harmonic.c:394 src/harmonic.c:652 src/harmonic.c:699
+#: src/harmonic.c:165 src/harmonic.c:243 src/harmonic.c:299 src/harmonic.c:356
+#: src/harmonic.c:402 src/harmonic.c:660 src/harmonic.c:707
 msgid "Multiple plots for Results over index j"
-msgstr "Trame multiple per risultati per l'indice J"
+msgstr "Trame multiple per risultati di indice J"
 
-#: src/harmonic.c:161 src/harmonic.c:239 src/harmonic.c:295 src/harmonic.c:352
-#: src/harmonic.c:398 src/harmonic.c:656 src/harmonic.c:703
+#: src/harmonic.c:169 src/harmonic.c:247 src/harmonic.c:303 src/harmonic.c:360
+#: src/harmonic.c:406 src/harmonic.c:664 src/harmonic.c:711
 msgid "Multiple plots for Results over index k"
-msgstr "Trame multiple per risultati per l'indice K"
+msgstr "Trame multiple per risultati di indice K"
 
-#: src/harmonic.c:212 src/harmonic.c:323 src/harmonic.c:627
+#: src/harmonic.c:220 src/harmonic.c:331 src/harmonic.c:635
 msgid "X axis text:"
-msgstr "Testo per l'asse X"
+msgstr "Testo per asse delle ascisse"
 
-#: src/harmonic.c:215 src/harmonic.c:326 src/harmonic.c:630
+#: src/harmonic.c:223 src/harmonic.c:334 src/harmonic.c:638
 msgid "Y axis text:"
-msgstr "Testo per l'asse Y"
+msgstr "Testo per asse delle ordinate"
 
-#: src/harmonic.c:391 src/harmonic.c:508 src/harmonic.c:695 src/harmonic.c:817
+#: src/harmonic.c:399 src/harmonic.c:516 src/harmonic.c:703 src/harmonic.c:825
 msgid "Multiple plots for Inverse Domain"
 msgstr "Trame multiple per dominio inverso"
 
-#: src/harmonic.c:941 src/harmonic.c:958 src/harmonic.c:975
-#: src/harmonic.c:1001 src/harmonic.c:1018 src/harmonic.c:1044
+#: src/harmonic.c:949 src/harmonic.c:966 src/harmonic.c:983
+#: src/harmonic.c:1009 src/harmonic.c:1026 src/harmonic.c:1052
 msgid "Select Image File"
-msgstr "Selezionate file di immagine"
+msgstr "Nome del file immagine"
 
-#: src/harmonic.c:993 src/harmonic.c:1036 src/harmonic.c:1061
+#: src/harmonic.c:1001 src/harmonic.c:1044 src/harmonic.c:1069
 msgid "No available image."
 msgstr "Nessuna immagine disponibile."
 
-#: src/harmonic.c:1084 src/harmonic.c:1148 src/harmonic.c:1199
-#: src/harmonic.c:1360 src/harmonic.c:1522 src/harmonic.c:9679
-msgid "Select Data File"
-msgstr "Selezionate file di dati"
-
-#: src/harmonic.c:1090 src/harmonic.c:1154 src/harmonic.c:1205
-#: src/harmonic.c:1366 src/harmonic.c:1528
-msgid "Parameter selection"
-msgstr "Selezione dei parametri"
-
 #: src/harmonic.c:1092 src/harmonic.c:1156 src/harmonic.c:1207
-#: src/harmonic.c:1368 src/harmonic.c:1530 src/harmonic.c:3113
-msgid "Select Parameter to save:"
-msgstr "Selezioni un parametro per conservare:"
+#: src/harmonic.c:1368 src/harmonic.c:1530 src/harmonic.c:12038
+msgid "Select Data File"
+msgstr "Selezionare il file dati"
 
-#: src/harmonic.c:1212 src/harmonic.c:1373 src/harmonic.c:1535
+#: src/harmonic.c:1098 src/harmonic.c:1162 src/harmonic.c:1213
+#: src/harmonic.c:1374 src/harmonic.c:1536
+msgid "Parameter selection"
+msgstr "Selezionare i parametri"
+
+#: src/harmonic.c:1100 src/harmonic.c:1164 src/harmonic.c:1215
+#: src/harmonic.c:1376 src/harmonic.c:1538 src/harmonic.c:11966
+msgid "Select Parameter to save:"
+msgstr "Selezionare il metodo di misurazione:"
+
+#: src/harmonic.c:1220 src/harmonic.c:1381 src/harmonic.c:1543
 msgid "INVERSE_D\tREAL_VAL \tIMAG_VAL "
 msgstr "D_INVERSO\\tVL_REALE\\tVL_IMMAG"
 
-#: src/harmonic.c:1264 src/harmonic.c:1336 src/harmonic.c:1425
-#: src/harmonic.c:1497 src/harmonic.c:1587 src/harmonic.c:1659
+#: src/harmonic.c:1272 src/harmonic.c:1344 src/harmonic.c:1433
+#: src/harmonic.c:1505 src/harmonic.c:1595 src/harmonic.c:1667
 #, c-format
 msgid "Error Saving file: %s"
 msgstr "Errore di salvataggio file: %s"
 
-#: src/harmonic.c:1272 src/harmonic.c:1433 src/harmonic.c:1595
+#: src/harmonic.c:1280 src/harmonic.c:1441 src/harmonic.c:1603
 msgid "INVERSE_D\tMAGNITUDE\tPHASE    "
 msgstr "D_INVERSO\\tMAGNITUDI\\tFASE     "
 
-#: src/harmonic.c:1352 src/harmonic.c:1513 src/harmonic.c:1674
+#: src/harmonic.c:1360 src/harmonic.c:1521 src/harmonic.c:1682
 msgid "No available processed data."
-msgstr "Non sono disponibili dati trattati."
+msgstr "Dati elaborati non disponibili."
 
-#: src/harmonic.c:1836 src/harmonic.c:1948 src/harmonic.c:2099
-#: src/harmonic.c:2205
+#: src/harmonic.c:1844 src/harmonic.c:1956 src/harmonic.c:2107
+#: src/harmonic.c:2213
 #, c-format
 msgid "Insufficient windowing range in channel %d, %d."
-msgstr "Gamma insufficiente di uso di finestre in scanalatura %d, %d."
+msgstr "Errore di selezione dati nel canale (J,K)=(%d,%d)."
 
-#: src/harmonic.c:1858 src/harmonic.c:2121
+#: src/harmonic.c:1866 src/harmonic.c:2129
 msgid "Chirp"
-msgstr "Cinguettare"
+msgstr "Chirp"
 
-#: src/harmonic.c:2231
+#: src/harmonic.c:2239
 msgid "No transform for analysis exists yet."
-msgstr "Nessun trasformi per l'analisi esiste ancora."
+msgstr "Eseguire la trasformata prima di procedere."
 
-#: src/harmonic.c:2282 src/harmonic.c:2303 src/harmonic.c:2325
-#: src/harmonic.c:2346 src/harmonic.c:2368 src/harmonic.c:2389
-#: src/harmonic.c:2410 src/harmonic.c:2436 src/harmonic.c:2457
-#: src/harmonic.c:2479 src/harmonic.c:2500 src/harmonic.c:2522
-#: src/harmonic.c:2543 src/harmonic.c:2564 src/harmonic.c:2592
-#: src/harmonic.c:2624 src/harmonic.c:2657 src/harmonic.c:2680
-#: src/harmonic.c:2704 src/harmonic.c:2733 src/harmonic.c:2766
-#: src/harmonic.c:2795 src/harmonic.c:2824 src/harmonic.c:2847
-#: src/harmonic.c:2871 src/harmonic.c:2898
+#: src/harmonic.c:2290 src/harmonic.c:2311 src/harmonic.c:2333
+#: src/harmonic.c:2354 src/harmonic.c:2376 src/harmonic.c:2397
+#: src/harmonic.c:2418 src/harmonic.c:2444 src/harmonic.c:2465
+#: src/harmonic.c:2487 src/harmonic.c:2508 src/harmonic.c:2530
+#: src/harmonic.c:2551 src/harmonic.c:2572 src/harmonic.c:2600
+#: src/harmonic.c:2632 src/harmonic.c:2665 src/harmonic.c:2688
+#: src/harmonic.c:2712 src/harmonic.c:2741 src/harmonic.c:2774
+#: src/harmonic.c:2803 src/harmonic.c:2832 src/harmonic.c:2855
+#: src/harmonic.c:2879 src/harmonic.c:2906
 #, c-format
 msgid "Some clipping occured in channel %d. Increase zero padding."
-msgstr ""
-"Un certo residuo della potatura meccanica si  presentato in scanalatura %d. "
-"Aumenti il riempimento zero."
+msgstr "Dati persi nel canale %d. Aumentare lo \"zero padding\"."
 
-#: src/harmonic.c:3015
+#: src/harmonic.c:3023
 msgid "Open a file for analysis first."
-msgstr "Apra un file per l'analisi in primo luogo."
+msgstr "In primo luogo aprire un file per l'analisi."
 
-#: src/harmonic.c:3061
+#: src/harmonic.c:3069
 #, c-format
 msgid "x: %f, y: %f"
 msgstr "x: %f, y: %f"
 
-#: src/harmonic.c:3097
+#: src/harmonic.c:3105
 msgid "Perform an initial test of the parameters first"
-msgstr "Effettui una prova iniziale dei parametri in primo luogo"
-
-#: src/harmonic.c:3103
-msgid "Select Config File"
-msgstr "Selezioni file di configurazione"
+msgstr "In primo luogo effettuare una prova iniziale dei parametri"
 
 #: src/harmonic.c:3111
-msgid "Variable Parameter"
-msgstr "Variabile al processo"
+msgid "Select Config File"
+msgstr "Selezionare il file di configurazione"
 
-#: src/harmonic.c:3127 src/harmonic.c:3139 src/harmonic.c:9587
-#: src/harmonic.c:9708 src/harmonic.c:10458
-msgid "Analysis Results"
-msgstr "Risultati di analisi"
-
-#: src/harmonic.c:3165 src/harmonic.c:3360 src/harmonic.c:3556
-#: src/harmonic.c:3751 src/harmonic.c:3949 src/harmonic.c:4144
-#: src/harmonic.c:4340 src/harmonic.c:4535 src/harmonic.c:4735
-#: src/harmonic.c:4930 src/harmonic.c:5126 src/harmonic.c:5321
-#: src/harmonic.c:5519 src/harmonic.c:5714 src/harmonic.c:5910
-#: src/harmonic.c:6105 src/harmonic.c:6307 src/harmonic.c:6502
-#: src/harmonic.c:6698 src/harmonic.c:6893 src/harmonic.c:7091
-#: src/harmonic.c:7286 src/harmonic.c:7482 src/harmonic.c:7677
-#: src/harmonic.c:7877 src/harmonic.c:8072 src/harmonic.c:8268
-#: src/harmonic.c:8463 src/harmonic.c:8661 src/harmonic.c:8856
-#: src/harmonic.c:9052 src/harmonic.c:9247 src/harmonic.c:9443
-#: src/harmonic.c:9601 src/harmonic.c:9780
+#: src/harmonic.c:3142 src/harmonic.c:3316 src/harmonic.c:3493
+#: src/harmonic.c:3667 src/harmonic.c:3844 src/harmonic.c:4018
+#: src/harmonic.c:4193 src/harmonic.c:4367 src/harmonic.c:4546
+#: src/harmonic.c:4720 src/harmonic.c:4895 src/harmonic.c:5069
+#: src/harmonic.c:5246 src/harmonic.c:5420 src/harmonic.c:5595
+#: src/harmonic.c:5769 src/harmonic.c:5950 src/harmonic.c:6124
+#: src/harmonic.c:6299 src/harmonic.c:6473 src/harmonic.c:6650
+#: src/harmonic.c:6824 src/harmonic.c:6999 src/harmonic.c:7173
+#: src/harmonic.c:7352 src/harmonic.c:7528 src/harmonic.c:7703
+#: src/harmonic.c:7877 src/harmonic.c:8054 src/harmonic.c:8228
+#: src/harmonic.c:8403 src/harmonic.c:8577 src/harmonic.c:8760
+#: src/harmonic.c:8894 src/harmonic.c:9021 src/harmonic.c:9149
+#: src/harmonic.c:9276 src/harmonic.c:9406 src/harmonic.c:9533
+#: src/harmonic.c:9661 src/harmonic.c:9788 src/harmonic.c:9922
+#: src/harmonic.c:10049 src/harmonic.c:10177 src/harmonic.c:10304
+#: src/harmonic.c:10434 src/harmonic.c:10561 src/harmonic.c:10689
+#: src/harmonic.c:10816 src/harmonic.c:10948 src/harmonic.c:11075
+#: src/harmonic.c:11203 src/harmonic.c:11330 src/harmonic.c:11460
+#: src/harmonic.c:11587 src/harmonic.c:11715 src/harmonic.c:11842
+#: src/harmonic.c:12139
 #, c-format
 msgid "File: %s successfully loaded"
-msgstr "Il file: %s ha caricato con successo"
+msgstr "Il file: %s è stato caricato con successo"
 
-#: src/harmonic.c:3343 src/harmonic.c:3538 src/harmonic.c:3734
-#: src/harmonic.c:3929 src/harmonic.c:4127 src/harmonic.c:4322
-#: src/harmonic.c:4518 src/harmonic.c:4713 src/harmonic.c:4913
-#: src/harmonic.c:5108 src/harmonic.c:5304 src/harmonic.c:5499
-#: src/harmonic.c:5697 src/harmonic.c:5892 src/harmonic.c:6088
-#: src/harmonic.c:6283 src/harmonic.c:6485 src/harmonic.c:6680
-#: src/harmonic.c:6876 src/harmonic.c:7071 src/harmonic.c:7269
-#: src/harmonic.c:7464 src/harmonic.c:7660 src/harmonic.c:7855
-#: src/harmonic.c:8055 src/harmonic.c:8250 src/harmonic.c:8446
-#: src/harmonic.c:8641 src/harmonic.c:8839 src/harmonic.c:9034
-#: src/harmonic.c:9230 src/harmonic.c:9425 src/harmonic.c:9565
-#: src/harmonic.c:9647 src/harmonic.c:9663 src/harmonic.c:9799
+#: src/harmonic.c:3299 src/harmonic.c:3475 src/harmonic.c:3650
+#: src/harmonic.c:3824 src/harmonic.c:4001 src/harmonic.c:4175
+#: src/harmonic.c:4350 src/harmonic.c:4524 src/harmonic.c:4703
+#: src/harmonic.c:4877 src/harmonic.c:5052 src/harmonic.c:5226
+#: src/harmonic.c:5403 src/harmonic.c:5577 src/harmonic.c:5752
+#: src/harmonic.c:5926 src/harmonic.c:6107 src/harmonic.c:6281
+#: src/harmonic.c:6456 src/harmonic.c:6630 src/harmonic.c:6807
+#: src/harmonic.c:6981 src/harmonic.c:7156 src/harmonic.c:7330
+#: src/harmonic.c:7511 src/harmonic.c:7685 src/harmonic.c:7860
+#: src/harmonic.c:8034 src/harmonic.c:8211 src/harmonic.c:8385
+#: src/harmonic.c:8560 src/harmonic.c:8734 src/harmonic.c:8871
+#: src/harmonic.c:9005 src/harmonic.c:9132 src/harmonic.c:9260
+#: src/harmonic.c:9387 src/harmonic.c:9517 src/harmonic.c:9644
+#: src/harmonic.c:9772 src/harmonic.c:9899 src/harmonic.c:10033
+#: src/harmonic.c:10160 src/harmonic.c:10288 src/harmonic.c:10415
+#: src/harmonic.c:10545 src/harmonic.c:10672 src/harmonic.c:10800
+#: src/harmonic.c:10927 src/harmonic.c:11059 src/harmonic.c:11186
+#: src/harmonic.c:11314 src/harmonic.c:11441 src/harmonic.c:11571
+#: src/harmonic.c:11698 src/harmonic.c:11826 src/harmonic.c:11953
+#: src/harmonic.c:12022 src/harmonic.c:12158
 #, c-format
 msgid "Loading failed for file: %s, Error: %s"
-msgstr "Carico venuto a mancare per file: %s, Errore: %s"
+msgstr "Il file: %s non è stato caricato. Errore: %s"
 
-#: src/harmonic.c:9696 src/harmonic.c:10446
+#: src/harmonic.c:11964
+msgid "Variable Parameter"
+msgstr "Il metodo di misurazione"
+
+#: src/harmonic.c:11980 src/harmonic.c:11992 src/harmonic.c:12009
+#: src/harmonic.c:12067 src/harmonic.c:12817
+msgid "Analysis Results"
+msgstr "Risultati dell'analisi"
+
+#: src/harmonic.c:12055 src/harmonic.c:12805
 msgid "Visibility"
-msgstr "Visibilit"
+msgstr "Visibilità"
 
-#: src/harmonic.c:9702 src/harmonic.c:10452
+#: src/harmonic.c:12061 src/harmonic.c:12811
 msgid "Domain Shift"
 msgstr "Sposti nel dominio"
 
-#: src/harmonic.c:10142
+#: src/harmonic.c:12501
 msgid "Harmonic Spectrum Analyser"
 msgstr "Analizzatore di spettro armonico"
 
-#: src/harmonic.c:10176
+#: src/harmonic.c:12535
 msgid "_File"
 msgstr "_File"
 
-#: src/harmonic.c:10199
+#: src/harmonic.c:12558
 msgid "Raw Delimited Data"
-msgstr "Dati delimitati da rivedere"
+msgstr "Dati delimitati senza intestazione"
 
-#: src/harmonic.c:10203
+#: src/harmonic.c:12562
 msgid "Data Format:"
 msgstr "Disposizione di dati:"
 
-#: src/harmonic.c:10208
+#: src/harmonic.c:12567
 msgid "Trace:"
 msgstr "Traccia:"
 
-#: src/harmonic.c:10212
+#: src/harmonic.c:12571
 msgid "Transmission Measurement?"
-msgstr "Misure della trasmissione?"
+msgstr "Misura in trasmissione?"
 
-#: src/harmonic.c:10216
+#: src/harmonic.c:12575
 msgid "Data in dBs?"
 msgstr "Dati in dB?"
 
-#: src/harmonic.c:10220
+#: src/harmonic.c:12579
 msgid "Negate?"
 msgstr "Negare?"
 
-#: src/harmonic.c:10224
+#: src/harmonic.c:12583
 msgid "Display Properties:"
-msgstr "Propriet dell'esposizione"
+msgstr "Proprietà di visualizzazione:"
 
-#: src/harmonic.c:10229
+#: src/harmonic.c:12588
 msgid "_Properties"
-msgstr "_Propriet"
+msgstr "_Proprietà"
 
-#: src/harmonic.c:10235
+#: src/harmonic.c:12594
 msgid "None"
 msgstr "Nessun"
 
-#: src/harmonic.c:10239
+#: src/harmonic.c:12598
 msgid ""
 "1st order\n"
 "spectral shadowing"
 msgstr ""
-"Compensazione d'ombreggiamento\n"
-"spettrale di primo ordine"
+"Compensazione della coda\n"
+"spettrale (di primo ordine)"
 
-#: src/harmonic.c:10243
+#: src/harmonic.c:12602
 msgid ""
 "Nonlinear\n"
 "Compensation:"
@@ -271,102 +285,104 @@ msgstr ""
 "Compensazione\n"
 "non lineare"
 
-#: src/harmonic.c:10247
+#: src/harmonic.c:12606
 msgid "Batch Process Data?"
-msgstr "Processo discontinuo i dati?"
+msgstr "Elaborazione batch per gruppi di files."
 
-#: src/harmonic.c:10262
+#: src/harmonic.c:12621
 msgid "Invert domain?"
 msgstr "Invertire il dominio?"
 
-#: src/harmonic.c:10266
+#: src/harmonic.c:12625
 msgid "Calculate Chirp?"
-msgstr "Calcolare lo stridio?"
+msgstr "Calcolare il chirp?"
 
-#: src/harmonic.c:10270
+#: src/harmonic.c:12629
 msgid "Optimise Triangle fit?"
 msgstr "Ottimizzare la misura dei triangoli?"
 
-#: src/harmonic.c:10274
+#: src/harmonic.c:12633
 msgid "_Advanced"
 msgstr "A_vanzato"
 
-#: src/harmonic.c:10288
+#: src/harmonic.c:12638
+msgid "Instructions"
+msgstr "Istruzioni"
+
+#: src/harmonic.c:12647
 msgid "_Help"
 msgstr "_Aiuto"
 
-#: src/harmonic.c:10309
+#: src/harmonic.c:12668
 msgid "Spectrum Start:"
-msgstr "Inizio dello spettro inverso:"
+msgstr "Inizio dello spettro:"
 
-#: src/harmonic.c:10317
+#: src/harmonic.c:12676
 msgid "Spectrum Stop:"
-msgstr "Conclusione dello spettro inverso:"
+msgstr "Conclusione dello spettro:"
 
-#: src/harmonic.c:10325
+#: src/harmonic.c:12684
 msgid "Offset:"
-msgstr "Contrappeso:"
+msgstr "Slittamento:"
 
-#: src/harmonic.c:10332 src/harmonic.c:10398
+#: src/harmonic.c:12691 src/harmonic.c:12757
 msgid "j index:"
 msgstr "Indice di J"
 
-#: src/harmonic.c:10340
+#: src/harmonic.c:12699
 msgid "Zero Padding 2^:"
-msgstr "Riempimento zero 2^:"
+msgstr "Zero padding 2^:"
 
-#: src/harmonic.c:10347 src/harmonic.c:10414
+#: src/harmonic.c:12706 src/harmonic.c:12773
 msgid ""
 "Reset\n"
 "Arrays"
-msgstr ""
-"Ripristini gli\n"
-"allineamenti"
+msgstr "Resettare"
 
-#: src/harmonic.c:10351
+#: src/harmonic.c:12710
 msgid "Transform Spectrum"
-msgstr "Transformare lo spettro"
+msgstr "Trasformare lo spettro"
 
-#: src/harmonic.c:10354 src/harmonic.c:10433
+#: src/harmonic.c:12713 src/harmonic.c:12792
 msgid "Spectrum"
 msgstr "Spettro"
 
-#: src/harmonic.c:10358
+#: src/harmonic.c:12717
 msgid "Inverse Spectrum Start:"
 msgstr "Inizio dello spettro inverso:"
 
-#: src/harmonic.c:10366
+#: src/harmonic.c:12725
 msgid "Inverse Spectrum Stop:"
 msgstr "Conclusione dello spettro inverso:"
 
-#: src/harmonic.c:10374
+#: src/harmonic.c:12733
 msgid "Triangle Centre:"
 msgstr "Centro del triangolo:"
 
-#: src/harmonic.c:10382
+#: src/harmonic.c:12741
 msgid "Triangle Full Width:"
 msgstr "Larghezza completa del triangolo:"
 
-#: src/harmonic.c:10390
+#: src/harmonic.c:12749
 msgid "DC Peak Width:"
-msgstr "Larghezza di punta di CC:"
+msgstr "Larghezza massima della CC:"
 
-#: src/harmonic.c:10406
+#: src/harmonic.c:12765
 msgid "k index:"
 msgstr "Indice di K"
 
-#: src/harmonic.c:10418
+#: src/harmonic.c:12777
 msgid ""
 "Process\n"
 "Spectrum"
 msgstr ""
-"Procedi lo\n"
+"Analisi dello\n"
 "spettro"
 
-#: src/harmonic.c:10421 src/harmonic.c:10442
+#: src/harmonic.c:12780 src/harmonic.c:12801
 msgid "Inverse Spectrum"
 msgstr "Spettro inverso"
 
-#: src/harmonic.c:10438
+#: src/harmonic.c:12797
 msgid "Inverse Domain"
 msgstr "Dominio inverso"
