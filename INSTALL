@@ -59,7 +59,7 @@ The simplest way to compile this package is:
 Alternately the following should work with gcc:
 
    cd src
-   gcc -o Harmonic harmonic0-1-0.c -lfftw3 -lm \
+   gcc -o Harmonic harmonic.c -lfftw3 -lm \
        `pkg-config --cflags --libs gtk+-2.0` \
        plotlinear0-1-0.h plotlinear0-1-0.c 
 
