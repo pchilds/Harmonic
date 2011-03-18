@@ -55,7 +55,7 @@
 #include <fftw3.h>
 #include <math.h>
 #include "plotlinear0-1-0.h"
-/*#include "plotpolar0-1-0.h"*/
+#include "plotpolar0-1-0.h"
 
 #define DZE 0.00001 /* divide by zero threshold */
 #define NZE -0.00001 /* negative of this */
@@ -110,9 +110,9 @@ void static dpr(GtkWidget *widget, gpointer data)
 	GtkWidget *helpwin, *content, *table, *vbox, *entry1, *entry2, *label, *spin1, *spin2, *hsp, *ck, *ck2, *ck3;
 	GtkAdjustment *adj1, *adj2;
 	PlotLinear *plt;
-	gdouble xi, xf, mny, mxy, iv, clc;
+	PlotPolar *plt2;
+	gdouble xi, xf, mny, mxy, iv, clc, rcn, thc;
 	gint dx, dx2, j, k;
-	/*PlotPolarBoth *plt2;*/
 	
 	helpwin=gtk_dialog_new_with_buttons(_("Display Properties"), GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, GTK_STOCK_APPLY, GTK_RESPONSE_APPLY, NULL);
 	g_signal_connect_swapped(G_OBJECT(helpwin), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
@@ -145,17 +145,17 @@ void static dpr(GtkWidget *widget, gpointer data)
 				label=gtk_label_new(_("Azimuthal axis text:"));
 				gtk_widget_show(label);
 				gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-				/*plt2=PLOT_POLAR(plot3);
+				plt2=PLOT_POLAR(plot3);
 				gtk_entry_set_text(GTK_ENTRY(entry1), g_strdup(plt2->rlab));
 				gtk_entry_set_text(GTK_ENTRY(entry2), g_strdup(plt2->thlab));
 				adj1=(GtkAdjustment *) gtk_adjustment_new((plt2->lfsize), 8, 64, 1.0, 5.0, 0.0);
 				adj2=(GtkAdjustment *) gtk_adjustment_new((plt2->afsize), 8, 64, 1.0, 5.0, 0.0);
 				spin1=gtk_spin_button_new(adj1, 0, 0);
-				spin2=gtk_spin_button_new(adj2, 0, 0);*/
+				spin2=gtk_spin_button_new(adj2, 0, 0);
 				gtk_widget_show(entry1);
 				gtk_widget_show(entry2);
-				/*gtk_widget_show(spin1);
-				gtk_widget_show(spin2);*/
+				gtk_widget_show(spin1);
+				gtk_widget_show(spin2);
 				gtk_table_attach(GTK_TABLE(table), entry1, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				gtk_table_attach(GTK_TABLE(table), entry2, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				gtk_table_attach(GTK_TABLE(table), spin1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -173,11 +173,11 @@ void static dpr(GtkWidget *widget, gpointer data)
 				gtk_container_add(GTK_CONTAINER(content), vbox);
 				if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 				{
-					/*(plt2->rlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
+					(plt2->rlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 					(plt2->thlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
 					(plt2->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
 					(plt2->afsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin2));
-					g_object_get(G_OBJECT(plot3), "rmin", &xi, "rmax", &xf, "thmin", &mny, "thmax", &mxy, NULL);*/
+					g_object_get(G_OBJECT(plot3), "rmin", &xi, "rmax", &xf, "thmin", &mny, "thmax", &mxy, "rcnt", &rcn, "thcnt", &thc, NULL);
 					if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2)))
 					{
 						if ((flagd&2)==0)
@@ -212,7 +212,7 @@ void static dpr(GtkWidget *widget, gpointer data)
 						{
 						}
 					}
-					/*plot_polar_update_scale(plot3, xi, xf, mny, mxy);*/
+					plot_polar_update_scale(plot3, xi, xf, mny, mxy, rcn, thc);
 				}
 			}
 			else
@@ -956,7 +956,8 @@ void static prt(GtkWidget *widget, gpointer data)
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				plot_linear_print_eps(plot3, fout);
+				if ((flags&32)!=0) plot_polar_print_eps(plot3, fout);
+				else plot_linear_print_eps(plot3, fout);
 				g_free(fout);
 			}
 			gtk_widget_destroy(wfile);
@@ -1716,9 +1717,9 @@ void static prs(GtkWidget *widget, gpointer data)
 					/*
 					 fit values to zwa
 					 */
+					vzt=g_array_index(stars, gdouble, 2*j*sz2);
 					iv=g_array_index(zwa, gdouble, j)*idelf/2;
-					vzt=0;
-					for (l=0; l<iv; l++)
+					for (l=1; l<iv; l++)
 					{
 						ivd=g_array_index(stars, gdouble, l+(2*j*sz2));
 						ivd*=ivd;
@@ -1881,9 +1882,9 @@ void static prs(GtkWidget *widget, gpointer data)
 					/*
 					 fit values to zwa
 					 */
+					vzt=g_array_index(stars, gdouble, 2*j*sz2);
 					iv=g_array_index(zwa, gdouble, j)*idelf/2;
-					vzt=0;
-					for (l=0; l<iv; l++)
+					for (l=1; l<iv; l++)
 					{
 						ivd=g_array_index(stars, gdouble, l+(2*j*sz2));
 						ivd*=ivd;
@@ -1981,10 +1982,10 @@ void static prs(GtkWidget *widget, gpointer data)
 			chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 			for (j=0; j<=jdimxf; j++)
 			{
+				vzt=g_array_index(stars, gdouble, 2*j*sz2);
 				idelf=1/g_array_index(delf, gdouble, j);
 				iv=g_array_index(zwa, gdouble, j)*idelf/2;
-				vzt=0;
-				for (l=0; l<iv; l++)
+				for (l=1; l<iv; l++)
 				{
 					ivd=g_array_index(stars, gdouble, l+(2*j*sz2));
 					ivd*=ivd;
@@ -2140,10 +2141,10 @@ void static prs(GtkWidget *widget, gpointer data)
 		{
 			for (j=0; j<=jdimxf; j++)
 			{
+				vzt=g_array_index(stars, gdouble, 2*j*sz2);
 				idelf=1/g_array_index(delf, gdouble, j);
 				iv=g_array_index(zwa, gdouble, j)*idelf/2;
-				vzt=0;
-				for (l=0; l<iv; l++)
+				for (l=1; l<iv; l++)
 				{
 					ivd=g_array_index(stars, gdouble, l+(2*j*sz2));
 					ivd*=ivd;
@@ -3071,8 +3072,7 @@ void static pltmv(PlotLinear *plot, gpointer data)
 	g_free(str);
 }
 
-/*
-void static pltmvp(PlotPolarBoth *plot, gpointer data)
+void static pltmvp(PlotPolar *plot, gpointer data)
 {
 	gchar *str;
 
@@ -3080,14 +3080,11 @@ void static pltmvp(PlotPolarBoth *plot, gpointer data)
 	gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 	g_free(str);
 }
-*/
 
 void static opd(GtkWidget *widget, gpointer data)
 {
 	PlotLinear *plt;
-	/*
-	 PlotPolarBoth *plt2;
-	 */
+	PlotPolar *plt2;
 	GtkWidget *wfile, *dialog, *cont, *trace, *table, *label;
 	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct;
 	guint j, k, l, m, sal, st, sp, kib;
@@ -3103,6 +3100,12 @@ void static opd(GtkWidget *widget, gpointer data)
 		if ((flags&4)==0)
 		{
 			str=g_strdup(_("Perform an initial test of the parameters first"));
+			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+			g_free(str);
+		}
+		else if ((jdimx!=jdimxf)||(kdimx!=kdimxf))
+		{
+			str=g_strdup(_("Parameters have changed since the last test. Retest with the current values first"));
 			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 			g_free(str);
 		}
@@ -3182,10 +3185,10 @@ void static opd(GtkWidget *widget, gpointer data)
 													chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 													for (j=0; j<=jdimxf; j++)
 													{
+														vzt=g_array_index(stars, gdouble, j*zp);
 														idelf=1/g_array_index(delf, gdouble, j);
 														iv=g_array_index(zwa, gdouble, j)*idelf/2;
-														vzt=0;
-														for (l=0; l<iv; l++)
+														for (l=1; l<iv; l++)
 														{
 															ivd=g_array_index(stars, gdouble, l+(j*zp));
 															ivd*=ivd;
@@ -3356,10 +3359,10 @@ void static opd(GtkWidget *widget, gpointer data)
 													chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 													for (j=0; j<=jdimxf; j++)
 													{
+														vzt=g_array_index(stars, gdouble, j*zp);
 														idelf=1/g_array_index(delf, gdouble, j);
 														iv=g_array_index(zwa, gdouble, j)*idelf/2;
-														vzt=0;
-														for (l=0; l<iv; l++)
+														for (l=1; l<iv; l++)
 														{
 															ivd=g_array_index(stars, gdouble, l+(j*zp));
 															ivd*=ivd;
@@ -3533,10 +3536,10 @@ void static opd(GtkWidget *widget, gpointer data)
 												chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 												for (j=0; j<=jdimxf; j++)
 												{
+													vzt=g_array_index(stars, gdouble, j*zp);
 													idelf=1/g_array_index(delf, gdouble, j);
 													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													vzt=0;
-													for (l=0; l<iv; l++)
+													for (l=1; l<iv; l++)
 													{
 														ivd=g_array_index(stars, gdouble, l+(j*zp));
 														ivd*=ivd;
@@ -3707,10 +3710,10 @@ void static opd(GtkWidget *widget, gpointer data)
 												chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 												for (j=0; j<=jdimxf; j++)
 												{
+													vzt=g_array_index(stars, gdouble, j*zp);
 													idelf=1/g_array_index(delf, gdouble, j);
 													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													vzt=0;
-													for (l=0; l<iv; l++)
+													for (l=1; l<iv; l++)
 													{
 														ivd=g_array_index(stars, gdouble, l+(j*zp));
 														ivd*=ivd;
@@ -3884,10 +3887,10 @@ void static opd(GtkWidget *widget, gpointer data)
 												chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 												for (j=0; j<=jdimxf; j++)
 												{
+													vzt=g_array_index(stars, gdouble, j*zp);
 													idelf=1/g_array_index(delf, gdouble, j);
 													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													vzt=0;
-													for (l=0; l<iv; l++)
+													for (l=1; l<iv; l++)
 													{
 														ivd=g_array_index(stars, gdouble, l+(j*zp));
 														ivd*=ivd;
@@ -4058,10 +4061,10 @@ void static opd(GtkWidget *widget, gpointer data)
 												chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 												for (j=0; j<=jdimxf; j++)
 												{
+													vzt=g_array_index(stars, gdouble, j*zp);
 													idelf=1/g_array_index(delf, gdouble, j);
 													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													vzt=0;
-													for (l=0; l<iv; l++)
+													for (l=1; l<iv; l++)
 													{
 														ivd=g_array_index(stars, gdouble, l+(j*zp));
 														ivd*=ivd;
@@ -4233,10 +4236,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -4407,10 +4410,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -4586,10 +4589,10 @@ void static opd(GtkWidget *widget, gpointer data)
 												chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 												for (j=0; j<=jdimxf; j++)
 												{
+													vzt=g_array_index(stars, gdouble, j*zp);
 													idelf=1/g_array_index(delf, gdouble, j);
 													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													vzt=0;
-													for (l=0; l<iv; l++)
+													for (l=1; l<iv; l++)
 													{
 														ivd=g_array_index(stars, gdouble, l+(j*zp));
 														ivd*=ivd;
@@ -4760,10 +4763,10 @@ void static opd(GtkWidget *widget, gpointer data)
 												chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 												for (j=0; j<=jdimxf; j++)
 												{
+													vzt=g_array_index(stars, gdouble, j*zp);
 													idelf=1/g_array_index(delf, gdouble, j);
 													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													vzt=0;
-													for (l=0; l<iv; l++)
+													for (l=1; l<iv; l++)
 													{
 														ivd=g_array_index(stars, gdouble, l+(j*zp));
 														ivd*=ivd;
@@ -4935,10 +4938,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -5109,10 +5112,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -5286,10 +5289,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -5460,10 +5463,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -5635,10 +5638,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -5809,10 +5812,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -5990,10 +5993,10 @@ void static opd(GtkWidget *widget, gpointer data)
 												chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 												for (j=0; j<=jdimxf; j++)
 												{
+													vzt=g_array_index(stars, gdouble, j*zp);
 													idelf=1/g_array_index(delf, gdouble, j);
 													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													vzt=0;
-													for (l=0; l<iv; l++)
+													for (l=1; l<iv; l++)
 													{
 														ivd=g_array_index(stars, gdouble, l+(j*zp));
 														ivd*=ivd;
@@ -6164,10 +6167,10 @@ void static opd(GtkWidget *widget, gpointer data)
 												chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 												for (j=0; j<=jdimxf; j++)
 												{
+													vzt=g_array_index(stars, gdouble, j*zp);
 													idelf=1/g_array_index(delf, gdouble, j);
 													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													vzt=0;
-													for (l=0; l<iv; l++)
+													for (l=1; l<iv; l++)
 													{
 														ivd=g_array_index(stars, gdouble, l+(j*zp));
 														ivd*=ivd;
@@ -6339,10 +6342,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -6513,10 +6516,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -6690,10 +6693,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -6864,10 +6867,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -7039,10 +7042,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -7213,10 +7216,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -7392,10 +7395,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -7568,10 +7571,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -7743,10 +7746,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -7917,10 +7920,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -8094,10 +8097,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -8268,10 +8271,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -8443,10 +8446,10 @@ void static opd(GtkWidget *widget, gpointer data)
 									chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 									for (j=0; j<=jdimxf; j++)
 									{
+										vzt=g_array_index(stars, gdouble, j*zp);
 										idelf=1/g_array_index(delf, gdouble, j);
 										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										vzt=0;
-										for (l=0; l<iv; l++)
+										for (l=1; l<iv; l++)
 										{
 											ivd=g_array_index(stars, gdouble, l+(j*zp));
 											ivd*=ivd;
@@ -8617,10 +8620,10 @@ void static opd(GtkWidget *widget, gpointer data)
 									chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 									for (j=0; j<=jdimxf; j++)
 									{
+										vzt=g_array_index(stars, gdouble, j*zp);
 										idelf=1/g_array_index(delf, gdouble, j);
 										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										vzt=0;
-										for (l=0; l<iv; l++)
+										for (l=1; l<iv; l++)
 										{
 											ivd=g_array_index(stars, gdouble, l+(j*zp));
 											ivd*=ivd;
@@ -8798,10 +8801,10 @@ void static opd(GtkWidget *widget, gpointer data)
 												trs(tr, NULL);/* swap to more efficient routines for batch processing */
 												for (j=0; j<=jdimxf; j++)
 												{
+													vzt=g_array_index(stars, gdouble, j*zp);
 													idelf=1/g_array_index(delf, gdouble, j);
 													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													vzt=0;
-													for (l=0; l<iv; l++)
+													for (l=1; l<iv; l++)
 													{
 														ivd=g_array_index(stars, gdouble, l+(j*zp));
 														ivd*=ivd;
@@ -8932,10 +8935,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											trs(tr, NULL);/* swap to more efficient routines for batch processing */
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -9059,10 +9062,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											trs(tr, NULL);/* swap to more efficient routines for batch processing */
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -9187,10 +9190,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										trs(tr, NULL);/* swap to more efficient routines for batch processing */
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -9314,10 +9317,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										trs(tr, NULL);/* swap to more efficient routines for batch processing */
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -9444,10 +9447,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										trs(tr, NULL);/* swap to more efficient routines for batch processing */
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -9571,10 +9574,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										trs(tr, NULL);/* swap to more efficient routines for batch processing */
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -9699,10 +9702,10 @@ void static opd(GtkWidget *widget, gpointer data)
 									trs(tr, NULL);/* swap to more efficient routines for batch processing */
 									for (j=0; j<=jdimxf; j++)
 									{
+										vzt=g_array_index(stars, gdouble, j*zp);
 										idelf=1/g_array_index(delf, gdouble, j);
 										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										vzt=0;
-										for (l=0; l<iv; l++)
+										for (l=1; l<iv; l++)
 										{
 											ivd=g_array_index(stars, gdouble, l+(j*zp));
 											ivd*=ivd;
@@ -9826,10 +9829,10 @@ void static opd(GtkWidget *widget, gpointer data)
 									trs(tr, NULL);/* swap to more efficient routines for batch processing */
 									for (j=0; j<=jdimxf; j++)
 									{
+										vzt=g_array_index(stars, gdouble, j*zp);
 										idelf=1/g_array_index(delf, gdouble, j);
 										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										vzt=0;
-										for (l=0; l<iv; l++)
+										for (l=1; l<iv; l++)
 										{
 											ivd=g_array_index(stars, gdouble, l+(j*zp));
 											ivd*=ivd;
@@ -9960,10 +9963,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											trs(tr, NULL);/* swap to more efficient routines for batch processing */
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-											for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -10087,10 +10090,10 @@ void static opd(GtkWidget *widget, gpointer data)
 											trs(tr, NULL);/* swap to more efficient routines for batch processing */
 											for (j=0; j<=jdimxf; j++)
 											{
+												vzt=g_array_index(stars, gdouble, j*zp);
 												idelf=1/g_array_index(delf, gdouble, j);
 												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												vzt=0;
-												for (l=0; l<iv; l++)
+												for (l=1; l<iv; l++)
 												{
 													ivd=g_array_index(stars, gdouble, l+(j*zp));
 													ivd*=ivd;
@@ -10215,10 +10218,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										trs(tr, NULL);/* swap to more efficient routines for batch processing */
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -10342,10 +10345,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										trs(tr, NULL);/* swap to more efficient routines for batch processing */
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -10472,10 +10475,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										trs(tr, NULL);/* swap to more efficient routines for batch processing */
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -10599,10 +10602,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										trs(tr, NULL);/* swap to more efficient routines for batch processing */
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -10727,10 +10730,10 @@ void static opd(GtkWidget *widget, gpointer data)
 									trs(tr, NULL);/* swap to more efficient routines for batch processing */
 									for (j=0; j<=jdimxf; j++)
 									{
+										vzt=g_array_index(stars, gdouble, j*zp);
 										idelf=1/g_array_index(delf, gdouble, j);
 										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										vzt=0;
-										for (l=0; l<iv; l++)
+										for (l=1; l<iv; l++)
 										{
 											ivd=g_array_index(stars, gdouble, l+(j*zp));
 											ivd*=ivd;
@@ -10854,10 +10857,10 @@ void static opd(GtkWidget *widget, gpointer data)
 									trs(tr, NULL);/* swap to more efficient routines for batch processing */
 									for (j=0; j<=jdimxf; j++)
 									{
+										vzt=g_array_index(stars, gdouble, j*zp);
 										idelf=1/g_array_index(delf, gdouble, j);
 										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										vzt=0;
-										for (l=0; l<iv; l++)
+										for (l=1; l<iv; l++)
 										{
 											ivd=g_array_index(stars, gdouble, l+(j*zp));
 											ivd*=ivd;
@@ -10986,10 +10989,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										trs(tr, NULL);/* swap to more efficient routines for batch processing */
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -11113,10 +11116,10 @@ void static opd(GtkWidget *widget, gpointer data)
 										trs(tr, NULL);/* swap to more efficient routines for batch processing */
 										for (j=0; j<=jdimxf; j++)
 										{
+											vzt=g_array_index(stars, gdouble, j*zp);
 											idelf=1/g_array_index(delf, gdouble, j);
 											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											vzt=0;
-											for (l=0; l<iv; l++)
+											for (l=1; l<iv; l++)
 											{
 												ivd=g_array_index(stars, gdouble, l+(j*zp));
 												ivd*=ivd;
@@ -11241,10 +11244,10 @@ void static opd(GtkWidget *widget, gpointer data)
 									trs(tr, NULL);/* swap to more efficient routines for batch processing */
 									for (j=0; j<=jdimxf; j++)
 									{
+										vzt=g_array_index(stars, gdouble, j*zp);
 										idelf=1/g_array_index(delf, gdouble, j);
 										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										vzt=0;
-										for (l=0; l<iv; l++)
+										for (l=1; l<iv; l++)
 										{
 											ivd=g_array_index(stars, gdouble, l+(j*zp));
 											ivd*=ivd;
@@ -11368,10 +11371,10 @@ void static opd(GtkWidget *widget, gpointer data)
 									trs(tr, NULL);/* swap to more efficient routines for batch processing */
 									for (j=0; j<=jdimxf; j++)
 									{
+										vzt=g_array_index(stars, gdouble, j*zp);
 										idelf=1/g_array_index(delf, gdouble, j);
 										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										vzt=0;
-										for (l=0; l<iv; l++)
+										for (l=1; l<iv; l++)
 										{
 											ivd=g_array_index(stars, gdouble, l+(j*zp));
 											ivd*=ivd;
@@ -11498,10 +11501,10 @@ void static opd(GtkWidget *widget, gpointer data)
 									trs(tr, NULL);/* swap to more efficient routines for batch processing */
 									for (j=0; j<=jdimxf; j++)
 									{
+										vzt=g_array_index(stars, gdouble, j*zp);
 										idelf=1/g_array_index(delf, gdouble, j);
 										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										vzt=0;
-										for (l=0; l<iv; l++)
+										for (l=1; l<iv; l++)
 										{
 											ivd=g_array_index(stars, gdouble, l+(j*zp));
 											ivd*=ivd;
@@ -11625,10 +11628,10 @@ void static opd(GtkWidget *widget, gpointer data)
 									trs(tr, NULL);/* swap to more efficient routines for batch processing */
 									for (j=0; j<=jdimxf; j++)
 									{
+										vzt=g_array_index(stars, gdouble, j*zp);
 										idelf=1/g_array_index(delf, gdouble, j);
 										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										vzt=0;
-										for (l=0; l<iv; l++)
+										for (l=1; l<iv; l++)
 										{
 											ivd=g_array_index(stars, gdouble, l+(j*zp));
 											ivd*=ivd;
@@ -11753,10 +11756,10 @@ void static opd(GtkWidget *widget, gpointer data)
 								trs(tr, NULL);/* swap to more efficient routines for batch processing */
 								for (j=0; j<=jdimxf; j++)
 								{
+									vzt=g_array_index(stars, gdouble, j*zp);
 									idelf=1/g_array_index(delf, gdouble, j);
 									iv=g_array_index(zwa, gdouble, j)*idelf/2;
-									vzt=0;
-									for (l=0; l<iv; l++)
+									for (l=1; l<iv; l++)
 									{
 										ivd=g_array_index(stars, gdouble, l+(j*zp));
 										ivd*=ivd;
@@ -11880,10 +11883,10 @@ void static opd(GtkWidget *widget, gpointer data)
 								trs(tr, NULL);/* swap to more efficient routines for batch processing */
 								for (j=0; j<=jdimxf; j++)
 								{
+									vzt=g_array_index(stars, gdouble, j*zp);
 									idelf=1/g_array_index(delf, gdouble, j);
 									iv=g_array_index(zwa, gdouble, j)*idelf/2;
-									vzt=0;
-									for (l=0; l<iv; l++)
+									for (l=1; l<iv; l++)
 									{
 										ivd=g_array_index(stars, gdouble, l+(j*zp));
 										ivd*=ivd;
@@ -12002,8 +12005,8 @@ void static opd(GtkWidget *widget, gpointer data)
 							gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
 							table=gtk_table_new(1, 1, FALSE);
 							gtk_widget_show(table);
-							plot3=plot_linear_new(); /* change to plot_polar_both */
-							g_signal_connect(plot3, "moved", G_CALLBACK(pltmv), NULL); /* change to pltmvp */
+							plot3=plot_polar_new();
+							g_signal_connect(plot3, "moved", G_CALLBACK(pltmvp), NULL);
 							gtk_widget_show(plot3);
 							gtk_table_attach(GTK_TABLE(table), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 							label=gtk_label_new(_("Analysis Results"));
@@ -12831,6 +12834,7 @@ int main( int argc, char *argv[])
 	vis=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 	doms=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 	chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+	flags=0;
 	gtk_widget_show(window);
 	gtk_main();
 	return 0;
