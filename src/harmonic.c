@@ -12404,6 +12404,9 @@ void static upa2(GtkWidget *widget, gpointer data)
 	gdouble *ptr;
 
 	ptr=&g_array_index((GArray*)data, gdouble, jdim+(kdim*MXD));
+	/*
+	ptr=&g_array_index((GArray*)data, gdouble, jdim+(kdim*jdimx));
+	 */
 	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 }
 
@@ -12478,6 +12481,13 @@ void static reset2(GtkWidget *widget, gpointer data)
 	ispa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 	tca=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 	twa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+	/*
+	zwa=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	isra=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	ispa=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	tca=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	twa=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	 */
 	for (j=0; j<=jdimx; j++)
 	{
 		g_array_append_val(isra, num);
@@ -12653,14 +12663,22 @@ int main( int argc, char *argv[])
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnb), mni);
 	gtk_menu_item_right_justify(GTK_MENU_ITEM(mni));
 	bsra=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXD);
-	g_array_append_val(bsra, fll);
 	bspa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXD);
-	g_array_append_val(bspa, fll);
 	zwa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXD);
 	isra=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 	ispa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 	tca=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 	twa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+	/*
+	bsra=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	bspa=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	isra=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	ispa=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	tca=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	twa=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	 */
+	g_array_append_val(bsra, fll);
+	g_array_append_val(bspa, fll);
 	hpane=gtk_hpaned_new();
 	gtk_widget_show(hpane);
 	gtk_container_add(GTK_CONTAINER(vbox), hpane);
@@ -12834,6 +12852,11 @@ int main( int argc, char *argv[])
 	vis=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 	doms=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
 	chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
+	/*
+	vis=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	doms=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	chp=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	 */
 	flags=0;
 	gtk_widget_show(window);
 	gtk_main();
