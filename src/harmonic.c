@@ -80,7 +80,8 @@ void static help(GtkWidget *widget, gpointer data)
 
 	if (data) uri=g_strdup_printf("ghelp:Harmonic-help?%s", (gchar *) data);
 	else uri=g_strdup("ghelp:Harmonic-help");
-	gtk_show_uri(NULL, uri, gtk_get_current_event_time (), &Err);
+	gtk_show_uri(NULL, uri, gtk_get_current_event_time(), &Err);
+	g_free(uri);
 	if (Err)
 	{
 		str=g_strdup(_("Could not load help files."));
@@ -106,11 +107,12 @@ void static about(GtkWidget *widget, gpointer data)
 void static dpr(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *helpwin, *content, *table, *vbox, *entry1, *entry2, *label, *spin1, *spin2, *hsp, *ck, *ck2, *ck3;
-	GtkAdjustment *adj1, *adj2;
+	GtkAdjustment *adj;
 	PlotLinear *plt;
 	PlotPolar *plt2;
 	gdouble xi, xf, mny, mxy, iv, clc, rcn, thc;
 	gint dx, dx2, j, k;
+	gchar *str;
 	
 	helpwin=gtk_dialog_new_with_buttons(_("Display Properties"), GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, GTK_STOCK_APPLY, GTK_RESPONSE_APPLY, NULL);
 	g_signal_connect_swapped(G_OBJECT(helpwin), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
@@ -144,12 +146,16 @@ void static dpr(GtkWidget *widget, gpointer data)
 				gtk_widget_show(label);
 				gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				plt2=PLOT_POLAR(plot3);
-				gtk_entry_set_text(GTK_ENTRY(entry1), g_strdup(plt2->rlab));
-				gtk_entry_set_text(GTK_ENTRY(entry2), g_strdup(plt2->thlab));
-				adj1=(GtkAdjustment *) gtk_adjustment_new((plt2->lfsize), 8, 64, 1.0, 5.0, 0.0);
-				adj2=(GtkAdjustment *) gtk_adjustment_new((plt2->afsize), 8, 64, 1.0, 5.0, 0.0);
-				spin1=gtk_spin_button_new(adj1, 0, 0);
-				spin2=gtk_spin_button_new(adj2, 0, 0);
+				str=g_strdup(plt2->rlab);
+				gtk_entry_set_text(GTK_ENTRY(entry1), str);
+				g_free(str);
+				str=g_strdup(plt2->thlab);
+				gtk_entry_set_text(GTK_ENTRY(entry2), str);
+				g_free(str);
+				adj=(GtkAdjustment *) gtk_adjustment_new((plt2->lfsize), 8, 64, 1.0, 5.0, 0.0);
+				spin1=gtk_spin_button_new(adj, 0, 0);
+				adj=(GtkAdjustment *) gtk_adjustment_new((plt2->afsize), 8, 64, 1.0, 5.0, 0.0);
+				spin2=gtk_spin_button_new(adj, 0, 0);
 				gtk_widget_show(entry1);
 				gtk_widget_show(entry2);
 				gtk_widget_show(spin1);
@@ -171,6 +177,8 @@ void static dpr(GtkWidget *widget, gpointer data)
 				gtk_container_add(GTK_CONTAINER(content), vbox);
 				if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 				{
+					g_free(plt2->rlab);
+					g_free(plt2->thlab);
 					(plt2->rlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 					(plt2->thlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
 					(plt2->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
@@ -222,12 +230,16 @@ void static dpr(GtkWidget *widget, gpointer data)
 				gtk_widget_show(label);
 				gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				plt=PLOT_LINEAR(plot3);
-				gtk_entry_set_text(GTK_ENTRY(entry1), g_strdup(plt->xlab));
-				gtk_entry_set_text(GTK_ENTRY(entry2), g_strdup(plt->ylab));
-				adj1=(GtkAdjustment *) gtk_adjustment_new((plt->lfsize), 8, 64, 1.0, 5.0, 0.0);
-				adj2=(GtkAdjustment *) gtk_adjustment_new((plt->afsize), 8, 64, 1.0, 5.0, 0.0);
-				spin1=gtk_spin_button_new(adj1, 0, 0);
-				spin2=gtk_spin_button_new(adj2, 0, 0);
+				str=g_strdup(plt->xlab);
+				gtk_entry_set_text(GTK_ENTRY(entry1), str);
+				g_free(str);
+				str=g_strdup(plt->ylab);
+				gtk_entry_set_text(GTK_ENTRY(entry2), str);
+				g_free(str);
+				adj=(GtkAdjustment *) gtk_adjustment_new((plt->lfsize), 8, 64, 1.0, 5.0, 0.0);
+				spin1=gtk_spin_button_new(adj, 0, 0);
+				adj=(GtkAdjustment *) gtk_adjustment_new((plt->afsize), 8, 64, 1.0, 5.0, 0.0);
+				spin2=gtk_spin_button_new(adj, 0, 0);
 				gtk_widget_show(entry1);
 				gtk_widget_show(entry2);
 				gtk_widget_show(spin1);
@@ -249,6 +261,8 @@ void static dpr(GtkWidget *widget, gpointer data)
 				gtk_container_add(GTK_CONTAINER(content), vbox);
 				if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 				{
+					g_free(plt->xlab);
+					g_free(plt->ylab);
 					(plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 					(plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
 					(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
@@ -333,12 +347,16 @@ void static dpr(GtkWidget *widget, gpointer data)
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		plt=PLOT_LINEAR(plot2);
-		gtk_entry_set_text(GTK_ENTRY(entry1), g_strdup(plt->xlab));
-		gtk_entry_set_text(GTK_ENTRY(entry2), g_strdup(plt->ylab));
-		adj1=(GtkAdjustment *) gtk_adjustment_new((plt->lfsize), 8, 64, 1.0, 5.0, 0.0);
-		adj2=(GtkAdjustment *) gtk_adjustment_new((plt->afsize), 8, 64, 1.0, 5.0, 0.0);
-		spin1=gtk_spin_button_new(adj1, 0, 0);
-		spin2=gtk_spin_button_new(adj2, 0, 0);
+		str=g_strdup(plt->xlab);
+		gtk_entry_set_text(GTK_ENTRY(entry1), str);
+		g_free(str);
+		str=g_strdup(plt->ylab);
+		gtk_entry_set_text(GTK_ENTRY(entry2), str);
+		g_free(str);
+		adj=(GtkAdjustment *) gtk_adjustment_new((plt->lfsize), 8, 64, 1.0, 5.0, 0.0);
+		spin1=gtk_spin_button_new(adj, 0, 0);
+		adj=(GtkAdjustment *) gtk_adjustment_new((plt->afsize), 8, 64, 1.0, 5.0, 0.0);
+		spin2=gtk_spin_button_new(adj, 0, 0);
 		gtk_widget_show(entry1);
 		gtk_widget_show(entry2);
 		gtk_widget_show(spin1);
@@ -362,6 +380,8 @@ void static dpr(GtkWidget *widget, gpointer data)
 			gtk_container_add(GTK_CONTAINER(content), vbox);
 			if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 			{
+				g_free(plt->xlab);
+				g_free(plt->ylab);
 				(plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 				(plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
 				(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
@@ -408,6 +428,8 @@ void static dpr(GtkWidget *widget, gpointer data)
 			gtk_container_add(GTK_CONTAINER(content), vbox);
 			if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 			{
+				g_free(plt->xlab);
+				g_free(plt->ylab);
 				(plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 				(plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
 				(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
@@ -518,6 +540,8 @@ void static dpr(GtkWidget *widget, gpointer data)
 			gtk_container_add(GTK_CONTAINER(content), vbox);
 			if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 			{
+				g_free(plt->xlab);
+				g_free(plt->ylab);
 				(plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 				(plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
 				(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
@@ -637,12 +661,16 @@ void static dpr(GtkWidget *widget, gpointer data)
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		plt=PLOT_LINEAR(plot1);
-		gtk_entry_set_text(GTK_ENTRY(entry1), g_strdup(plt->xlab));
-		gtk_entry_set_text(GTK_ENTRY(entry2), g_strdup(plt->ylab));
-		adj1=(GtkAdjustment *) gtk_adjustment_new((plt->lfsize), 8, 64, 1.0, 5.0, 0.0);
-		adj2=(GtkAdjustment *) gtk_adjustment_new((plt->afsize), 8, 64, 1.0, 5.0, 0.0);
-		spin1=gtk_spin_button_new(adj1, 0, 0);
-		spin2=gtk_spin_button_new(adj2, 0, 0);
+		str=g_strdup(plt->xlab);
+		gtk_entry_set_text(GTK_ENTRY(entry1), str);
+		g_free(str);
+		str=g_strdup(plt->ylab);
+		gtk_entry_set_text(GTK_ENTRY(entry2), str);
+		g_free(str);
+		adj=(GtkAdjustment *) gtk_adjustment_new((plt->lfsize), 8, 64, 1.0, 5.0, 0.0);
+		spin1=gtk_spin_button_new(adj, 0, 0);
+		adj=(GtkAdjustment *) gtk_adjustment_new((plt->afsize), 8, 64, 1.0, 5.0, 0.0);
+		spin2=gtk_spin_button_new(adj, 0, 0);
 		gtk_widget_show(entry1);
 		gtk_widget_show(entry2);
 		gtk_widget_show(spin1);
@@ -666,6 +694,8 @@ void static dpr(GtkWidget *widget, gpointer data)
 			gtk_container_add(GTK_CONTAINER(content), vbox);
 			if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 			{
+				g_free(plt->xlab);
+				g_free(plt->ylab);
 				(plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 				(plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
 				(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
@@ -713,6 +743,8 @@ void static dpr(GtkWidget *widget, gpointer data)
 			gtk_container_add(GTK_CONTAINER(content), vbox);
 			if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 			{
+				g_free(plt->xlab);
+				g_free(plt->ylab);
 				(plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 				(plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
 				(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
@@ -827,6 +859,8 @@ void static dpr(GtkWidget *widget, gpointer data)
 			gtk_container_add(GTK_CONTAINER(content), vbox);
 			if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 			{
+				g_free(plt->xlab);
+				g_free(plt->ylab);
 				(plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 				(plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
 				(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
@@ -1223,7 +1257,9 @@ void static sav(GtkWidget *widget, gpointer data)
 						str=g_strjoin("\t", contents, str2, NULL);
 						g_free(contents);
 						contents=g_strdup(str);
+						g_free(str);
 					}
+					g_free(str2);
 					plt=PLOT_LINEAR(plot2);
 					sz2=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
@@ -1283,7 +1319,9 @@ void static sav(GtkWidget *widget, gpointer data)
 						str=g_strjoin("\t", contents, str2, NULL);
 						g_free(contents);
 						contents=g_strdup(str);
+						g_free(str);
 					}
+					g_free(str2);
 					plt=PLOT_LINEAR(plot2);
 					sz2=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
@@ -1384,7 +1422,9 @@ void static sav(GtkWidget *widget, gpointer data)
 						str=g_strjoin("\t", contents, str2, NULL);
 						g_free(contents);
 						contents=g_strdup(str);
+						g_free(str);
 					}
+					g_free(str2);
 					plt=PLOT_LINEAR(plot2);
 					sz2=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
@@ -1444,7 +1484,9 @@ void static sav(GtkWidget *widget, gpointer data)
 						str=g_strjoin("\t", contents, str2, NULL);
 						g_free(contents);
 						contents=g_strdup(str);
+						g_free(str);
 					}
+					g_free(str2);
 					plt=PLOT_LINEAR(plot2);
 					sz2=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
@@ -1546,7 +1588,9 @@ void static sav(GtkWidget *widget, gpointer data)
 						str=g_strjoin("\t", contents, str2, NULL);
 						g_free(contents);
 						contents=g_strdup(str);
+						g_free(str);
 					}
+					g_free(str2);
 					plt=PLOT_LINEAR(plot2);
 					sz2=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
@@ -1606,7 +1650,9 @@ void static sav(GtkWidget *widget, gpointer data)
 						str=g_strjoin("\t", contents, str2, NULL);
 						g_free(contents);
 						contents=g_strdup(str);
+						g_free(str);
 					}
+					g_free(str2);
 					plt=PLOT_LINEAR(plot2);
 					sz2=g_array_index((plt->sizes), gint, 0);/* check that this is what is wanted and compatibility with multiplots */
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
@@ -1853,6 +1899,7 @@ void static prs(GtkWidget *widget, gpointer data)
 					gtk_label_set_text(GTK_LABEL(visl), str);
 					gtk_label_set_text(GTK_LABEL(dsl), str);
 					chil=gtk_label_new(str);
+					g_free(str);
 				}
 				gtk_table_attach(GTK_TABLE(rest), chil, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				gtk_widget_show(chil);
@@ -1953,6 +2000,7 @@ void static prs(GtkWidget *widget, gpointer data)
 					str=g_strdup("");
 					gtk_label_set_text(GTK_LABEL(visl), str);
 					gtk_label_set_text(GTK_LABEL(dsl), str);
+					g_free(str);
 				}
 				flags|=4;
 			}
@@ -2099,6 +2147,7 @@ void static prs(GtkWidget *widget, gpointer data)
 				gtk_label_set_text(GTK_LABEL(visl), str);
 				gtk_label_set_text(GTK_LABEL(dsl), str);
 				chil=gtk_label_new(str);
+				g_free(str);
 			}
 			flags|=20;
 		}
@@ -2191,6 +2240,7 @@ void static prs(GtkWidget *widget, gpointer data)
 				str=g_strdup("");
 				gtk_label_set_text(GTK_LABEL(visl), str);
 				gtk_label_set_text(GTK_LABEL(dsl), str);
+				g_free(str);
 			}
 			flags|=4;
 		}
@@ -12588,7 +12638,6 @@ int main( int argc, char *argv[])
 	vis=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	doms=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	chp=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	flags=0;
 	gtk_widget_show(window);
 	gtk_main();
 	return 0;
