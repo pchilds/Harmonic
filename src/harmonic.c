@@ -13134,14 +13134,9 @@ int main( int argc, char *argv[])
 	xsb=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	ysb=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	delf=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	vis=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
-	doms=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
-	chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), MXDS);
-	/*
 	vis=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	doms=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	chp=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	 */
 	flags=0;
 	gtk_widget_show(window);
 	gtk_main();
