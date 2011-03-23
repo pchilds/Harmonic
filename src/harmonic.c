@@ -12183,6 +12183,7 @@ void static upj(GtkWidget *widget, gpointer data)
 	gdouble num, num2, num3, num4, num5, num6, num7;
 	gdouble *ptr;
 	gchar s[10];
+	gchar *str;
 
 	jdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 	if (jdim>jdimx)
@@ -12215,6 +12216,28 @@ void static upj(GtkWidget *widget, gpointer data)
 			g_array_append_val(bsra, num6);
 			g_array_append_val(bspa, num7);
 		}
+		/*
+		for (k=0; k<(kdimx-1); k++)
+		{
+			for (j=(jdimx+1); j<=jdim; j++)
+			{
+				g_array_insert_val(isra, j+(k*jdim), num);
+				g_array_insert_val(ispa, j+(k*jdim), num2);
+				g_array_insert_val(tca, j+(k*jdim), num3);
+				g_array_insert_val(twa, j+(k*jdim), num4);
+			}
+		}
+		for (j=(jdimx+1); j<=jdim; j++)
+		{
+			g_array_append_val(isra, num);
+			g_array_append_val(ispa, num2);
+			g_array_append_val(tca, num3);
+			g_array_append_val(twa, num4);
+			g_array_append_val(zwa, num5);
+			g_array_append_val(bsra, num6);
+			g_array_append_val(bspa, num7);
+		}
+		 */
 		jdimx=jdim;
 	}
 	else
@@ -12226,6 +12249,15 @@ void static upj(GtkWidget *widget, gpointer data)
 		num=g_array_index(tca, gdouble, (jdim+(kdim*MXD)));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tc), num);
 		num=g_array_index(twa, gdouble, (jdim+(kdim*MXD)));
+		/*
+		num=g_array_index(isra, gdouble, (jdim+(kdim*jdimx)));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(isr), num);
+		num=g_array_index(ispa, gdouble, (jdim+(kdim*jdimx)));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(isp), num);
+		num=g_array_index(tca, gdouble, (jdim+(kdim*jdimx)));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tc), num);
+		num=g_array_index(twa, gdouble, (jdim+(kdim*jdimx)));
+		 */
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tw), num);
 		num=g_array_index(zwa, gdouble, jdim);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(zw), num);
@@ -12249,7 +12281,7 @@ void static upj(GtkWidget *widget, gpointer data)
 				num=j*g_array_index(delf, gdouble, jdim);
 				g_array_append_val(xsb, num);
 			}
-			j*=2*(jdim);
+			j*=(2*jdim);
 			num2=fabs(g_array_index(stars, gdouble, j));
 			g_array_append_val(ysb, num2);
 			while (j<(((2*jdim)+1)*sz2))
@@ -12294,22 +12326,47 @@ void static upj(GtkWidget *widget, gpointer data)
 					}
 				}
 			}
-			else
+			else if (kdim<=kdimxf)
 			{
 				num=g_array_index(vis, gdouble, (jdim+(kdim*MXD)));
+				/*
+				num=g_array_index(vis, gdouble, (jdim+(kdim*jdimxf)));
+				 */
 				g_snprintf(s, 7, "%f", num);
 				gtk_label_set_text(GTK_LABEL(visl), s);
 				num=g_array_index(doms, gdouble, (jdim+(kdim*MXD)));
+				/*
+				num=g_array_index(doms, gdouble, (jdim+(kdim*jdimxf)));
+				 */
 				g_snprintf(s, 9, "%f", num);
 				gtk_label_set_text(GTK_LABEL(dsl), s);
 				if ((flags&16)!=0)
 				{
 					num=g_array_index(chp, gdouble, (jdim+(kdim*MXD)));
+					/*
+					num=g_array_index(chp, gdouble, (jdim+(kdim*jdimxf)));
+					 */
 					g_snprintf(s, 8, "%f", num);
 					gtk_label_set_text(GTK_LABEL(chil), s);
 				}
 			}
+			else
+			{
+				str=g_strdup("");
+				gtk_label_set_text(GTK_LABEL(visl), str);
+				gtk_label_set_text(GTK_LABEL(dsl), str);
+				if ((flags&16)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
+				g_free(str);
+			}
 		}
+	}
+	else if (((flags&4)!=0)&&((flags&8)==0))
+	{
+		str=g_strdup("");
+		gtk_label_set_text(GTK_LABEL(visl), str);
+		gtk_label_set_text(GTK_LABEL(dsl), str);
+		if ((flags&16)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
+		g_free(str);
 	}
 }
 
@@ -12324,6 +12381,7 @@ void static upk(GtkWidget *widget, gpointer data)
 	guint j;
 	gdouble num, num2, num3, num4;
 	gchar s[10];
+	gchar *str;
 
 	kdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 	if (kdim>kdimx)
@@ -12339,6 +12397,15 @@ void static upk(GtkWidget *widget, gpointer data)
 			g_array_append_val(tca, num3);
 			g_array_append_val(twa, num4);
 		}
+		/*
+		for (j=0; j<jdimx*(kdim-kdimx); j++)
+		{
+			g_array_append_val(isra, num);
+			g_array_append_val(ispa, num2);
+			g_array_append_val(tca, num3);
+			g_array_append_val(twa, num4);
+		}
+		 */
 		kdimx=kdim;
 	}
 	else
@@ -12351,10 +12418,20 @@ void static upk(GtkWidget *widget, gpointer data)
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tc), num);
 		num=g_array_index(twa, gdouble, (jdim+(kdim*MXD)));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tw), num);
+		/*
+		num=g_array_index(isra, gdouble, (jdim+(kdim*jdimx)));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(isr), num);
+		num=g_array_index(ispa, gdouble, (jdim+(kdim*jdimx)));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(isp), num);
+		num=g_array_index(tca, gdouble, (jdim+(kdim*jdimx)));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tc), num);
+		num=g_array_index(twa, gdouble, (jdim+(kdim*jdimx)));
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tw), num);
+		 */
 	}
-	if (kdim<=kdimxf)
+	if ((flags&4)!=0)
 	{
-		if ((flags&4)!=0)
+		if (kdim<=kdimxf)
 		{
 			if ((flags&8)!=0)
 			{
@@ -12380,21 +12457,46 @@ void static upk(GtkWidget *widget, gpointer data)
 					}
 				}
 			}
-			else
+			else if (jdim<=jdimxf)
 			{
 				num=g_array_index(vis, gdouble, (jdim+(kdim*MXD)));
+				/*
+				num=g_array_index(vis, gdouble, (jdim+(kdim*jdimxf)));
+				 */
 				g_snprintf(s, 7, "%f", num);
 				gtk_label_set_text(GTK_LABEL(visl), s);
 				num=g_array_index(doms, gdouble, (jdim+(kdim*MXD)));
+				/*
+				num=g_array_index(doms, gdouble, (jdim+(kdim*jdimxf)));
+				 */
 				g_snprintf(s, 9, "%f", num);
 				gtk_label_set_text(GTK_LABEL(dsl), s);
 				if ((flags&16)!=0)
 				{
 					num=g_array_index(chp, gdouble, (jdim+(kdim*MXD)));
+					/*
+					num=g_array_index(chp, gdouble, (jdim+(kdim*jdimxf)));
+					 */
 					g_snprintf(s, 8, "%f", num);
 					gtk_label_set_text(GTK_LABEL(chil), s);
 				}
 			}
+			else
+			{
+				str=g_strdup("");
+				gtk_label_set_text(GTK_LABEL(visl), str);
+				gtk_label_set_text(GTK_LABEL(dsl), str);
+				if ((flags&16)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
+				g_free(str);
+			}
+		}
+		else if ((flags&8)==0)
+		{
+			str=g_strdup("");
+			gtk_label_set_text(GTK_LABEL(visl), str);
+			gtk_label_set_text(GTK_LABEL(dsl), str);
+			if ((flags&16)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
+			g_free(str);
 		}
 	}
 }
