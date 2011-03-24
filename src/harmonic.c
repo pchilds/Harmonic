@@ -33,7 +33,6 @@
 /*
  * TO DO:
  *
- * whether to broaden to expandable g_array without MXD set size
  * brush up dynamic memory allocation with g_array
  * check divide by zero handling
  * HELP: build contents
@@ -444,8 +443,8 @@ void static dpr(GtkWidget *widget, gpointer data)
 						{
 							dx=((plt->ydata)->len);
 							dx2=0;
-							g_array_free(ysb, FALSE);
-							g_array_free(nx, FALSE);
+							g_array_free(ysb, TRUE);
+							g_array_free(nx, TRUE);
 							ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx*(jdimxf+1));
 							nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), dx*(jdimxf+1));
 							mxy=fabs(g_array_index(stars, gdouble, 0));
@@ -480,12 +479,6 @@ void static dpr(GtkWidget *widget, gpointer data)
 								dx2+=dx;
 								g_array_append_val(nx, dx2);
 							}
-							/*
-							g_array_free((plt->sizes), FALSE);
-							g_array_free((plt->ind), FALSE);
-							g_array_free((plt->xdata), FALSE);
-							g_array_free((plt->ydata), FALSE);
-							 */
 							(plt->sizes)=sz;
 							(plt->ind)=nx;
 							(plt->xdata)=xsb;
@@ -499,10 +492,10 @@ void static dpr(GtkWidget *widget, gpointer data)
 					if ((flags&2)!=0)/* narrow array to the one plot */
 					{
 						dx=g_array_index((plt->sizes), gint, 0);
-						g_array_free(xsb, FALSE);
-						g_array_free(ysb, FALSE);
-						g_array_free(sz, FALSE);
-						g_array_free(nx, FALSE);
+						g_array_free(xsb, TRUE);
+						g_array_free(ysb, TRUE);
+						g_array_free(sz, TRUE);
+						g_array_free(nx, TRUE);
 						xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
 						ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
 						sz=g_array_new(FALSE, FALSE, sizeof(gint));
@@ -524,12 +517,6 @@ void static dpr(GtkWidget *widget, gpointer data)
 						g_array_append_val(sz, dx);
 						dx=0;
 						g_array_append_val(nx, dx);
-						/*
-						g_array_free((plt->sizes), FALSE);
-						g_array_free((plt->ind), FALSE);
-						g_array_free((plt->xdata), FALSE);
-						g_array_free((plt->ydata), FALSE);
-						 */
 						(plt->sizes)=sz;
 						(plt->ind)=nx;
 						(plt->xdata)=xsb;
@@ -568,8 +555,8 @@ void static dpr(GtkWidget *widget, gpointer data)
 						{
 							dx=((plt->ydata)->len);
 							dx2=0;
-							g_array_free(ysb, FALSE);
-							g_array_free(nx, FALSE);
+							g_array_free(ysb, TRUE);
+							g_array_free(nx, TRUE);
 							ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx*(jdimxf+1));
 							nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), dx*(jdimxf+1));
 							mxy=fabs(g_array_index(stars, gdouble, 0));
@@ -604,12 +591,6 @@ void static dpr(GtkWidget *widget, gpointer data)
 								dx2+=dx;
 								g_array_append_val(nx, dx2);
 							}
-							/*
-							g_array_free((plt->sizes), FALSE);
-							g_array_free((plt->ind), FALSE);
-							g_array_free((plt->xdata), FALSE);
-							g_array_free((plt->ydata), FALSE);
-							 */
 							(plt->sizes)=sz;
 							(plt->ind)=nx;
 							(plt->xdata)=xsb;
@@ -623,10 +604,10 @@ void static dpr(GtkWidget *widget, gpointer data)
 					if ((flags&2)!=0)/* narrow array to the one plot */
 					{
 						dx=g_array_index((plt->sizes), gint, 0);
-						g_array_free(xsb, FALSE);
-						g_array_free(ysb, FALSE);
-						g_array_free(sz, FALSE);
-						g_array_free(nx, FALSE);
+						g_array_free(xsb, TRUE);
+						g_array_free(ysb, TRUE);
+						g_array_free(sz, TRUE);
+						g_array_free(nx, TRUE);
 						xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
 						ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
 						sz=g_array_new(FALSE, FALSE, sizeof(gint));
@@ -648,12 +629,6 @@ void static dpr(GtkWidget *widget, gpointer data)
 						g_array_append_val(sz, dx);
 						dx=0;
 						g_array_append_val(nx, dx);
-						/*
-						g_array_free((plt->sizes), FALSE);
-						g_array_free((plt->ind), FALSE);
-						g_array_free((plt->xdata), FALSE);
-						g_array_free((plt->ydata), FALSE);
-						 */
 						(plt->sizes)=sz;
 						(plt->ind)=nx;
 						(plt->xdata)=xsb;
@@ -783,8 +758,8 @@ void static dpr(GtkWidget *widget, gpointer data)
 							plt=PLOT_LINEAR(plot2);
 							dx=((plt->ydata)->len);
 							dx2=0;
-							g_array_free(ysb, FALSE);
-							g_array_free(nx, FALSE);
+							g_array_free(ysb, TRUE);
+							g_array_free(nx, TRUE);
 							ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx*(jdimxf+1));
 							nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), dx*(jdimxf+1));
 							mxy=fabs(g_array_index(stars, gdouble, 0));
@@ -819,12 +794,6 @@ void static dpr(GtkWidget *widget, gpointer data)
 								dx2+=dx;
 								g_array_append_val(nx, dx2);
 							}
-							/*
-							g_array_free((plt->sizes), FALSE);
-							g_array_free((plt->ind), FALSE);
-							g_array_free((plt->xdata), FALSE);
-							g_array_free((plt->ydata), FALSE);
-							 */
 							(plt->sizes)=sz;
 							(plt->ind)=nx;
 							(plt->xdata)=xsb;
@@ -840,10 +809,10 @@ void static dpr(GtkWidget *widget, gpointer data)
 					{
 						plt=PLOT_LINEAR(plot2);
 						dx=g_array_index((plt->sizes), gint, 0);
-						g_array_free(xsb, FALSE);
-						g_array_free(ysb, FALSE);
-						g_array_free(sz, FALSE);
-						g_array_free(nx, FALSE);
+						g_array_free(xsb, TRUE);
+						g_array_free(ysb, TRUE);
+						g_array_free(sz, TRUE);
+						g_array_free(nx, TRUE);
 						xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
 						ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
 						sz=g_array_new(FALSE, FALSE, sizeof(gint));
@@ -865,12 +834,6 @@ void static dpr(GtkWidget *widget, gpointer data)
 						g_array_append_val(sz, dx);
 						dx=0;
 						g_array_append_val(nx, dx);
-						/*
-						g_array_free((plt->sizes), FALSE);
-						g_array_free((plt->ind), FALSE);
-						g_array_free((plt->xdata), FALSE);
-						g_array_free((plt->ydata), FALSE);
-						 */
 						(plt->sizes)=sz;
 						(plt->ind)=nx;
 						(plt->xdata)=xsb;
@@ -911,8 +874,8 @@ void static dpr(GtkWidget *widget, gpointer data)
 							plt=PLOT_LINEAR(plot2);
 							dx=((plt->ydata)->len);
 							dx2=0;
-							g_array_free(ysb, FALSE);
-							g_array_free(nx, FALSE);
+							g_array_free(ysb, TRUE);
+							g_array_free(nx, TRUE);
 							ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx*(jdimxf+1));
 							nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), dx*(jdimxf+1));
 							mxy=fabs(g_array_index(stars, gdouble, 0));
@@ -947,12 +910,6 @@ void static dpr(GtkWidget *widget, gpointer data)
 								dx2+=dx;
 								g_array_append_val(nx, dx2);
 							}
-							/*
-							g_array_free((plt->sizes), FALSE);
-							g_array_free((plt->ind), FALSE);
-							g_array_free((plt->xdata), FALSE);
-							g_array_free((plt->ydata), FALSE);
-							 */
 							(plt->sizes)=sz;
 							(plt->ind)=nx;
 							(plt->xdata)=xsb;
@@ -968,10 +925,10 @@ void static dpr(GtkWidget *widget, gpointer data)
 					{
 						plt=PLOT_LINEAR(plot2);
 						dx=g_array_index((plt->sizes), gint, 0);
-						g_array_free(xsb, FALSE);
-						g_array_free(ysb, FALSE);
-						g_array_free(sz, FALSE);
-						g_array_free(nx, FALSE);
+						g_array_free(xsb, TRUE);
+						g_array_free(ysb, TRUE);
+						g_array_free(sz, TRUE);
+						g_array_free(nx, TRUE);
 						xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
 						ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
 						sz=g_array_new(FALSE, FALSE, sizeof(gint));
@@ -993,12 +950,6 @@ void static dpr(GtkWidget *widget, gpointer data)
 						g_array_append_val(sz, dx);
 						dx=0;
 						g_array_append_val(nx, dx);
-						/*
-						g_array_free((plt->sizes), FALSE);
-						g_array_free((plt->ind), FALSE);
-						g_array_free((plt->xdata), FALSE);
-						g_array_free((plt->ydata), FALSE);
-						 */
 						(plt->sizes)=sz;
 						(plt->ind)=nx;
 						(plt->xdata)=xsb;
@@ -3063,12 +3014,6 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 		}
 		fftw_free(star);
 		plt=PLOT_LINEAR(plot2);
-		/*
-		g_array_free((plt->sizes), FALSE);
-		g_array_free((plt->ind), FALSE);
-		g_array_free((plt->xdata), FALSE);
-		g_array_free((plt->ydata), FALSE);
-		 */
 		(plt->sizes)=sz;
 		(plt->ind)=nx;
 		(plt->xdata)=xsb;
@@ -3125,9 +3070,6 @@ void static upg(GtkWidget *widget, gpointer data)
 		if (dt<mny) mny=dt;
 		else if (dt>mxy) mxy=dt;
 	}
-	/*
-	g_array_free((plt->ydata), FALSE);
-	 */
 	(plt->ydata)=yb;
 	xi=g_array_index(x, gdouble, 0);
 	xf=g_array_index(x, gdouble, (lc-1));
@@ -11954,12 +11896,6 @@ void static opd(GtkWidget *widget, gpointer data)
 				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 				g_free(str);
 				plt=PLOT_LINEAR(plot1);
-				/*
-				g_array_free((plt->sizes), FALSE);
-				g_array_free((plt->ind), FALSE);
-				g_array_free((plt->xdata), FALSE);
-				g_array_free((plt->ydata), FALSE);
-				 */
 				sz=g_array_new(FALSE, FALSE, sizeof(gint));
 				nx=g_array_new(FALSE, FALSE, sizeof(gint));
 				g_array_append_val(sz, lc);/* adjust if multiple traces desired */
@@ -12083,10 +12019,6 @@ void static upj(GtkWidget *widget, gpointer data)
 				g_array_append_val(ysb, num6);
 				j++;
 			}
-			/*
-			g_array_free((plt2->xdata), FALSE);
-			g_array_free((plt2->ydata), FALSE);
-			 */
 			(plt2->xdata)=xsb;
 			(plt2->ydata)=ysb;
 			plot_linear_update_scale_pretty(plot2, 0, num, 0, num2);

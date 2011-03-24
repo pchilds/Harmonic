@@ -3195,10 +3195,10 @@ static void plot_linear_redraw(GtkWidget *widget)
 {
 	GdkRegion *region;
 
-	if (!widget->window) return;
+	if (!(widget->window)) return;
 	region=gdk_drawable_get_clip_region(widget->window);
-	gdk_window_invalidate_region(widget->window, region, TRUE);
-	gdk_window_process_updates(widget->window, TRUE);
+	gdk_window_invalidate_region((widget->window), region, TRUE);
+	gdk_window_process_updates((widget->window), TRUE);
 	gdk_region_destroy(region);
 }
 
@@ -3207,10 +3207,10 @@ gboolean plot_linear_update_scale(GtkWidget *widget, gdouble xn, gdouble xx, gdo
 	PlotLinearPrivate *priv;
 
 	priv=PLOT_LINEAR_GET_PRIVATE(widget);
-	priv->bounds.xmin=xn;
-	priv->bounds.xmax=xx;
-	priv->bounds.ymin=yn;
-	priv->bounds.ymax=yx;
+	(priv->bounds.xmin)=xn;
+	(priv->bounds.xmax)=xx;
+	(priv->bounds.ymin)=yn;
+	(priv->bounds.ymax)=yx;
 	plot_linear_redraw(widget);
 	return FALSE;
 }
