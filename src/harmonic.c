@@ -480,6 +480,12 @@ void static dpr(GtkWidget *widget, gpointer data)
 								dx2+=dx;
 								g_array_append_val(nx, dx2);
 							}
+							/*
+							g_array_free((plt->sizes), FALSE);
+							g_array_free((plt->ind), FALSE);
+							g_array_free((plt->xdata), FALSE);
+							g_array_free((plt->ydata), FALSE);
+							 */
 							(plt->sizes)=sz;
 							(plt->ind)=nx;
 							(plt->xdata)=xsb;
@@ -518,6 +524,12 @@ void static dpr(GtkWidget *widget, gpointer data)
 						g_array_append_val(sz, dx);
 						dx=0;
 						g_array_append_val(nx, dx);
+						/*
+						g_array_free((plt->sizes), FALSE);
+						g_array_free((plt->ind), FALSE);
+						g_array_free((plt->xdata), FALSE);
+						g_array_free((plt->ydata), FALSE);
+						 */
 						(plt->sizes)=sz;
 						(plt->ind)=nx;
 						(plt->xdata)=xsb;
@@ -592,6 +604,12 @@ void static dpr(GtkWidget *widget, gpointer data)
 								dx2+=dx;
 								g_array_append_val(nx, dx2);
 							}
+							/*
+							g_array_free((plt->sizes), FALSE);
+							g_array_free((plt->ind), FALSE);
+							g_array_free((plt->xdata), FALSE);
+							g_array_free((plt->ydata), FALSE);
+							 */
 							(plt->sizes)=sz;
 							(plt->ind)=nx;
 							(plt->xdata)=xsb;
@@ -630,6 +648,12 @@ void static dpr(GtkWidget *widget, gpointer data)
 						g_array_append_val(sz, dx);
 						dx=0;
 						g_array_append_val(nx, dx);
+						/*
+						g_array_free((plt->sizes), FALSE);
+						g_array_free((plt->ind), FALSE);
+						g_array_free((plt->xdata), FALSE);
+						g_array_free((plt->ydata), FALSE);
+						 */
 						(plt->sizes)=sz;
 						(plt->ind)=nx;
 						(plt->xdata)=xsb;
@@ -795,6 +819,12 @@ void static dpr(GtkWidget *widget, gpointer data)
 								dx2+=dx;
 								g_array_append_val(nx, dx2);
 							}
+							/*
+							g_array_free((plt->sizes), FALSE);
+							g_array_free((plt->ind), FALSE);
+							g_array_free((plt->xdata), FALSE);
+							g_array_free((plt->ydata), FALSE);
+							 */
 							(plt->sizes)=sz;
 							(plt->ind)=nx;
 							(plt->xdata)=xsb;
@@ -835,6 +865,12 @@ void static dpr(GtkWidget *widget, gpointer data)
 						g_array_append_val(sz, dx);
 						dx=0;
 						g_array_append_val(nx, dx);
+						/*
+						g_array_free((plt->sizes), FALSE);
+						g_array_free((plt->ind), FALSE);
+						g_array_free((plt->xdata), FALSE);
+						g_array_free((plt->ydata), FALSE);
+						 */
 						(plt->sizes)=sz;
 						(plt->ind)=nx;
 						(plt->xdata)=xsb;
@@ -911,6 +947,12 @@ void static dpr(GtkWidget *widget, gpointer data)
 								dx2+=dx;
 								g_array_append_val(nx, dx2);
 							}
+							/*
+							g_array_free((plt->sizes), FALSE);
+							g_array_free((plt->ind), FALSE);
+							g_array_free((plt->xdata), FALSE);
+							g_array_free((plt->ydata), FALSE);
+							 */
 							(plt->sizes)=sz;
 							(plt->ind)=nx;
 							(plt->xdata)=xsb;
@@ -951,6 +993,12 @@ void static dpr(GtkWidget *widget, gpointer data)
 						g_array_append_val(sz, dx);
 						dx=0;
 						g_array_append_val(nx, dx);
+						/*
+						g_array_free((plt->sizes), FALSE);
+						g_array_free((plt->ind), FALSE);
+						g_array_free((plt->xdata), FALSE);
+						g_array_free((plt->ydata), FALSE);
+						 */
 						(plt->sizes)=sz;
 						(plt->ind)=nx;
 						(plt->xdata)=xsb;
@@ -1775,7 +1823,7 @@ void static prs(GtkWidget *widget, gpointer data)
 					for (k=0; k<=kdimx; k++)
 					{
 						st=ceil(g_array_index(isra, gdouble, j+(k*jdimxf))*idelf);
-						st=ceil(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
+						sp=floor(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
 						/*
 						 fit values to twa and tca
 						 */
@@ -1927,7 +1975,7 @@ void static prs(GtkWidget *widget, gpointer data)
 					for (k=0; k<=kdimx; k++)
 					{
 						st=ceil(g_array_index(isra, gdouble, j+(k*jdimxf))*idelf);
-						st=ceil(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
+						sp=floor(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
 						/*
 						 fit values to twa and tca
 						 */
@@ -2026,7 +2074,7 @@ void static prs(GtkWidget *widget, gpointer data)
 				for (k=0; k<=kdimx; k++)
 				{
 					st=ceil(g_array_index(isra, gdouble, j+(k*jdimxf))*idelf);
-					st=ceil(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
+					sp=floor(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
 					tcn=g_array_index(tca, gdouble, j+(k*jdimxf))*idelf;
 					twd=g_array_index(twa, gdouble, j+(k*jdimxf))*idelf/2;
 					if ((st<(sz2-2))&&(sp<sz2)&&((sp-st)>1))
@@ -2170,7 +2218,7 @@ void static prs(GtkWidget *widget, gpointer data)
 				for (k=0; k<=kdimx; k++)
 				{
 					st=ceil(g_array_index(isra, gdouble, j+(k*jdimxf))*idelf);
-					st=ceil(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
+					sp=floor(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
 					tcn=g_array_index(tca, gdouble, j+(k*jdimxf))*idelf;
 					twd=g_array_index(twa, gdouble, j+(k*jdimxf))*idelf/2;
 					if ((st<(sz2-1))&&(sp<sz2)&&((sp-st)>0))
@@ -3015,6 +3063,12 @@ void static trs(GtkWidget *widget, gpointer data) /* need to incorporate case fo
 		}
 		fftw_free(star);
 		plt=PLOT_LINEAR(plot2);
+		/*
+		g_array_free((plt->sizes), FALSE);
+		g_array_free((plt->ind), FALSE);
+		g_array_free((plt->xdata), FALSE);
+		g_array_free((plt->ydata), FALSE);
+		 */
 		(plt->sizes)=sz;
 		(plt->ind)=nx;
 		(plt->xdata)=xsb;
@@ -3071,6 +3125,9 @@ void static upg(GtkWidget *widget, gpointer data)
 		if (dt<mny) mny=dt;
 		else if (dt>mxy) mxy=dt;
 	}
+	/*
+	g_array_free((plt->ydata), FALSE);
+	 */
 	(plt->ydata)=yb;
 	xi=g_array_index(x, gdouble, 0);
 	xf=g_array_index(x, gdouble, (lc-1));
@@ -3320,7 +3377,7 @@ void static opd(GtkWidget *widget, gpointer data)
 													g_error_free(Err);
 												}
 												g_free(contents);
-												g_free(strat2); /* save strat2[0] */
+												g_strfreev(strat2); /* save strat2[0] */
 											}
 											flags|=31;
 										}
@@ -3490,7 +3547,7 @@ void static opd(GtkWidget *widget, gpointer data)
 													g_error_free(Err);
 												}
 												g_free(contents);
-												g_free(strat2); /* save strat2[0] */
+												g_strfreev(strat2); /* save strat2[0] */
 											}
 											flags|=31;
 										}
@@ -3659,7 +3716,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												g_error_free(Err);
 											}
 											g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 										}
 										flags|=31;
 									}
@@ -3827,7 +3884,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												g_error_free(Err);
 											}
 											g_free(contents);
-											g_free(strat2); /* save strat2[0] */
+											g_strfreev(strat2); /* save strat2[0] */
 										}
 										flags|=31;
 									}
@@ -3998,7 +4055,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												g_error_free(Err);
 											}
 											g_free(contents);
-											g_free(strat2); /* save strat2[0] */
+											g_strfreev(strat2); /* save strat2[0] */
 										}
 										flags|=31;
 									}
@@ -4166,7 +4223,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												g_error_free(Err);
 											}
 											g_free(contents);
-											g_free(strat2); /* save strat2[0] */
+											g_strfreev(strat2); /* save strat2[0] */
 										}
 										flags|=31;
 									}
@@ -4335,7 +4392,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 									}
 									flags|=31;
 								}
@@ -4503,7 +4560,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 									}
 									flags|=31;
 								}
@@ -4676,7 +4733,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												g_error_free(Err);
 											}
 											g_free(contents);
-											g_free(strat2); /* save strat2[0] */
+											g_strfreev(strat2); /* save strat2[0] */
 										}
 										flags|=31;
 									}
@@ -4844,7 +4901,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												g_error_free(Err);
 											}
 											g_free(contents);
-											g_free(strat2); /* save strat2[0] */
+											g_strfreev(strat2); /* save strat2[0] */
 										}
 										flags|=31;
 									}
@@ -5013,7 +5070,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 									}
 									flags|=31;
 								}
@@ -5181,7 +5238,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 									}
 									flags|=31;
 								}
@@ -5352,7 +5409,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 									}
 									flags|=31;
 								}
@@ -5520,7 +5577,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 									}
 									flags|=31;
 								}
@@ -5689,7 +5746,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2); /* save strat2[0] */
+									g_strfreev(strat2); /* save strat2[0] */
 								}
 								flags|=31;
 							}
@@ -5857,7 +5914,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2); /* save strat2[0] */
+									g_strfreev(strat2); /* save strat2[0] */
 								}
 								flags|=31;
 							}
@@ -6032,7 +6089,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												g_error_free(Err);
 											}
 											g_free(contents);
-											g_free(strat2); /* save strat2[0] */
+											g_strfreev(strat2); /* save strat2[0] */
 										}
 										flags|=31;
 									}
@@ -6200,7 +6257,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												g_error_free(Err);
 											}
 											g_free(contents);
-											g_free(strat2); /* save strat2[0] */
+											g_strfreev(strat2); /* save strat2[0] */
 										}
 										flags|=31;
 									}
@@ -6369,7 +6426,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 									}
 									flags|=31;
 								}
@@ -6537,7 +6594,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 									}
 									flags|=31;
 								}
@@ -6708,7 +6765,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 									}
 									flags|=31;
 								}
@@ -6876,7 +6933,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 									}
 									flags|=31;
 								}
@@ -7045,7 +7102,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2); /* save strat2[0] */
+									g_strfreev(strat2); /* save strat2[0] */
 								}
 								flags|=31;
 							}
@@ -7213,7 +7270,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2); /* save strat2[0] */
+									g_strfreev(strat2); /* save strat2[0] */
 								}
 								flags|=31;
 							}
@@ -7388,7 +7445,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 									}
 									flags|=31;
 								}
@@ -7556,7 +7613,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2); /* save strat2[0] */
+										g_strfreev(strat2); /* save strat2[0] */
 									}
 									flags|=31;
 								}
@@ -7725,7 +7782,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2); /* save strat2[0] */
+									g_strfreev(strat2); /* save strat2[0] */
 								}
 								flags|=31;
 							}
@@ -7893,7 +7950,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2); /* save strat2[0] */
+									g_strfreev(strat2); /* save strat2[0] */
 								}
 								flags|=31;
 							}
@@ -8064,7 +8121,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2); /* save strat2[0] */
+									g_strfreev(strat2); /* save strat2[0] */
 								}
 								flags|=31;
 							}
@@ -8232,7 +8289,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2); /* save strat2[0] */
+									g_strfreev(strat2); /* save strat2[0] */
 								}
 								flags|=31;
 							}
@@ -8401,7 +8458,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_error_free(Err);
 								}
 								g_free(contents);
-								g_free(strat2); /* save strat2[0] */
+								g_strfreev(strat2); /* save strat2[0] */
 							}
 							flags|=31;
 						}
@@ -8569,7 +8626,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_error_free(Err);
 								}
 								g_free(contents);
-								g_free(strat2); /* save strat2[0] */
+								g_strfreev(strat2); /* save strat2[0] */
 							}
 							flags|=31;
 						}
@@ -8703,7 +8760,7 @@ void static opd(GtkWidget *widget, gpointer data)
 												g_error_free(Err);
 											}
 											g_free(contents);
-											g_free(strat2);
+											g_strfreev(strat2);
 										}
 									}
 								}
@@ -8834,7 +8891,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2);
+										g_strfreev(strat2);
 									}
 								}
 								else
@@ -8958,7 +9015,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2);
+										g_strfreev(strat2);
 									}
 								}
 							}
@@ -9083,7 +9140,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2);
+									g_strfreev(strat2);
 								}
 							}
 							else
@@ -9207,7 +9264,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2);
+									g_strfreev(strat2);
 								}
 							}
 						}
@@ -9334,7 +9391,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2);
+									g_strfreev(strat2);
 								}
 							}
 							else
@@ -9458,7 +9515,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2);
+									g_strfreev(strat2);
 								}
 							}
 						}
@@ -9583,7 +9640,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_error_free(Err);
 								}
 								g_free(contents);
-								g_free(strat2);
+								g_strfreev(strat2);
 							}
 						}
 						else
@@ -9707,7 +9764,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_error_free(Err);
 								}
 								g_free(contents);
-								g_free(strat2);
+								g_strfreev(strat2);
 							}
 						}
 					}
@@ -9838,7 +9895,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2);
+										g_strfreev(strat2);
 									}
 								}
 								else
@@ -9962,7 +10019,7 @@ void static opd(GtkWidget *widget, gpointer data)
 											g_error_free(Err);
 										}
 										g_free(contents);
-										g_free(strat2);
+										g_strfreev(strat2);
 									}
 								}
 							}
@@ -10087,7 +10144,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2);
+									g_strfreev(strat2);
 								}
 							}
 							else
@@ -10211,7 +10268,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2);
+									g_strfreev(strat2);
 								}
 							}
 						}
@@ -10338,7 +10395,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2);
+									g_strfreev(strat2);
 								}
 							}
 							else
@@ -10462,7 +10519,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2);
+									g_strfreev(strat2);
 								}
 							}
 						}
@@ -10587,7 +10644,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_error_free(Err);
 								}
 								g_free(contents);
-								g_free(strat2);
+								g_strfreev(strat2);
 							}
 						}
 						else
@@ -10711,7 +10768,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_error_free(Err);
 								}
 								g_free(contents);
-								g_free(strat2);
+								g_strfreev(strat2);
 							}
 						}
 					}
@@ -10840,7 +10897,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2);
+									g_strfreev(strat2);
 								}
 							}
 							else
@@ -10964,7 +11021,7 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_error_free(Err);
 									}
 									g_free(contents);
-									g_free(strat2);
+									g_strfreev(strat2);
 								}
 							}
 						}
@@ -11089,7 +11146,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_error_free(Err);
 								}
 								g_free(contents);
-								g_free(strat2);
+								g_strfreev(strat2);
 							}
 						}
 						else
@@ -11213,7 +11270,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_error_free(Err);
 								}
 								g_free(contents);
-								g_free(strat2);
+								g_strfreev(strat2);
 							}
 						}
 					}
@@ -11340,7 +11397,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_error_free(Err);
 								}
 								g_free(contents);
-								g_free(strat2);
+								g_strfreev(strat2);
 							}
 						}
 						else
@@ -11464,7 +11521,7 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_error_free(Err);
 								}
 								g_free(contents);
-								g_free(strat2);
+								g_strfreev(strat2);
 							}
 						}
 					}
@@ -11589,7 +11646,7 @@ void static opd(GtkWidget *widget, gpointer data)
 								g_error_free(Err);
 							}
 							g_free(contents);
-							g_free(strat2);
+							g_strfreev(strat2);
 						}
 					}
 					else
@@ -11713,11 +11770,11 @@ void static opd(GtkWidget *widget, gpointer data)
 								g_error_free(Err);
 							}
 							g_free(contents);
-							g_free(strat2);
+							g_strfreev(strat2);
 						}
 						flags|=15;
 					}
-					g_free(strary2);
+					g_strfreev(strary2);
 					dialog=gtk_dialog_new_with_buttons(_("Variable Parameter"), GTK_WINDOW(window), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Linear", 1, "Polar", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 					cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
 					label=gtk_label_new(_("Select Parameter to save:"));
@@ -11897,6 +11954,12 @@ void static opd(GtkWidget *widget, gpointer data)
 				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 				g_free(str);
 				plt=PLOT_LINEAR(plot1);
+				/*
+				g_array_free((plt->sizes), FALSE);
+				g_array_free((plt->ind), FALSE);
+				g_array_free((plt->xdata), FALSE);
+				g_array_free((plt->ydata), FALSE);
+				 */
 				sz=g_array_new(FALSE, FALSE, sizeof(gint));
 				nx=g_array_new(FALSE, FALSE, sizeof(gint));
 				g_array_append_val(sz, lc);/* adjust if multiple traces desired */
@@ -12020,6 +12083,10 @@ void static upj(GtkWidget *widget, gpointer data)
 				g_array_append_val(ysb, num6);
 				j++;
 			}
+			/*
+			g_array_free((plt2->xdata), FALSE);
+			g_array_free((plt2->ydata), FALSE);
+			 */
 			(plt2->xdata)=xsb;
 			(plt2->ydata)=ysb;
 			plot_linear_update_scale_pretty(plot2, 0, num, 0, num2);
