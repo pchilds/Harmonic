@@ -64,7 +64,7 @@
 #define LNTOT 0.23025850929940456840179914546843642076011014886288 /* (ln10)/10 */
 
 GtkWidget *window, *tr, *zpd, *pr, *tracmenu, *trac, *fst, *notebook, *notebook2, *plot1, *plot2, *plot3, *statusbar, *rest, *visl, *dsl, *chil;
-GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *ncmp, *lcmp, *bat, *chi, *twopionx, *opttri, *trac, *trans, *dBs, *neg;
+GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *ncmp, *lcmp, *bat, *chi, *twopionx, *opttri, *trans, *dBs, *neg;
 GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; /* widgets for windowing */
 GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *sz, *nx, *delf, *vis, *doms, *chp; /* arrays for windowing and data */
 GSList *group2=NULL; /* list for various traces available */
@@ -3099,14 +3099,17 @@ void static opd(GtkWidget *widget, gpointer data)
 	PlotLinear *plt;
 	PlotPolar *plt2;
 	GtkWidget *wfile, *dialog, *cont, *trace, *table, *label;
-	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct;
+	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, clc;
 	guint j, k, l, m, sal, st, sp, kib;
-	gint n, zp, lcib, mx;
+	gint n, zp, lcib, mx, dr;
 	gchar s[5];
 	gchar *contents, *contents2, *str, *fin=NULL;
 	gchar **strary, **strary2, **strat, **strat2;
 	GSList *list;
 	GError *Err=NULL;
+	double *y, *star;
+	fftw_plan p;
+	fftw_r2r_kind type=FFTW_R2HC;
 
 	if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(bat)))
 	{
@@ -3124,18 +3127,31 @@ void static opd(GtkWidget *widget, gpointer data)
 		}
 		else /* batch job processing mode */
 		{
-			wfile=gtk_file_chooser_dialog_new(_("Select Config File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+			wfile=gtk_file_chooser_dialog_new(_("Select Config File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_NEW, GTK_RESPONSE_APPLY, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
-			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+			dr=gtk_dialog_run(GTK_DIALOG(wfile));
+			if (dr==GTK_RESPONSE_APPLY)
+			{
+				fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile)); /* overwrite confirmation? */
+				/*
+				
+				 */
+				dr=GTK_RESPONSE_ACCEPT;
+			}
+			if (dr==GTK_RESPONSE_ACCEPT)
 			{
 				fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
 				gtk_widget_destroy(wfile);
 				if (g_file_get_contents(fin, &contents2, NULL, &Err))
 				{
-					strary2=g_strsplit_set(contents2, "\r\n", 0);
+					strary2=g_strsplit_set(contents2, "\r\n", 0);/*combine delimiters?*/
 					mx=g_strv_length(strary2);
 					zp=1<<(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(zpd)));
 					n=zp*(jdimx+1);
+					ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
+					y=fftw_malloc(sizeof(double)*n);
+					star=fftw_malloc(sizeof(double)*n);
+					p=fftw_plan_many_r2r(1, &zp, (jdimx+1), y, NULL, 1, zp, star, NULL, 1, zp, &type, FFTW_ESTIMATE);
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(anosa))) {kib=2; lcib=-1;}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(sws))) {kib=0; lcib=-1;}
 					else {kib=0; lcib=0;}
@@ -3160,19 +3176,19 @@ void static opd(GtkWidget *widget, gpointer data)
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
-												if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
-													str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+													str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
 													g_array_free(x, TRUE);
 													g_array_free(yb, TRUE);
-													g_array_free(specs, TRUE);
+													g_array_free(delf, TRUE);
+													g_array_free(stars, TRUE);
 													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -3184,23 +3200,25 @@ void static opd(GtkWidget *widget, gpointer data)
 														strat=g_strsplit_set(strary[k], "\t,", 0);
 														lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 														g_array_append_val(x, lcl);
-														if (lc==0) satl=g_strv_length(strat);
-														if (!strat[1]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-														g_array_append_val(specs, lcl);
+														if (!strat[trc]) lcl=0;
+														else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 														g_array_append_val(yb, lcl);
-														for (l=2; l<satl; l++)
-														{
-															if (!strat[l]) lcl=0;
-															else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-															g_array_append_val(specs, lcl);
-														}
 														g_strfreev(strat);
 														lc++;
 													}
 													g_strfreev(strary);
-													satl--;
-													trs(tr, NULL);/* swap to more efficient routines for batch processing */
+													delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+													for (j=0; j<n; j++) y[j]=0;
+													for (j=0; j<=jdimx; j++)
+													{
+													}
+													fftw_execute(p);
+													stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+													for (j=0; j<n; j++)
+													{
+														iv=star[j];
+														g_array_append_val(stars, iv);
+													}
 													for (j=0; j<=jdimx; j++)
 													{
 														vzt=g_array_index(stars, gdouble, j*zp);
@@ -3328,19 +3346,19 @@ void static opd(GtkWidget *widget, gpointer data)
 											for (m=0; m<g_strv_length(strary2); m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
-												if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
-													str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+													str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
 													g_array_free(x, TRUE);
 													g_array_free(yb, TRUE);
-													g_array_free(specs, TRUE);
+													g_array_free(delf, TRUE);
+													g_array_free(stars, TRUE);
 													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -3352,23 +3370,25 @@ void static opd(GtkWidget *widget, gpointer data)
 														strat=g_strsplit_set(strary[k], "\t,", 0);
 														lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 														g_array_append_val(x, lcl);
-														if (lc==0) satl=g_strv_length(strat);
-														if (!strat[1]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-														g_array_append_val(specs, lcl);
+														if (!strat[trc]) lcl=0;
+														else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 														g_array_append_val(yb, lcl);
-														for (l=2; l<satl; l++)
-														{
-															if (!strat[l]) lcl=0;
-															else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-															g_array_append_val(specs, lcl);
-														}
 														g_strfreev(strat);
 														lc++;
 													}
 													g_strfreev(strary);
-													satl--;
-													trs(tr, NULL);/* swap to more efficient routines for batch processing */
+													delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+													for (j=0; j<n; j++) y[j]=0;
+													for (j=0; j<=jdimx; j++)
+													{
+													}
+													fftw_execute(p);
+													stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+													for (j=0; j<n; j++)
+													{
+														iv=star[j];
+														g_array_append_val(stars, iv);
+													}
 													for (j=0; j<=jdimx; j++)
 													{
 														vzt=g_array_index(stars, gdouble, j*zp);
@@ -3499,19 +3519,19 @@ void static opd(GtkWidget *widget, gpointer data)
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
 												g_array_free(x, TRUE);
 												g_array_free(yb, TRUE);
-												g_array_free(specs, TRUE);
+												g_array_free(delf, TRUE);
+												g_array_free(stars, TRUE);
 												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -3523,23 +3543,25 @@ void static opd(GtkWidget *widget, gpointer data)
 													strat=g_strsplit_set(strary[k], "\t,", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(x, lcl);
-													if (lc==0) satl=g_strv_length(strat);
-													if (!strat[1]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-													g_array_append_val(specs, lcl);
+													if (!strat[trc]) lcl=0;
+													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 													g_array_append_val(yb, lcl);
-													for (l=2; l<satl; l++)
-													{
-														if (!strat[l]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-														g_array_append_val(specs, lcl);
-														}
 													g_strfreev(strat);
 													lc++;
 												}
 												g_strfreev(strary);
-												satl--;
-												trs(tr, NULL);/* swap to more efficient routines for batch processing */
+												delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+												for (j=0; j<n; j++) y[j]=0;
+												for (j=0; j<=jdimx; j++)
+												{
+												}
+												fftw_execute(p);
+												stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+												for (j=0; j<n; j++)
+												{
+													iv=star[j];
+													g_array_append_val(stars, iv);
+												}
 												for (j=0; j<=jdimx; j++)
 												{
 													vzt=g_array_index(stars, gdouble, j*zp);
@@ -3667,19 +3689,19 @@ void static opd(GtkWidget *widget, gpointer data)
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
 												g_array_free(x, TRUE);
 												g_array_free(yb, TRUE);
-												g_array_free(specs, TRUE);
+												g_array_free(delf, TRUE);
+												g_array_free(stars, TRUE);
 												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -3691,23 +3713,25 @@ void static opd(GtkWidget *widget, gpointer data)
 													strat=g_strsplit_set(strary[k], "\t,", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(x, lcl);
-													if (lc==0) satl=g_strv_length(strat);
-													if (!strat[1]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-													g_array_append_val(specs, lcl);
+													if (!strat[trc]) lcl=0;
+													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 													g_array_append_val(yb, lcl);
-													for (l=2; l<satl; l++)
-													{
-														if (!strat[l]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-														g_array_append_val(specs, lcl);
-													}
 													g_strfreev(strat);
 													lc++;
 												}
 												g_strfreev(strary);
-												satl--;
-												trs(tr, NULL);/* swap to more efficient routines for batch processing */
+												delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+												for (j=0; j<n; j++) y[j]=0;
+												for (j=0; j<=jdimx; j++)
+												{
+												}
+												fftw_execute(p);
+												stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+												for (j=0; j<n; j++)
+												{
+													iv=star[j];
+													g_array_append_val(stars, iv);
+												}
 												for (j=0; j<=jdimx; j++)
 												{
 													vzt=g_array_index(stars, gdouble, j*zp);
@@ -3838,19 +3862,19 @@ void static opd(GtkWidget *widget, gpointer data)
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
 												g_array_free(x, TRUE);
 												g_array_free(yb, TRUE);
-												g_array_free(specs, TRUE);
+												g_array_free(delf, TRUE);
+												g_array_free(stars, TRUE);
 												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -3862,23 +3886,25 @@ void static opd(GtkWidget *widget, gpointer data)
 													strat=g_strsplit_set(strary[k], "\t,", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(x, lcl);
-													if (lc==0) satl=g_strv_length(strat);
-													if (!strat[1]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-													g_array_append_val(specs, lcl);
+													if (!strat[trc]) lcl=0;
+													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 													g_array_append_val(yb, lcl);
-													for (l=2; l<satl; l++)
-														{
-														if (!strat[l]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-														g_array_append_val(specs, lcl);
-													}
 													g_strfreev(strat);
 													lc++;
 												}
 												g_strfreev(strary);
-												satl--;
-												trs(tr, NULL);/* swap to more efficient routines for batch processing */
+												delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+												for (j=0; j<n; j++) y[j]=0;
+												for (j=0; j<=jdimx; j++)
+												{
+												}
+												fftw_execute(p);
+												stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+												for (j=0; j<n; j++)
+												{
+													iv=star[j];
+													g_array_append_val(stars, iv);
+												}
 												for (j=0; j<=jdimx; j++)
 												{
 													vzt=g_array_index(stars, gdouble, j*zp);
@@ -4006,19 +4032,19 @@ void static opd(GtkWidget *widget, gpointer data)
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
 												g_array_free(x, TRUE);
 												g_array_free(yb, TRUE);
-												g_array_free(specs, TRUE);
+												g_array_free(delf, TRUE);
+												g_array_free(stars, TRUE);
 												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -4030,23 +4056,25 @@ void static opd(GtkWidget *widget, gpointer data)
 													strat=g_strsplit_set(strary[k], "\t,", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(x, lcl);
-													if (lc==0) satl=g_strv_length(strat);
-													if (!strat[1]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-													g_array_append_val(specs, lcl);
+													if (!strat[trc]) lcl=0;
+													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 													g_array_append_val(yb, lcl);
-													for (l=2; l<satl; l++)
-													{
-														if (!strat[l]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-														g_array_append_val(specs, lcl);
-													}
 													g_strfreev(strat);
 													lc++;
 												}
 												g_strfreev(strary);
-												satl--;
-												trs(tr, NULL);/* swap to more efficient routines for batch processing */
+												delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+												for (j=0; j<n; j++) y[j]=0;
+												for (j=0; j<=jdimx; j++)
+												{
+												}
+												fftw_execute(p);
+												stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+												for (j=0; j<n; j++)
+												{
+													iv=star[j];
+													g_array_append_val(stars, iv);
+												}
 												for (j=0; j<=jdimx; j++)
 												{
 													vzt=g_array_index(stars, gdouble, j*zp);
@@ -4175,19 +4203,19 @@ void static opd(GtkWidget *widget, gpointer data)
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -4199,23 +4227,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -4343,19 +4373,19 @@ void static opd(GtkWidget *widget, gpointer data)
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -4367,23 +4397,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -4516,19 +4548,19 @@ void static opd(GtkWidget *widget, gpointer data)
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
 												g_array_free(x, TRUE);
 												g_array_free(yb, TRUE);
-												g_array_free(specs, TRUE);
+												g_array_free(delf, TRUE);
+												g_array_free(stars, TRUE);
 												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -4540,23 +4572,25 @@ void static opd(GtkWidget *widget, gpointer data)
 													strat=g_strsplit_set(strary[k], "\t,", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(x, lcl);
-													if (lc==0) satl=g_strv_length(strat);
-													if (!strat[1]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-													g_array_append_val(specs, lcl);
+													if (!strat[trc]) lcl=0;
+													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 													g_array_append_val(yb, lcl);
-													for (l=2; l<satl; l++)
-													{
-														if (!strat[l]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-														g_array_append_val(specs, lcl);
-													}
 													g_strfreev(strat);
 													lc++;
 												}
 												g_strfreev(strary);
-												satl--;
-												trs(tr, NULL);/* swap to more efficient routines for batch processing */
+												delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+												for (j=0; j<n; j++) y[j]=0;
+												for (j=0; j<=jdimx; j++)
+												{
+												}
+												fftw_execute(p);
+												stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+												for (j=0; j<n; j++)
+												{
+													iv=star[j];
+													g_array_append_val(stars, iv);
+												}
 												for (j=0; j<=jdimx; j++)
 												{
 													vzt=g_array_index(stars, gdouble, j*zp);
@@ -4684,19 +4718,19 @@ void static opd(GtkWidget *widget, gpointer data)
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
 												g_array_free(x, TRUE);
 												g_array_free(yb, TRUE);
-												g_array_free(specs, TRUE);
+												g_array_free(delf, TRUE);
+												g_array_free(stars, TRUE);
 												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -4708,23 +4742,25 @@ void static opd(GtkWidget *widget, gpointer data)
 													strat=g_strsplit_set(strary[k], "\t,", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(x, lcl);
-													if (lc==0) satl=g_strv_length(strat);
 													if (!strat[1]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-													g_array_append_val(specs, lcl);
+													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 													g_array_append_val(yb, lcl);
-													for (l=2; l<satl; l++)
-													{
-														if (!strat[l]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-														g_array_append_val(specs, lcl);
-													}
 													g_strfreev(strat);
 													lc++;
 												}
 												g_strfreev(strary);
-												satl--;
-												trs(tr, NULL);/* swap to more efficient routines for batch processing */
+												delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+												for (j=0; j<n; j++) y[j]=0;
+												for (j=0; j<=jdimx; j++)
+												{
+												}
+												fftw_execute(p);
+												stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+												for (j=0; j<n; j++)
+												{
+													iv=star[j];
+													g_array_append_val(stars, iv);
+												}
 												for (j=0; j<=jdimx; j++)
 												{
 													vzt=g_array_index(stars, gdouble, j*zp);
@@ -4853,19 +4889,19 @@ void static opd(GtkWidget *widget, gpointer data)
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -4877,23 +4913,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -5021,19 +5059,19 @@ void static opd(GtkWidget *widget, gpointer data)
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -5045,23 +5083,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -5192,19 +5232,19 @@ void static opd(GtkWidget *widget, gpointer data)
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -5216,23 +5256,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -5360,19 +5402,19 @@ void static opd(GtkWidget *widget, gpointer data)
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -5384,23 +5426,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -5529,19 +5573,19 @@ void static opd(GtkWidget *widget, gpointer data)
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -5553,23 +5597,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -5697,19 +5743,19 @@ void static opd(GtkWidget *widget, gpointer data)
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -5721,23 +5767,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -5872,19 +5920,19 @@ void static opd(GtkWidget *widget, gpointer data)
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
 												g_array_free(x, TRUE);
 												g_array_free(yb, TRUE);
-												g_array_free(specs, TRUE);
+												g_array_free(delf, TRUE);
+												g_array_free(stars, TRUE);
 												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -5896,23 +5944,45 @@ void static opd(GtkWidget *widget, gpointer data)
 													strat=g_strsplit_set(strary[k], "\t,", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(x, lcl);
-													if (lc==0) satl=g_strv_length(strat);
-													if (!strat[1]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-													g_array_append_val(specs, lcl);
+													if (!strat[trc]) lcl=0;
+													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 													g_array_append_val(yb, lcl);
-													for (l=2; l<satl; l++)
-													{
-														if (!strat[l]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-														g_array_append_val(specs, lcl);
-													}
 													g_strfreev(strat);
 													lc++;
 												}
 												g_strfreev(strary);
-												satl--;
-												trs(tr, NULL);/* swap to more efficient routines for batch processing */
+												delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+												for (j=0; j<n; j++) y[j]=0;
+												for (j=0; j<=jdimx; j++)
+												{
+													iv=g_array_index(bsra, gdouble, j);
+													k=0;
+													while ((k<lc)&&(iv>g_array_index(x, gdouble, k))) k++;
+													st=k;
+													iv=g_array_index(bspa, gdouble, j);
+													while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
+													sp=k-st;
+													if (sp>zp) sp=zp;
+													iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
+													g_array_append_val(delf, iv);
+													for (k=0; k<sp; k++)
+													{
+														clc=ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl));
+														if (clc<0)
+														{
+															clc=-exp(LNTOT*clc);
+															y[k+(j*zp)]=log(++clc);
+														}
+														else y[k+(j*zp)]=-G_MAXDOUBLE;
+													}
+												}
+												fftw_execute(p);
+												stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+												for (j=0; j<n; j++)
+												{
+													iv=star[j];
+													g_array_append_val(stars, iv);
+												}
 												for (j=0; j<=jdimx; j++)
 												{
 													vzt=g_array_index(stars, gdouble, j*zp);
@@ -6040,19 +6110,19 @@ void static opd(GtkWidget *widget, gpointer data)
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
 												g_array_free(x, TRUE);
 												g_array_free(yb, TRUE);
-												g_array_free(specs, TRUE);
+												g_array_free(delf, TRUE);
+												g_array_free(stars, TRUE);
 												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -6064,23 +6134,25 @@ void static opd(GtkWidget *widget, gpointer data)
 													strat=g_strsplit_set(strary[k], "\t,", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(x, lcl);
-													if (lc==0) satl=g_strv_length(strat);
-													if (!strat[1]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-													g_array_append_val(specs, lcl);
+													if (!strat[trc]) lcl=0;
+													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 													g_array_append_val(yb, lcl);
-													for (l=2; l<satl; l++)
-													{
-														if (!strat[l]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-														g_array_append_val(specs, lcl);
-													}
 													g_strfreev(strat);
 													lc++;
 												}
 												g_strfreev(strary);
-												satl--;
-												trs(tr, NULL);/* swap to more efficient routines for batch processing */
+												delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+												for (j=0; j<n; j++) y[j]=0;
+												for (j=0; j<=jdimx; j++)
+												{
+												}
+												fftw_execute(p);
+												stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+												for (j=0; j<n; j++)
+												{
+													iv=star[j];
+													g_array_append_val(stars, iv);
+												}
 												for (j=0; j<=jdimx; j++)
 												{
 													vzt=g_array_index(stars, gdouble, j*zp);
@@ -6209,19 +6281,19 @@ void static opd(GtkWidget *widget, gpointer data)
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -6233,23 +6305,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -6377,19 +6451,19 @@ void static opd(GtkWidget *widget, gpointer data)
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -6401,23 +6475,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -6548,19 +6624,19 @@ void static opd(GtkWidget *widget, gpointer data)
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -6572,23 +6648,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -6716,19 +6794,19 @@ void static opd(GtkWidget *widget, gpointer data)
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -6740,23 +6818,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -6885,19 +6965,19 @@ void static opd(GtkWidget *widget, gpointer data)
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -6909,23 +6989,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -7053,19 +7135,19 @@ void static opd(GtkWidget *widget, gpointer data)
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -7077,23 +7159,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -7226,19 +7310,19 @@ void static opd(GtkWidget *widget, gpointer data)
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -7250,23 +7334,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -7396,19 +7482,19 @@ void static opd(GtkWidget *widget, gpointer data)
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -7420,23 +7506,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -7565,19 +7653,19 @@ void static opd(GtkWidget *widget, gpointer data)
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -7589,23 +7677,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -7733,19 +7823,19 @@ void static opd(GtkWidget *widget, gpointer data)
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -7757,23 +7847,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -7904,19 +7996,19 @@ void static opd(GtkWidget *widget, gpointer data)
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -7928,23 +8020,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -8072,19 +8166,19 @@ void static opd(GtkWidget *widget, gpointer data)
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -8096,23 +8190,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -8241,19 +8337,19 @@ void static opd(GtkWidget *widget, gpointer data)
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
-									str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+									str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
 									g_array_free(x, TRUE);
 									g_array_free(yb, TRUE);
-									g_array_free(specs, TRUE);
+									g_array_free(delf, TRUE);
+									g_array_free(stars, TRUE);
 									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -8265,23 +8361,25 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat=g_strsplit_set(strary[k], "\t,", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(x, lcl);
-										if (lc==0) satl=g_strv_length(strat);
-										if (!strat[1]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-										g_array_append_val(specs, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 										g_array_append_val(yb, lcl);
-										for (l=2; l<satl; l++)
-										{
-											if (!strat[l]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-											g_array_append_val(specs, lcl);
-										}
 										g_strfreev(strat);
 										lc++;
 									}
 									g_strfreev(strary);
-									satl--;
-									trs(tr, NULL);/* swap to more efficient routines for batch processing */
+									delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<=jdimx; j++)
+									{
+									}
+									fftw_execute(p);
+									stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++)
+									{
+										iv=star[j];
+										g_array_append_val(stars, iv);
+									}
 									for (j=0; j<=jdimx; j++)
 									{
 										vzt=g_array_index(stars, gdouble, j*zp);
@@ -8409,19 +8507,19 @@ void static opd(GtkWidget *widget, gpointer data)
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
-									str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+									str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
 									g_array_free(x, TRUE);
 									g_array_free(yb, TRUE);
-									g_array_free(specs, TRUE);
+									g_array_free(delf, TRUE);
+									g_array_free(stars, TRUE);
 									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -8433,23 +8531,25 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat=g_strsplit_set(strary[k], "\t,", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(x, lcl);
-										if (lc==0) satl=g_strv_length(strat);
-										if (!strat[1]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-										g_array_append_val(specs, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 										g_array_append_val(yb, lcl);
-										for (l=2; l<satl; l++)
-										{
-											if (!strat[l]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-											g_array_append_val(specs, lcl);
-										}
 										g_strfreev(strat);
 										lc++;
 									}
 									g_strfreev(strary);
-									satl--;
-									trs(tr, NULL);/* swap to more efficient routines for batch processing */
+									delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<=jdimx; j++)
+									{
+									}
+									fftw_execute(p);
+									stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++)
+									{
+										iv=star[j];
+										g_array_append_val(stars, iv);
+									}
 									for (j=0; j<=jdimx; j++)
 									{
 										vzt=g_array_index(stars, gdouble, j*zp);
@@ -8581,24 +8681,24 @@ void static opd(GtkWidget *widget, gpointer data)
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss- */
 									{
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
-												str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 												g_free(str);
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
 												g_array_free(x, TRUE);
 												g_array_free(yb, TRUE);
-												g_array_free(specs, TRUE);
+												g_array_free(delf, TRUE);
+												g_array_free(stars, TRUE);
 												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -8610,23 +8710,151 @@ void static opd(GtkWidget *widget, gpointer data)
 													strat=g_strsplit_set(strary[k], "\t,", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(x, lcl);
-													if (lc==0) satl=g_strv_length(strat);
-													if (!strat[1]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-													g_array_append_val(specs, lcl);
+													if (!strat[trc]) lcl=0;
+													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 													g_array_append_val(yb, lcl);
-													for (l=2; l<satl; l++)
-													{
-														if (!strat[l]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-														g_array_append_val(specs, lcl);
-													}
 													g_strfreev(strat);
 													lc++;
 												}
 												g_strfreev(strary);
-												satl--;
-												trs(tr, NULL);/* swap to more efficient routines for batch processing */
+												delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+												for (j=0; j<n; j++) y[j]=0;
+												for (j=0; j<=jdimx; j++)
+												{
+												}
+												fftw_execute(p);
+												stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+												for (j=0; j<n; j++)
+												{
+													iv=star[j];
+													g_array_append_val(stars, iv);
+												}
+												for (j=0; j<=jdimx; j++)
+												{
+													vzt=g_array_index(stars, gdouble, j*zp);
+													idelf=1/g_array_index(delf, gdouble, j);
+													iv=g_array_index(zwa, gdouble, j)*idelf/2;
+													for (l=1; l<iv; l++)
+													{
+														ivd=g_array_index(stars, gdouble, l+(j*zp));
+														ivd*=ivd;
+														ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+														ivdt*=ivdt;
+														vzt+=sqrt(ivd+ivdt);
+													}
+													vzt=l/vzt;
+													for (k=0; k<=kdimx; k++)
+													{
+														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+														{
+															vt=g_array_index(stars, gdouble, st+(j*zp));
+															ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-st);
+															phio=-atan2(ivdt, vt);
+															vt*=vt;
+															ivdt*=ivdt;
+															vt=sqrt(vt+ivdt);
+															{dst=0; pn=0;}
+															for (l=st+1; l<=sp; l++)
+															{
+																ivd=g_array_index(stars, gdouble, l+(j*zp));
+																ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+																phi=atan2(ivdt, ivd);
+																phio+=phi;
+																if (phio>G_PI) phio-=(MY_2PI);
+																else if (phio<=NMY_PI) phio+=(MY_2PI);
+																if (l>(tcn-twd+0.5))
+																{
+																	if (l<=(tcn+0.5))
+																	{
+																		tp=(((gdouble) l)-tcn-0.5)/twd;
+																		pn+=++tp;
+																		dst+=tp*phio;
+																	}
+																	else if (l<(tcn+twd+0.5))
+																	{
+																		tp=(tcn+0.5-((gdouble) l))/twd;
+																		pn+=++tp;
+																		dst+=tp*phio;
+																	}
+																}
+																phio=-phi;
+																ivd*=ivd;
+																ivdt*=ivdt;
+																vt+=sqrt(ivd+ivdt);
+															}
+															pn*=MY_2PI*g_array_index(delf, gdouble, j);
+															dst/=-pn;
+															vt*=vzt/(sp-st+1);
+														}
+														else {vt=0; dst=0;}
+														g_array_append_val(vis, vt);
+														g_array_append_val(doms, dst);
+													}
+												}
+											}
+											else
+											{
+												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
+												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+												g_free(str);
+												g_error_free(Err);
+											}
+											g_free(contents);
+											g_strfreev(strat2);
+										}
+									}
+									else /* +TdBss- */
+									{
+										for (m=0; m<g_strv_length(strary2); m++)
+										{
+											strat2=g_strsplit_set(strary2[m], "\t,", 0);
+											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+											{
+												str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
+												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+												g_free(str);
+												strary=g_strsplit_set(contents, "\r\n", 0);
+												sal=g_strv_length(strary);
+												g_array_free(x, TRUE);
+												g_array_free(yb, TRUE);
+												g_array_free(delf, TRUE);
+												g_array_free(stars, TRUE);
+												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												lc=lcib;
+												for (k=kib; k<sal; k++)
+												{
+													if (!strary[k]) continue;
+													g_strchug(strary[k]);
+													if (!g_strcmp0("", strary[k])) continue;
+													if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+													if (lc<0) {lc++; continue;}
+													strat=g_strsplit_set(strary[k], "\t,", 0);
+													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+													g_array_append_val(x, lcl);
+													if (!strat[trc]) lcl=0;
+													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+													g_array_append_val(yb, lcl);
+													g_strfreev(strat);
+													lc++;
+												}
+												g_strfreev(strary);
+												delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+												for (j=0; j<n; j++) y[j]=0;
+												for (j=0; j<=jdimx; j++)
+												{
+												}
+												fftw_execute(p);
+												stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+												for (j=0; j<n; j++)
+												{
+													iv=star[j];
+													g_array_append_val(stars, iv);
+												}
 												for (j=0; j<=jdimx; j++)
 												{
 													vzt=g_array_index(stars, gdouble, j*zp);
@@ -8706,30 +8934,279 @@ void static opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss- */
+								{
+									for (m=0; m<g_strv_length(strary2); m++)
+									{
+										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+										{
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
+											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+											g_free(str);
+											strary=g_strsplit_set(contents, "\r\n", 0);
+											sal=g_strv_length(strary);
+											g_array_free(x, TRUE);
+											g_array_free(yb, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
+											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											lc=lcib;
+											for (k=kib; k<sal; k++)
+											{
+												if (!strary[k]) continue;
+												g_strchug(strary[k]);
+												if (!g_strcmp0("", strary[k])) continue;
+												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+												if (lc<0) {lc++; continue;}
+												strat=g_strsplit_set(strary[k], "\t,", 0);
+												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+												g_array_append_val(x, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+												g_array_append_val(yb, lcl);
+												g_strfreev(strat);
+												lc++;
+											}
+											g_strfreev(strary);
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
+											for (j=0; j<=jdimx; j++)
+											{
+												vzt=g_array_index(stars, gdouble, j*zp);
+												idelf=1/g_array_index(delf, gdouble, j);
+												iv=g_array_index(zwa, gdouble, j)*idelf/2;
+												for (l=1; l<iv; l++)
+												{
+													ivd=g_array_index(stars, gdouble, l+(j*zp));
+													ivd*=ivd;
+													ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+													ivdt*=ivdt;
+													vzt+=sqrt(ivd+ivdt);
+												}
+												vzt=l/vzt;
+												for (k=0; k<=kdimx; k++)
+												{
+													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+													{
+														vt=g_array_index(stars, gdouble, st+(j*zp));
+														ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-st);
+														phio=-atan2(ivdt, vt);
+														vt*=vt;
+														ivdt*=ivdt;
+														vt=sqrt(vt+ivdt);
+														{dst=0; pn=0;}
+														for (l=st+1; l<=sp; l++)
+														{
+															ivd=g_array_index(stars, gdouble, l+(j*zp));
+															ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+															phi=atan2(ivdt, ivd);
+															phio+=phi;
+															if (phio>G_PI) phio-=(MY_2PI);
+															else if (phio<=NMY_PI) phio+=(MY_2PI);
+															if (l>(tcn-twd+0.5))
+															{
+																if (l<=(tcn+0.5))
+																{
+																	tp=(((gdouble) l)-tcn-0.5)/twd;
+																	pn+=++tp;
+																	dst+=tp*phio;
+																}
+																else if (l<(tcn+twd+0.5))
+																{
+																	tp=(tcn+0.5-((gdouble) l))/twd;
+																	pn+=++tp;
+																	dst+=tp*phio;
+																}
+															}
+															phio=-phi;
+															ivd*=ivd;
+															ivdt*=ivdt;
+															vt+=sqrt(ivd+ivdt);
+														}
+														pn*=MY_2PI*g_array_index(delf, gdouble, j);
+														dst/=-pn;
+														vt*=vzt/(sp-st+1);
+													}
+													else {vt=0; dst=0;}
+													g_array_append_val(vis, vt);
+													g_array_append_val(doms, dst);
+												}
+											}
+										}
+										else
+										{
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
+											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+											g_free(str);
+											g_error_free(Err);
+										}
+										g_free(contents);
+										g_strfreev(strat2);
+									}
+								}
+								else /* +RdBss- */
+								{
+									for (m=0; m<g_strv_length(strary2); m++)
+									{
+										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+										{
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
+											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+											g_free(str);
+											strary=g_strsplit_set(contents, "\r\n", 0);
+											sal=g_strv_length(strary);
+											g_array_free(x, TRUE);
+											g_array_free(yb, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
+											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											lc=lcib;
+											for (k=kib; k<sal; k++)
+											{
+												if (!strary[k]) continue;
+												g_strchug(strary[k]);
+												if (!g_strcmp0("", strary[k])) continue;
+												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+												if (lc<0) {lc++; continue;}
+												strat=g_strsplit_set(strary[k], "\t,", 0);
+												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+												g_array_append_val(x, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+												g_array_append_val(yb, lcl);
+												g_strfreev(strat);
+												lc++;
+											}
+											g_strfreev(strary);
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
+											for (j=0; j<=jdimx; j++)
+											{
+												vzt=g_array_index(stars, gdouble, j*zp);
+												idelf=1/g_array_index(delf, gdouble, j);
+												iv=g_array_index(zwa, gdouble, j)*idelf/2;
+												for (l=1; l<iv; l++)
+												{
+													ivd=g_array_index(stars, gdouble, l+(j*zp));
+													ivd*=ivd;
+													ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+													ivdt*=ivdt;
+													vzt+=sqrt(ivd+ivdt);
+												}
+												vzt=l/vzt;
+												for (k=0; k<=kdimx; k++)
+												{
+													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+													{
+														vt=g_array_index(stars, gdouble, st+(j*zp));
+														ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-st);
+														phio=-atan2(ivdt, vt);
+														vt*=vt;
+														ivdt*=ivdt;
+														vt=sqrt(vt+ivdt);
+														{dst=0; pn=0;}
+														for (l=st+1; l<=sp; l++)
+														{
+															ivd=g_array_index(stars, gdouble, l+(j*zp));
+															ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+															phi=atan2(ivdt, ivd);
+															phio+=phi;
+															if (phio>G_PI) phio-=(MY_2PI);
+															else if (phio<=NMY_PI) phio+=(MY_2PI);
+															if (l>(tcn-twd+0.5))
+															{
+																if (l<=(tcn+0.5))
+																{
+																	tp=(((gdouble) l)-tcn-0.5)/twd;
+																	pn+=++tp;
+																	dst+=tp*phio;
+																}
+																else if (l<(tcn+twd+0.5))
+																{
+																	tp=(tcn+0.5-((gdouble) l))/twd;
+																	pn+=++tp;
+																	dst+=tp*phio;
+																}
+															}
+															phio=-phi;
+															ivd*=ivd;
+															ivdt*=ivdt;
+															vt+=sqrt(ivd+ivdt);
+														}
+														pn*=MY_2PI*g_array_index(delf, gdouble, j);
+														dst/=-pn;
+														vt*=vzt/(sp-st+1);
+													}
+													else {vt=0; dst=0;}
+													g_array_append_val(vis, vt);
+													g_array_append_val(doms, dst);
+												}
+											}
+										}
+										else
+										{
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
+											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+											g_free(str);
+											g_error_free(Err);
+										}
+										g_free(contents);
+										g_strfreev(strat2);
+									}
+								}
 							}
-						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
-						{
-							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 							{
-								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* +Tlss- */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -8741,23 +9218,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -8836,24 +9315,24 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else
+								else /* +Tlss- */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -8865,23 +9344,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -8961,24 +9442,24 @@ void static opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -Rlss- */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -8990,23 +9471,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -9085,24 +9568,24 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else
+							else /* +Rlss- */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -9114,23 +9597,535 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
+										for (j=0; j<=jdimx; j++)
+										{
+											vzt=g_array_index(stars, gdouble, j*zp);
+											idelf=1/g_array_index(delf, gdouble, j);
+											iv=g_array_index(zwa, gdouble, j)*idelf/2;
+											for (l=1; l<iv; l++)
+											{
+												ivd=g_array_index(stars, gdouble, l+(j*zp));
+												ivd*=ivd;
+												ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+												ivdt*=ivdt;
+												vzt+=sqrt(ivd+ivdt);
+											}
+											vzt=l/vzt;
+											for (k=0; k<=kdimx; k++)
+											{
+												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+												{
+													vt=g_array_index(stars, gdouble, st+(j*zp));
+													ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-st);
+													phio=-atan2(ivdt, vt);
+													vt*=vt;
+													ivdt*=ivdt;
+													vt=sqrt(vt+ivdt);
+													{dst=0; pn=0;}
+													for (l=st+1; l<=sp; l++)
+													{
+														ivd=g_array_index(stars, gdouble, l+(j*zp));
+														ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+														phi=atan2(ivdt, ivd);
+														phio+=phi;
+														if (phio>G_PI) phio-=(MY_2PI);
+														else if (phio<=NMY_PI) phio+=(MY_2PI);
+														if (l>(tcn-twd+0.5))
+														{
+															if (l<=(tcn+0.5))
+															{
+																tp=(((gdouble) l)-tcn-0.5)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+															}
+															else if (l<(tcn+twd+0.5))
+															{
+																tp=(tcn+0.5-((gdouble) l))/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+															}
+														}
+														phio=-phi;
+														ivd*=ivd;
+														ivdt*=ivdt;
+														vt+=sqrt(ivd+ivdt);
+													}
+													pn*=MY_2PI*g_array_index(delf, gdouble, j);
+													dst/=-pn;
+													vt*=vzt/(sp-st+1);
+												}
+												else {vt=0; dst=0;}
+												g_array_append_val(vis, vt);
+												g_array_append_val(doms, dst);
+											}
+										}
+									}
+									else
+									{
+										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
+										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+										g_free(str);
+										g_error_free(Err);
+									}
+									g_free(contents);
+									g_strfreev(strat2);
+								}
+							}
+						}
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
+						{
+							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
+							{
+								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0- */
+								{
+									for (m=0; m<g_strv_length(strary2); m++)
+									{
+										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+										{
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
+											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+											g_free(str);
+											strary=g_strsplit_set(contents, "\r\n", 0);
+											sal=g_strv_length(strary);
+											g_array_free(x, TRUE);
+											g_array_free(yb, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
+											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											lc=lcib;
+											for (k=kib; k<sal; k++)
+											{
+												if (!strary[k]) continue;
+												g_strchug(strary[k]);
+												if (!g_strcmp0("", strary[k])) continue;
+												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+												if (lc<0) {lc++; continue;}
+												strat=g_strsplit_set(strary[k], "\t,", 0);
+												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+												g_array_append_val(x, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+												g_array_append_val(yb, lcl);
+												g_strfreev(strat);
+												lc++;
+											}
+											g_strfreev(strary);
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
+											for (j=0; j<=jdimx; j++)
+											{
+												vzt=g_array_index(stars, gdouble, j*zp);
+												idelf=1/g_array_index(delf, gdouble, j);
+												iv=g_array_index(zwa, gdouble, j)*idelf/2;
+												for (l=1; l<iv; l++)
+												{
+													ivd=g_array_index(stars, gdouble, l+(j*zp));
+													ivd*=ivd;
+													ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+													ivdt*=ivdt;
+													vzt+=sqrt(ivd+ivdt);
+												}
+												vzt=l/vzt;
+												for (k=0; k<=kdimx; k++)
+												{
+													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+													{
+														vt=g_array_index(stars, gdouble, st+(j*zp));
+														ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-st);
+														phio=-atan2(ivdt, vt);
+														vt*=vt;
+														ivdt*=ivdt;
+														vt=sqrt(vt+ivdt);
+														{dst=0; pn=0;}
+														for (l=st+1; l<=sp; l++)
+														{
+															ivd=g_array_index(stars, gdouble, l+(j*zp));
+															ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+															phi=atan2(ivdt, ivd);
+															phio+=phi;
+															if (phio>G_PI) phio-=(MY_2PI);
+															else if (phio<=NMY_PI) phio+=(MY_2PI);
+															if (l>(tcn-twd+0.5))
+															{
+																if (l<=(tcn+0.5))
+																{
+																	tp=(((gdouble) l)-tcn-0.5)/twd;
+																	pn+=++tp;
+																	dst+=tp*phio;
+																}
+																else if (l<(tcn+twd+0.5))
+																{
+																	tp=(tcn+0.5-((gdouble) l))/twd;
+																	pn+=++tp;
+																	dst+=tp*phio;
+																}
+															}
+															phio=-phi;
+															ivd*=ivd;
+															ivdt*=ivdt;
+															vt+=sqrt(ivd+ivdt);
+														}
+														pn*=MY_2PI*g_array_index(delf, gdouble, j);
+														dst/=-pn;
+														vt*=vzt/(sp-st+1);
+													}
+													else {vt=0; dst=0;}
+													g_array_append_val(vis, vt);
+													g_array_append_val(doms, dst);
+												}
+											}
+										}
+										else
+										{
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
+											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+											g_free(str);
+											g_error_free(Err);
+										}
+										g_free(contents);
+										g_strfreev(strat2);
+									}
+								}
+								else /* +TdB0- */
+								{
+									for (m=0; m<g_strv_length(strary2); m++)
+									{
+										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+										{
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
+											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+											g_free(str);
+											strary=g_strsplit_set(contents, "\r\n", 0);
+											sal=g_strv_length(strary);
+											g_array_free(x, TRUE);
+											g_array_free(yb, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
+											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											lc=lcib;
+											for (k=kib; k<sal; k++)
+											{
+												if (!strary[k]) continue;
+												g_strchug(strary[k]);
+												if (!g_strcmp0("", strary[k])) continue;
+												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+												if (lc<0) {lc++; continue;}
+												strat=g_strsplit_set(strary[k], "\t,", 0);
+												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+												g_array_append_val(x, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+												g_array_append_val(yb, lcl);
+												g_strfreev(strat);
+												lc++;
+											}
+											g_strfreev(strary);
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
+											for (j=0; j<=jdimx; j++)
+											{
+												vzt=g_array_index(stars, gdouble, j*zp);
+												idelf=1/g_array_index(delf, gdouble, j);
+												iv=g_array_index(zwa, gdouble, j)*idelf/2;
+												for (l=1; l<iv; l++)
+												{
+													ivd=g_array_index(stars, gdouble, l+(j*zp));
+													ivd*=ivd;
+													ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+													ivdt*=ivdt;
+													vzt+=sqrt(ivd+ivdt);
+												}
+												vzt=l/vzt;
+												for (k=0; k<=kdimx; k++)
+												{
+													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+													{
+														vt=g_array_index(stars, gdouble, st+(j*zp));
+														ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-st);
+														phio=-atan2(ivdt, vt);
+														vt*=vt;
+														ivdt*=ivdt;
+														vt=sqrt(vt+ivdt);
+														{dst=0; pn=0;}
+														for (l=st+1; l<=sp; l++)
+														{
+															ivd=g_array_index(stars, gdouble, l+(j*zp));
+															ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+															phi=atan2(ivdt, ivd);
+															phio+=phi;
+															if (phio>G_PI) phio-=(MY_2PI);
+															else if (phio<=NMY_PI) phio+=(MY_2PI);
+															if (l>(tcn-twd+0.5))
+															{
+																if (l<=(tcn+0.5))
+																{
+																	tp=(((gdouble) l)-tcn-0.5)/twd;
+																	pn+=++tp;
+																	dst+=tp*phio;
+																}
+																else if (l<(tcn+twd+0.5))
+																{
+																	tp=(tcn+0.5-((gdouble) l))/twd;
+																	pn+=++tp;
+																	dst+=tp*phio;
+																}
+															}
+															phio=-phi;
+															ivd*=ivd;
+															ivdt*=ivdt;
+															vt+=sqrt(ivd+ivdt);
+														}
+														pn*=MY_2PI*g_array_index(delf, gdouble, j);
+														dst/=-pn;
+														vt*=vzt/(sp-st+1);
+													}
+													else {vt=0; dst=0;}
+													g_array_append_val(vis, vt);
+													g_array_append_val(doms, dst);
+												}
+											}
+										}
+										else
+										{
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
+											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+											g_free(str);
+											g_error_free(Err);
+										}
+										g_free(contents);
+										g_strfreev(strat2);
+									}
+								}
+							}
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0- */
+							{
+								for (m=0; m<g_strv_length(strary2); m++)
+								{
+									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+									{
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
+										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+										g_free(str);
+										strary=g_strsplit_set(contents, "\r\n", 0);
+										sal=g_strv_length(strary);
+										g_array_free(x, TRUE);
+										g_array_free(yb, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
+										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										lc=lcib;
+										for (k=kib; k<sal; k++)
+										{
+											if (!strary[k]) continue;
+											g_strchug(strary[k]);
+											if (!g_strcmp0("", strary[k])) continue;
+											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+											if (lc<0) {lc++; continue;}
+											strat=g_strsplit_set(strary[k], "\t,", 0);
+											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+											g_array_append_val(x, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+											g_array_append_val(yb, lcl);
+											g_strfreev(strat);
+											lc++;
+										}
+										g_strfreev(strary);
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
+										for (j=0; j<=jdimx; j++)
+										{
+											vzt=g_array_index(stars, gdouble, j*zp);
+											idelf=1/g_array_index(delf, gdouble, j);
+											iv=g_array_index(zwa, gdouble, j)*idelf/2;
+											for (l=1; l<iv; l++)
+											{
+												ivd=g_array_index(stars, gdouble, l+(j*zp));
+												ivd*=ivd;
+												ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+												ivdt*=ivdt;
+												vzt+=sqrt(ivd+ivdt);
+											}
+											vzt=l/vzt;
+											for (k=0; k<=kdimx; k++)
+											{
+												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+												{
+													vt=g_array_index(stars, gdouble, st+(j*zp));
+													ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-st);
+													phio=-atan2(ivdt, vt);
+													vt*=vt;
+													ivdt*=ivdt;
+													vt=sqrt(vt+ivdt);
+													{dst=0; pn=0;}
+													for (l=st+1; l<=sp; l++)
+													{
+														ivd=g_array_index(stars, gdouble, l+(j*zp));
+														ivdt=g_array_index(stars, gdouble, ((j+1)*zp)-l);
+														phi=atan2(ivdt, ivd);
+														phio+=phi;
+														if (phio>G_PI) phio-=(MY_2PI);
+														else if (phio<=NMY_PI) phio+=(MY_2PI);
+														if (l>(tcn-twd+0.5))
+														{
+															if (l<=(tcn+0.5))
+															{
+																tp=(((gdouble) l)-tcn-0.5)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+															}
+															else if (l<(tcn+twd+0.5))
+															{
+																tp=(tcn+0.5-((gdouble) l))/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+															}
+														}
+														phio=-phi;
+														ivd*=ivd;
+														ivdt*=ivdt;
+														vt+=sqrt(ivd+ivdt);
+													}
+													pn*=MY_2PI*g_array_index(delf, gdouble, j);
+													dst/=-pn;
+													vt*=vzt/(sp-st+1);
+												}
+												else {vt=0; dst=0;}
+												g_array_append_val(vis, vt);
+												g_array_append_val(doms, dst);
+											}
+										}
+									}
+									else
+									{
+										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s"), fin, (gchar *) Err);
+										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+										g_free(str);
+										g_error_free(Err);
+									}
+									g_free(contents);
+									g_strfreev(strat2);
+								}
+							}
+							else /* +RdB0- */
+							{
+								for (m=0; m<g_strv_length(strary2); m++)
+								{
+									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+									{
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
+										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+										g_free(str);
+										strary=g_strsplit_set(contents, "\r\n", 0);
+										sal=g_strv_length(strary);
+										g_array_free(x, TRUE);
+										g_array_free(yb, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
+										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										lc=lcib;
+										for (k=kib; k<sal; k++)
+										{
+											if (!strary[k]) continue;
+											g_strchug(strary[k]);
+											if (!g_strcmp0("", strary[k])) continue;
+											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+											if (lc<0) {lc++; continue;}
+											strat=g_strsplit_set(strary[k], "\t,", 0);
+											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+											g_array_append_val(x, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+											g_array_append_val(yb, lcl);
+											g_strfreev(strat);
+											lc++;
+										}
+										g_strfreev(strary);
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -9212,24 +10207,24 @@ void static opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 						{
-							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -Tl0- */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -9241,23 +10236,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -9336,24 +10333,24 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else
+							else /* +Tl0- */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -9365,23 +10362,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -9461,24 +10460,24 @@ void static opd(GtkWidget *widget, gpointer data)
 								}
 							}
 						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -Rl0- */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
-									str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+									str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
 									g_array_free(x, TRUE);
 									g_array_free(yb, TRUE);
-									g_array_free(specs, TRUE);
+									g_array_free(delf, TRUE);
+									g_array_free(stars, TRUE);
 									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -9490,23 +10489,25 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat=g_strsplit_set(strary[k], "\t,", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(x, lcl);
-										if (lc==0) satl=g_strv_length(strat);
-										if (!strat[1]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-										g_array_append_val(specs, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 										g_array_append_val(yb, lcl);
-										for (l=2; l<satl; l++)
-										{
-											if (!strat[l]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-											g_array_append_val(specs, lcl);
-										}
 										g_strfreev(strat);
 										lc++;
 									}
 									g_strfreev(strary);
-									satl--;
-									trs(tr, NULL);/* swap to more efficient routines for batch processing */
+									delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<=jdimx; j++)
+									{
+									}
+									fftw_execute(p);
+									stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++)
+									{
+										iv=star[j];
+										g_array_append_val(stars, iv);
+									}
 									for (j=0; j<=jdimx; j++)
 									{
 										vzt=g_array_index(stars, gdouble, j*zp);
@@ -9585,24 +10586,24 @@ void static opd(GtkWidget *widget, gpointer data)
 								g_strfreev(strat2);
 							}
 						}
-						else
+						else /* +Rl0- */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
-									str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+									str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
 									g_array_free(x, TRUE);
 									g_array_free(yb, TRUE);
-									g_array_free(specs, TRUE);
+									g_array_free(delf, TRUE);
+									g_array_free(stars, TRUE);
 									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -9614,23 +10615,25 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat=g_strsplit_set(strary[k], "\t,", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(x, lcl);
-										if (lc==0) satl=g_strv_length(strat);
-										if (!strat[1]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-										g_array_append_val(specs, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 										g_array_append_val(yb, lcl);
-										for (l=2; l<satl; l++)
-										{
-											if (!strat[l]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-											g_array_append_val(specs, lcl);
-										}
 										g_strfreev(strat);
 										lc++;
 									}
 									g_strfreev(strary);
-									satl--;
-									trs(tr, NULL);/* swap to more efficient routines for batch processing */
+									delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<=jdimx; j++)
+									{
+									}
+									fftw_execute(p);
+									stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++)
+									{
+										iv=star[j];
+										g_array_append_val(stars, iv);
+									}
 									for (j=0; j<=jdimx; j++)
 									{
 										vzt=g_array_index(stars, gdouble, j*zp);
@@ -9716,24 +10719,24 @@ void static opd(GtkWidget *widget, gpointer data)
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 							{
-								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -9745,23 +10748,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -9840,24 +10845,24 @@ void static opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else
+								else /* +TdBss+ */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
-											str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+											str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 											g_free(str);
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
 											g_array_free(x, TRUE);
 											g_array_free(yb, TRUE);
-											g_array_free(specs, TRUE);
+											g_array_free(delf, TRUE);
+											g_array_free(stars, TRUE);
 											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -9869,23 +10874,25 @@ void static opd(GtkWidget *widget, gpointer data)
 												strat=g_strsplit_set(strary[k], "\t,", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(x, lcl);
-												if (lc==0) satl=g_strv_length(strat);
-												if (!strat[1]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-												g_array_append_val(specs, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 												g_array_append_val(yb, lcl);
-												for (l=2; l<satl; l++)
-												{
-													if (!strat[l]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-													g_array_append_val(specs, lcl);
-												}
 												g_strfreev(strat);
 												lc++;
 											}
 											g_strfreev(strary);
-											satl--;
-											trs(tr, NULL);/* swap to more efficient routines for batch processing */
+											delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<=jdimx; j++)
+											{
+											}
+											fftw_execute(p);
+											stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++)
+											{
+												iv=star[j];
+												g_array_append_val(stars, iv);
+											}
 											for (j=0; j<=jdimx; j++)
 											{
 												vzt=g_array_index(stars, gdouble, j*zp);
@@ -9965,24 +10972,24 @@ void static opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -9994,23 +11001,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -10089,24 +11098,24 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else
+							else /* +RdBss+ */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -10118,23 +11127,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -10216,24 +11227,24 @@ void static opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 						{
-							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -Tlss+ */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -10245,23 +11256,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -10340,24 +11353,24 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else
+							else /* +Tlss+ */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -10369,23 +11382,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -10465,24 +11480,24 @@ void static opd(GtkWidget *widget, gpointer data)
 								}
 							}
 						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -Rlss+ */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
-									str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+									str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
 									g_array_free(x, TRUE);
 									g_array_free(yb, TRUE);
-									g_array_free(specs, TRUE);
+									g_array_free(delf, TRUE);
+									g_array_free(stars, TRUE);
 									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -10494,23 +11509,25 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat=g_strsplit_set(strary[k], "\t,", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(x, lcl);
-										if (lc==0) satl=g_strv_length(strat);
-										if (!strat[1]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-										g_array_append_val(specs, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 										g_array_append_val(yb, lcl);
-										for (l=2; l<satl; l++)
-										{
-											if (!strat[l]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-											g_array_append_val(specs, lcl);
-										}
 										g_strfreev(strat);
 										lc++;
 									}
 									g_strfreev(strary);
-									satl--;
-									trs(tr, NULL);/* swap to more efficient routines for batch processing */
+									delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<=jdimx; j++)
+									{
+									}
+									fftw_execute(p);
+									stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++)
+									{
+										iv=star[j];
+										g_array_append_val(stars, iv);
+									}
 									for (j=0; j<=jdimx; j++)
 									{
 										vzt=g_array_index(stars, gdouble, j*zp);
@@ -10589,24 +11606,24 @@ void static opd(GtkWidget *widget, gpointer data)
 								g_strfreev(strat2);
 							}
 						}
-						else
+						else /* +Rlss+ */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
-									str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+									str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
 									g_array_free(x, TRUE);
 									g_array_free(yb, TRUE);
-									g_array_free(specs, TRUE);
+									g_array_free(delf, TRUE);
+									g_array_free(stars, TRUE);
 									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -10618,23 +11635,25 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat=g_strsplit_set(strary[k], "\t,", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(x, lcl);
-										if (lc==0) satl=g_strv_length(strat);
-										if (!strat[1]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-										g_array_append_val(specs, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 										g_array_append_val(yb, lcl);
-										for (l=2; l<satl; l++)
-										{
-											if (!strat[l]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-											g_array_append_val(specs, lcl);
-										}
 										g_strfreev(strat);
 										lc++;
 									}
 									g_strfreev(strary);
-									satl--;
-									trs(tr, NULL);/* swap to more efficient routines for batch processing */
+									delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<=jdimx; j++)
+									{
+									}
+									fftw_execute(p);
+									stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++)
+									{
+										iv=star[j];
+										g_array_append_val(stars, iv);
+									}
 									for (j=0; j<=jdimx; j++)
 									{
 										vzt=g_array_index(stars, gdouble, j*zp);
@@ -10718,24 +11737,24 @@ void static opd(GtkWidget *widget, gpointer data)
 					{
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 						{
-							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -10747,23 +11766,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -10842,24 +11863,24 @@ void static opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else
+							else /* +TdB0+ */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
-										str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+										str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 										g_free(str);
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
 										g_array_free(x, TRUE);
 										g_array_free(yb, TRUE);
-										g_array_free(specs, TRUE);
+										g_array_free(delf, TRUE);
+										g_array_free(stars, TRUE);
 										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -10871,23 +11892,25 @@ void static opd(GtkWidget *widget, gpointer data)
 											strat=g_strsplit_set(strary[k], "\t,", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(x, lcl);
-											if (lc==0) satl=g_strv_length(strat);
-											if (!strat[1]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-											g_array_append_val(specs, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 											g_array_append_val(yb, lcl);
-											for (l=2; l<satl; l++)
-											{
-												if (!strat[l]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-												g_array_append_val(specs, lcl);
-											}
 											g_strfreev(strat);
 											lc++;
 										}
 										g_strfreev(strary);
-										satl--;
-										trs(tr, NULL);/* swap to more efficient routines for batch processing */
+										delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<=jdimx; j++)
+										{
+										}
+										fftw_execute(p);
+										stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++)
+										{
+											iv=star[j];
+											g_array_append_val(stars, iv);
+										}
 										for (j=0; j<=jdimx; j++)
 										{
 											vzt=g_array_index(stars, gdouble, j*zp);
@@ -10967,24 +11990,24 @@ void static opd(GtkWidget *widget, gpointer data)
 								}
 							}
 						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
-									str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+									str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
 									g_array_free(x, TRUE);
 									g_array_free(yb, TRUE);
-									g_array_free(specs, TRUE);
+									g_array_free(delf, TRUE);
+									g_array_free(stars, TRUE);
 									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -10996,23 +12019,25 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat=g_strsplit_set(strary[k], "\t,", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(x, lcl);
-										if (lc==0) satl=g_strv_length(strat);
-										if (!strat[1]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-										g_array_append_val(specs, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 										g_array_append_val(yb, lcl);
-										for (l=2; l<satl; l++)
-										{
-											if (!strat[l]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-											g_array_append_val(specs, lcl);
-										}
 										g_strfreev(strat);
 										lc++;
 									}
 									g_strfreev(strary);
-									satl--;
-									trs(tr, NULL);/* swap to more efficient routines for batch processing */
+									delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<=jdimx; j++)
+									{
+									}
+									fftw_execute(p);
+									stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++)
+									{
+										iv=star[j];
+										g_array_append_val(stars, iv);
+									}
 									for (j=0; j<=jdimx; j++)
 									{
 										vzt=g_array_index(stars, gdouble, j*zp);
@@ -11091,24 +12116,24 @@ void static opd(GtkWidget *widget, gpointer data)
 								g_strfreev(strat2);
 							}
 						}
-						else
+						else /* +RdB0+ */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
-									str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+									str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
 									g_array_free(x, TRUE);
 									g_array_free(yb, TRUE);
-									g_array_free(specs, TRUE);
+									g_array_free(delf, TRUE);
+									g_array_free(stars, TRUE);
 									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -11120,23 +12145,25 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat=g_strsplit_set(strary[k], "\t,", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(x, lcl);
-										if (lc==0) satl=g_strv_length(strat);
-										if (!strat[1]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-										g_array_append_val(specs, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 										g_array_append_val(yb, lcl);
-										for (l=2; l<satl; l++)
-										{
-											if (!strat[l]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-											g_array_append_val(specs, lcl);
-										}
 										g_strfreev(strat);
 										lc++;
 									}
 									g_strfreev(strary);
-									satl--;
-									trs(tr, NULL);/* swap to more efficient routines for batch processing */
+									delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<=jdimx; j++)
+									{
+									}
+									fftw_execute(p);
+									stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++)
+									{
+										iv=star[j];
+										g_array_append_val(stars, iv);
+									}
 									for (j=0; j<=jdimx; j++)
 									{
 										vzt=g_array_index(stars, gdouble, j*zp);
@@ -11218,24 +12245,24 @@ void static opd(GtkWidget *widget, gpointer data)
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 					{
-						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -Tl0+ */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
-									str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+									str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
 									g_array_free(x, TRUE);
 									g_array_free(yb, TRUE);
-									g_array_free(specs, TRUE);
+									g_array_free(delf, TRUE);
+									g_array_free(stars, TRUE);
 									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -11247,23 +12274,25 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat=g_strsplit_set(strary[k], "\t,", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(x, lcl);
-										if (lc==0) satl=g_strv_length(strat);
-										if (!strat[1]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-										g_array_append_val(specs, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 										g_array_append_val(yb, lcl);
-										for (l=2; l<satl; l++)
-										{
-											if (!strat[l]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-											g_array_append_val(specs, lcl);
-										}
 										g_strfreev(strat);
 										lc++;
 									}
 									g_strfreev(strary);
-									satl--;
-									trs(tr, NULL);/* swap to more efficient routines for batch processing */
+									delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<=jdimx; j++)
+									{
+									}
+									fftw_execute(p);
+									stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++)
+									{
+										iv=star[j];
+										g_array_append_val(stars, iv);
+									}
 									for (j=0; j<=jdimx; j++)
 									{
 										vzt=g_array_index(stars, gdouble, j*zp);
@@ -11342,24 +12371,24 @@ void static opd(GtkWidget *widget, gpointer data)
 								g_strfreev(strat2);
 							}
 						}
-						else
+						else /* +Tl0+ */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
-									str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+									str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
 									g_array_free(x, TRUE);
 									g_array_free(yb, TRUE);
-									g_array_free(specs, TRUE);
+									g_array_free(delf, TRUE);
+									g_array_free(stars, TRUE);
 									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -11371,23 +12400,25 @@ void static opd(GtkWidget *widget, gpointer data)
 										strat=g_strsplit_set(strary[k], "\t,", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(x, lcl);
-										if (lc==0) satl=g_strv_length(strat);
-										if (!strat[1]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-										g_array_append_val(specs, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 										g_array_append_val(yb, lcl);
-										for (l=2; l<satl; l++)
-										{
-											if (!strat[l]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-											g_array_append_val(specs, lcl);
-										}
 										g_strfreev(strat);
 										lc++;
 									}
 									g_strfreev(strary);
-									satl--;
-									trs(tr, NULL);/* swap to more efficient routines for batch processing */
+									delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<=jdimx; j++)
+									{
+									}
+									fftw_execute(p);
+									stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++)
+									{
+										iv=star[j];
+										g_array_append_val(stars, iv);
+									}
 									for (j=0; j<=jdimx; j++)
 									{
 										vzt=g_array_index(stars, gdouble, j*zp);
@@ -11467,24 +12498,24 @@ void static opd(GtkWidget *widget, gpointer data)
 							}
 						}
 					}
-					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /*  */
+					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -Rl0+ */
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
 							strat2=g_strsplit_set(strary2[m], "\t,", 0);
-							if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
-								str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+								str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								strary=g_strsplit_set(contents, "\r\n", 0);
 								sal=g_strv_length(strary);
 								g_array_free(x, TRUE);
 								g_array_free(yb, TRUE);
-								g_array_free(specs, TRUE);
+								g_array_free(delf, TRUE);
+								g_array_free(stars, TRUE);
 								x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 								yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-								specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 								lc=lcib;
 								for (k=kib; k<sal; k++)
 								{
@@ -11496,23 +12527,25 @@ void static opd(GtkWidget *widget, gpointer data)
 									strat=g_strsplit_set(strary[k], "\t,", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(x, lcl);
-									if (lc==0) satl=g_strv_length(strat);
-									if (!strat[1]) lcl=0;
-									else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-									g_array_append_val(specs, lcl);
+									if (!strat[trc]) lcl=0;
+									else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 									g_array_append_val(yb, lcl);
-									for (l=2; l<satl; l++)
-									{
-										if (!strat[l]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-										g_array_append_val(specs, lcl);
-									}
 									g_strfreev(strat);
 									lc++;
 								}
 								g_strfreev(strary);
-								satl--;
-								trs(tr, NULL);/* swap to more efficient routines for batch processing */
+								delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+								for (j=0; j<n; j++) y[j]=0;
+								for (j=0; j<=jdimx; j++)
+								{
+								}
+								fftw_execute(p);
+								stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+								for (j=0; j<n; j++)
+								{
+									iv=star[j];
+									g_array_append_val(stars, iv);
+								}
 								for (j=0; j<=jdimx; j++)
 								{
 									vzt=g_array_index(stars, gdouble, j*zp);
@@ -11591,24 +12624,24 @@ void static opd(GtkWidget *widget, gpointer data)
 							g_strfreev(strat2);
 						}
 					}
-					else
+					else /* +Rl0+ */
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
 							strat2=g_strsplit_set(strary2[m], "\t,", 0);
-							if (g_file_get_contents(strat[1], &contents, NULL, &Err))
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
-								str=g_strdup_printf(_("File: %s successfully loaded"), strat[1]);
+								str=g_strdup_printf(_("File: %s successfully loaded"), strat2[1]);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								strary=g_strsplit_set(contents, "\r\n", 0);
 								sal=g_strv_length(strary);
 								g_array_free(x, TRUE);
 								g_array_free(yb, TRUE);
-								g_array_free(specs, TRUE);
+								g_array_free(delf, TRUE);
+								g_array_free(stars, TRUE);
 								x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 								yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-								specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
 								lc=lcib;
 								for (k=kib; k<sal; k++)
 								{
@@ -11620,23 +12653,25 @@ void static opd(GtkWidget *widget, gpointer data)
 									strat=g_strsplit_set(strary[k], "\t,", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(x, lcl);
-									if (lc==0) satl=g_strv_length(strat);
-									if (!strat[1]) lcl=0;
-									else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-									g_array_append_val(specs, lcl);
+									if (!strat[trc]) lcl=0;
+									else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
 									g_array_append_val(yb, lcl);
-									for (l=2; l<satl; l++)
-									{
-										if (!strat[l]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-										g_array_append_val(specs, lcl);
-									}
 									g_strfreev(strat);
 									lc++;
 								}
 								g_strfreev(strary);
-								satl--;
-								trs(tr, NULL);/* swap to more efficient routines for batch processing */
+								delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+								for (j=0; j<n; j++) y[j]=0;
+								for (j=0; j<=jdimx; j++)
+								{
+								}
+								fftw_execute(p);
+								stars=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+								for (j=0; j<n; j++)
+								{
+									iv=star[j];
+									g_array_append_val(stars, iv);
+								}
 								for (j=0; j<=jdimx; j++)
 								{
 									vzt=g_array_index(stars, gdouble, j*zp);
@@ -11717,6 +12752,9 @@ void static opd(GtkWidget *widget, gpointer data)
 						flags|=15;
 					}
 					g_strfreev(strary2);
+					fftw_destroy_plan(p);
+					fftw_free(y);
+					fftw_free(star);
 					dialog=gtk_dialog_new_with_buttons(_("Variable Parameter"), GTK_WINDOW(window), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Linear", 1, "Polar", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 					cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
 					label=gtk_label_new(_("Select Parameter to save:"));
@@ -12408,17 +13446,6 @@ int main( int argc, char *argv[])
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(bat), FALSE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), bat);
 	gtk_widget_show(bat);
-	/*
-	if (check if harmonicconf is installed)
-	{
-		smnu=gtk_menu_new();
-		mni=gtk_menu_item_new_with_label(_("Create File"));
-		g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(btc), NULL); change to run executable
-		gtk_menu_shell_append(GTK_MENU_SHELL(smnu), mni);
-		gtk_widget_show(mni);
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(bat), smnu);
-	}
-	*/
 	twopionx=gtk_check_menu_item_new_with_label(_("Invert domain?"));
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(twopionx), FALSE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), twopionx);
