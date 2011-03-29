@@ -33,19 +33,19 @@
 /*
  * TO DO:
  *
- * brush up dynamic memory allocation with g_array
  * check divide by zero handling
+ * multiplot capability for polarplot?
+ * selector for vis/doms/chp (use flagd bits 8&16)
  * HELP: build contents
  * DPR: change to be nonmodal
- * OPD: better handling of the two modes - maybe inline fft and processing routines in a more optimal way
  * OPD: config writer (+overwrite confirm)
  * OPD: unix and windows delimiter support
+ * OPD: max min and final calls to plot
  * PLOT: signal connect k index for displaying plot3
  * PLOT: signal connect j index for displaying plot3
- * BATCH: add polar capability to OPD/SAV/PRT/DPR etc.
+ * BATCH: add polar capability to SAV/PRT/DPR etc.
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
- * PRC: output to plot3 for batch
  * SAVE: case for batch processed data
  */
 
@@ -67,7 +67,7 @@
 GtkWidget *window, *tr, *zpd, *pr, *tracmenu, *trac, *fst, *notebook, *notebook2, *plot1, *plot2, *plot3, *statusbar, *rest, *visl, *dsl, *chil;
 GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *ncmp, *lcmp, *bat, *chi, *twopionx, *opttri, *trans, *dBs, *neg;
 GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; /* widgets for windowing */
-GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *sz, *nx, *delf, *vis, *doms, *chp, *msr; /* arrays for windowing and data */
+GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *sz, *nx, *delf, *vis, *doms, *chp, *msr, *bxr, *byr, *bsz, *bnx; /* arrays for windowing and data */
 GSList *group2=NULL; /* list for various traces available */
 gint lc; /* number of data points */
 guint jdim=0, kdim=0, jdimx=0, kdimx=0, jdimxf=0, kdimxf=0, satl=0, trc=1, flags=0, flagd=0; /* array indices, #of traces, trace number, and current processing state and display flags */
@@ -3100,7 +3100,7 @@ void static opd(GtkWidget *widget, gpointer data)
 	PlotLinear *plt;
 	PlotPolar *plt2;
 	GtkWidget *wfile, *dialog, *cont, *trace, *table, *label;
-	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, clc;
+	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, clc, dx2, xx;
 	guint j, k, l, m, sal, st, sp, kib;
 	gint n, zp, lcib, mx, dr;
 	gchar s[5];
@@ -3158,10 +3158,12 @@ void static opd(GtkWidget *widget, gpointer data)
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(sws))) {kib=0; lcib=-1;}
 					else {kib=0; lcib=0;}
 					g_array_free(vis, TRUE);
-					vis=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
 					g_array_free(doms, TRUE);
-					doms=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
 					g_array_free(msr, TRUE);
+					g_array_free(bnx, TRUE);
+					g_array_free(bsz, TRUE);
+					vis=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
+					doms=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
 					msr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
 					{
@@ -10600,8 +10602,231 @@ void static opd(GtkWidget *widget, gpointer data)
 					fftw_destroy_plan(p);
 					fftw_free(y);
 					fftw_free(star);
+					bnx=g_array_new(FALSE, FALSE, sizeof(gint));
+					bsz=g_array_new(FALSE, FALSE, sizeof(gint));
+					dx2=0;
+					if ((flagd&2)==0)
+					{
+						if ((flagd&4)==0)
+						{
+							bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+							byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+							if ((flagd&16)==0)
+							{
+								if ((flagd&8)==0)
+								{
+									for (j=0; j<mx; j++)
+									{
+										xx=g_array_index(msr, gdouble, j);
+										g_array_append_val(bxr, xx);
+										xx=g_array_index(vis, gdouble, kdim+((jdim+(j*jdimx))*kdimx));
+										g_array_append_val(byr, xx);
+									}
+								}
+								else
+								{
+									for (j=0; j<mx; j++)
+									{
+										xx=g_array_index(msr, gdouble, j);
+										g_array_append_val(bxr, xx);
+										xx=g_array_index(doms, gdouble, kdim+((jdim+(j*jdimx))*kdimx));
+										g_array_append_val(byr, xx);
+									}
+								}
+							}
+							else
+							{
+								for (j=0; j<mx; j++)
+								{
+									xx=g_array_index(msr, gdouble, j);
+									g_array_append_val(bxr, xx);
+									xx=g_array_index(chp, gdouble, kdim+((jdim+(j*jdimx))*kdimx));
+									g_array_append_val(byr, xx);
+								}
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+						}
+						else
+						{
+							bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimx);
+							byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimx);
+							if ((flagd&16)==0)
+							{
+								if ((flagd&8)==0)
+								{
+									for (k=0; k<kdimx; k++)
+									{
+										for (j=0; j<mx; j++)
+										{
+											xx=g_array_index(msr, gdouble, j);
+											g_array_append_val(bxr, xx);
+											xx=g_array_index(vis, gdouble, k+((jdim+(j*jdimx))*kdimx));
+											g_array_append_val(byr, xx);
+										}
+										g_array_append_val(bsz, mx);
+										g_array_append_val(bnx, dx2);
+										dx2+=mx;
+									}
+								}
+								else
+								{
+									for (k=0; k<kdimx; k++)
+									{
+										for (j=0; j<mx; j++)
+										{
+											xx=g_array_index(msr, gdouble, j);
+											g_array_append_val(bxr, xx);
+											xx=g_array_index(doms, gdouble, k+((jdim+(j*jdimx))*kdimx));
+											g_array_append_val(byr, xx);
+										}
+										g_array_append_val(bsz, mx);
+										g_array_append_val(bnx, dx2);
+										dx2+=mx;
+									}
+								}
+							}
+							else
+							{
+								for (k=0; k<kdimx; k++)
+								{
+									for (j=0; j<mx; j++)
+									{
+										xx=g_array_index(msr, gdouble, j);
+										g_array_append_val(bxr, xx);
+										xx=g_array_index(chp, gdouble, k+((jdim+(j*jdimx))*kdimx));
+										g_array_append_val(byr, xx);
+									}
+									g_array_append_val(bsz, mx);
+									g_array_append_val(bnx, dx2);
+									dx2+=mx;
+								}
+							}
+						}
+					}
+					else if ((flagd&4)==0)
+					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimx);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimx);
+						if ((flagd&16)==0)
+						{
+							if ((flagd&8)==0)
+							{
+								for (k=0; k<jdimx; k++)
+								{
+									for (j=0; j<mx; j++)
+									{
+										xx=g_array_index(msr, gdouble, j);
+										g_array_append_val(bxr, xx);
+										xx=g_array_index(vis, gdouble, kdim+((k+(j*jdimx))*kdimx));
+										g_array_append_val(byr, xx);
+									}
+									g_array_append_val(bsz, mx);
+									g_array_append_val(bnx, dx2);
+									dx2+=mx;
+								}
+							}
+							else
+							{
+								for (k=0; k<jdimx; k++)
+								{
+									for (j=0; j<mx; j++)
+									{
+										xx=g_array_index(msr, gdouble, j);
+										g_array_append_val(bxr, xx);
+										xx=g_array_index(doms, gdouble, kdim+((k+(j*jdimx))*kdimx));
+										g_array_append_val(byr, xx);
+									}
+									g_array_append_val(bsz, mx);
+									g_array_append_val(bnx, dx2);
+									dx2+=mx;
+								}
+							}
+						}
+						else
+						{
+							for (k=0; k<jdimx; k++)
+							{
+								for (j=0; j<mx; j++)
+								{
+									xx=g_array_index(msr, gdouble, j);
+									g_array_append_val(bxr, xx);
+									xx=g_array_index(chp, gdouble, kdim+((k+(j*jdimx))*kdimx));
+									g_array_append_val(byr, xx);
+								}
+								g_array_append_val(bsz, mx);
+								g_array_append_val(bnx, dx2);
+								dx2+=mx;
+							}
+						}
+					}
+					else
+					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimx*kdimx);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimx*kdimx);
+						if ((flagd&16)==0)
+						{
+							if ((flagd&8)==0)
+							{
+								for (l=0; l<jdimx; l++)
+								{
+									for (k=0; k<kdimx; k++)
+									{
+										for (j=0; j<mx; j++)
+										{
+											xx=g_array_index(msr, gdouble, j);
+											g_array_append_val(bxr, xx);
+											xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+											g_array_append_val(byr, xx);
+										}
+										g_array_append_val(bsz, mx);
+										g_array_append_val(bnx, dx2);
+										dx2+=mx;
+									}
+								}
+							}
+							else
+							{
+								for (l=0; l<jdimx; l++)
+								{
+									for (k=0; k<kdimx; k++)
+									{
+										for (j=0; j<mx; j++)
+										{
+											xx=g_array_index(msr, gdouble, j);
+											g_array_append_val(bxr, xx);
+											xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+											g_array_append_val(byr, xx);
+										}
+										g_array_append_val(bsz, mx);
+										g_array_append_val(bnx, dx2);
+										dx2+=mx;
+									}
+								}
+							}
+						}
+						else
+						{
+							for (l=0; l<jdimx; l++)
+							{
+								for (k=0; k<kdimx; k++)
+								{
+									for (j=0; j<mx; j++)
+									{
+										xx=g_array_index(msr, gdouble, j);
+										g_array_append_val(bxr, xx);
+										xx=g_array_index(chp, gdouble, k+((l+(j*jdimx))*kdimx));
+										g_array_append_val(byr, xx);
+									}
+									g_array_append_val(bsz, mx);
+									g_array_append_val(bnx, dx2);
+									dx2+=mx;
+								}
+							}
+						}
+					}
 					dialog=gtk_dialog_new_with_buttons(_("Measurand Variable Type"), GTK_WINDOW(window), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Linear"), 1, _("Polar"), 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
-					cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
+					cont=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 					label=gtk_label_new(_("Select Parameter to save:"));
 					gtk_container_add(GTK_CONTAINER(cont), label);
 					switch (gtk_dialog_run(GTK_DIALOG(dialog)))
@@ -10633,11 +10858,11 @@ void static opd(GtkWidget *widget, gpointer data)
 							flags^=32;
 						}
 						plt=PLOT_LINEAR(plot3);
+						(plt->xdata)=bxr;
+						(plt->ydata)=byr;
+						(plt->sizes)=bsz;
+						(plt->ind)=bnx;
 						/*
-						(plt->xdata)=msr;
-						(plt->ydata)=;
-						(plt->sizes)=;
-						(plt->ind)=;
 						plot_linear_update_scale_pretty(plot3, xi, xf, mny, mxy);
 						 */
 						gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
@@ -10657,11 +10882,11 @@ void static opd(GtkWidget *widget, gpointer data)
 							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
 						}
 						plt2=PLOT_POLAR(plot3);
+						(plt2->thdata)=bxr;
+						(plt2->rdata)=byr;
 						/*
-						(plt2->thdata)=msr;
-						(plt2->rdata)=;
-						(plt2->sizes)=;
-						(plt2->ind)=;
+						(plt2->sizes)=bsz;
+						(plt2->ind)=bnx;
 						plot_polar_update_scale_pretty(plot3, xi, xf, mny, mxy);
 						 */
 						flags|=41;
