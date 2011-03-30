@@ -76,6 +76,9 @@
       <para>
         The box on the right controls whether to zoom in or out (arrows pointing out or in respectively). For the case of zooming in, the resultant image displayed in the plot is the image loosely fitted to the bounding click-drag-release box (loosely as the plot tries to fit the axes range to sensible power of ten multiples of 1, 2 and 5). For the case of zooming out, the resultant image is the extrapolation of shrinking the original entire plot into the bounding click-drag-release box.
       </para>
+      <para>
+        Multiple plots can be displayed and the title/size of the axes changed by selecting Display Properties in the Properties menu.
+      </para>
       <tip><title>tip</title>
         <para>
           If e.g you wanted to display more range to the top left of the graph then (with zoom out mode set) you would select a bounding box in the bottom right of the plot.
