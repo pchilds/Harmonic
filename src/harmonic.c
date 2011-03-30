@@ -40,7 +40,6 @@
  * OPD: config writer (+overwrite confirm)
  * OPD: unix and windows delimiter support
  * UPK: signal connect k index for displaying plot3
- * UPJ: signal connect j index for displaying plot3
  * BATCH: add polar capability to SAV/PRT etc.
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
@@ -67,7 +66,7 @@ GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *ncmp, *lcmp, *bat, *chi, *twopionx
 GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; /* widgets for windowing */
 GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *sz, *nx, *delf, *vis, *doms, *chp, *msr, *bxr, *byr, *bsz, *bnx; /* arrays for windowing and data */
 GSList *group2=NULL; /* list for various traces available */
-gint lc; /* number of data points */
+gint lc, mx; /* number of data points and number of files in batch routine */
 guint jdim=0, kdim=0, jdimx=0, kdimx=0, jdimxf=0, kdimxf=0, satl=0, trc=1, flags=0, flagd=0; /* array indices, #of traces, trace number, and current processing state and display flags */
 gulong pr_id; /* id for disabling/enabling post-transform processing */
 
@@ -3100,7 +3099,7 @@ void static opd(GtkWidget *widget, gpointer data)
 	GtkWidget *wfile, *dialog, *cont, *trace, *table, *label;
 	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, clc, dx2, xx;
 	guint j, k, l, m, sal, st, sp, kib;
-	gint n, zp, lcib, mx, dr;
+	gint n, zp, lcib, dr;
 	gchar s[5];
 	gchar *contents, *contents2, *str, *fin=NULL;
 	gchar **strary, **strary2, **strat, **strat2;
@@ -10752,7 +10751,7 @@ void static opd(GtkWidget *widget, gpointer data)
 					dx2=0;
 					if ((flagd&2)==0)
 					{
-						if ((flagd&4)==0)
+						if ((flagd&4)==0)/* single plot mode */
 						{
 							bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
 							byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
@@ -10813,7 +10812,7 @@ void static opd(GtkWidget *widget, gpointer data)
 							g_array_append_val(bsz, mx);
 							g_array_append_val(bnx, dx2);
 						}
-						else
+						else/* multiplot over k */
 						{
 							bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimx);
 							byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimx);
@@ -11265,8 +11264,8 @@ void static opd(GtkWidget *widget, gpointer data)
 						(plt2->thdata)=bxr;
 						(plt2->rdata)=byr;
 						(plt2->sizes)=bsz;
-						(plt2->ind)=bnx;	
-						plot_polar_update_scale_pretty(plot3, xi, xf, mny, mxy);
+						(plt2->ind)=bnx;
+						plot_polar_update_scale_pretty(plot3, mny, mxy, xi, xf);
 						flags|=41;
 						gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
 						gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 2);
@@ -11430,8 +11429,9 @@ void static upj(GtkWidget *widget, gpointer data)
 	 * If processing has been performed, updates the displayed value/plot
 	 */
 	PlotLinear *plt2, *plt3;
+	PlotPolar *plt4;
 	guint j, k, sz2;
-	gdouble num, num2, num3, num4, num5, num6, num7;
+	gdouble num, num2, num3, num4, num5, num6, num7, xi, xf, mny, mxy;
 	gdouble *ptr;
 	gchar s[10];
 	gchar *str;
@@ -11492,7 +11492,7 @@ void static upj(GtkWidget *widget, gpointer data)
 		if (((flags&2)!=0)&&((flagd&1)==0))
 		{
 			plt2=PLOT_LINEAR(plot2);
-			sz2=g_array_index((plt2->sizes), gint, 0);/* check if this works with desired multitrace capability */
+			sz2=g_array_index((plt2->sizes), gint, 0);
 			g_array_free(xsb, TRUE);
 			g_array_free(ysb, TRUE);
 			xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), sz2);
@@ -11527,23 +11527,142 @@ void static upj(GtkWidget *widget, gpointer data)
 			{
 				if ((flagd&2)==0)
 				{
+					g_array_free(byr, TRUE);
 					if ((flagd&4)==0)
 					{
-						if ((flags&32)!=0)
-						{ /* change polar plot3 */
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+						if ((flagd&16)==0)
+						{
+							if ((flagd&8)==0)
+							{
+								num3=g_array_index(vis, gdouble, kdim+(jdim*kdimxf));
+								g_array_append_val(byr, num3);
+								num4=num3;
+								for (j=1; j<mx; j++)
+								{
+									num=g_array_index(vis, gdouble, kdim+((jdim+(j*jdimxf))*kdimxf));
+									g_array_append_val(byr, num);
+									if (num>num4) num4=num;
+									else if (num<num3) num3=num;
+								}
+							}
+							else
+							{
+								num3=g_array_index(doms, gdouble, kdim+(jdim*kdimxf));
+								g_array_append_val(byr, num3);
+								num4=num3;
+								for (j=1; j<mx; j++)
+								{
+									num=g_array_index(doms, gdouble, kdim+((jdim+(j*jdimxf))*kdimxf));
+									g_array_append_val(byr, num);
+									if (num>num4) num4=num;
+									else if (num<num3) num3=num;
+								}
+							}
 						}
 						else
-						{ /* change plot3 */
+						{
+							num3=g_array_index(chp, gdouble, kdim+(jdim*kdimxf));
+							g_array_append_val(byr, num3);
+							num4=num3;
+							for (j=1; j<mx; j++)
+							{
+								num=g_array_index(chp, gdouble, kdim+((jdim+(j*jdimxf))*kdimxf));
+								g_array_append_val(byr, num);
+								if (num>num4) num4=num;
+								else if (num<num3) num3=num;
+							}
 						}
 					}
 					else/* multiplot over k */
 					{
-						if ((flags&32)!=0)
-						{ /* change polar plot3 */
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimx);
+						if ((flagd&16)==0)
+						{
+							if ((flagd&8)==0)
+							{
+								num3=g_array_index(vis, gdouble, (jdim*kdimxf));
+								g_array_append_val(byr, num3);
+								num4=num3;
+								for (j=1; j<mx; j++)
+								{
+									num=g_array_index(vis, gdouble, ((jdim+(j*jdimxf))*kdimxf));
+									g_array_append_val(byr, num);
+									if (num>num4) num4=num;
+									else if (num<num3) num3=num;
+								}
+								for (k=1; k<kdimxf; k++)
+								{
+									for (j=0; j<mx; j++)
+									{
+										num=g_array_index(vis, gdouble, k+((jdim+(j*jdimxf))*kdimxf));
+										g_array_append_val(byr, num);
+										if (num>num4) num4=num;
+										else if (num<num3) num3=num;
+									}
+								}
+							}
+							else
+							{
+								num3=g_array_index(doms, gdouble, (jdim*kdimxf));
+								g_array_append_val(byr, num3);
+								num4=num3;
+								for (j=1; j<mx; j++)
+								{
+									num=g_array_index(doms, gdouble, ((jdim+(j*jdimxf))*kdimxf));
+									g_array_append_val(byr, num);
+									if (num>num4) num4=num;
+									else if (num<num3) num3=num;
+								}
+								for (k=1; k<kdimxf; k++)
+								{
+									for (j=0; j<mx; j++)
+									{
+										num=g_array_index(doms, gdouble, k+((jdim+(j*jdimxf))*kdimxf));
+										g_array_append_val(byr, num);
+										if (num>num4) num4=num;
+										else if (num<num3) num3=num;
+									}
+								}
+							}
 						}
 						else
-						{ /* change plot3 */
+						{
+							num3=g_array_index(chp, gdouble, (jdim*kdimxf));
+							g_array_append_val(byr, num3);
+							num4=num3;
+							for (j=1; j<mx; j++)
+							{
+								num=g_array_index(chp, gdouble, ((jdim+(j*jdimxf))*kdimxf));
+								g_array_append_val(byr, num);
+								if (num>num4) num4=num;
+								else if (num<num3) num3=num;
+							}
+							for (k=1; k<kdimxf; k++)
+							{
+								for (j=0; j<mx; j++)
+								{
+									num=g_array_index(chp, gdouble, k+((jdim+(j*jdimxf))*kdimxf));
+									g_array_append_val(byr, num);
+									if (num>num4) num4=num;
+									else if (num<num3) num3=num;
+								}
+							}
 						}
+					}
+					if ((flags&32)==0)
+					{
+						plt3=PLOT_LINEAR(plot3);
+						(plt3->ydata)=byr;
+						g_object_get(G_OBJECT(plot3), "xmin", &num, "xmax", &num2, NULL);
+						plot_linear_update_scale_pretty(plot3, num, num2, num3, num4);
+					}
+					else
+					{
+						plt4=PLOT_POLAR(plot3);
+						(plt4->rdata)=byr;
+						g_object_get(G_OBJECT(plot3), "thmin", &num, "thmax", &num2, NULL);
+						plot_polar_update_scale_pretty(plot3, num3, num4, num, num2);
 					}
 				}
 			}
