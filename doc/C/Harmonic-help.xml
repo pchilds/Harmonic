@@ -54,7 +54,7 @@
       Use &app; to transform spectral data into the dual domain and analyse the resultant invere spectrum to extract properties such as fringe visibility, domain shifts and chirp.
     </para>
     <para>
-      For updates please visit <ulink type="http" url="https://www.github.com/pchilds/Harmonic">Harmonic's Github repository</ulink>
+      For updates please visit <ulink type="http" url="https://github.com/pchilds/Harmonic">Harmonic's Github repository</ulink>
     </para>
   </sect1>
   <sect1 id="base-domain"><title>The Base Domain</title>
@@ -68,7 +68,7 @@
     </sect2>
     <sect2><title>Navigating the Plots</title>
       <para>
-        Harmonic uses a customised plotting widget for displaying data. For further information and/or feedback see the documentation given in its <ulink type="http" url="https://www.github.com/pchilds/GtkPlot">repository</ulink>.
+        Harmonic uses a customised plotting widget for displaying data. For further information and/or feedback see the documentation given in its <ulink type="http" url="https://github.com/pchilds/GtkPlot">repository</ulink>.
       </para>
       <para>
         The range of the plot can be zoomed in and out (horizontally and/or vertically) according to the zoom mode selected by clicking on the two boxes in the top right corner of each plot. The box on the left controls whether zooming is to be performed in the horizontal direction only (when two dotted vertical lines are shown), in the vertical direction only (when two dotted horizontal lines are shown) or both horzontally and vertically (A dashed rectangle is shown). The range to zoom over is selecting by clicking at one corner/edge and draggin and releasing at the opposite corner/edge. For convenience, zooming can alternately be perfomed with a single click by toggling the setting in the left box until an X is displayed.

@@ -68,7 +68,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	PlotLinear *plot;
 	guint xs;
 	gint j, k, xw, yw, xr, xr2, yr, yr2, xa, ya, xl, yl, xu, yu, tf, tz, to, tn, tnn, xv, yv, xvn, yvn, dtt, tx, wd, hg, ft, lt;
-	gdouble dt, lr1, lr2, lr3;
+	gdouble vv, wv, zv, av, dt, lr1, lr2, lr3;
 	gchar *str1=NULL, *str2=".", *str3=NULL;
 	gchar lbl[10];
 	cairo_text_extents_t extents;
@@ -2446,14 +2446,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			cairo_set_line_width(cr, (plot->linew));
 			if (((plot->flagd)&2)!=0) /* lines and points */
 			{
-				for (k=0;k<(plot->ind->len);k++)
+				for (k=0; k<(plot->ind->len); k++)
 				{
 					dtt=fmod(k,(priv->rd->len));
-					ft=g_array_index((priv->rd), gdouble, dtt);
-					lt=g_array_index((priv->gr), gdouble, dtt);
-					xv=g_array_index((priv->bl), gdouble, dtt);
-					yv=g_array_index((priv->al), gdouble, dtt);
-					cairo_set_source_rgba(cr, ft, lt, xv, 0.8);
+					vv=g_array_index((priv->rd), gdouble, dtt);
+					wv=g_array_index((priv->gr), gdouble, dtt);
+					zv=g_array_index((priv->bl), gdouble, dtt);
+					av=g_array_index((priv->al), gdouble, dtt);
+					cairo_set_source_rgba(cr, vv, wv, zv, av);
 					ft=g_array_index((plot->ind), gint, k);
 					lt=g_array_index((plot->sizes), gint, k)+ft;
 					xv=xl+((xu-xl)*(g_array_index((plot->xdata), gdouble, ft)-(priv->bounds.xmin))/((priv->bounds.xmax)-(priv->bounds.xmin)));
@@ -2802,11 +2802,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				for (k=0;k<(plot->ind->len);k++)
 				{
 					dtt=fmod(k,(priv->rd->len));
-					ft=g_array_index((priv->rd), gdouble, dtt);
-					lt=g_array_index((priv->gr), gdouble, dtt);
-					xv=g_array_index((priv->bl), gdouble, dtt);
-					yv=g_array_index((priv->al), gdouble, dtt);
-					cairo_set_source_rgba(cr, ft, lt, xv, 0.8);
+					vv=g_array_index((priv->rd), gdouble, dtt);
+					wv=g_array_index((priv->gr), gdouble, dtt);
+					zv=g_array_index((priv->bl), gdouble, dtt);
+					av=g_array_index((priv->al), gdouble, dtt);
+					cairo_set_source_rgba(cr, vv, wv, zv, av);
 					ft=g_array_index((plot->ind), gint, k);
 					lt=g_array_index((plot->sizes), gint, k)+ft;
 					xv=xl+((xu-xl)*(g_array_index((plot->xdata), gdouble, ft)-(priv->bounds.xmin))/((priv->bounds.xmax)-(priv->bounds.xmin)));
@@ -3162,11 +3162,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			for (k=0;k<(plot->ind->len);k++)
 			{
 				dtt=fmod(k,(priv->rd->len));
-				ft=g_array_index((priv->rd), gdouble, dtt);
-				lt=g_array_index((priv->gr), gdouble, dtt);
-				xv=g_array_index((priv->bl), gdouble, dtt);
-				yv=g_array_index((priv->al), gdouble, dtt);
-				cairo_set_source_rgba(cr, ft, lt, xv, 0.8);
+				vv=g_array_index((priv->rd), gdouble, dtt);
+				wv=g_array_index((priv->gr), gdouble, dtt);
+				zv=g_array_index((priv->bl), gdouble, dtt);
+				av=g_array_index((priv->al), gdouble, dtt);
+				cairo_set_source_rgba(cr, vv, wv, zv, av);
 				ft=g_array_index((plot->ind), gint, k);
 				lt=g_array_index((plot->sizes), gint, k)+ft;
 				xv=xl+((xu-xl)*(g_array_index(plot->xdata, gdouble, ft)-(priv->bounds.xmin))/((priv->bounds.xmax)-(priv->bounds.xmin)));
