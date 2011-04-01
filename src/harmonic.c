@@ -545,7 +545,6 @@ void static dpr(GtkWidget *widget, gpointer data)
 					if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3))) flagd|=4;
 				}
 			}
-			gtk_widget_destroy(helpwin);
 			break;
 			case 1:
 			table=gtk_table_new(4, 2, FALSE);
@@ -814,7 +813,6 @@ void static dpr(GtkWidget *widget, gpointer data)
 					plot_linear_update_scale(plot2, xi, xf, mny, mxy);
 				}
 			}
-			gtk_widget_destroy(helpwin);
 			break;
 			default:
 			table=gtk_table_new(4, 2, FALSE);
@@ -1092,10 +1090,10 @@ void static dpr(GtkWidget *widget, gpointer data)
 					plot_linear_update_scale(plot1, xi, xf, mny, mxy);
 				}
 			}
-			gtk_widget_destroy(helpwin);
 			break;
 		}
 	}
+	gtk_widget_destroy(helpwin);
 }
 
 void static prt(GtkWidget *widget, gpointer data)
@@ -3278,7 +3276,8 @@ void static opd(GtkWidget *widget, gpointer data)
 {
 	PlotLinear *plt;
 	PlotPolar *plt2;
-	GtkWidget *wfile, *dialog, *cont, *trace, *table, *label;
+	GtkWidget *wfile, *dialog, *content, *vbox, *table, *spin, *butt, *label, *cont, *trace;
+	GtkAdjustment *adj;
 	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, clc, dx2, xx;
 	guint j, k, l, m, sal, st, sp, kib;
 	gint n, zp, lcib, dr;
@@ -3313,10 +3312,34 @@ void static opd(GtkWidget *widget, gpointer data)
 			if (dr==GTK_RESPONSE_APPLY)
 			{
 				fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile)); /* overwrite confirmation? */
-				/*
-				
-				 */
-				dr=GTK_RESPONSE_ACCEPT;
+				dialog=gtk_dialog_new_with_buttons(_("Configuration file generation"), GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_APPLY, NULL);
+				g_signal_connect_swapped(G_OBJECT(dialog), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(dialog));
+				gtk_widget_show(dialog);
+				content=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+				vbox=gtk_vbox_new(FALSE, 0);
+				gtk_widget_show(vbox);
+				table=gtk_table_new(2, 2, FALSE);
+				gtk_widget_show(table);
+				label=gtk_label_new(_("Measurand\nValue:"));
+				gtk_widget_show(label);
+				gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+				label=gtk_label_new(_("File:"));
+				gtk_widget_show(label);
+				gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+				adj=(GtkAdjustment *) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+				spin=gtk_spin_button_new(adj, 0, 0);
+				gtk_widget_show(spin);
+				gtk_table_attach(GTK_TABLE(table), spin, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+				butt=gtk_button_new(); /* thread to control updating table? */
+				gtk_widget_show(butt);
+				gtk_table_attach(GTK_TABLE(table), butt, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+				gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
+				gtk_container_add(GTK_CONTAINER(content), vbox);
+				if (gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_APPLY)
+				{
+					dr=GTK_RESPONSE_ACCEPT;
+				}
+				gtk_widget_destroy(dialog);
 			}
 			if (dr!=GTK_RESPONSE_ACCEPT) gtk_widget_destroy(wfile);
 			else
