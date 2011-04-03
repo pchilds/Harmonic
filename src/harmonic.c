@@ -34,9 +34,7 @@
  * TO DO:
  *
  * DPR: change to be nonmodal
- * DPR: handling of plot3 and vis/doms/chp selector
  * OPD: config writer (+overwrite confirm)
- * OPD: unix/windows/mac delimiter support
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
  * SAVE: case for batch processed data
@@ -57,7 +55,11 @@
 #define NMY_2PI -6.2831853071795864769252867665590057683943387987502
 #define NMY_PI -3.1415926535897932384626433832795028841971693993751
 #define LNTOT 0.23025850929940456840179914546843642076011014886288 /* (ln10)/10 */
-#define DLMT "\n"
+#ifdef G_OS_WIN32
+#	define DLMT "\r\n"
+#else
+#	define DLMT "\n"
+#endif
 
 GtkWidget *window, *tr, *zpd, *pr, *tracmenu, *trac, *fst, *notebook, *notebook2, *plot1, *plot2, *plot3, *statusbar, *rest, *visl, *dsl, *chil;
 GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *ncmp, *lcmp, *bat, *chi, *twopionx, *opttri, *trans, *dBs, *neg;
@@ -106,7 +108,7 @@ void static dpr(GtkWidget *widget, gpointer data)
 	PlotLinear *plt;
 	PlotPolar *plt2;
 	gdouble xi, xf, mny, mxy, iv, clc, rcn, thc;
-	gint dx, dx2, j, k;
+	gint dx, dx2, j, k, l, bl1, bl2, bl3;
 	gchar *str;
 	
 	helpwin=gtk_dialog_new_with_buttons(_("Display Properties"), GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, GTK_STOCK_APPLY, GTK_RESPONSE_APPLY, NULL);
@@ -181,135 +183,484 @@ void static dpr(GtkWidget *widget, gpointer data)
 			(plt2->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
 			(plt2->afsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin2));
 			g_object_get(G_OBJECT(plot3), "thmin", &xi, "thmax", &xf, "rmin", &mny, "rmax", &mxy, "rcnt", &rcn, "thcnt", &thc, NULL);
-			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2)))
+			bl1=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2));
+			bl2=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3));
+			bl3=gtk_combo_box_get_active(GTK_COMBO_BOX(ck4));
+			if ((bl1==((flagd&2)==0))||(bl2==((flagd&4)==0))||((bl3*8)!=(flagd&24)))
 			{
-				if ((flagd&2)==0)/* expand arrays over j*/
+				g_array_free(bxr, TRUE);
+				g_array_free(byr, TRUE);
+				g_array_free(bsz, TRUE);
+				g_array_free(bnx, TRUE);
+				dx2=0;
+				if (bl3==0)
 				{
-					flagd^=2;
-					if ((flagd&4)==0)
+					if (bl1)
 					{
-						if ((flagd&16)==0)
+						if (bl2)
 						{
-							if ((flagd&8)==0)
+							iv=g_array_index(msr, gdouble, 0);
+							g_array_append_val(bxr, iv);
+							mny=g_array_index(vis, gdouble, 0);
+							g_array_append_val(byr, mny);
+							mxy=mny;
+							for (j=1; j<mx; j++)
 							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(vis, gdouble, (j*jdimxf*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
 							}
-							else
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+							for (k=1; k<kdimxf; k++)
 							{
+								for (j=0; j<mx; j++)
+								{
+									iv=g_array_index(msr, gdouble, j);
+									g_array_append_val(bxr, iv);
+									iv=g_array_index(vis, gdouble, k+(j*jdimxf*kdimxf));
+									g_array_append_val(byr, iv);
+									if (iv>mxy) mxy=iv;
+									else if (iv<mny) mny=iv;
+								}
+								g_array_append_val(bsz, mx);
+								g_array_append_val(bnx, dx2);
+								dx2+=mx;
 							}
+							for (l=1; l<jdimxf; l++)
+							{
+								for (k=0; k<kdimxf; k++)
+								{
+									for (j=0; j<mx; j++)
+									{
+										iv=g_array_index(msr, gdouble, j);
+										g_array_append_val(bxr, iv);
+										iv=g_array_index(vis, gdouble, k+((l+(j*jdimxf))*kdimxf));
+										g_array_append_val(byr, iv);
+										if (iv>mxy) mxy=iv;
+										else if (iv<mny) mny=iv;
+									}
+									g_array_append_val(bsz, mx);
+									g_array_append_val(bnx, dx2);
+									dx2+=mx;
+								}
+							}
+							flagd&=1;
+							flagd|=6;
 						}
 						else
 						{
+							iv=g_array_index(msr, gdouble, 0);
+							g_array_append_val(bxr, iv);
+							mny=g_array_index(vis, gdouble, kdim);
+							g_array_append_val(byr, mny);
+							mxy=mny;
+							for (j=1; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(vis, gdouble, kdim+(j*jdimxf*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+							for (k=1; k<jdimxf; k++)
+							{
+								for (j=0; j<mx; j++)
+								{
+									iv=g_array_index(msr, gdouble, j);
+									g_array_append_val(bxr, iv);
+									iv=g_array_index(vis, gdouble, kdim+((k+(j*jdimxf))*kdimxf));
+									g_array_append_val(byr, iv);
+									if (iv>mxy) mxy=iv;
+									else if (iv<mny) mny=iv;
+								}
+								g_array_append_val(bsz, mx);
+								g_array_append_val(bnx, dx2);
+								dx2+=mx;
+							}
+							flagd&=1;
+							flagd|=2;
 						}
 					}
-					else if ((flagd&16)==0)
+					else if (bl2)
 					{
-						if ((flagd&8)==0)
+						iv=g_array_index(msr, gdouble, 0);
+						g_array_append_val(bxr, iv);
+						mny=g_array_index(vis, gdouble, (jdim*kdimxf));
+						g_array_append_val(byr, mny);
+						mxy=mny;
+						for (j=1; j<mx; j++)
 						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(vis, gdouble, ((jdim+(j*jdimxf))*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
 						}
-						else
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						dx2+=mx;
+						for (k=1; k<kdimxf; k++)
 						{
+							for (j=0; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(vis, gdouble, k+((jdim+(j*jdimxf))*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
 						}
+						flagd&=1;
+						flagd|=4;
 					}
 					else
 					{
+						iv=g_array_index(msr, gdouble, 0);
+						g_array_append_val(bxr, iv);
+						mny=g_array_index(vis, gdouble, kdim+(jdim*kdimxf));
+						g_array_append_val(byr, mny);
+						mxy=mny;
+						for (j=1; j<mx; j++)
+						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(vis, gdouble, kdim+((jdim+(j*jdimxf))*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						flagd&=1;
 					}
 				}
-			}
-			else if ((flagd&2)!=0)/* shrink j variable of arrays */
-			{
-				flagd^=2;
-				if ((flagd&4)==0)
+				else if (bl3==1)
 				{
-					if ((flagd&16)==0)
+					if (bl1)
 					{
-						if ((flagd&8)==0)
+						if (bl2)
 						{
+							iv=g_array_index(msr, gdouble, 0);
+							g_array_append_val(bxr, iv);
+							mny=g_array_index(doms, gdouble, 0);
+							g_array_append_val(byr, mny);
+							mxy=mny;
+							for (j=1; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(doms, gdouble, (j*jdimxf*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+							for (k=1; k<kdimxf; k++)
+							{
+								for (j=0; j<mx; j++)
+								{
+									iv=g_array_index(msr, gdouble, j);
+									g_array_append_val(bxr, iv);
+									iv=g_array_index(doms, gdouble, k+(j*jdimxf*kdimxf));
+									g_array_append_val(byr, iv);
+									if (iv>mxy) mxy=iv;
+									else if (iv<mny) mny=iv;
+								}
+								g_array_append_val(bsz, mx);
+								g_array_append_val(bnx, dx2);
+								dx2+=mx;
+							}
+							for (l=1; l<jdimxf; l++)
+							{
+								for (k=0; k<kdimxf; k++)
+								{
+									for (j=0; j<mx; j++)
+									{
+										iv=g_array_index(msr, gdouble, j);
+										g_array_append_val(bxr, iv);
+										iv=g_array_index(doms, gdouble, k+((l+(j*jdimxf))*kdimxf));
+										g_array_append_val(byr, iv);
+										if (iv>mxy) mxy=iv;
+										else if (iv<mny) mny=iv;
+									}
+									g_array_append_val(bsz, mx);
+									g_array_append_val(bnx, dx2);
+									dx2+=mx;
+								}
+							}
+							flagd&=1;
+							flagd|=14;
 						}
 						else
 						{
+							iv=g_array_index(msr, gdouble, 0);
+							g_array_append_val(bxr, iv);
+							mny=g_array_index(doms, gdouble, kdim);
+							g_array_append_val(byr, mny);
+							mxy=mny;
+							for (j=1; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(doms, gdouble, kdim+(j*jdimxf*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+							for (k=1; k<jdimxf; k++)
+							{
+								for (j=0; j<mx; j++)
+								{
+									iv=g_array_index(msr, gdouble, j);
+									g_array_append_val(bxr, iv);
+									iv=g_array_index(doms, gdouble, kdim+((k+(j*jdimxf))*kdimxf));
+									g_array_append_val(byr, iv);
+									if (iv>mxy) mxy=iv;
+									else if (iv<mny) mny=iv;
+								}
+								g_array_append_val(bsz, mx);
+								g_array_append_val(bnx, dx2);
+								dx2+=mx;
+							}
+							flagd&=1;
+							flagd|=10;
 						}
 					}
+					else if (bl2)
+					{
+						iv=g_array_index(msr, gdouble, 0);
+						g_array_append_val(bxr, iv);
+						mny=g_array_index(doms, gdouble, (jdim*kdimxf));
+						g_array_append_val(byr, mny);
+						mxy=mny;
+						for (j=1; j<mx; j++)
+						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(doms, gdouble, ((jdim+(j*jdimxf))*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						dx2+=mx;
+						for (k=1; k<kdimxf; k++)
+						{
+							for (j=0; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(doms, gdouble, k+((jdim+(j*jdimxf))*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+						}
+						flagd&=1;
+						flagd|=12;
+					}
 					else
 					{
+						iv=g_array_index(msr, gdouble, 0);
+						g_array_append_val(bxr, iv);
+						mny=g_array_index(doms, gdouble, kdim+(jdim*kdimxf));
+						g_array_append_val(byr, mny);
+						mxy=mny;
+						for (j=1; j<mx; j++)
+						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(doms, gdouble, kdim+((jdim+(j*jdimxf))*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						flagd&=1;
+						flagd|=8;
 					}
 				}
-				else if ((flagd&16)==0)
+				else if (bl1)
 				{
-					if ((flagd&8)==0)
+					if (bl2)
 					{
+						iv=g_array_index(msr, gdouble, 0);
+						g_array_append_val(bxr, iv);
+						mny=g_array_index(chp, gdouble, 0);
+						g_array_append_val(byr, mny);
+						mxy=mny;
+						for (j=1; j<mx; j++)
+						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(chp, gdouble, (j*jdimxf*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						dx2+=mx;
+						for (k=1; k<kdimxf; k++)
+						{
+							for (j=0; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(chp, gdouble, k+(j*jdimxf*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+						}
+						for (l=1; l<jdimxf; l++)
+						{
+							for (k=0; k<kdimxf; k++)
+							{
+								for (j=0; j<mx; j++)
+								{
+									iv=g_array_index(msr, gdouble, j);
+									g_array_append_val(bxr, iv);
+									iv=g_array_index(chp, gdouble, k+((l+(j*jdimxf))*kdimxf));
+									g_array_append_val(byr, iv);
+									if (iv>mxy) mxy=iv;
+									else if (iv<mny) mny=iv;
+								}
+								g_array_append_val(bsz, mx);
+								g_array_append_val(bnx, dx2);
+								dx2+=mx;
+							}
+						}
+						flagd&=1;
+						flagd|=22;
 					}
 					else
 					{
+						iv=g_array_index(msr, gdouble, 0);
+						g_array_append_val(bxr, iv);
+						mny=g_array_index(chp, gdouble, kdim);
+						g_array_append_val(byr, mny);
+						mxy=mny;
+						for (j=1; j<mx; j++)
+						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(chp, gdouble, kdim+(j*jdimxf*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						dx2+=mx;
+						for (k=1; k<jdimxf; k++)
+						{
+							for (j=0; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(chp, gdouble, kdim+((k+(j*jdimxf))*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+						}
+						flagd&=1;
+						flagd|=18;
 					}
+				}
+				else if (bl2)
+				{
+					iv=g_array_index(msr, gdouble, 0);
+					g_array_append_val(bxr, iv);
+					mny=g_array_index(chp, gdouble, (jdim*kdimxf));
+					g_array_append_val(byr, mny);
+					mxy=mny;
+					for (j=1; j<mx; j++)
+					{
+						iv=g_array_index(msr, gdouble, j);
+						g_array_append_val(bxr, iv);
+						iv=g_array_index(chp, gdouble, ((jdim+(j*jdimxf))*kdimxf));
+						g_array_append_val(byr, iv);
+						if (iv>mxy) mxy=iv;
+						else if (iv<mny) mny=iv;
+					}
+					g_array_append_val(bsz, mx);
+					g_array_append_val(bnx, dx2);
+					dx2+=mx;
+					for (k=1; k<kdimxf; k++)
+					{
+						for (j=0; j<mx; j++)
+						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(chp, gdouble, k+((jdim+(j*jdimxf))*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						dx2+=mx;
+					}
+					flagd&=1;
+					flagd|=20;
 				}
 				else
 				{
+					iv=g_array_index(msr, gdouble, 0);
+					g_array_append_val(bxr, iv);
+					mny=g_array_index(chp, gdouble, kdim+(jdim*kdimxf));
+					g_array_append_val(byr, mny);
+					mxy=mny;
+					for (j=1; j<mx; j++)
+					{
+						iv=g_array_index(msr, gdouble, j);
+						g_array_append_val(bxr, iv);
+						iv=g_array_index(chp, gdouble, kdim+((jdim+(j*jdimxf))*kdimxf));
+						g_array_append_val(byr, iv);
+						if (iv>mxy) mxy=iv;
+						else if (iv<mny) mny=iv;
+					}
+					g_array_append_val(bsz, mx);
+					g_array_append_val(bnx, dx2);
+					flagd&=1;
+					flagd|=16;
 				}
-			}
-			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3)))
-			{
-				if ((flagd&4)==0)/* expand arrays over k*/
-				{
-					flagd^=4;
-					if ((flagd&2)==0)
-					{
-						if ((flagd&16)==0)
-						{
-							if ((flagd&8)==0)
-							{
-							}
-							else
-							{
-							}
-						}
-						else
-						{
-						}
-					}
-					else if ((flagd&16)==0)
-					{
-						if ((flagd&8)==0)
-						{
-						}
-						else
-						{
-						}
-					}
-					else
-					{
-					}
-				}
-			}
-			else if ((flagd&4)!=0)/* shrink k variable of arrays */
-			{
-				flagd^=4;
-				if ((flagd&2)==0)
-				{
-					if ((flagd&16)==0)
-					{
-						if ((flagd&8)==0)
-						{
-						}
-						else
-						{
-						}
-					}
-					else
-					{
-					}
-				}
-				else if ((flagd&16)==0)
-				{
-					if ((flagd&8)==0)
-					{
-					}
-					else
-					{
-					}
-				}
-				else
-				{
-				}
+				(plt2->thdata)=bxr;
+				(plt2->rdata)=byr;
+				(plt2->sizes)=bsz;
+				(plt2->ind)=bnx;
 			}
 			plot_polar_update_scale(plot3, mny, mxy, xi, xf, rcn, thc);
 		}
@@ -380,135 +731,483 @@ void static dpr(GtkWidget *widget, gpointer data)
 			(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
 			(plt->afsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin2));
 			g_object_get(G_OBJECT(plot3), "xmin", &xi, "xmax", &xf, "ymin", &mny, "ymax", &mxy, NULL);
-			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2)))
+			bl1=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2));
+			bl2=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3));
+			bl3=gtk_combo_box_get_active(GTK_COMBO_BOX(ck4));
+			if ((bl1==((flagd&2)==0))||(bl2==((flagd&4)==0))||((bl3*8)!=(flagd&24)))
 			{
-				if ((flagd&2)==0)/* expand arrays over j*/
+				g_array_free(bxr, TRUE);
+				g_array_free(byr, TRUE);
+				g_array_free(bsz, TRUE);
+				g_array_free(bnx, TRUE);
+				if (bl3==0)
 				{
-					flagd^=2;
-					if ((flagd&4)==0)
+					if (bl1)
 					{
-						if ((flagd&16)==0)
+						if (bl2)
 						{
-							if ((flagd&8)==0)
+							iv=g_array_index(msr, gdouble, 0);
+							g_array_append_val(bxr, iv);
+							mny=g_array_index(vis, gdouble, 0);
+							g_array_append_val(byr, mny);
+							mxy=mny;
+							for (j=1; j<mx; j++)
 							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(vis, gdouble, (j*jdimxf*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
 							}
-							else
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+							for (k=1; k<kdimxf; k++)
 							{
+								for (j=0; j<mx; j++)
+								{
+									iv=g_array_index(msr, gdouble, j);
+									g_array_append_val(bxr, iv);
+									iv=g_array_index(vis, gdouble, k+(j*jdimxf*kdimxf));
+									g_array_append_val(byr, iv);
+									if (iv>mxy) mxy=iv;
+									else if (iv<mny) mny=iv;
+								}
+								g_array_append_val(bsz, mx);
+								g_array_append_val(bnx, dx2);
+								dx2+=mx;
 							}
+							for (l=1; l<jdimxf; l++)
+							{
+								for (k=0; k<kdimxf; k++)
+								{
+									for (j=0; j<mx; j++)
+									{
+										iv=g_array_index(msr, gdouble, j);
+										g_array_append_val(bxr, iv);
+										iv=g_array_index(vis, gdouble, k+((l+(j*jdimxf))*kdimxf));
+										g_array_append_val(byr, iv);
+										if (iv>mxy) mxy=iv;
+										else if (iv<mny) mny=iv;
+									}
+									g_array_append_val(bsz, mx);
+									g_array_append_val(bnx, dx2);
+									dx2+=mx;
+								}
+							}
+							flagd&=1;
+							flagd|=6;
 						}
 						else
 						{
+							iv=g_array_index(msr, gdouble, 0);
+							g_array_append_val(bxr, iv);
+							mny=g_array_index(vis, gdouble, kdim);
+							g_array_append_val(byr, mny);
+							mxy=mny;
+							for (j=1; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(vis, gdouble, kdim+(j*jdimxf*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+							for (k=1; k<jdimxf; k++)
+							{
+								for (j=0; j<mx; j++)
+								{
+									iv=g_array_index(msr, gdouble, j);
+									g_array_append_val(bxr, iv);
+									iv=g_array_index(vis, gdouble, kdim+((k+(j*jdimxf))*kdimxf));
+									g_array_append_val(byr, iv);
+									if (iv>mxy) mxy=iv;
+									else if (iv<mny) mny=iv;
+								}
+								g_array_append_val(bsz, mx);
+								g_array_append_val(bnx, dx2);
+								dx2+=mx;
+							}
+							flagd&=1;
+							flagd|=2;
 						}
 					}
-					else if ((flagd&16)==0)
+					else if (bl2)
 					{
-						if ((flagd&8)==0)
+						iv=g_array_index(msr, gdouble, 0);
+						g_array_append_val(bxr, iv);
+						mny=g_array_index(vis, gdouble, (jdim*kdimxf));
+						g_array_append_val(byr, mny);
+						mxy=mny;
+						for (j=1; j<mx; j++)
 						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(vis, gdouble, ((jdim+(j*jdimxf))*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
 						}
-						else
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						dx2+=mx;
+						for (k=1; k<kdimxf; k++)
 						{
+							for (j=0; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(vis, gdouble, k+((jdim+(j*jdimxf))*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
 						}
+						flagd&=1;
+						flagd|=4;
 					}
 					else
 					{
+						iv=g_array_index(msr, gdouble, 0);
+						g_array_append_val(bxr, iv);
+						mny=g_array_index(vis, gdouble, kdim+(jdim*kdimxf));
+						g_array_append_val(byr, mny);
+						mxy=mny;
+						for (j=1; j<mx; j++)
+						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(vis, gdouble, kdim+((jdim+(j*jdimxf))*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						flagd&=1;
 					}
 				}
-			}
-			else if ((flagd&2)!=0)/* shrink j variable of arrays */
-			{
-				flagd^=2;
-				if ((flagd&4)==0)
+				else if (bl3==1)
 				{
-					if ((flagd&16)==0)
+					if (bl1)
 					{
-						if ((flagd&8)==0)
+						if (bl2)
 						{
+							iv=g_array_index(msr, gdouble, 0);
+							g_array_append_val(bxr, iv);
+							mny=g_array_index(doms, gdouble, 0);
+							g_array_append_val(byr, mny);
+							mxy=mny;
+							for (j=1; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(doms, gdouble, (j*jdimxf*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+							for (k=1; k<kdimxf; k++)
+							{
+								for (j=0; j<mx; j++)
+								{
+									iv=g_array_index(msr, gdouble, j);
+									g_array_append_val(bxr, iv);
+									iv=g_array_index(doms, gdouble, k+(j*jdimxf*kdimxf));
+									g_array_append_val(byr, iv);
+									if (iv>mxy) mxy=iv;
+									else if (iv<mny) mny=iv;
+								}
+								g_array_append_val(bsz, mx);
+								g_array_append_val(bnx, dx2);
+								dx2+=mx;
+							}
+							for (l=1; l<jdimxf; l++)
+							{
+								for (k=0; k<kdimxf; k++)
+								{
+									for (j=0; j<mx; j++)
+									{
+										iv=g_array_index(msr, gdouble, j);
+										g_array_append_val(bxr, iv);
+										iv=g_array_index(doms, gdouble, k+((l+(j*jdimxf))*kdimxf));
+										g_array_append_val(byr, iv);
+										if (iv>mxy) mxy=iv;
+										else if (iv<mny) mny=iv;
+									}
+									g_array_append_val(bsz, mx);
+									g_array_append_val(bnx, dx2);
+									dx2+=mx;
+								}
+							}
+							flagd&=1;
+							flagd|=14;
 						}
 						else
 						{
+							iv=g_array_index(msr, gdouble, 0);
+							g_array_append_val(bxr, iv);
+							mny=g_array_index(doms, gdouble, kdim);
+							g_array_append_val(byr, mny);
+							mxy=mny;
+							for (j=1; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(doms, gdouble, kdim+(j*jdimxf*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+							for (k=1; k<jdimxf; k++)
+							{
+								for (j=0; j<mx; j++)
+								{
+									iv=g_array_index(msr, gdouble, j);
+									g_array_append_val(bxr, iv);
+									iv=g_array_index(doms, gdouble, kdim+((k+(j*jdimxf))*kdimxf));
+									g_array_append_val(byr, iv);
+									if (iv>mxy) mxy=iv;
+									else if (iv<mny) mny=iv;
+								}
+								g_array_append_val(bsz, mx);
+								g_array_append_val(bnx, dx2);
+								dx2+=mx;
+							}
+							flagd&=1;
+							flagd|=10;
 						}
 					}
+					else if (bl2)
+					{
+						iv=g_array_index(msr, gdouble, 0);
+						g_array_append_val(bxr, iv);
+						mny=g_array_index(doms, gdouble, (jdim*kdimxf));
+						g_array_append_val(byr, mny);
+						mxy=mny;
+						for (j=1; j<mx; j++)
+						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(doms, gdouble, ((jdim+(j*jdimxf))*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						dx2+=mx;
+						for (k=1; k<kdimxf; k++)
+						{
+							for (j=0; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(doms, gdouble, k+((jdim+(j*jdimxf))*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+						}
+						flagd&=1;
+						flagd|=12;
+					}
 					else
 					{
+						iv=g_array_index(msr, gdouble, 0);
+						g_array_append_val(bxr, iv);
+						mny=g_array_index(doms, gdouble, kdim+(jdim*kdimxf));
+						g_array_append_val(byr, mny);
+						mxy=mny;
+						for (j=1; j<mx; j++)
+						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(doms, gdouble, kdim+((jdim+(j*jdimxf))*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						flagd&=1;
+						flagd|=8;
 					}
 				}
-				else if ((flagd&16)==0)
+				else if (bl1)
 				{
-					if ((flagd&8)==0)
+					if (bl2)
 					{
+						iv=g_array_index(msr, gdouble, 0);
+						g_array_append_val(bxr, iv);
+						mny=g_array_index(chp, gdouble, 0);
+						g_array_append_val(byr, mny);
+						mxy=mny;
+						for (j=1; j<mx; j++)
+						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(chp, gdouble, (j*jdimxf*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						dx2+=mx;
+						for (k=1; k<kdimxf; k++)
+						{
+							for (j=0; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(chp, gdouble, k+(j*jdimxf*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+						}
+						for (l=1; l<jdimxf; l++)
+						{
+							for (k=0; k<kdimxf; k++)
+							{
+								for (j=0; j<mx; j++)
+								{
+									iv=g_array_index(msr, gdouble, j);
+									g_array_append_val(bxr, iv);
+									iv=g_array_index(chp, gdouble, k+((l+(j*jdimxf))*kdimxf));
+									g_array_append_val(byr, iv);
+									if (iv>mxy) mxy=iv;
+									else if (iv<mny) mny=iv;
+								}
+								g_array_append_val(bsz, mx);
+								g_array_append_val(bnx, dx2);
+								dx2+=mx;
+							}
+						}
+						flagd&=1;
+						flagd|=22;
 					}
 					else
 					{
+						iv=g_array_index(msr, gdouble, 0);
+						g_array_append_val(bxr, iv);
+						mny=g_array_index(chp, gdouble, kdim);
+						g_array_append_val(byr, mny);
+						mxy=mny;
+						for (j=1; j<mx; j++)
+						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(chp, gdouble, kdim+(j*jdimxf*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						dx2+=mx;
+						for (k=1; k<jdimxf; k++)
+						{
+							for (j=0; j<mx; j++)
+							{
+								iv=g_array_index(msr, gdouble, j);
+								g_array_append_val(bxr, iv);
+								iv=g_array_index(chp, gdouble, kdim+((k+(j*jdimxf))*kdimxf));
+								g_array_append_val(byr, iv);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, mx);
+							g_array_append_val(bnx, dx2);
+							dx2+=mx;
+						}
+						flagd&=1;
+						flagd|=18;
 					}
+				}
+				else if (bl2)
+				{
+					iv=g_array_index(msr, gdouble, 0);
+					g_array_append_val(bxr, iv);
+					mny=g_array_index(chp, gdouble, (jdim*kdimxf));
+					g_array_append_val(byr, mny);
+					mxy=mny;
+					for (j=1; j<mx; j++)
+					{
+						iv=g_array_index(msr, gdouble, j);
+						g_array_append_val(bxr, iv);
+						iv=g_array_index(chp, gdouble, ((jdim+(j*jdimxf))*kdimxf));
+						g_array_append_val(byr, iv);
+						if (iv>mxy) mxy=iv;
+						else if (iv<mny) mny=iv;
+					}
+					g_array_append_val(bsz, mx);
+					g_array_append_val(bnx, dx2);
+					dx2+=mx;
+					for (k=1; k<kdimxf; k++)
+					{
+						for (j=0; j<mx; j++)
+						{
+							iv=g_array_index(msr, gdouble, j);
+							g_array_append_val(bxr, iv);
+							iv=g_array_index(chp, gdouble, k+((jdim+(j*jdimxf))*kdimxf));
+							g_array_append_val(byr, iv);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						g_array_append_val(bsz, mx);
+						g_array_append_val(bnx, dx2);
+						dx2+=mx;
+					}
+					flagd&=1;
+					flagd|=20;
 				}
 				else
 				{
+					iv=g_array_index(msr, gdouble, 0);
+					g_array_append_val(bxr, iv);
+					mny=g_array_index(chp, gdouble, kdim+(jdim*kdimxf));
+					g_array_append_val(byr, mny);
+					mxy=mny;
+					for (j=1; j<mx; j++)
+					{
+						iv=g_array_index(msr, gdouble, j);
+						g_array_append_val(bxr, iv);
+						iv=g_array_index(chp, gdouble, kdim+((jdim+(j*jdimxf))*kdimxf));
+						g_array_append_val(byr, iv);
+						if (iv>mxy) mxy=iv;
+						else if (iv<mny) mny=iv;
+					}
+					g_array_append_val(bsz, mx);
+					g_array_append_val(bnx, dx2);
+					flagd&=1;
+					flagd|=16;
 				}
-			}
-			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3)))
-			{
-				if ((flagd&4)==0)/* expand arrays over k*/
-				{
-					flagd^=4;
-					if ((flagd&2)==0)
-					{
-						if ((flagd&16)==0)
-						{
-							if ((flagd&8)==0)
-							{
-							}
-							else
-							{
-							}
-						}
-						else
-						{
-						}
-					}
-					else if ((flagd&16)==0)
-					{
-						if ((flagd&8)==0)
-						{
-						}
-						else
-						{
-						}
-					}
-					else
-					{
-					}
-				}
-			}
-			else if ((flagd&4)!=0)/* shrink k variable of arrays */
-			{
-				flagd^=4;
-				if ((flagd&2)==0)
-				{
-					if ((flagd&16)==0)
-					{
-						if ((flagd&8)==0)
-						{
-						}
-						else
-						{
-						}
-					}
-					else
-					{
-					}
-				}
-				else if ((flagd&16)==0)
-				{
-					if ((flagd&8)==0)
-					{
-					}
-					else
-					{
-					}
-				}
-				else
-				{
-				}
+				(plt->xdata)=bxr;
+				(plt->ydata)=byr;
+				(plt->sizes)=bsz;
+				(plt->ind)=bnx;
 			}
 			plot_linear_update_scale(plot3, xi, xf, mny, mxy);
 		}
@@ -586,11 +1285,12 @@ void static dpr(GtkWidget *widget, gpointer data)
 			gtk_table_attach(GTK_TABLE(table), spin2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 			gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
+			ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck), (flagd&1));
+			gtk_widget_show(ck);
+			gtk_box_pack_start(GTK_BOX(vbox), ck, FALSE, FALSE, 2);
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(bat)))
 			{
-				ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
-				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck), (flagd&1));
-				gtk_widget_show(ck);
 				ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck2), (flagd&2));
 				gtk_widget_show(ck2);
@@ -707,10 +1407,6 @@ void static dpr(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
-				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck), (flagd&1));
-				gtk_widget_show(ck);
-				gtk_box_pack_start(GTK_BOX(vbox), ck, FALSE, FALSE, 2);
 				gtk_container_add(GTK_CONTAINER(content), vbox);
 				if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 				{
@@ -854,12 +1550,12 @@ void static dpr(GtkWidget *widget, gpointer data)
 			gtk_table_attach(GTK_TABLE(table), spin2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 			gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
+			ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck), (flagd&1));
+			gtk_widget_show(ck);
+			gtk_box_pack_start(GTK_BOX(vbox), ck, FALSE, FALSE, 2);
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(bat)))
 			{
-				ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
-				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck), (flagd&1));
-				gtk_widget_show(ck);
-				gtk_box_pack_start(GTK_BOX(vbox), ck, FALSE, FALSE, 2);
 				ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck2), (flagd&2));
 				gtk_widget_show(ck2);
@@ -980,10 +1676,6 @@ void static dpr(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
-				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck), (flagd&1));
-				gtk_widget_show(ck);
-				gtk_box_pack_start(GTK_BOX(vbox), ck, FALSE, FALSE, 2);
 				gtk_container_add(GTK_CONTAINER(content), vbox);
 				if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 				{
@@ -3348,7 +4040,7 @@ void static opd(GtkWidget *widget, gpointer data)
 				gtk_widget_destroy(wfile);
 				if (g_file_get_contents(fin, &contents2, NULL, &Err))
 				{
-					strary2=g_strsplit_set(contents2, "\r\n", 0);/*combine delimiters?*/
+					strary2=g_strsplit_set(contents2, DLMT, 0);
 					mx=g_strv_length(strary2);
 					zp=1<<(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(zpd)));
 					n=zp*(jdimx+1);
@@ -12243,7 +12935,7 @@ void static upk(GtkWidget *widget, gpointer data)
 									g_array_append_val(byr, num);
 									if (num>num4) num4=num;
 									else if (num<num3) num3=num;
-								}	
+								}
 							}
 							else
 							{
@@ -12256,7 +12948,7 @@ void static upk(GtkWidget *widget, gpointer data)
 									g_array_append_val(byr, num);
 									if (num>num4) num4=num;
 									else if (num<num3) num3=num;
-								}								
+								}
 							}
 						}
 						else
@@ -12270,7 +12962,7 @@ void static upk(GtkWidget *widget, gpointer data)
 								g_array_append_val(byr, num);
 								if (num>num4) num4=num;
 								else if (num<num3) num3=num;
-							}								
+							}
 						}
 					}
 					else/* multiplot over j */
@@ -12418,85 +13110,19 @@ void static upa1(GtkWidget *widget, gpointer data)
 
 void static reset(GtkWidget *widget, gpointer data)
 {
-	gdouble num;
-
-	jdim=0;
-	jdimx=0;
-	kdim=0;
-	kdimx=0;
-	num=0;
+	{jdim=0; jdimx=0; kdim=0; kdimx=0;}
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), 0);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
-	num=g_array_index(bsra, gdouble, 0);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(bsr), num);
-	g_array_free(bsra, TRUE);
-	bsra=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	g_array_append_val(bsra, num);
-	num=g_array_index(bspa, gdouble, 0);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(bsp), num);
-	g_array_free(bspa, TRUE);
-	bspa=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	g_array_append_val(bspa, num);
-	num=g_array_index(zwa, gdouble, 0);
-	g_array_free(zwa, TRUE);
-	zwa=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	g_array_append_val(zwa, num);
-	num=g_array_index(isra, gdouble, 0);
-	g_array_free(isra, TRUE);
-	isra=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	g_array_append_val(isra, num);
-	num=g_array_index(ispa, gdouble, 0);
-	g_array_free(ispa, TRUE);
-	ispa=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	g_array_append_val(ispa, num);
-	num=g_array_index(tca, gdouble, 0);
-	g_array_free(tca, TRUE);
-	tca=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	g_array_append_val(tca, num);
-	num=g_array_index(twa, gdouble, 0);
-	g_array_free(twa, TRUE);
-	twa=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	g_array_append_val(twa, num);
+	{(bsra->len)=1; (bspa->len)=1;}
+	{(isra->len)=1; (ispa->len)=1; (tca->len)=1; (twa->len)=1; (zwa->len)=1;}
 }
 
 void static reset2(GtkWidget *widget, gpointer data)
 {
-	gdouble num, num2, num3, num4, num5;
-	guint j;
-
-	jdim=0;
-	kdim=0;
-	kdimx=0;
+	{jdim=0; kdim=0; kdimx=0;}
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), 0);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
-	num=g_array_index(isra, gdouble, 0);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(isr), num);
-	g_array_free(isra, TRUE);
-	isra=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	num2=g_array_index(ispa, gdouble, 0);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(isp), num2);
-	g_array_free(ispa, TRUE);
-	ispa=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	num3=g_array_index(tca, gdouble, 0);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(tc), num3);
-	g_array_free(tca, TRUE);
-	tca=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	num4=g_array_index(twa, gdouble, 0);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(tw), num4);
-	g_array_free(twa, TRUE);
-	twa=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	num5=g_array_index(zwa, gdouble, 0);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(zw), num5);
-	g_array_free(zwa, TRUE);
-	zwa=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	for (j=0; j<=jdimx; j++)
-	{
-		g_array_append_val(isra, num);
-		g_array_append_val(ispa, num2);
-		g_array_append_val(tca, num3);
-		g_array_append_val(twa, num4);
-		g_array_append_val(zwa, num5);
-	}
+	{(isra->len)=jdimx+1; (ispa->len)=jdimx+1; (tca->len)=jdimx+1; (twa->len)=jdimx+1;}
 }
 
 int main( int argc, char *argv[])
@@ -12655,6 +13281,9 @@ int main( int argc, char *argv[])
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), mnu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnb), mni);
 	gtk_menu_item_right_justify(GTK_MENU_ITEM(mni));
+	hpane=gtk_hpaned_new();
+	gtk_widget_show(hpane);
+	gtk_container_add(GTK_CONTAINER(vbox), hpane);
 	bsra=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	bspa=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	isra=g_array_new(FALSE, FALSE, sizeof(gdouble));
@@ -12663,15 +13292,15 @@ int main( int argc, char *argv[])
 	twa=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	zwa=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	g_array_append_val(bsra, fll);
+	fll++;
 	g_array_append_val(bspa, fll);
 	g_array_append_val(isra, fll);
-	g_array_append_val(ispa, fll);
+	fll++;
 	g_array_append_val(tca, fll);
 	g_array_append_val(twa, fll);
 	g_array_append_val(zwa, fll);
-	hpane=gtk_hpaned_new();
-	gtk_widget_show(hpane);
-	gtk_container_add(GTK_CONTAINER(vbox), hpane);
+	fll++;
+	g_array_append_val(ispa, fll);
 	notebook=gtk_notebook_new();
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(notebook), GTK_POS_TOP);
 	table=gtk_table_new(5, 3, FALSE);
@@ -12728,7 +13357,7 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("Inverse Spectrum Start:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment *) gtk_adjustment_new(1, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 	isr=gtk_spin_button_new(adj, 0.5, 3);
 	g_signal_connect(G_OBJECT(isr), "value-changed", G_CALLBACK(upa2), (gpointer) isra);
 	gtk_table_attach(GTK_TABLE(table), isr, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -12736,7 +13365,7 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("Inverse Spectrum Stop:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(1, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment *) gtk_adjustment_new(3, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 	isp=gtk_spin_button_new(adj, 0.5, 3);
 	g_signal_connect(G_OBJECT(isp), "value-changed", G_CALLBACK(upa2), (gpointer) ispa);
 	gtk_table_attach(GTK_TABLE(table), isp, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -12744,7 +13373,7 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("Triangle Centre:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment *) gtk_adjustment_new(2, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 	tc=gtk_spin_button_new(adj, 0.5, 3);
 	g_signal_connect(G_OBJECT(tc), "value-changed", G_CALLBACK(upa2), (gpointer) tca);
 	gtk_table_attach(GTK_TABLE(table), tc, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);

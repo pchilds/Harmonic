@@ -1,12 +1,11 @@
 Known Bugs/Issues
 -----------------
-Unable to vary the alpha of plots
 
 Future Proposals
 ----------------
-* Batch processing
-* Help dialog
 * config writer
+* nonmodal display properties window
 * invert to 2pi/
 * triangle optimisation
+* saving data
 * translations
