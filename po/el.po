@@ -7,21 +7,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-04-01 15:23+0300\n"
-"PO-Revision-Date: 2011-04-01 15:33+0300\n"
+"POT-Creation-Date: 2011-04-04 20:58+0300\n"
+"PO-Revision-Date: 2011-04-04 21:09+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
-"Language-Team: Greek\n"
+"Language-Team: Greek <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/harmonic.c:82
+#: src/harmonic.c:86
 msgid "Could not load help files."
 msgstr "Δεν ήταν δυνατή η φόρτωση αρχεία βοήθειας."
 
-#: src/harmonic.c:97
+#: src/harmonic.c:101
 msgid ""
 "Harmonic is a program for performing harmonic analysis (e.g. Fourier "
 "analysis) and obtaining visibility of fringes, domain shift and chirp "
@@ -31,152 +31,154 @@ msgstr ""
 "Φουριερ) και απόκτησης προβολή της κρόσσια στροφή τομέα και μετρήσεις "
 "τερέτισμα."
 
-#: src/harmonic.c:112
+#: src/harmonic.c:116
 msgid "Display Properties"
 msgstr "Ιδιότητες εμφάνισης"
 
-#: src/harmonic.c:122 src/harmonic.c:321 src/harmonic.c:552 src/harmonic.c:820
+#: src/harmonic.c:126 src/harmonic.c:674 src/harmonic.c:1253
+#: src/harmonic.c:1518
 msgid "Text size:"
 msgstr "Μέγεθος κειμένου:"
 
-#: src/harmonic.c:125 src/harmonic.c:324 src/harmonic.c:555 src/harmonic.c:823
+#: src/harmonic.c:129 src/harmonic.c:677 src/harmonic.c:1256
+#: src/harmonic.c:1521
 msgid "Tick label size:"
 msgstr "Μέγεθος ετικέτας:"
 
-#: src/harmonic.c:132
+#: src/harmonic.c:136
 msgid "Radial axis text:"
 msgstr "Κείμενο για τον ακτινικό άξονα:"
 
-#: src/harmonic.c:135
+#: src/harmonic.c:139
 msgid "Azimuthal axis text:"
 msgstr "Κείμενο για τον αζιμουθιακό άξονα:"
 
-#: src/harmonic.c:160 src/harmonic.c:359 src/harmonic.c:524
-#: src/harmonic.c:1260 src/harmonic.c:1324 src/harmonic.c:11784
-#: src/harmonic.c:12816
+#: src/harmonic.c:164 src/harmonic.c:712 src/harmonic.c:1225
+#: src/harmonic.c:1954 src/harmonic.c:2018 src/harmonic.c:28026
+#: src/harmonic.c:29015
 msgid "Visibility"
 msgstr "Προβολή"
 
-#: src/harmonic.c:161 src/harmonic.c:360 src/harmonic.c:525
-#: src/harmonic.c:1260 src/harmonic.c:1324 src/harmonic.c:11790
-#: src/harmonic.c:12822
+#: src/harmonic.c:165 src/harmonic.c:713 src/harmonic.c:1226
+#: src/harmonic.c:1954 src/harmonic.c:2018 src/harmonic.c:28032
+#: src/harmonic.c:29021
 msgid "Domain Shift"
 msgstr "Μετατόπιση περιοχών"
 
-#: src/harmonic.c:163 src/harmonic.c:362 src/harmonic.c:527
-#: src/harmonic.c:1260 src/harmonic.c:2013 src/harmonic.c:2267
+#: src/harmonic.c:167 src/harmonic.c:715 src/harmonic.c:1228
+#: src/harmonic.c:1954 src/harmonic.c:2707 src/harmonic.c:2961
 msgid "Chirp"
 msgstr "Τερέτισμα"
 
-#: src/harmonic.c:166 src/harmonic.c:365 src/harmonic.c:530 src/harmonic.c:594
-#: src/harmonic.c:863
+#: src/harmonic.c:170 src/harmonic.c:718 src/harmonic.c:1231
+#: src/harmonic.c:1296 src/harmonic.c:1561
 msgid "Multiple plots for Results over index j"
 msgstr "Πολλαπλές επιφάνειες για τα αποτελέσματα πάνω δείκτη η"
 
-#: src/harmonic.c:170 src/harmonic.c:369 src/harmonic.c:534 src/harmonic.c:598
-#: src/harmonic.c:867
+#: src/harmonic.c:174 src/harmonic.c:722 src/harmonic.c:1235
+#: src/harmonic.c:1300 src/harmonic.c:1565
 msgid "Multiple plots for Results over index k"
 msgstr "Πολλαπλές επιφάνειες για τα αποτελέσματα πάνω δείκτη ζ"
 
-#: src/harmonic.c:331 src/harmonic.c:562 src/harmonic.c:830
+#: src/harmonic.c:684 src/harmonic.c:1263 src/harmonic.c:1528
 msgid "X axis text:"
 msgstr "Κείμενο για τον άξονα Χ:"
 
-#: src/harmonic.c:334 src/harmonic.c:565 src/harmonic.c:833
+#: src/harmonic.c:687 src/harmonic.c:1266 src/harmonic.c:1531
 msgid "Y axis text:"
 msgstr "Κείμενο για τον άξονα Υ:"
 
-#: src/harmonic.c:591 src/harmonic.c:710 src/harmonic.c:859 src/harmonic.c:983
+#: src/harmonic.c:1290 src/harmonic.c:1555
 msgid "Multiple plots for Inverse Domain"
 msgstr "Πολλαπλές επιφάνειες για την αντίστροφη περιοχή"
 
-#: src/harmonic.c:1110 src/harmonic.c:1128 src/harmonic.c:1145
-#: src/harmonic.c:1171 src/harmonic.c:1188 src/harmonic.c:1214
+#: src/harmonic.c:1804 src/harmonic.c:1822 src/harmonic.c:1839
+#: src/harmonic.c:1865 src/harmonic.c:1882 src/harmonic.c:1908
 msgid "Select Image File"
 msgstr "Επιλέξτε το αρχείο εικόνας"
 
-#: src/harmonic.c:1163 src/harmonic.c:1206 src/harmonic.c:1231
+#: src/harmonic.c:1857 src/harmonic.c:1900 src/harmonic.c:1925
 msgid "No available image."
 msgstr "Δεν υπάρχουν διαθέσιμες εικόνα."
 
-#: src/harmonic.c:1254 src/harmonic.c:1318 src/harmonic.c:1369
-#: src/harmonic.c:1534 src/harmonic.c:1700 src/harmonic.c:11767
+#: src/harmonic.c:1948 src/harmonic.c:2012 src/harmonic.c:2063
+#: src/harmonic.c:2228 src/harmonic.c:2394 src/harmonic.c:28009
 msgid "Select Data File"
 msgstr "Επιλέξτε το αρχείο δεδομένων"
 
-#: src/harmonic.c:1260 src/harmonic.c:1324 src/harmonic.c:1375
-#: src/harmonic.c:1540 src/harmonic.c:1706
+#: src/harmonic.c:1954 src/harmonic.c:2018 src/harmonic.c:2069
+#: src/harmonic.c:2234 src/harmonic.c:2400
 msgid "Parameter selection"
 msgstr "Παράμετρος επιλογής"
 
-#: src/harmonic.c:1262 src/harmonic.c:1326 src/harmonic.c:1377
-#: src/harmonic.c:1542 src/harmonic.c:1708 src/harmonic.c:11686
+#: src/harmonic.c:1956 src/harmonic.c:2020 src/harmonic.c:2071
+#: src/harmonic.c:2236 src/harmonic.c:2402 src/harmonic.c:27928
 msgid "Select Parameter to save:"
 msgstr "Επιλέξτε την παράμετρο για να αποθηκεύσετε:"
 
-#: src/harmonic.c:1382 src/harmonic.c:1547 src/harmonic.c:1713
+#: src/harmonic.c:2076 src/harmonic.c:2241 src/harmonic.c:2407
 msgid "INVERSE_D\tREAL_VAL \tIMAG_VAL "
 msgstr "ΑΝΤΙ_ΠΕΡΧ\tΠΡΑΓ_ΤΙΜ \tΦΑΝΤ_ΤΙΜ "
 
-#: src/harmonic.c:1436 src/harmonic.c:1510 src/harmonic.c:1601
-#: src/harmonic.c:1675 src/harmonic.c:1767 src/harmonic.c:1841
+#: src/harmonic.c:2130 src/harmonic.c:2204 src/harmonic.c:2295
+#: src/harmonic.c:2369 src/harmonic.c:2461 src/harmonic.c:2535
 #, c-format
-msgid "Error Saving file: %s"
-msgstr "Σφάλμα κατά την αποθήκευση αρχείου: %s"
+msgid "Error Saving file: %s."
+msgstr "Σφάλμα κατά την αποθήκευση αρχείου: %s."
 
-#: src/harmonic.c:1444 src/harmonic.c:1609 src/harmonic.c:1775
+#: src/harmonic.c:2138 src/harmonic.c:2303 src/harmonic.c:2469
 msgid "INVERSE_D\tMAGNITUDE\tPHASE    "
 msgstr "ΑΝΤΙ_ΠΕΡΧ\tΜΕΓΕΘΟΣ  \tΦΑΣΗ     "
 
-#: src/harmonic.c:1526 src/harmonic.c:1691 src/harmonic.c:1856
+#: src/harmonic.c:2220 src/harmonic.c:2385 src/harmonic.c:2550
 msgid "No available processed data."
 msgstr "Δεν υπάρχουν διαθέσιμα δεδομένα που τυγχάνουν επεξεργασίας."
 
-#: src/harmonic.c:2003 src/harmonic.c:2115 src/harmonic.c:2257
-#: src/harmonic.c:2361
+#: src/harmonic.c:2697 src/harmonic.c:2809 src/harmonic.c:2951
+#: src/harmonic.c:3055
 #, c-format
 msgid "Insufficient windowing range in channel %d, %d."
 msgstr "Ανεπαρκής παράθυρων κυμαίνονται στο κανάλι %d, %d."
 
-#: src/harmonic.c:2393
+#: src/harmonic.c:3087
 msgid "No transform for analysis exists yet."
 msgstr "Δεν μετασχηματισμό για την ανάλυση υπάρχει ακόμα."
 
-#: src/harmonic.c:2444 src/harmonic.c:2465 src/harmonic.c:2487
-#: src/harmonic.c:2508 src/harmonic.c:2530 src/harmonic.c:2551
-#: src/harmonic.c:2572 src/harmonic.c:2598 src/harmonic.c:2619
-#: src/harmonic.c:2641 src/harmonic.c:2662 src/harmonic.c:2684
-#: src/harmonic.c:2705 src/harmonic.c:2726 src/harmonic.c:2754
-#: src/harmonic.c:2786 src/harmonic.c:2819 src/harmonic.c:2842
-#: src/harmonic.c:2874 src/harmonic.c:2912 src/harmonic.c:2946
-#: src/harmonic.c:2975 src/harmonic.c:3004 src/harmonic.c:3027
-#: src/harmonic.c:3059 src/harmonic.c:3095
+#: src/harmonic.c:3138 src/harmonic.c:3159 src/harmonic.c:3181
+#: src/harmonic.c:3202 src/harmonic.c:3224 src/harmonic.c:3245
+#: src/harmonic.c:3266 src/harmonic.c:3292 src/harmonic.c:3313
+#: src/harmonic.c:3335 src/harmonic.c:3356 src/harmonic.c:3378
+#: src/harmonic.c:3399 src/harmonic.c:3420 src/harmonic.c:3448
+#: src/harmonic.c:3480 src/harmonic.c:3513 src/harmonic.c:3536
+#: src/harmonic.c:3568 src/harmonic.c:3606 src/harmonic.c:3640
+#: src/harmonic.c:3669 src/harmonic.c:3698 src/harmonic.c:3721
+#: src/harmonic.c:3753 src/harmonic.c:3789
 #, c-format
 msgid "Some clipping occured in channel %d. Increase zero padding."
 msgstr "Μερικές ψαλίδισμα εμφανίστηκαν σε κανάλι %d. Αύξηση μηδέν παραγέμισμα."
 
-#: src/harmonic.c:2857 src/harmonic.c:2895 src/harmonic.c:3042
-#: src/harmonic.c:3078 src/harmonic.c:6272 src/harmonic.c:6473
-#: src/harmonic.c:7436 src/harmonic.c:7635 src/harmonic.c:10017
-#: src/harmonic.c:10174 src/harmonic.c:10917 src/harmonic.c:11073
+#: src/harmonic.c:3551 src/harmonic.c:3589 src/harmonic.c:3736
+#: src/harmonic.c:3772 src/harmonic.c:22514 src/harmonic.c:22715
+#: src/harmonic.c:23678 src/harmonic.c:23877 src/harmonic.c:26259
+#: src/harmonic.c:26416 src/harmonic.c:27159 src/harmonic.c:27315
 msgid "Offset must be nonzero for linear measurements."
 msgstr ""
 "Όφσετ πρέπει να είναι διαφορετική από το μηδέν για γραμμικές μετρήσεις."
 
-#: src/harmonic.c:3215
+#: src/harmonic.c:3909
 msgid "Open a file for analysis first."
 msgstr "Ανοίξτε ένα αρχείο για ανάλυση πρώτη."
 
-#: src/harmonic.c:3261 src/harmonic.c:3270
+#: src/harmonic.c:3955 src/harmonic.c:3964
 #, c-format
 msgid "x: %f, y: %f"
 msgstr "x: %f, y: %f"
 
-#: src/harmonic.c:3297
+#: src/harmonic.c:3991
 msgid "Perform an initial test of the parameters first."
 msgstr "Εκτελέστε μια πρώτη δοκιμή των παραμέτρων πρώτη."
 
-#: src/harmonic.c:3303
+#: src/harmonic.c:3997
 msgid ""
 "Parameters have changed since the last test. Retest with the current values "
 "first."
@@ -184,112 +186,144 @@ msgstr ""
 "Οι παράμετροι έχουν αλλάξει από την τελευταία δοκιμή. Επανεξετάστε με τις "
 "ισχύουσες τιμές πρώτα."
 
-#: src/harmonic.c:3309
+#: src/harmonic.c:4003
 msgid "Select Config File"
 msgstr "Επιλέξτε το αρχείο ρυθμίσεων"
 
-#: src/harmonic.c:3315
+#: src/harmonic.c:4009
 msgid "Configuration file generation"
 msgstr "Διαμόρφωση δημιουργία αρχείων"
 
-#: src/harmonic.c:3323
+#: src/harmonic.c:4017
 msgid ""
 "Measurand\n"
 "Value:"
 msgstr "Μετρούμενο αξία"
 
-#: src/harmonic.c:3326
+#: src/harmonic.c:4020
 msgid "File:"
 msgstr "Αρχείο:"
 
-#: src/harmonic.c:3552 src/harmonic.c:3729 src/harmonic.c:3905
-#: src/harmonic.c:4080 src/harmonic.c:4256 src/harmonic.c:4431
-#: src/harmonic.c:4611 src/harmonic.c:4786 src/harmonic.c:4962
-#: src/harmonic.c:5137 src/harmonic.c:5313 src/harmonic.c:5488
-#: src/harmonic.c:5690 src/harmonic.c:5885 src/harmonic.c:6072
-#: src/harmonic.c:6258 src/harmonic.c:6459 src/harmonic.c:6659
-#: src/harmonic.c:6858 src/harmonic.c:7049 src/harmonic.c:7236
-#: src/harmonic.c:7422 src/harmonic.c:7621 src/harmonic.c:7816
-#: src/harmonic.c:7958 src/harmonic.c:8089 src/harmonic.c:8221
-#: src/harmonic.c:8352 src/harmonic.c:8484 src/harmonic.c:8615
-#: src/harmonic.c:8751 src/harmonic.c:8882 src/harmonic.c:9014
-#: src/harmonic.c:9145 src/harmonic.c:9277 src/harmonic.c:9408
-#: src/harmonic.c:9567 src/harmonic.c:9718 src/harmonic.c:9861
-#: src/harmonic.c:10003 src/harmonic.c:10160 src/harmonic.c:10316
-#: src/harmonic.c:10470 src/harmonic.c:10617 src/harmonic.c:10760
-#: src/harmonic.c:10902 src/harmonic.c:11058 src/harmonic.c:11210
-#: src/harmonic.c:11755 src/harmonic.c:11887
+#: src/harmonic.c:4248 src/harmonic.c:4423 src/harmonic.c:4599
+#: src/harmonic.c:4774 src/harmonic.c:4950 src/harmonic.c:5125
+#: src/harmonic.c:5305 src/harmonic.c:5480 src/harmonic.c:5656
+#: src/harmonic.c:5831 src/harmonic.c:6007 src/harmonic.c:6182
+#: src/harmonic.c:6384 src/harmonic.c:6579 src/harmonic.c:6766
+#: src/harmonic.c:6952 src/harmonic.c:7145 src/harmonic.c:7336
+#: src/harmonic.c:7532 src/harmonic.c:7723 src/harmonic.c:7910
+#: src/harmonic.c:8096 src/harmonic.c:8287 src/harmonic.c:8473
+#: src/harmonic.c:8614 src/harmonic.c:8745 src/harmonic.c:8877
+#: src/harmonic.c:9008 src/harmonic.c:9140 src/harmonic.c:9271
+#: src/harmonic.c:9407 src/harmonic.c:9538 src/harmonic.c:9670
+#: src/harmonic.c:9801 src/harmonic.c:9933 src/harmonic.c:10064
+#: src/harmonic.c:10223 src/harmonic.c:10374 src/harmonic.c:10517
+#: src/harmonic.c:10659 src/harmonic.c:10808 src/harmonic.c:10955
+#: src/harmonic.c:11108 src/harmonic.c:11255 src/harmonic.c:11398
+#: src/harmonic.c:11540 src/harmonic.c:11688 src/harmonic.c:11831
+#: src/harmonic.c:12022 src/harmonic.c:12197 src/harmonic.c:12373
+#: src/harmonic.c:12548 src/harmonic.c:12724 src/harmonic.c:12899
+#: src/harmonic.c:13079 src/harmonic.c:13254 src/harmonic.c:13430
+#: src/harmonic.c:13605 src/harmonic.c:13781 src/harmonic.c:13956
+#: src/harmonic.c:14158 src/harmonic.c:14353 src/harmonic.c:14540
+#: src/harmonic.c:14726 src/harmonic.c:14919 src/harmonic.c:15110
+#: src/harmonic.c:15306 src/harmonic.c:15497 src/harmonic.c:15684
+#: src/harmonic.c:15870 src/harmonic.c:16061 src/harmonic.c:16247
+#: src/harmonic.c:16388 src/harmonic.c:16519 src/harmonic.c:16651
+#: src/harmonic.c:16782 src/harmonic.c:16914 src/harmonic.c:17045
+#: src/harmonic.c:17181 src/harmonic.c:17312 src/harmonic.c:17444
+#: src/harmonic.c:17575 src/harmonic.c:17707 src/harmonic.c:17838
+#: src/harmonic.c:17997 src/harmonic.c:18148 src/harmonic.c:18291
+#: src/harmonic.c:18433 src/harmonic.c:18582 src/harmonic.c:18729
+#: src/harmonic.c:18882 src/harmonic.c:19029 src/harmonic.c:19172
+#: src/harmonic.c:19314 src/harmonic.c:19462 src/harmonic.c:19605
+#: src/harmonic.c:19794 src/harmonic.c:19971 src/harmonic.c:20147
+#: src/harmonic.c:20322 src/harmonic.c:20498 src/harmonic.c:20673
+#: src/harmonic.c:20853 src/harmonic.c:21028 src/harmonic.c:21204
+#: src/harmonic.c:21379 src/harmonic.c:21555 src/harmonic.c:21730
+#: src/harmonic.c:21932 src/harmonic.c:22127 src/harmonic.c:22314
+#: src/harmonic.c:22500 src/harmonic.c:22701 src/harmonic.c:22901
+#: src/harmonic.c:23100 src/harmonic.c:23291 src/harmonic.c:23478
+#: src/harmonic.c:23664 src/harmonic.c:23863 src/harmonic.c:24058
+#: src/harmonic.c:24200 src/harmonic.c:24331 src/harmonic.c:24463
+#: src/harmonic.c:24594 src/harmonic.c:24726 src/harmonic.c:24857
+#: src/harmonic.c:24993 src/harmonic.c:25124 src/harmonic.c:25256
+#: src/harmonic.c:25387 src/harmonic.c:25519 src/harmonic.c:25650
+#: src/harmonic.c:25809 src/harmonic.c:25960 src/harmonic.c:26103
+#: src/harmonic.c:26245 src/harmonic.c:26402 src/harmonic.c:26558
+#: src/harmonic.c:26712 src/harmonic.c:26859 src/harmonic.c:27002
+#: src/harmonic.c:27144 src/harmonic.c:27300 src/harmonic.c:27452
+#: src/harmonic.c:27997 src/harmonic.c:28129
 #, c-format
-msgid "Loading failed for file: %s, Error: %s"
-msgstr "Φόρτωση απέτυχε για αυτό το αρχείο: %s, Σφάλμα: %s"
+msgid "Loading failed for file: %s, Error: %s."
+msgstr "Φόρτωση απέτυχε για αυτό το αρχείο: %s, Σφάλμα: %s."
 
-#: src/harmonic.c:11684
+#: src/harmonic.c:27926
 msgid "Measurand Variable Type"
 msgstr "Παράμετρος για την ανάλυση"
 
-#: src/harmonic.c:11684
+#: src/harmonic.c:27926
 msgid "Linear"
 msgstr "Γραμμική"
 
-#: src/harmonic.c:11684
+#: src/harmonic.c:27926
 msgid "Polar"
 msgstr "Πολικός"
 
-#: src/harmonic.c:11700 src/harmonic.c:11713 src/harmonic.c:11736
-#: src/harmonic.c:11796 src/harmonic.c:12828
+#: src/harmonic.c:27942 src/harmonic.c:27955 src/harmonic.c:27978
+#: src/harmonic.c:28038 src/harmonic.c:29027
 msgid "Analysis Results"
 msgstr "Αποτελέσματα της ανάλυσης"
 
-#: src/harmonic.c:11868
+#: src/harmonic.c:28110
 #, c-format
-msgid "File: %s successfully loaded"
-msgstr "Αρχείο: %s φορτωθεί επιτυχώς"
+msgid "File: %s successfully loaded."
+msgstr "Αρχείο: %s φορτωθεί επιτυχώς."
 
-#: src/harmonic.c:12518
+#: src/harmonic.c:28694
 msgid "Harmonic Spectrum Analyser"
 msgstr "Αρμονική αναλυτής φάσματος"
 
-#: src/harmonic.c:12552
+#: src/harmonic.c:28728
 msgid "_File"
 msgstr "_Αρχείο"
 
-#: src/harmonic.c:12575
+#: src/harmonic.c:28751
 msgid "Raw Delimited Data"
 msgstr "Πρώτες οριοθετημένη δεδομένα "
 
-#: src/harmonic.c:12579
+#: src/harmonic.c:28755
 msgid "Data Format:"
 msgstr "Μορφή δεδομένων"
 
-#: src/harmonic.c:12584
+#: src/harmonic.c:28760
 msgid "Trace:"
 msgstr "Ίχνος:"
 
-#: src/harmonic.c:12588
+#: src/harmonic.c:28767
 msgid "Transmission Measurement?"
 msgstr "Μέτρηση της μετάδοσης;"
 
-#: src/harmonic.c:12592
+#: src/harmonic.c:28771
 msgid "Data in dBs?"
 msgstr "Δεδομένα σε dBs;"
 
-#: src/harmonic.c:12596
+#: src/harmonic.c:28775
 msgid "Negate?"
 msgstr "Ανατρέπει;"
 
-#: src/harmonic.c:12600
+#: src/harmonic.c:28782
 msgid "Display Properties:"
 msgstr "Ιδιότητες εμφάνισης:"
 
-#: src/harmonic.c:12605
+#: src/harmonic.c:28787
 msgid "_Properties"
 msgstr "_Ιδιοτητες"
 
-#: src/harmonic.c:12611
+#: src/harmonic.c:28793
 msgid "None"
 msgstr "Τίποτα"
 
-#: src/harmonic.c:12615
+#: src/harmonic.c:28797
 msgid ""
 "1st order\n"
 "spectral shadowing"
@@ -297,7 +331,7 @@ msgstr ""
 "Πρώτα αποζημίωση\n"
 "προκειμένου φασματική σκίαση"
 
-#: src/harmonic.c:12619
+#: src/harmonic.c:28801
 msgid ""
 "Nonlinear\n"
 "Compensation:"
@@ -305,55 +339,69 @@ msgstr ""
 "Μη γραμμική\n"
 "αποζημίωση:"
 
-#: src/harmonic.c:12623
-msgid "Batch Process Data?"
-msgstr "Μαζική επεξεργασία τα στοιχεία;"
-
-#: src/harmonic.c:12627
+#: src/harmonic.c:28805
 msgid "Invert domain?"
 msgstr "Αναστρέψει την περιοχή;"
 
-#: src/harmonic.c:12631
+#: src/harmonic.c:28809
+msgid ""
+"Apply correction\n"
+"to Window edges?"
+msgstr ""
+"Εφαρμόστε τις διορθώσεις\n"
+"στο παράθυρο άκρα;"
+
+#: src/harmonic.c:28816
+msgid "Optimise Triangle fit?"
+msgstr ""
+"βελτιστοποίηση Ταιριάζουν\n"
+"των τριγώνων;"
+
+#: src/harmonic.c:28820
 msgid "Calculate Chirp?"
 msgstr "Υπολογίσει το τερέτισμα;"
 
-#: src/harmonic.c:12635
-msgid "Optimise Triangle fit?"
-msgstr "βελτιστοποίηση Ταιριάζουν των τριγώνων"
+#: src/harmonic.c:28827
+msgid "Batch Process Data?"
+msgstr "Μαζική επεξεργασία τα στοιχεία;"
 
-#: src/harmonic.c:12639
+#: src/harmonic.c:28831
+msgid "Autotrack Offset?"
+msgstr "Aυτοματοποίηση Όφσετ;"
+
+#: src/harmonic.c:28835
 msgid "_Advanced"
 msgstr "Προηγμένη"
 
-#: src/harmonic.c:12644
+#: src/harmonic.c:28840
 msgid "Instructions"
 msgstr "Οδηγίες"
 
-#: src/harmonic.c:12653
+#: src/harmonic.c:28849
 msgid "_Help"
 msgstr "_Βοήθεια"
 
-#: src/harmonic.c:12679
+#: src/harmonic.c:28878
 msgid "Spectrum Start:"
 msgstr "Έναρξη του φάσματος"
 
-#: src/harmonic.c:12687
+#: src/harmonic.c:28886
 msgid "Spectrum Stop:"
 msgstr "Τέλος του φάσματος"
 
-#: src/harmonic.c:12695
+#: src/harmonic.c:28894
 msgid "Offset:"
 msgstr "Όφσετ:"
 
-#: src/harmonic.c:12702 src/harmonic.c:12768
+#: src/harmonic.c:28901 src/harmonic.c:28967
 msgid "j index:"
 msgstr "η δείκτη"
 
-#: src/harmonic.c:12710
+#: src/harmonic.c:28909
 msgid "Zero Padding 2^:"
 msgstr "Μηδέν υλικό παραγεμίσματος 2^:"
 
-#: src/harmonic.c:12717 src/harmonic.c:12784
+#: src/harmonic.c:28916 src/harmonic.c:28983
 msgid ""
 "Reset\n"
 "Arrays"
@@ -361,49 +409,49 @@ msgstr ""
 "Επαναφέρετε\n"
 "το συστοιχίες"
 
-#: src/harmonic.c:12721
+#: src/harmonic.c:28920
 msgid "Transform Spectrum"
 msgstr "Μεταμορφώστε το φάσμα"
 
-#: src/harmonic.c:12724 src/harmonic.c:12803
+#: src/harmonic.c:28923 src/harmonic.c:29002
 msgid "Spectrum"
 msgstr "Φάσμα"
 
-#: src/harmonic.c:12728
+#: src/harmonic.c:28927
 msgid "Inverse Spectrum Start:"
 msgstr "Έναρξη της αντίστροφης φάσματος"
 
-#: src/harmonic.c:12736
+#: src/harmonic.c:28935
 msgid "Inverse Spectrum Stop:"
 msgstr "Τέλος της αντίστροφης φάσματος"
 
-#: src/harmonic.c:12744
+#: src/harmonic.c:28943
 msgid "Triangle Centre:"
 msgstr "Κέντρο του τριγώνου:"
 
-#: src/harmonic.c:12752
+#: src/harmonic.c:28951
 msgid "Triangle Full Width:"
 msgstr "Πλάτος του τριγώνου:"
 
-#: src/harmonic.c:12760
+#: src/harmonic.c:28959
 msgid "DC Peak Width:"
 msgstr "Πλάτος της κορυφής μηδενική συχνότητα:"
 
-#: src/harmonic.c:12776
+#: src/harmonic.c:28975
 msgid "k index:"
 msgstr "ζ δείκτη"
 
-#: src/harmonic.c:12788
+#: src/harmonic.c:28987
 msgid ""
 "Process\n"
 "Spectrum"
 msgstr "Διαδικασία του φάσματος"
 
-#: src/harmonic.c:12791 src/harmonic.c:12812
+#: src/harmonic.c:28990 src/harmonic.c:29011
 msgid "Inverse Spectrum"
 msgstr "Αντίστροφης φάσματος"
 
-#: src/harmonic.c:12808
+#: src/harmonic.c:29007
 msgid "Inverse Domain"
 msgstr "Αντίστροφη περιοχή"
 
