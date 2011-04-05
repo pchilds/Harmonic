@@ -1,5 +1,5 @@
 /***************************************************************************
- *            harmonic.h
+ *            open.h
  *
  *  Sat Dec  4 17:18:14 2010
  *  Copyright  2010  Paul Childs
@@ -22,7 +22,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
 
-#ifndef __HARMONIC_H__
-#define __HARMONIC_H__
-#endif __COMPUTER_H__
-
+#ifndef __OPEN_H__
+#	define __OPEN_H__
+#	include "main.h"
+#	include <fftw3.h>
+	extern GtkWidget *window, *statusbar, *notebook, *notebook2, *plot1, *plot3, *zpd, *fst, *tracmenu, *rest, *visl, *dsl, *tr, *pr;
+	extern GtkWidget *bat, *chi, *trans, *anosa, *sws, *wll, *oft, *twopionx, *lcmp, *dBs, *neg, *plot1, *plot3;
+	extern GArray *bxr, *byr, *bsz, *bnx, *msr, *vis, *doms, *chp, *x, *yb, *delf, *stars, *specs, *sz, *nx;
+	extern GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa;
+	extern GSList *group2;
+	extern gint lc, mx;
+	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, flags, flagd, satl, trc;
+	extern gulong pr_id;
+	extern void trs(GtkWidget*, gpointer);
+	extern void pltmv(PlotLinear*, gpointer);
+	extern void pltmvp(PlotPolar*, gpointer);
+	extern void upg(GtkWidget*, gpointer);
+void opd(GtkWidget*, gpointer);
+#endif

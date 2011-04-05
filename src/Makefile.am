@@ -3,10 +3,14 @@ AM_CFLAGS=$(HARM_CFLAGS)
 AM_CPPFLAGS= -DLOCALEDIR=\"$(localedir)\" -DPACKAGE=\"$(PACKAGE)\"
 bin_PROGRAMS=Harmonic
 Harmonic_SOURCES=		\
-	harmonic.c		\
+	main.c			\
+	main.h			\
+	open.c			\
+	open.h			\
+	display.c		\
+	display.h		\
 	plotlinear0-1-0.c	\
-	plotpolar0-1-0.c	\
-	harmonic.h		\
 	plotlinear0-1-0.h	\
+	plotpolar0-1-0.c	\
 	plotpolar0-1-0.h
 Harmonic_LDADD=$(HARM_LIBS)

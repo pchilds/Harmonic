@@ -1,6 +1,6 @@
 AC_PREREQ([2.65])
 AC_INIT([Harmonic],[0.1.0],[pchilds@physics.org],[gtk-harmonic],[https://github.com/pchilds/Harmonic])
-AC_CONFIG_SRCDIR([src/harmonic.h])
+AC_CONFIG_SRCDIR([src/main.h])
 AC_CONFIG_AUX_DIR([confsupp])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
