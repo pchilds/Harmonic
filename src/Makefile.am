@@ -7,6 +7,10 @@ Harmonic_SOURCES=		\
 	main.h			\
 	util.c			\
 	util.h			\
+	data.c			\
+	data.h			\
+	proc.c			\
+	proc.h			\
 	disp.c			\
 	disp.h			\
 	open.c			\
