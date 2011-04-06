@@ -1,5 +1,5 @@
 /***************************************************************************
- *            display.h
+ *            disp.h
  *
  *  Sat Dec  4 17:18:14 2010
  *  Copyright  2010  Paul Childs
@@ -22,8 +22,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
 
-#ifndef __DISPLAY_H__
-#	define __DISPLAY_H__
+#ifndef __DISP_H__
+#	define __DISP_H__
 #	include "main.h"
 	extern GtkWidget *window, *plot1, *plot2, *plot3, *notebook2, *bat, *chi;
 	extern GArray *bxr, *byr, *bsz, *bnx, *msr, *vis, *doms, *chp, *delf, *xsb, *ysb, *sz, *nx, *stars;

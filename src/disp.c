@@ -1,5 +1,5 @@
 /***************************************************************************
- *            display.c
+ *            disp.c
  *
  *  Sat Dec  4 17:18:14 2010
  *  Copyright  2010  Paul Childs
@@ -22,7 +22,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
 
-#include "display.h"
+#include "disp.h"
 
 void dpr(GtkWidget *widget, gpointer data)
 {

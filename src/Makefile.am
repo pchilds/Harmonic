@@ -5,10 +5,12 @@ bin_PROGRAMS=Harmonic
 Harmonic_SOURCES=		\
 	main.c			\
 	main.h			\
+	util.c			\
+	util.h			\
+	disp.c			\
+	disp.h			\
 	open.c			\
 	open.h			\
-	display.c		\
-	display.h		\
 	plotlinear0-1-0.c	\
 	plotlinear0-1-0.h	\
 	plotpolar0-1-0.c	\
