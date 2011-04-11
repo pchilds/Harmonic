@@ -8,6 +8,7 @@
  *            Graphical display of data and transformed result
  *            Batch Processing
  *            Analysis for visibility, domain shifts and chirp
+ *            Publication ready graphs of results in postscript format
  *
  *  Sat Dec  4 17:18:14 2010
  *  Copyright  2011  Paul Childs
