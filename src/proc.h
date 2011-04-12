@@ -34,6 +34,7 @@
 	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, trc, satl, flags, flagd;
 	extern gint lc;
 	extern gulong pr_id;
+	extern gdouble oe;
 	void prs(GtkWidget*, gpointer);
 	void trs(GtkWidget*, gpointer);
 #endif

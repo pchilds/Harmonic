@@ -60,6 +60,7 @@ GSList *group2=NULL; /* list for various traces available */
 gint lc, mx; /* number of data points and number of files in batch routine */
 guint jdim=0, kdim=0, jdimx=0, kdimx=0, jdimxf=0, kdimxf=0, satl=0, trc=1, flags=0, flagd=0; /* array indices, #of traces, trace number, and current processing state and display flags */
 gulong pr_id; /* id for disabling/enabling post-transform processing */
+gdouble oe; /* value to hold prior reference level for offset tracking */
 
 int main( int argc, char *argv[])
 {

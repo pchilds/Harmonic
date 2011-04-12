@@ -565,7 +565,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 	PlotLinear *plt;
 	guint j, k, st, sp;
 	gint n, zp, dx, dx2;
-	gdouble iv, clc, ofs, xx, yx;
+	gdouble iv, clc, ofs, xx, yx, ce;
 	gchar *str;
 	double *y, *star;
 	fftw_plan p;
@@ -573,14 +573,17 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 
 	if ((flags&1)!=0)
 	{
-		zp=1<<(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(zpd)));
-		n=zp*(jdimx+1);
 		g_array_free(stars, TRUE);
 		g_array_free(xsb, TRUE);
 		g_array_free(ysb, TRUE);
 		g_array_free(delf, TRUE);
 		delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+		zp=1<<(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(zpd)));
+		n=zp*(jdimx+1);
 		y=fftw_malloc(sizeof(double)*n);
+		ce=0;
+		for (j=1; j<=16; j++) ce+=g_array_index(specs, gdouble, trc-1+((lc-j)*satl));
+		ce/=16;
 		for (j=0; j<n; j++) y[j]=0;
 		if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))/* interpolate */
 		{
@@ -858,7 +861,11 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(oft)))/* history based offset */
 			{
 				if ((flags&2)==0) ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));/* check if this is right */
-				else ofs=ofs;/* change accordingly */
+				else
+				{
+					ofs+=ce-oe;
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), ofs);
+				}
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 				{
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
@@ -1740,7 +1747,11 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(oft)))/* history based offset */
 		{
 			if ((flags&2)==0) ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));/* check if this is right */
-			else ofs=ofs;/* change accordingly */
+			else
+			{
+				ofs=ofs+ce-oe;/* change accordingly */
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), ofs);
+			}
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 			{
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
@@ -2539,6 +2550,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 		}
 		fftw_free(star);
+		oe=ce;
 		plt=PLOT_LINEAR(plot2);
 		(plt->sizes)=sz;
 		(plt->ind)=nx;
