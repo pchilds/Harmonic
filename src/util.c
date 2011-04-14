@@ -126,7 +126,7 @@ void upj(GtkWidget *widget, gpointer data)
 	gchar *str;
 
 	jdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-	if (jdim>jdimx)
+	if (jdim>=jdimx)
 	{
 		num=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isr));
 		num2=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isp));
@@ -136,9 +136,9 @@ void upj(GtkWidget *widget, gpointer data)
 		num6=gtk_spin_button_get_value(GTK_SPIN_BUTTON(bsr));
 		num7=gtk_spin_button_get_value(GTK_SPIN_BUTTON(bsp));
 		k=0;
-		while (k<kdimx)
+		while (k<(kdimx-1))
 		{
-			for (j=(jdimx+1); j<=jdim; j++)
+			for (j=jdimx; j<=jdim; j++)
 			{
 				g_array_insert_val(isra, j+(k*jdim), num);
 				g_array_insert_val(ispa, j+(k*jdim), num2);
@@ -147,7 +147,7 @@ void upj(GtkWidget *widget, gpointer data)
 			}
 			k++;
 		}
-		for (j=(jdimx+1); j<=jdim; j++)
+		for (j=jdimx; j<=jdim; j++)
 		{
 			g_array_append_val(isra, num);
 			g_array_append_val(ispa, num2);
@@ -157,7 +157,7 @@ void upj(GtkWidget *widget, gpointer data)
 			g_array_append_val(bsra, num6);
 			g_array_append_val(bspa, num7);
 		}
-		jdimx=jdim;
+		jdimx=(jdim+1);
 	}
 	else
 	{
@@ -176,7 +176,7 @@ void upj(GtkWidget *widget, gpointer data)
 		num6=g_array_index(bspa, gdouble, jdim);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(bsp), num6);
 	}
-	if (jdim<=jdimxf)
+	if (jdim<jdimxf)
 	{
 		if (((flags&2)!=0)&&((flagd&1)==0))
 		{
@@ -355,7 +355,7 @@ void upj(GtkWidget *widget, gpointer data)
 					}
 				}
 			}
-			else if (kdim<=kdimxf)
+			else if (kdim<kdimxf)
 			{
 				num=g_array_index(vis, gdouble, (jdim+(kdim*jdimxf)));
 				g_snprintf(s, 7, "%f", num);
@@ -405,20 +405,20 @@ void upk(GtkWidget *widget, gpointer data)
 	gchar *str;
 
 	kdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-	if (kdim>kdimx)
+	if (kdim>=kdimx)
 	{
 		num=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isr));
 		num2=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isp));
 		num3=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tc));
 		num4=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tw));
-		for (j=0; j<jdimx*(kdim-kdimx); j++)
+		for (j=0; j<jdimx*(kdim-kdimx+1); j++)
 		{
 			g_array_append_val(isra, num);
 			g_array_append_val(ispa, num2);
 			g_array_append_val(tca, num3);
 			g_array_append_val(twa, num4);
 		}
-		kdimx=kdim;
+		kdimx=(kdim+1);
 	}
 	else
 	{
@@ -433,7 +433,7 @@ void upk(GtkWidget *widget, gpointer data)
 	}
 	if ((flags&4)!=0)
 	{
-		if (kdim<=kdimxf)
+		if (kdim<kdimxf)
 		{
 			if ((flags&8)!=0)
 			{
@@ -578,7 +578,7 @@ void upk(GtkWidget *widget, gpointer data)
 					}
 				}
 			}
-			else if (jdim<=jdimxf)
+			else if (jdim<jdimxf)
 			{
 				num=g_array_index(vis, gdouble, (jdim+(kdim*jdimxf)));
 				g_snprintf(s, 7, "%f", num);
@@ -631,7 +631,7 @@ void upa1(GtkWidget *widget, gpointer data)
 
 void reset(GtkWidget *widget, gpointer data)
 {
-	{jdim=0; jdimx=0; kdim=0; kdimx=0;}
+	{jdim=0; jdimx=1; kdim=0; kdimx=1;}
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), 0);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
 	{(bsra->len)=1; (bspa->len)=1;}
@@ -640,9 +640,9 @@ void reset(GtkWidget *widget, gpointer data)
 
 void reset2(GtkWidget *widget, gpointer data)
 {
-	{jdim=0; kdim=0; kdimx=0;}
+	{jdim=0; kdim=0; kdimx=1;}
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), 0);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
-	{(isra->len)=jdimx+1; (ispa->len)=jdimx+1; (tca->len)=jdimx+1; (twa->len)=jdimx+1;}
+	{(isra->len)=jdimx; (ispa->len)=jdimx; (tca->len)=jdimx; (twa->len)=jdimx;}
 }
 

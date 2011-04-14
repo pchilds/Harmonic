@@ -1,5 +1,10 @@
 # List of source files which contain translatable strings.
 
 # Package source files
-src/harmonic.c
+src/main.c
+src/util.c
+src/data.c
+src/proc.c
+src/disp.c
+src/open.c
 

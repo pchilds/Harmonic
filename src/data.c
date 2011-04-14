@@ -169,7 +169,7 @@ void sav(GtkWidget *widget, gpointer data)
 	GtkWidget *wfile, *dialog, *cont, *label;
 	PlotLinear *plt;
 	gchar *contents, *str, *str2, *fout=NULL;
-	gchar s1[10], s2[10], s3[10];
+	gchar s1[10], s2[10], s3[10], s4[10];
 	gint j, k, sz2;
 	gdouble num, num2;
 	GError *Err=NULL;
@@ -291,6 +291,218 @@ void sav(GtkWidget *widget, gpointer data)
 			}
 			gtk_widget_destroy(wfile);
 		}
+		else if ((flags&20)==20)
+		{
+			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+			{
+				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
+				if (jdimxf==0)
+				{
+					if (kdimxf==0)
+					{
+						str=g_strdup(_("VISIBILTY\tDOMN_SHFT\tCHIRP    "));
+						g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, 0));
+						g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, 0));
+						g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, 0));
+						str2=g_strjoin("\t", s1, s2, s3, s4, NULL);
+						contents=g_strjoin(DLMT, str, str2, NULL);
+						g_free(str);
+						g_free(str2);
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+					}
+					else
+					{
+						contents=g_strdup(_("K        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "));
+						for (k=0; k<kdimxf; k++)
+						{
+							g_snprintf(s1, 10, "%d", k);
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, k));
+							g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, k));
+							g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, k));
+							str2=g_strjoin("\t", s1, s2, s3, s4, NULL);
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+					}
+				}
+				else
+				{
+					str2=g_strdup(_("J        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "));
+					contents=g_strdup(str2);
+					for (k=1; k<kdimxf; k++)
+					{
+						str=g_strjoin("\t", contents, str2, NULL);
+						g_free(contents);
+						contents=g_strdup(str);
+						g_free(str);
+					}
+					g_free(str2);
+					for (j=0; j<jdimxf; j++)
+					{
+						g_snprintf(s1, 10, "%d", j);
+						g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, j*kdimxf));
+						g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, j*kdimxf));
+						g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, j*kdimxf));
+						str2=g_strjoin("\t", s1, s2, s3, s4, NULL);
+						k=1;
+						while (k<kdimxf)
+						{
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (j*kdimxf)+k));
+							g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, (j*kdimxf)+k));
+							g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, (j*kdimxf)+k));
+							str=g_strjoin("\t", str2, s1, s2, s3, s4, NULL);
+							g_free(str2);
+							str2=g_strdup(str);
+							g_free(str);
+							k++;
+						}
+						str=g_strdup(contents);
+						g_free(contents);
+						contents=g_strjoin(DLMT, str, str2, NULL);
+						g_free(str);
+						g_free(str2);
+					}
+					g_file_set_contents(fout, contents, -1, &Err);
+					g_free(contents);
+					if (Err)
+					{
+						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+						g_free(str);
+						g_error_free(Err);
+					}
+				}
+				g_free(fout);
+			}
+			gtk_widget_destroy(wfile);
+		}
+		else if ((flags&4)!=0)
+		{
+			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
+			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+			{
+				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
+				if (jdimxf==0)
+				{
+					if (kdimxf==0)
+					{
+						str=g_strdup(_("VISIBILTY\tDOMN_SHFT"));
+						g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, 0));
+						g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, 0));
+						str2=g_strjoin("\t", s1, s2, s3, NULL);
+						contents=g_strjoin(DLMT, str, str2, NULL);
+						g_free(str);
+						g_free(str2);
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+					}
+					else
+					{
+						contents=g_strdup(_("K        \tVISIBILTY\tDOMN_SHFT"));
+						for (k=0; k<kdimxf; k++)
+						{
+							g_snprintf(s1, 10, "%d", k);
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, k));
+							g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, k));
+							str2=g_strjoin("\t", s1, s2, s3, NULL);
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+					}
+				}
+				else
+				{
+					str2=g_strdup(_("J        \tVISIBILTY\tDOMN_SHFT"));
+					contents=g_strdup(str2);
+					for (k=1; k<kdimxf; k++)
+					{
+						str=g_strjoin("\t", contents, str2, NULL);
+						g_free(contents);
+						contents=g_strdup(str);
+						g_free(str);
+					}
+					g_free(str2);
+					for (j=0; j<jdimxf; j++)
+					{
+						g_snprintf(s1, 10, "%d", j);
+						g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, j*kdimxf));
+						g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, j*kdimxf));
+						str2=g_strjoin("\t", s1, s2, s3, NULL);
+						k=1;
+						while (k<kdimxf)
+						{
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (j*kdimxf)+k));
+							g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, (j*kdimxf)+k));
+							str=g_strjoin("\t", str2, s1, s2, s3, NULL);
+							g_free(str2);
+							str2=g_strdup(str);
+							g_free(str);
+							k++;
+						}
+						str=g_strdup(contents);
+						g_free(contents);
+						contents=g_strjoin(DLMT, str, str2, NULL);
+						g_free(str);
+						g_free(str2);
+					}
+					g_file_set_contents(fout, contents, -1, &Err);
+					g_free(contents);
+					if (Err)
+					{
+						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+						g_free(str);
+						g_error_free(Err);
+					}
+				}
+				g_free(fout);
+			}
+			gtk_widget_destroy(wfile);
+		}
 		else if ((flags&2)!=0)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
@@ -300,7 +512,7 @@ void sav(GtkWidget *widget, gpointer data)
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Real/Imaginary", 1, "Magnitude/Phase", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Real/Imaginary"), 1, _("Magnitude/Phase"), 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 				cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
 				label=gtk_label_new(_("Select Parameter to save:"));
 				gtk_container_add(GTK_CONTAINER(cont), label);
@@ -309,7 +521,7 @@ void sav(GtkWidget *widget, gpointer data)
 					case 1:
 					str2=g_strdup(_("INVERSE_D\tREAL_VAL \tIMAG_VAL "));
 					contents=g_strdup(str2);
-					for (k=1; k<=jdimxf; k++)
+					for (k=1; k<jdimxf; k++)
 					{
 						str=g_strjoin("\t", contents, str2, NULL);
 						g_free(contents);
@@ -321,7 +533,7 @@ void sav(GtkWidget *widget, gpointer data)
 					sz2=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
-					for (k=1; k<=jdimxf; k++)
+					for (k=1; k<jdimxf; k++)
 					{
 						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
@@ -341,7 +553,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz2)-j));
 						str2=g_strjoin("\t", s1, s2, s3, NULL);
 						k=1;
-						while (k<=jdimxf)
+						while (k<jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz2)+j));
@@ -371,7 +583,7 @@ void sav(GtkWidget *widget, gpointer data)
 					case 2:
 					str2=g_strdup(_("INVERSE_D\tMAGNITUDE\tPHASE    "));
 					contents=g_strdup(str2);
-					for (k=1; k<=jdimxf; k++)
+					for (k=1; k<jdimxf; k++)
 					{
 						str=g_strjoin("\t", contents, str2, NULL);
 						g_free(contents);
@@ -383,7 +595,7 @@ void sav(GtkWidget *widget, gpointer data)
 					sz2=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
-					for (k=1; k<=jdimxf; k++)
+					for (k=1; k<jdimxf; k++)
 					{
 						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
@@ -409,7 +621,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_snprintf(s2, 10, "%f", num);
 						str2=g_strjoin("\t", s1, s2, s3, NULL);
 						k=1;
-						while (k<=jdimxf)
+						while (k<jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 							num=g_array_index(stars, gdouble, (2*k*sz2)+j);
@@ -465,7 +677,7 @@ void sav(GtkWidget *widget, gpointer data)
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Real/Imaginary", 1, "Magnitude/Phase", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Real/Imaginary"), 1, _("Magnitude/Phase"), 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 				cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
 				label=gtk_label_new(_("Select Parameter to save:"));
 				gtk_container_add(GTK_CONTAINER(cont), label);
@@ -474,7 +686,7 @@ void sav(GtkWidget *widget, gpointer data)
 					case 1:
 					str2=g_strdup(_("INVERSE_D\tREAL_VAL \tIMAG_VAL "));
 					contents=g_strdup(str2);
-					for (k=1; k<=jdimxf; k++)
+					for (k=1; k<jdimxf; k++)
 					{
 						str=g_strjoin("\t", contents, str2, NULL);
 						g_free(contents);
@@ -486,7 +698,7 @@ void sav(GtkWidget *widget, gpointer data)
 					sz2=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
-					for (k=1; k<=jdimxf; k++)
+					for (k=1; k<jdimxf; k++)
 					{
 						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
@@ -506,7 +718,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz2)-j));
 						str2=g_strjoin("\t", s1, s2, s3, NULL);
 						k=1;
-						while (k<=jdimxf)
+						while (k<jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz2)+j));
@@ -536,7 +748,7 @@ void sav(GtkWidget *widget, gpointer data)
 					case 2:
 					str2=g_strdup(_("INVERSE_D\tMAGNITUDE\tPHASE    "));
 					contents=g_strdup(str2);
-					for (k=1; k<=jdimxf; k++)
+					for (k=1; k<jdimxf; k++)
 					{
 						str=g_strjoin("\t", contents, str2, NULL);
 						g_free(contents);
@@ -548,7 +760,7 @@ void sav(GtkWidget *widget, gpointer data)
 					sz2=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
-					for (k=1; k<=jdimxf; k++)
+					for (k=1; k<jdimxf; k++)
 					{
 						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
@@ -574,7 +786,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_snprintf(s2, 10, "%f", num);
 						str2=g_strjoin("\t", s1, s2, s3, NULL);
 						k=1;
-						while (k<=jdimxf)
+						while (k<jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 							num=g_array_index(stars, gdouble, (2*k*sz2)+j);
@@ -631,7 +843,7 @@ void sav(GtkWidget *widget, gpointer data)
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, "Real/Imaginary", 1, "Magnitude/Phase", 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Real/Imaginary"), 1, _("Magnitude/Phase"), 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 				cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
 				label=gtk_label_new(_("Select Parameter to save:"));
 				gtk_container_add(GTK_CONTAINER(cont), label);
@@ -640,7 +852,7 @@ void sav(GtkWidget *widget, gpointer data)
 					case 1:
 					str2=g_strdup(_("INVERSE_D\tREAL_VAL \tIMAG_VAL "));
 					contents=g_strdup(str2);
-					for (k=1; k<=jdimxf; k++)
+					for (k=1; k<jdimxf; k++)
 					{
 						str=g_strjoin("\t", contents, str2, NULL);
 						g_free(contents);
@@ -652,7 +864,7 @@ void sav(GtkWidget *widget, gpointer data)
 					sz2=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
-					for (k=1; k<=jdimxf; k++)
+					for (k=1; k<jdimxf; k++)
 					{
 						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
@@ -672,7 +884,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz2)-j));
 						str2=g_strjoin("\t", s1, s2, s3, NULL);
 						k=1;
-						while (k<=jdimxf)
+						while (k<jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz2)+j));
@@ -702,7 +914,7 @@ void sav(GtkWidget *widget, gpointer data)
 					case 2:
 					str2=g_strdup(_("INVERSE_D\tMAGNITUDE\tPHASE    "));
 					contents=g_strdup(str2);
-					for (k=1; k<=jdimxf; k++)
+					for (k=1; k<jdimxf; k++)
 					{
 						str=g_strjoin("\t", contents, str2, NULL);
 						g_free(contents);
@@ -714,7 +926,7 @@ void sav(GtkWidget *widget, gpointer data)
 					sz2=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
-					for (k=1; k<=jdimxf; k++)
+					for (k=1; k<jdimxf; k++)
 					{
 						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
@@ -740,7 +952,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_snprintf(s2, 10, "%f", num);
 						str2=g_strjoin("\t", s1, s2, s3, NULL);
 						k=1;
-						while (k<=jdimxf)
+						while (k<jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 							num=g_array_index(stars, gdouble, (2*k*sz2)+j);

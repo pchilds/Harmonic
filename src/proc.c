@@ -47,7 +47,7 @@ void prs(GtkWidget *widget, gpointer data)
 			{
 				g_array_free(chp, TRUE);
 				chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimxf*kdimx);
-				for (j=0; j<=jdimxf; j++)
+				for (j=0; j<jdimxf; j++)
 				{
 					iv=g_array_index(delf, gdouble, j);
 					if (iv<DZE) idelf=G_MAXDOUBLE;
@@ -67,7 +67,7 @@ void prs(GtkWidget *widget, gpointer data)
 					}
 					if (vzt<DZE) vzt=G_MAXDOUBLE;
 					else vzt=l/vzt;
-					for (k=0; k<=kdimx; k++)
+					for (k=0; k<kdimx; k++)
 					{
 						st=ceil(g_array_index(isra, gdouble, j+(k*jdimxf))*idelf);
 						sp=floor(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
@@ -176,7 +176,7 @@ void prs(GtkWidget *widget, gpointer data)
 				label=gtk_label_new(_("Chirp"));
 				gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				gtk_widget_show(label);
-				if (jdim<=jdimxf)
+				if (jdim<jdimxf)
 				{
 					vt=g_array_index(vis, gdouble, (jdim+(kdim*jdimxf)));
 					g_snprintf(s, 7, "%f", vt);
@@ -186,7 +186,7 @@ void prs(GtkWidget *widget, gpointer data)
 					gtk_label_set_text(GTK_LABEL(dsl), s);
 					vt=g_array_index(chp, gdouble, (jdim+(kdim*jdimxf)));
 					g_snprintf(s, 8, "%f", vt);
-					chil=gtk_label_new(s);					
+					chil=gtk_label_new(s);
 				}
 				else
 				{
@@ -202,7 +202,7 @@ void prs(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				for (j=0; j<=jdimxf; j++)
+				for (j=0; j<jdimxf; j++)
 				{
 					iv=g_array_index(delf, gdouble, j);
 					if (iv<DZE) idelf=G_MAXDOUBLE;
@@ -222,7 +222,7 @@ void prs(GtkWidget *widget, gpointer data)
 					}
 					if (vzt<DZE) vzt=G_MAXDOUBLE;
 					else vzt=l/vzt;
-					for (k=0; k<=kdimx; k++)
+					for (k=0; k<kdimx; k++)
 					{
 						st=ceil(g_array_index(isra, gdouble, j+(k*jdimxf))*idelf);
 						sp=floor(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
@@ -284,14 +284,14 @@ void prs(GtkWidget *widget, gpointer data)
 						g_array_append_val(doms, dst);
 					}
 				}
-				if (jdim<=jdimxf)
+				if (jdim<jdimxf)
 				{
 					vt=g_array_index(vis, gdouble, (jdim+(kdim*jdimxf)));
 					g_snprintf(s, 7, "%f", vt);
 					gtk_label_set_text(GTK_LABEL(visl), s);
 					vt=g_array_index(doms, gdouble, (jdim+(kdim*jdimxf)));
 					g_snprintf(s, 9, "%f", vt);
-					gtk_label_set_text(GTK_LABEL(dsl), s);				
+					gtk_label_set_text(GTK_LABEL(dsl), s);
 				}
 				else
 				{
@@ -307,7 +307,7 @@ void prs(GtkWidget *widget, gpointer data)
 		{
 			g_array_free(chp, TRUE);
 			chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimxf*kdimx));
-			for (j=0; j<=jdimxf; j++)
+			for (j=0; j<jdimxf; j++)
 			{
 				vzt=g_array_index(stars, gdouble, 2*j*sz2);
 				iv=g_array_index(delf, gdouble, j);
@@ -324,7 +324,7 @@ void prs(GtkWidget *widget, gpointer data)
 				}
 				if (vzt<DZE) vzt=G_MAXDOUBLE;
 				else vzt=l/vzt;
-				for (k=0; k<=kdimx; k++)
+				for (k=0; k<kdimx; k++)
 				{
 					st=ceil(g_array_index(isra, gdouble, j+(k*jdimxf))*idelf);
 					sp=floor(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
@@ -430,7 +430,7 @@ void prs(GtkWidget *widget, gpointer data)
 			label=gtk_label_new(_("Chirp"));
 			gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_widget_show(label);
-			if (jdim<=jdimxf)
+			if (jdim<jdimxf)
 			{
 				vt=g_array_index(vis, gdouble, (jdim+(kdim*jdimxf)));
 				g_snprintf(s, 7, "%f", vt);
@@ -454,7 +454,7 @@ void prs(GtkWidget *widget, gpointer data)
 		}
 		else
 		{
-			for (j=0; j<=jdimxf; j++)
+			for (j=0; j<jdimxf; j++)
 			{
 				vzt=g_array_index(stars, gdouble, 2*j*sz2);
 				iv=g_array_index(delf, gdouble, j);
@@ -471,7 +471,7 @@ void prs(GtkWidget *widget, gpointer data)
 				}
 				if (vzt<DZE) vzt=G_MAXDOUBLE;
 				else vzt=l/vzt;
-				for (k=0; k<=kdimx; k++)
+				for (k=0; k<kdimx; k++)
 				{
 					st=ceil(g_array_index(isra, gdouble, j+(k*jdimxf))*idelf);
 					sp=floor(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
@@ -530,7 +530,7 @@ void prs(GtkWidget *widget, gpointer data)
 					g_array_append_val(doms, dst);
 				}
 			}
-			if (jdim<=jdimxf)
+			if (jdim<jdimxf)
 			{
 				vt=g_array_index(vis, gdouble, (jdim+(kdim*jdimxf)));
 				g_snprintf(s, 7, "%f", vt);
@@ -577,9 +577,9 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		g_array_free(xsb, TRUE);
 		g_array_free(ysb, TRUE);
 		g_array_free(delf, TRUE);
-		delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimx+1));
+		delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
 		zp=1<<(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(zpd)));
-		n=zp*(jdimx+1);
+		n=zp*jdimx;
 		y=fftw_malloc(sizeof(double)*n);
 		ce=0;
 		for (j=1; j<=16; j++) ce+=g_array_index(specs, gdouble, trc-1+((lc-j)*satl));
@@ -598,7 +598,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss- */
 							{
-								for (j=0; j<=jdimx; j++)
+								for (j=0; j<jdimx; j++)
 								{
 									iv=g_array_index(bsra, gdouble, j);
 									k=0;
@@ -619,7 +619,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 							}
 							else /* +TdBss- */
 							{
-								for (j=0; j<=jdimx; j++)
+								for (j=0; j<jdimx; j++)
 								{
 									iv=g_array_index(bsra, gdouble, j);
 									k=0;
@@ -641,7 +641,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss- */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -662,7 +662,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 						else /* +RdBss- */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -684,7 +684,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss- and +Tlss- */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -705,7 +705,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else /* -Rlss- +Rlss- */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -731,7 +731,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					{
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0- */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -752,7 +752,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 						else /* +TdB0- */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -774,7 +774,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0- */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -795,7 +795,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else /* +RdB0- */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -817,7 +817,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0- and +Tl0- */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -838,7 +838,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else /* -Rl0- +Rl0- */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -874,7 +874,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss- */
 							{
-								for (j=0; j<=jdimx; j++)
+								for (j=0; j<jdimx; j++)
 								{
 									iv=g_array_index(bsra, gdouble, j);
 									k=0;
@@ -895,7 +895,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 							}
 							else /* +TdBss- */
 							{
-								for (j=0; j<=jdimx; j++)
+								for (j=0; j<jdimx; j++)
 								{
 									iv=g_array_index(bsra, gdouble, j);
 									k=0;
@@ -917,7 +917,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss- */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -938,7 +938,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 						else /* +RdBss- */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -960,7 +960,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss- and +Tlss- */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -981,7 +981,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else /* -Rlss- +Rlss- */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1007,7 +1007,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					{
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0- */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -1028,7 +1028,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 						else /* +TdB0- */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -1050,7 +1050,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0- */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1071,7 +1071,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else /* +RdB0- */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1093,7 +1093,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0- and +Tl0- */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -1114,7 +1114,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else /* -Rl0- +Rl0- */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -1143,7 +1143,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					{
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss- */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -1164,7 +1164,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 						else /* +TdBss- */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -1186,7 +1186,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss- */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1207,7 +1207,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else /* +RdBss- */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1229,7 +1229,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss- +Tlss- */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -1250,7 +1250,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else /* -Rlss- +Rlss- */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -1277,7 +1277,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				{
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0- */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1298,7 +1298,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else /* +TdB0- */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1320,7 +1320,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0- */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -1341,7 +1341,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else /* +RdB0- */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -1364,7 +1364,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0- +Tl0- */
 			{
 				ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-				for (j=0; j<=jdimx; j++)
+				for (j=0; j<jdimx; j++)
 				{
 					iv=g_array_index(bsra, gdouble, j);
 					k=0;
@@ -1386,7 +1386,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			else /* -Rl0- +Rl0- */
 			{
 				ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-				for (j=0; j<=jdimx; j++)
+				for (j=0; j<jdimx; j++)
 				{
 					iv=g_array_index(bsra, gdouble, j);
 					k=0;
@@ -1417,7 +1417,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					{
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -1449,7 +1449,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 						else /* +TdBss+ */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -1482,7 +1482,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1505,7 +1505,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else /* +RdBss+ */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1529,7 +1529,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -1558,7 +1558,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else /* -Rlss+ +Rlss+ */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -1591,7 +1591,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				{
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1619,7 +1619,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else /* +TdB0+ */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1648,7 +1648,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -1671,7 +1671,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else /* +RdB0+ */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -1695,7 +1695,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ +Tl0+ */
 			{
-				for (j=0; j<=jdimx; j++)
+				for (j=0; j<jdimx; j++)
 				{
 					iv=g_array_index(bsra, gdouble, j);
 					k=0;
@@ -1722,7 +1722,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else /* -Rl0+ +Rl0+ */
 			{
-				for (j=0; j<=jdimx; j++)
+				for (j=0; j<jdimx; j++)
 				{
 					iv=g_array_index(bsra, gdouble, j);
 					k=0;
@@ -1746,10 +1746,10 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(oft)))/* history based offset */
 		{
-			if ((flags&2)==0) ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));/* check if this is right */
+			if ((flags&2)==0) ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 			else
 			{
-				ofs=ofs+ce-oe;/* change accordingly */
+				ofs+=ce-oe;
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), ofs);
 			}
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
@@ -1760,7 +1760,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					{
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -1792,7 +1792,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 						else /* +TdBss+ */
 						{
-							for (j=0; j<=jdimx; j++)
+							for (j=0; j<jdimx; j++)
 							{
 								iv=g_array_index(bsra, gdouble, j);
 								k=0;
@@ -1825,7 +1825,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1848,7 +1848,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else /* +RdBss+ */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1872,7 +1872,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -1901,7 +1901,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else /* -Rlss+ +Rlss+ */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -1934,7 +1934,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				{
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1962,7 +1962,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else /* +TdB0+ */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -1991,7 +1991,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -2014,7 +2014,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else /* +RdB0+ */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -2038,7 +2038,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ +Tl0+ */
 			{
-				for (j=0; j<=jdimx; j++)
+				for (j=0; j<jdimx; j++)
 				{
 					iv=g_array_index(bsra, gdouble, j);
 					k=0;
@@ -2065,7 +2065,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else /* -Rl0+ +Rl0+ */
 			{
-				for (j=0; j<=jdimx; j++)
+				for (j=0; j<jdimx; j++)
 				{
 					iv=g_array_index(bsra, gdouble, j);
 					k=0;
@@ -2096,7 +2096,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				{
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -2128,7 +2128,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 					else /* +TdBss+ */
 					{
-						for (j=0; j<=jdimx; j++)
+						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
 							k=0;
@@ -2161,7 +2161,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -2184,7 +2184,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else /* +RdBss+ */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -2216,7 +2216,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -2254,7 +2254,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 				else
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -2289,7 +2289,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			{
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
 				{
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -2318,7 +2318,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				else /* +TdB0+ */
 				{
 					j=0;
-					for (j=0; j<=jdimx; j++)
+					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
 						k=0;
@@ -2347,7 +2347,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
 			{
-				for (j=0; j<=jdimx; j++)
+				for (j=0; j<jdimx; j++)
 				{
 					iv=g_array_index(bsra, gdouble, j);
 					k=0;
@@ -2370,7 +2370,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else /* +RdB0+ */
 			{
-				for (j=0; j<=jdimx; j++)
+				for (j=0; j<jdimx; j++)
 				{
 					iv=g_array_index(bsra, gdouble, j);
 					k=0;
@@ -2403,7 +2403,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else
 			{
-				for (j=0; j<=jdimx; j++)
+				for (j=0; j<jdimx; j++)
 				{
 					iv=g_array_index(bsra, gdouble, j);
 					k=0;
@@ -2440,7 +2440,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else
 			{
-				for (j=0; j<=jdimx; j++)
+				for (j=0; j<jdimx; j++)
 				{
 					iv=g_array_index(bsra, gdouble, j);
 					k=0;
@@ -2463,7 +2463,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 		}
 		star=fftw_malloc(sizeof(double)*n);
-		p=fftw_plan_many_r2r(1, &zp, (jdimx+1), y, NULL, 1, zp, star, NULL, 1, zp, &type, FFTW_ESTIMATE);
+		p=fftw_plan_many_r2r(1, &zp, jdimx, y, NULL, 1, zp, star, NULL, 1, zp, &type, FFTW_ESTIMATE);
 		fftw_execute(p);
 		fftw_destroy_plan(p);
 		fftw_free(y);
@@ -2524,7 +2524,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			g_array_append_val(sz, dx);
 			g_array_append_val(nx, dx2);
-			for (k=1; k<=jdimx; k++)
+			for (k=1; k<jdimx; k++)
 			{
 				xx=0;
 				g_array_append_val(xsb, xx);
@@ -2560,7 +2560,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), 0);
-		adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, jdimx, 1.0, 5.0, 0.0);
+		adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, (jdimx-1), 1.0, 5.0, 0.0);
 		gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(jind2), adj);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), 0);
 		adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, G_MAXINT8, 1.0, 5.0, 0.0);

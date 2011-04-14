@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-04-04 20:58+0300\n"
+"POT-Creation-Date: 2011-04-14 14:24+0300\n"
 "PO-Revision-Date: 2011-04-04 21:09+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Greek <>\n"
@@ -17,11 +17,202 @@ msgstr ""
 "Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/harmonic.c:86
+#: src/main.c:80
+msgid "Harmonic Spectrum Analyser"
+msgstr "Αρμονική αναλυτής φάσματος"
+
+#: src/main.c:114
+msgid "_File"
+msgstr "_Αρχείο"
+
+#: src/main.c:137
+msgid "Raw Delimited Data"
+msgstr "Πρώτες οριοθετημένη δεδομένα "
+
+#: src/main.c:141
+msgid "Data Format:"
+msgstr "Μορφή δεδομένων"
+
+#: src/main.c:146
+msgid "Trace:"
+msgstr "Ίχνος:"
+
+#: src/main.c:153
+msgid "Transmission Measurement?"
+msgstr "Μέτρηση της μετάδοσης;"
+
+#: src/main.c:157
+msgid "Data in dBs?"
+msgstr "Δεδομένα σε dBs;"
+
+#: src/main.c:161
+msgid "Negate?"
+msgstr "Ανατρέπει;"
+
+#: src/main.c:168
+msgid "Display Properties:"
+msgstr "Ιδιότητες εμφάνισης:"
+
+#: src/main.c:173
+msgid "_Properties"
+msgstr "_Ιδιοτητες"
+
+#: src/main.c:179
+msgid "None"
+msgstr "Τίποτα"
+
+#: src/main.c:183
+msgid ""
+"1st order\n"
+"spectral shadowing"
+msgstr ""
+"Πρώτα αποζημίωση\n"
+"προκειμένου φασματική σκίαση"
+
+#: src/main.c:187
+msgid ""
+"Nonlinear\n"
+"Compensation:"
+msgstr ""
+"Μη γραμμική\n"
+"αποζημίωση:"
+
+#: src/main.c:191
+msgid "Invert domain?"
+msgstr "Αναστρέψει την περιοχή;"
+
+#: src/main.c:195
+msgid ""
+"Apply correction\n"
+"to Window edges?"
+msgstr ""
+"Εφαρμόστε τις διορθώσεις\n"
+"στο παράθυρο άκρα;"
+
+#: src/main.c:202
+msgid "Optimise Triangle fit?"
+msgstr ""
+"βελτιστοποίηση Ταιριάζουν\n"
+"των τριγώνων;"
+
+#: src/main.c:206
+msgid "Calculate Chirp?"
+msgstr "Υπολογίσει το τερέτισμα;"
+
+#: src/main.c:213
+msgid "Batch Process Data?"
+msgstr "Μαζική επεξεργασία τα στοιχεία;"
+
+#: src/main.c:217
+msgid "Autotrack Offset?"
+msgstr "Aυτοματοποίηση Όφσετ;"
+
+#: src/main.c:221
+msgid "_Advanced"
+msgstr "Προηγμένη"
+
+#: src/main.c:226
+msgid "Instructions"
+msgstr "Οδηγίες"
+
+#: src/main.c:235
+msgid "_Help"
+msgstr "_Βοήθεια"
+
+#: src/main.c:264
+msgid "Spectrum Start:"
+msgstr "Έναρξη του φάσματος"
+
+#: src/main.c:272
+msgid "Spectrum Stop:"
+msgstr "Τέλος του φάσματος"
+
+#: src/main.c:280
+msgid "Offset:"
+msgstr "Όφσετ:"
+
+#: src/main.c:287 src/main.c:353
+msgid "j index:"
+msgstr "η δείκτη"
+
+#: src/main.c:295
+msgid "Zero Padding 2^:"
+msgstr "Μηδέν υλικό παραγεμίσματος 2^:"
+
+#: src/main.c:302 src/main.c:369
+msgid ""
+"Reset\n"
+"Arrays"
+msgstr ""
+"Επαναφέρετε\n"
+"το συστοιχίες"
+
+#: src/main.c:306
+msgid "Transform Spectrum"
+msgstr "Μεταμορφώστε το φάσμα"
+
+#: src/main.c:309 src/main.c:388
+msgid "Spectrum"
+msgstr "Φάσμα"
+
+#: src/main.c:313
+msgid "Inverse Spectrum Start:"
+msgstr "Έναρξη της αντίστροφης φάσματος"
+
+#: src/main.c:321
+msgid "Inverse Spectrum Stop:"
+msgstr "Τέλος της αντίστροφης φάσματος"
+
+#: src/main.c:329
+msgid "Triangle Centre:"
+msgstr "Κέντρο του τριγώνου:"
+
+#: src/main.c:337
+msgid "Triangle Full Width:"
+msgstr "Πλάτος του τριγώνου:"
+
+#: src/main.c:345
+msgid "DC Peak Width:"
+msgstr "Πλάτος της κορυφής μηδενική συχνότητα:"
+
+#: src/main.c:361
+msgid "k index:"
+msgstr "ζ δείκτη"
+
+#: src/main.c:373
+msgid ""
+"Process\n"
+"Spectrum"
+msgstr "Διαδικασία του φάσματος"
+
+#: src/main.c:376 src/main.c:397
+msgid "Inverse Spectrum"
+msgstr "Αντίστροφης φάσματος"
+
+#: src/main.c:393
+msgid "Inverse Domain"
+msgstr "Αντίστροφη περιοχή"
+
+#: src/main.c:401 src/data.c:188 src/data.c:252 src/disp.c:85 src/disp.c:633
+#: src/disp.c:1146 src/open.c:24232
+msgid "Visibility"
+msgstr "Προβολή"
+
+#: src/main.c:407 src/data.c:188 src/data.c:252 src/disp.c:86 src/disp.c:634
+#: src/disp.c:1147 src/open.c:24238
+msgid "Domain Shift"
+msgstr "Μετατόπιση περιοχών"
+
+#: src/main.c:413 src/open.c:24148 src/open.c:24161 src/open.c:24184
+#: src/open.c:24244
+msgid "Analysis Results"
+msgstr "Αποτελέσματα της ανάλυσης"
+
+#: src/util.c:38
 msgid "Could not load help files."
 msgstr "Δεν ήταν δυνατή η φόρτωση αρχεία βοήθειας."
 
-#: src/harmonic.c:101
+#: src/util.c:53
 msgid ""
 "Harmonic is a program for performing harmonic analysis (e.g. Fourier "
 "analysis) and obtaining visibility of fringes, domain shift and chirp "
@@ -31,154 +222,179 @@ msgstr ""
 "Φουριερ) και απόκτησης προβολή της κρόσσια στροφή τομέα και μετρήσεις "
 "τερέτισμα."
 
-#: src/harmonic.c:116
-msgid "Display Properties"
-msgstr "Ιδιότητες εμφάνισης"
-
-#: src/harmonic.c:126 src/harmonic.c:674 src/harmonic.c:1253
-#: src/harmonic.c:1518
-msgid "Text size:"
-msgstr "Μέγεθος κειμένου:"
-
-#: src/harmonic.c:129 src/harmonic.c:677 src/harmonic.c:1256
-#: src/harmonic.c:1521
-msgid "Tick label size:"
-msgstr "Μέγεθος ετικέτας:"
-
-#: src/harmonic.c:136
-msgid "Radial axis text:"
-msgstr "Κείμενο για τον ακτινικό άξονα:"
-
-#: src/harmonic.c:139
-msgid "Azimuthal axis text:"
-msgstr "Κείμενο για τον αζιμουθιακό άξονα:"
-
-#: src/harmonic.c:164 src/harmonic.c:712 src/harmonic.c:1225
-#: src/harmonic.c:1954 src/harmonic.c:2018 src/harmonic.c:28026
-#: src/harmonic.c:29015
-msgid "Visibility"
-msgstr "Προβολή"
-
-#: src/harmonic.c:165 src/harmonic.c:713 src/harmonic.c:1226
-#: src/harmonic.c:1954 src/harmonic.c:2018 src/harmonic.c:28032
-#: src/harmonic.c:29021
-msgid "Domain Shift"
-msgstr "Μετατόπιση περιοχών"
-
-#: src/harmonic.c:167 src/harmonic.c:715 src/harmonic.c:1228
-#: src/harmonic.c:1954 src/harmonic.c:2707 src/harmonic.c:2961
-msgid "Chirp"
-msgstr "Τερέτισμα"
-
-#: src/harmonic.c:170 src/harmonic.c:718 src/harmonic.c:1231
-#: src/harmonic.c:1296 src/harmonic.c:1561
-msgid "Multiple plots for Results over index j"
-msgstr "Πολλαπλές επιφάνειες για τα αποτελέσματα πάνω δείκτη η"
-
-#: src/harmonic.c:174 src/harmonic.c:722 src/harmonic.c:1235
-#: src/harmonic.c:1300 src/harmonic.c:1565
-msgid "Multiple plots for Results over index k"
-msgstr "Πολλαπλές επιφάνειες για τα αποτελέσματα πάνω δείκτη ζ"
-
-#: src/harmonic.c:684 src/harmonic.c:1263 src/harmonic.c:1528
-msgid "X axis text:"
-msgstr "Κείμενο για τον άξονα Χ:"
-
-#: src/harmonic.c:687 src/harmonic.c:1266 src/harmonic.c:1531
-msgid "Y axis text:"
-msgstr "Κείμενο για τον άξονα Υ:"
-
-#: src/harmonic.c:1290 src/harmonic.c:1555
-msgid "Multiple plots for Inverse Domain"
-msgstr "Πολλαπλές επιφάνειες για την αντίστροφη περιοχή"
-
-#: src/harmonic.c:1804 src/harmonic.c:1822 src/harmonic.c:1839
-#: src/harmonic.c:1865 src/harmonic.c:1882 src/harmonic.c:1908
-msgid "Select Image File"
-msgstr "Επιλέξτε το αρχείο εικόνας"
-
-#: src/harmonic.c:1857 src/harmonic.c:1900 src/harmonic.c:1925
-msgid "No available image."
-msgstr "Δεν υπάρχουν διαθέσιμες εικόνα."
-
-#: src/harmonic.c:1948 src/harmonic.c:2012 src/harmonic.c:2063
-#: src/harmonic.c:2228 src/harmonic.c:2394 src/harmonic.c:28009
-msgid "Select Data File"
-msgstr "Επιλέξτε το αρχείο δεδομένων"
-
-#: src/harmonic.c:1954 src/harmonic.c:2018 src/harmonic.c:2069
-#: src/harmonic.c:2234 src/harmonic.c:2400
-msgid "Parameter selection"
-msgstr "Παράμετρος επιλογής"
-
-#: src/harmonic.c:1956 src/harmonic.c:2020 src/harmonic.c:2071
-#: src/harmonic.c:2236 src/harmonic.c:2402 src/harmonic.c:27928
-msgid "Select Parameter to save:"
-msgstr "Επιλέξτε την παράμετρο για να αποθηκεύσετε:"
-
-#: src/harmonic.c:2076 src/harmonic.c:2241 src/harmonic.c:2407
-msgid "INVERSE_D\tREAL_VAL \tIMAG_VAL "
-msgstr "ΑΝΤΙ_ΠΕΡΧ\tΠΡΑΓ_ΤΙΜ \tΦΑΝΤ_ΤΙΜ "
-
-#: src/harmonic.c:2130 src/harmonic.c:2204 src/harmonic.c:2295
-#: src/harmonic.c:2369 src/harmonic.c:2461 src/harmonic.c:2535
-#, c-format
-msgid "Error Saving file: %s."
-msgstr "Σφάλμα κατά την αποθήκευση αρχείου: %s."
-
-#: src/harmonic.c:2138 src/harmonic.c:2303 src/harmonic.c:2469
-msgid "INVERSE_D\tMAGNITUDE\tPHASE    "
-msgstr "ΑΝΤΙ_ΠΕΡΧ\tΜΕΓΕΘΟΣ  \tΦΑΣΗ     "
-
-#: src/harmonic.c:2220 src/harmonic.c:2385 src/harmonic.c:2550
-msgid "No available processed data."
-msgstr "Δεν υπάρχουν διαθέσιμα δεδομένα που τυγχάνουν επεξεργασίας."
-
-#: src/harmonic.c:2697 src/harmonic.c:2809 src/harmonic.c:2951
-#: src/harmonic.c:3055
-#, c-format
-msgid "Insufficient windowing range in channel %d, %d."
-msgstr "Ανεπαρκής παράθυρων κυμαίνονται στο κανάλι %d, %d."
-
-#: src/harmonic.c:3087
-msgid "No transform for analysis exists yet."
-msgstr "Δεν μετασχηματισμό για την ανάλυση υπάρχει ακόμα."
-
-#: src/harmonic.c:3138 src/harmonic.c:3159 src/harmonic.c:3181
-#: src/harmonic.c:3202 src/harmonic.c:3224 src/harmonic.c:3245
-#: src/harmonic.c:3266 src/harmonic.c:3292 src/harmonic.c:3313
-#: src/harmonic.c:3335 src/harmonic.c:3356 src/harmonic.c:3378
-#: src/harmonic.c:3399 src/harmonic.c:3420 src/harmonic.c:3448
-#: src/harmonic.c:3480 src/harmonic.c:3513 src/harmonic.c:3536
-#: src/harmonic.c:3568 src/harmonic.c:3606 src/harmonic.c:3640
-#: src/harmonic.c:3669 src/harmonic.c:3698 src/harmonic.c:3721
-#: src/harmonic.c:3753 src/harmonic.c:3789
-#, c-format
-msgid "Some clipping occured in channel %d. Increase zero padding."
-msgstr "Μερικές ψαλίδισμα εμφανίστηκαν σε κανάλι %d. Αύξηση μηδέν παραγέμισμα."
-
-#: src/harmonic.c:3551 src/harmonic.c:3589 src/harmonic.c:3736
-#: src/harmonic.c:3772 src/harmonic.c:22514 src/harmonic.c:22715
-#: src/harmonic.c:23678 src/harmonic.c:23877 src/harmonic.c:26259
-#: src/harmonic.c:26416 src/harmonic.c:27159 src/harmonic.c:27315
-msgid "Offset must be nonzero for linear measurements."
-msgstr ""
-"Όφσετ πρέπει να είναι διαφορετική από το μηδέν για γραμμικές μετρήσεις."
-
-#: src/harmonic.c:3909
-msgid "Open a file for analysis first."
-msgstr "Ανοίξτε ένα αρχείο για ανάλυση πρώτη."
-
-#: src/harmonic.c:3955 src/harmonic.c:3964
+#: src/util.c:98 src/util.c:107
 #, c-format
 msgid "x: %f, y: %f"
 msgstr "x: %f, y: %f"
 
-#: src/harmonic.c:3991
+#: src/data.c:38 src/data.c:56 src/data.c:73 src/data.c:99 src/data.c:116
+#: src/data.c:142
+msgid "Select Image File"
+msgstr "Επιλέξτε το αρχείο εικόνας"
+
+#: src/data.c:91 src/data.c:134 src/data.c:159
+msgid "No available image."
+msgstr "Δεν υπάρχουν διαθέσιμες εικόνα."
+
+#: src/data.c:182 src/data.c:246 src/data.c:296 src/data.c:404 src/data.c:509
+#: src/data.c:674 src/data.c:840 src/open.c:24215
+msgid "Select Data File"
+msgstr "Επιλέξτε το αρχείο δεδομένων"
+
+#: src/data.c:188 src/data.c:252 src/data.c:515 src/data.c:680 src/data.c:846
+msgid "Parameter selection"
+msgstr "Παράμετρος επιλογής"
+
+#: src/data.c:188 src/proc.c:176 src/proc.c:430 src/disp.c:88 src/disp.c:636
+#: src/disp.c:1149
+msgid "Chirp"
+msgstr "Τερέτισμα"
+
+#: src/data.c:190 src/data.c:254 src/data.c:517 src/data.c:682 src/data.c:848
+#: src/open.c:24134
+msgid "Select Parameter to save:"
+msgstr "Επιλέξτε την παράμετρο για να αποθηκεύσετε:"
+
+#: src/data.c:306
+msgid "VISIBILTY\tDOMN_SHFT\tCHIRP    "
+msgstr ""
+
+#: src/data.c:318 src/data.c:344 src/data.c:392 src/data.c:425 src/data.c:450
+#: src/data.c:496 src/data.c:576 src/data.c:650 src/data.c:741 src/data.c:815
+#: src/data.c:907 src/data.c:981
+#, c-format
+msgid "Error Saving file: %s."
+msgstr "Σφάλμα κατά την αποθήκευση αρχείου: %s."
+
+#: src/data.c:326
+msgid "K        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
+msgstr ""
+
+#: src/data.c:353
+msgid "J        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
+msgstr ""
+
+#: src/data.c:414
+msgid "VISIBILTY\tDOMN_SHFT"
+msgstr ""
+
+#: src/data.c:433
+msgid "K        \tVISIBILTY\tDOMN_SHFT"
+msgstr ""
+
+#: src/data.c:459
+msgid "J        \tVISIBILTY\tDOMN_SHFT"
+msgstr ""
+
+#: src/data.c:515 src/data.c:680 src/data.c:846
+msgid "Real/Imaginary"
+msgstr ""
+
+#: src/data.c:515 src/data.c:680 src/data.c:846
+msgid "Magnitude/Phase"
+msgstr ""
+
+#: src/data.c:522 src/data.c:687 src/data.c:853
+msgid "INVERSE_D\tREAL_VAL \tIMAG_VAL "
+msgstr "ΑΝΤΙ_ΠΕΡΧ\tΠΡΑΓ_ΤΙΜ \tΦΑΝΤ_ΤΙΜ "
+
+#: src/data.c:584 src/data.c:749 src/data.c:915
+msgid "INVERSE_D\tMAGNITUDE\tPHASE    "
+msgstr "ΑΝΤΙ_ΠΕΡΧ\tΜΕΓΕΘΟΣ  \tΦΑΣΗ     "
+
+#: src/data.c:666 src/data.c:831 src/data.c:996
+msgid "No available processed data."
+msgstr "Δεν υπάρχουν διαθέσιμα δεδομένα που τυγχάνουν επεξεργασίας."
+
+#: src/proc.c:166 src/proc.c:278 src/proc.c:420 src/proc.c:524
+#, c-format
+msgid "Insufficient windowing range in channel %d, %d."
+msgstr "Ανεπαρκής παράθυρων κυμαίνονται στο κανάλι %d, %d."
+
+#: src/proc.c:556
+msgid "No transform for analysis exists yet."
+msgstr "Δεν μετασχηματισμό για την ανάλυση υπάρχει ακόμα."
+
+#: src/proc.c:612 src/proc.c:633 src/proc.c:655 src/proc.c:676 src/proc.c:698
+#: src/proc.c:719 src/proc.c:745 src/proc.c:766 src/proc.c:788 src/proc.c:809
+#: src/proc.c:831 src/proc.c:852 src/proc.c:888 src/proc.c:909 src/proc.c:931
+#: src/proc.c:952 src/proc.c:974 src/proc.c:995 src/proc.c:1021
+#: src/proc.c:1042 src/proc.c:1064 src/proc.c:1085 src/proc.c:1107
+#: src/proc.c:1128 src/proc.c:1157 src/proc.c:1178 src/proc.c:1200
+#: src/proc.c:1221 src/proc.c:1243 src/proc.c:1264 src/proc.c:1291
+#: src/proc.c:1312 src/proc.c:1334 src/proc.c:1355 src/proc.c:1378
+#: src/proc.c:1400 src/proc.c:1431 src/proc.c:1463 src/proc.c:1496
+#: src/proc.c:1519 src/proc.c:1543 src/proc.c:1572 src/proc.c:1605
+#: src/proc.c:1633 src/proc.c:1662 src/proc.c:1685 src/proc.c:1709
+#: src/proc.c:1736 src/proc.c:1774 src/proc.c:1806 src/proc.c:1839
+#: src/proc.c:1862 src/proc.c:1886 src/proc.c:1915 src/proc.c:1948
+#: src/proc.c:1976 src/proc.c:2005 src/proc.c:2028 src/proc.c:2052
+#: src/proc.c:2079 src/proc.c:2110 src/proc.c:2142 src/proc.c:2175
+#: src/proc.c:2198 src/proc.c:2230 src/proc.c:2268 src/proc.c:2303
+#: src/proc.c:2332 src/proc.c:2361 src/proc.c:2384 src/proc.c:2417
+#: src/proc.c:2454
+#, c-format
+msgid "Some clipping occured in channel %d. Increase zero padding."
+msgstr "Μερικές ψαλίδισμα εμφανίστηκαν σε κανάλι %d. Αύξηση μηδέν παραγέμισμα."
+
+#: src/proc.c:2213 src/proc.c:2251 src/proc.c:2400 src/proc.c:2437
+#: src/open.c:18720 src/open.c:18921 src/open.c:19884 src/open.c:20083
+#: src/open.c:22465 src/open.c:22622 src/open.c:23365 src/open.c:23521
+msgid "Offset must be nonzero for linear measurements."
+msgstr ""
+"Όφσετ πρέπει να είναι διαφορετική από το μηδέν για γραμμικές μετρήσεις."
+
+#: src/proc.c:2575
+msgid "Open a file for analysis first."
+msgstr "Ανοίξτε ένα αρχείο για ανάλυση πρώτη."
+
+#: src/disp.c:37
+msgid "Display Properties"
+msgstr "Ιδιότητες εμφάνισης"
+
+#: src/disp.c:47 src/disp.c:595 src/disp.c:1174 src/disp.c:1439
+msgid "Text size:"
+msgstr "Μέγεθος κειμένου:"
+
+#: src/disp.c:50 src/disp.c:598 src/disp.c:1177 src/disp.c:1442
+msgid "Tick label size:"
+msgstr "Μέγεθος ετικέτας:"
+
+#: src/disp.c:57
+msgid "Radial axis text:"
+msgstr "Κείμενο για τον ακτινικό άξονα:"
+
+#: src/disp.c:60
+msgid "Azimuthal axis text:"
+msgstr "Κείμενο για τον αζιμουθιακό άξονα:"
+
+#: src/disp.c:91 src/disp.c:639 src/disp.c:1152 src/disp.c:1217
+#: src/disp.c:1482
+msgid "Multiple plots for Results over index j"
+msgstr "Πολλαπλές επιφάνειες για τα αποτελέσματα πάνω δείκτη η"
+
+#: src/disp.c:95 src/disp.c:643 src/disp.c:1156 src/disp.c:1221
+#: src/disp.c:1486
+msgid "Multiple plots for Results over index k"
+msgstr "Πολλαπλές επιφάνειες για τα αποτελέσματα πάνω δείκτη ζ"
+
+#: src/disp.c:605 src/disp.c:1184 src/disp.c:1449
+msgid "X axis text:"
+msgstr "Κείμενο για τον άξονα Χ:"
+
+#: src/disp.c:608 src/disp.c:1187 src/disp.c:1452
+msgid "Y axis text:"
+msgstr "Κείμενο για τον άξονα Υ:"
+
+#: src/disp.c:1211 src/disp.c:1476
+msgid "Multiple plots for Inverse Domain"
+msgstr "Πολλαπλές επιφάνειες για την αντίστροφη περιοχή"
+
+#: src/open.c:49
 msgid "Perform an initial test of the parameters first."
 msgstr "Εκτελέστε μια πρώτη δοκιμή των παραμέτρων πρώτη."
 
-#: src/harmonic.c:3997
+#: src/open.c:55
 msgid ""
 "Parameters have changed since the last test. Retest with the current values "
 "first."
@@ -186,274 +402,81 @@ msgstr ""
 "Οι παράμετροι έχουν αλλάξει από την τελευταία δοκιμή. Επανεξετάστε με τις "
 "ισχύουσες τιμές πρώτα."
 
-#: src/harmonic.c:4003
+#: src/open.c:61
 msgid "Select Config File"
 msgstr "Επιλέξτε το αρχείο ρυθμίσεων"
 
-#: src/harmonic.c:4009
+#: src/open.c:67
 msgid "Configuration file generation"
 msgstr "Διαμόρφωση δημιουργία αρχείων"
 
-#: src/harmonic.c:4017
+#: src/open.c:75
 msgid ""
 "Measurand\n"
 "Value:"
 msgstr "Μετρούμενο αξία"
 
-#: src/harmonic.c:4020
+#: src/open.c:78
 msgid "File:"
 msgstr "Αρχείο:"
 
-#: src/harmonic.c:4248 src/harmonic.c:4423 src/harmonic.c:4599
-#: src/harmonic.c:4774 src/harmonic.c:4950 src/harmonic.c:5125
-#: src/harmonic.c:5305 src/harmonic.c:5480 src/harmonic.c:5656
-#: src/harmonic.c:5831 src/harmonic.c:6007 src/harmonic.c:6182
-#: src/harmonic.c:6384 src/harmonic.c:6579 src/harmonic.c:6766
-#: src/harmonic.c:6952 src/harmonic.c:7145 src/harmonic.c:7336
-#: src/harmonic.c:7532 src/harmonic.c:7723 src/harmonic.c:7910
-#: src/harmonic.c:8096 src/harmonic.c:8287 src/harmonic.c:8473
-#: src/harmonic.c:8614 src/harmonic.c:8745 src/harmonic.c:8877
-#: src/harmonic.c:9008 src/harmonic.c:9140 src/harmonic.c:9271
-#: src/harmonic.c:9407 src/harmonic.c:9538 src/harmonic.c:9670
-#: src/harmonic.c:9801 src/harmonic.c:9933 src/harmonic.c:10064
-#: src/harmonic.c:10223 src/harmonic.c:10374 src/harmonic.c:10517
-#: src/harmonic.c:10659 src/harmonic.c:10808 src/harmonic.c:10955
-#: src/harmonic.c:11108 src/harmonic.c:11255 src/harmonic.c:11398
-#: src/harmonic.c:11540 src/harmonic.c:11688 src/harmonic.c:11831
-#: src/harmonic.c:12022 src/harmonic.c:12197 src/harmonic.c:12373
-#: src/harmonic.c:12548 src/harmonic.c:12724 src/harmonic.c:12899
-#: src/harmonic.c:13079 src/harmonic.c:13254 src/harmonic.c:13430
-#: src/harmonic.c:13605 src/harmonic.c:13781 src/harmonic.c:13956
-#: src/harmonic.c:14158 src/harmonic.c:14353 src/harmonic.c:14540
-#: src/harmonic.c:14726 src/harmonic.c:14919 src/harmonic.c:15110
-#: src/harmonic.c:15306 src/harmonic.c:15497 src/harmonic.c:15684
-#: src/harmonic.c:15870 src/harmonic.c:16061 src/harmonic.c:16247
-#: src/harmonic.c:16388 src/harmonic.c:16519 src/harmonic.c:16651
-#: src/harmonic.c:16782 src/harmonic.c:16914 src/harmonic.c:17045
-#: src/harmonic.c:17181 src/harmonic.c:17312 src/harmonic.c:17444
-#: src/harmonic.c:17575 src/harmonic.c:17707 src/harmonic.c:17838
-#: src/harmonic.c:17997 src/harmonic.c:18148 src/harmonic.c:18291
-#: src/harmonic.c:18433 src/harmonic.c:18582 src/harmonic.c:18729
-#: src/harmonic.c:18882 src/harmonic.c:19029 src/harmonic.c:19172
-#: src/harmonic.c:19314 src/harmonic.c:19462 src/harmonic.c:19605
-#: src/harmonic.c:19794 src/harmonic.c:19971 src/harmonic.c:20147
-#: src/harmonic.c:20322 src/harmonic.c:20498 src/harmonic.c:20673
-#: src/harmonic.c:20853 src/harmonic.c:21028 src/harmonic.c:21204
-#: src/harmonic.c:21379 src/harmonic.c:21555 src/harmonic.c:21730
-#: src/harmonic.c:21932 src/harmonic.c:22127 src/harmonic.c:22314
-#: src/harmonic.c:22500 src/harmonic.c:22701 src/harmonic.c:22901
-#: src/harmonic.c:23100 src/harmonic.c:23291 src/harmonic.c:23478
-#: src/harmonic.c:23664 src/harmonic.c:23863 src/harmonic.c:24058
-#: src/harmonic.c:24200 src/harmonic.c:24331 src/harmonic.c:24463
-#: src/harmonic.c:24594 src/harmonic.c:24726 src/harmonic.c:24857
-#: src/harmonic.c:24993 src/harmonic.c:25124 src/harmonic.c:25256
-#: src/harmonic.c:25387 src/harmonic.c:25519 src/harmonic.c:25650
-#: src/harmonic.c:25809 src/harmonic.c:25960 src/harmonic.c:26103
-#: src/harmonic.c:26245 src/harmonic.c:26402 src/harmonic.c:26558
-#: src/harmonic.c:26712 src/harmonic.c:26859 src/harmonic.c:27002
-#: src/harmonic.c:27144 src/harmonic.c:27300 src/harmonic.c:27452
-#: src/harmonic.c:27997 src/harmonic.c:28129
+#: src/open.c:306 src/open.c:481 src/open.c:657 src/open.c:832 src/open.c:1008
+#: src/open.c:1183 src/open.c:1363 src/open.c:1538 src/open.c:1714
+#: src/open.c:1889 src/open.c:2065 src/open.c:2240 src/open.c:2442
+#: src/open.c:2637 src/open.c:2824 src/open.c:3010 src/open.c:3203
+#: src/open.c:3394 src/open.c:3590 src/open.c:3781 src/open.c:3968
+#: src/open.c:4154 src/open.c:4345 src/open.c:4531 src/open.c:4672
+#: src/open.c:4803 src/open.c:4935 src/open.c:5066 src/open.c:5198
+#: src/open.c:5329 src/open.c:5465 src/open.c:5596 src/open.c:5728
+#: src/open.c:5859 src/open.c:5991 src/open.c:6122 src/open.c:6281
+#: src/open.c:6432 src/open.c:6575 src/open.c:6717 src/open.c:6866
+#: src/open.c:7013 src/open.c:7166 src/open.c:7313 src/open.c:7456
+#: src/open.c:7598 src/open.c:7746 src/open.c:7889 src/open.c:8084
+#: src/open.c:8262 src/open.c:8441 src/open.c:8619 src/open.c:8798
+#: src/open.c:8976 src/open.c:9159 src/open.c:9337 src/open.c:9516
+#: src/open.c:9694 src/open.c:9873 src/open.c:10051 src/open.c:10256
+#: src/open.c:10454 src/open.c:10644 src/open.c:10833 src/open.c:11029
+#: src/open.c:11223 src/open.c:11422 src/open.c:11616 src/open.c:11806
+#: src/open.c:11995 src/open.c:12189 src/open.c:12378 src/open.c:12522
+#: src/open.c:12656 src/open.c:12791 src/open.c:12925 src/open.c:13060
+#: src/open.c:13194 src/open.c:13333 src/open.c:13467 src/open.c:13602
+#: src/open.c:13736 src/open.c:13871 src/open.c:14005 src/open.c:14167
+#: src/open.c:14321 src/open.c:14467 src/open.c:14612 src/open.c:14764
+#: src/open.c:14914 src/open.c:15070 src/open.c:15220 src/open.c:15366
+#: src/open.c:15511 src/open.c:15662 src/open.c:15808 src/open.c:16000
+#: src/open.c:16177 src/open.c:16353 src/open.c:16528 src/open.c:16704
+#: src/open.c:16879 src/open.c:17059 src/open.c:17234 src/open.c:17410
+#: src/open.c:17585 src/open.c:17761 src/open.c:17936 src/open.c:18138
+#: src/open.c:18333 src/open.c:18520 src/open.c:18706 src/open.c:18907
+#: src/open.c:19107 src/open.c:19306 src/open.c:19497 src/open.c:19684
+#: src/open.c:19870 src/open.c:20069 src/open.c:20264 src/open.c:20406
+#: src/open.c:20537 src/open.c:20669 src/open.c:20800 src/open.c:20932
+#: src/open.c:21063 src/open.c:21199 src/open.c:21330 src/open.c:21462
+#: src/open.c:21593 src/open.c:21725 src/open.c:21856 src/open.c:22015
+#: src/open.c:22166 src/open.c:22309 src/open.c:22451 src/open.c:22608
+#: src/open.c:22764 src/open.c:22918 src/open.c:23065 src/open.c:23208
+#: src/open.c:23350 src/open.c:23506 src/open.c:23658 src/open.c:24203
+#: src/open.c:24335
 #, c-format
 msgid "Loading failed for file: %s, Error: %s."
 msgstr "Φόρτωση απέτυχε για αυτό το αρχείο: %s, Σφάλμα: %s."
 
-#: src/harmonic.c:27926
+#: src/open.c:24132
 msgid "Measurand Variable Type"
 msgstr "Παράμετρος για την ανάλυση"
 
-#: src/harmonic.c:27926
+#: src/open.c:24132
 msgid "Linear"
 msgstr "Γραμμική"
 
-#: src/harmonic.c:27926
+#: src/open.c:24132
 msgid "Polar"
 msgstr "Πολικός"
 
-#: src/harmonic.c:27942 src/harmonic.c:27955 src/harmonic.c:27978
-#: src/harmonic.c:28038 src/harmonic.c:29027
-msgid "Analysis Results"
-msgstr "Αποτελέσματα της ανάλυσης"
-
-#: src/harmonic.c:28110
+#: src/open.c:24316
 #, c-format
 msgid "File: %s successfully loaded."
 msgstr "Αρχείο: %s φορτωθεί επιτυχώς."
-
-#: src/harmonic.c:28694
-msgid "Harmonic Spectrum Analyser"
-msgstr "Αρμονική αναλυτής φάσματος"
-
-#: src/harmonic.c:28728
-msgid "_File"
-msgstr "_Αρχείο"
-
-#: src/harmonic.c:28751
-msgid "Raw Delimited Data"
-msgstr "Πρώτες οριοθετημένη δεδομένα "
-
-#: src/harmonic.c:28755
-msgid "Data Format:"
-msgstr "Μορφή δεδομένων"
-
-#: src/harmonic.c:28760
-msgid "Trace:"
-msgstr "Ίχνος:"
-
-#: src/harmonic.c:28767
-msgid "Transmission Measurement?"
-msgstr "Μέτρηση της μετάδοσης;"
-
-#: src/harmonic.c:28771
-msgid "Data in dBs?"
-msgstr "Δεδομένα σε dBs;"
-
-#: src/harmonic.c:28775
-msgid "Negate?"
-msgstr "Ανατρέπει;"
-
-#: src/harmonic.c:28782
-msgid "Display Properties:"
-msgstr "Ιδιότητες εμφάνισης:"
-
-#: src/harmonic.c:28787
-msgid "_Properties"
-msgstr "_Ιδιοτητες"
-
-#: src/harmonic.c:28793
-msgid "None"
-msgstr "Τίποτα"
-
-#: src/harmonic.c:28797
-msgid ""
-"1st order\n"
-"spectral shadowing"
-msgstr ""
-"Πρώτα αποζημίωση\n"
-"προκειμένου φασματική σκίαση"
-
-#: src/harmonic.c:28801
-msgid ""
-"Nonlinear\n"
-"Compensation:"
-msgstr ""
-"Μη γραμμική\n"
-"αποζημίωση:"
-
-#: src/harmonic.c:28805
-msgid "Invert domain?"
-msgstr "Αναστρέψει την περιοχή;"
-
-#: src/harmonic.c:28809
-msgid ""
-"Apply correction\n"
-"to Window edges?"
-msgstr ""
-"Εφαρμόστε τις διορθώσεις\n"
-"στο παράθυρο άκρα;"
-
-#: src/harmonic.c:28816
-msgid "Optimise Triangle fit?"
-msgstr ""
-"βελτιστοποίηση Ταιριάζουν\n"
-"των τριγώνων;"
-
-#: src/harmonic.c:28820
-msgid "Calculate Chirp?"
-msgstr "Υπολογίσει το τερέτισμα;"
-
-#: src/harmonic.c:28827
-msgid "Batch Process Data?"
-msgstr "Μαζική επεξεργασία τα στοιχεία;"
-
-#: src/harmonic.c:28831
-msgid "Autotrack Offset?"
-msgstr "Aυτοματοποίηση Όφσετ;"
-
-#: src/harmonic.c:28835
-msgid "_Advanced"
-msgstr "Προηγμένη"
-
-#: src/harmonic.c:28840
-msgid "Instructions"
-msgstr "Οδηγίες"
-
-#: src/harmonic.c:28849
-msgid "_Help"
-msgstr "_Βοήθεια"
-
-#: src/harmonic.c:28878
-msgid "Spectrum Start:"
-msgstr "Έναρξη του φάσματος"
-
-#: src/harmonic.c:28886
-msgid "Spectrum Stop:"
-msgstr "Τέλος του φάσματος"
-
-#: src/harmonic.c:28894
-msgid "Offset:"
-msgstr "Όφσετ:"
-
-#: src/harmonic.c:28901 src/harmonic.c:28967
-msgid "j index:"
-msgstr "η δείκτη"
-
-#: src/harmonic.c:28909
-msgid "Zero Padding 2^:"
-msgstr "Μηδέν υλικό παραγεμίσματος 2^:"
-
-#: src/harmonic.c:28916 src/harmonic.c:28983
-msgid ""
-"Reset\n"
-"Arrays"
-msgstr ""
-"Επαναφέρετε\n"
-"το συστοιχίες"
-
-#: src/harmonic.c:28920
-msgid "Transform Spectrum"
-msgstr "Μεταμορφώστε το φάσμα"
-
-#: src/harmonic.c:28923 src/harmonic.c:29002
-msgid "Spectrum"
-msgstr "Φάσμα"
-
-#: src/harmonic.c:28927
-msgid "Inverse Spectrum Start:"
-msgstr "Έναρξη της αντίστροφης φάσματος"
-
-#: src/harmonic.c:28935
-msgid "Inverse Spectrum Stop:"
-msgstr "Τέλος της αντίστροφης φάσματος"
-
-#: src/harmonic.c:28943
-msgid "Triangle Centre:"
-msgstr "Κέντρο του τριγώνου:"
-
-#: src/harmonic.c:28951
-msgid "Triangle Full Width:"
-msgstr "Πλάτος του τριγώνου:"
-
-#: src/harmonic.c:28959
-msgid "DC Peak Width:"
-msgstr "Πλάτος της κορυφής μηδενική συχνότητα:"
-
-#: src/harmonic.c:28975
-msgid "k index:"
-msgstr "ζ δείκτη"
-
-#: src/harmonic.c:28987
-msgid ""
-"Process\n"
-"Spectrum"
-msgstr "Διαδικασία του φάσματος"
-
-#: src/harmonic.c:28990 src/harmonic.c:29011
-msgid "Inverse Spectrum"
-msgstr "Αντίστροφης φάσματος"
-
-#: src/harmonic.c:29007
-msgid "Inverse Domain"
-msgstr "Αντίστροφη περιοχή"
 
 #~ msgid "Variable Parameter"
 #~ msgstr "Παράμετρος για την ανάλυση"

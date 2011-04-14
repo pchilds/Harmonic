@@ -66,6 +66,9 @@
       <para>When batch processing, the results can be displayed as a polar plot, which operates quite similarly. The exception here is due to the wrapping around 360&#xb0; in which case given two azimuthal limits it is ambiguous which segment to take as the range. In order to maintain consistency, the range is thus assumed to flow clockwise from the clicked limit to the released limit. e.g. clicking at 30&#xb0; and dragging to 50&#xb0; will give the large range of -310&#xb0; to 50&#xb0;<footnote><para>50&#xb0; is wrapped around to -310&#xb0; here in order to push the 360&#xb0; discontinuity point outside of the range.</para></footnote> even though the mouse may have taken the shorter path.</para>
       <para>Multiple plots can be displayed and the title/size of the axes changed by selecting Display Properties in the Properties menu.</para>
     </sect2>
+    <sect2><title>Invert domain?</title>
+      <para>One of the options in the Advanced menu is the option to invert the domain. Not to be confused with the inverse domain (whose inverse is calcluated as the Fourier inverse or more general harmonic inverses to be included later) this inverse is calculated as: <inlineequation>k=2pi/x</inlineequation>; useful for converting between domains such as wavelength and wavenumber that have such a relation. As the Fourier transformation requires uniform sampling, the domain is interpolated to ensure this.</para>
+    </sect2>
     <sect2><title>Selecting windowed regions for transformation</title>
       <para>Windows are defined by the Spectrum Start and Stop values. Multiple windows can be selected by incrementing the j index value to add a new window. If you have inadvertantly added a window that isn't desired you will have to press reset arrays to remove these additional windows and start again. Accurate values for the Start and Stop values can be determined based on the coordinates displayed in the statusbar when holding the mouse over a particular point in the spectrum displayed in the plot.</para>
       <para>If you want to see the transformed results of all the windows on the one plot at the same time select "Multiple plots for Inverse Domain" from Display Properties in the Properties menu.</para>
@@ -86,6 +89,9 @@
       <para> Differences for this case are mainly seen in the triangles parameters. Calculation of phase based values such as domain shifts and chirp is performed as a weighted average over these triangles, which are designed as the best fit to the peaks being analysed (in terms of centre value and width). In this way data at the edge of the triangles, where the magnitude is low (and hence noise in the phase is high), contributes less to the overall result and the reliable data in the centre contributes more.</para>
       <para>Phase shifts in the spectrum can also cause large errors. In this case it may be necessary to limit the start stop values to a narrower range so as to exclude regions of high phase error rather than unnaturally distorting the triangles.</para>
       <para>The visibility of fringes is referenced against the area given by the peak at zero frequency (DC peak), hence you will have to specify the width of this peak over which to calculate its area (To be consistent with the way in which the triangles are defined, this is the full width which can be determined as twice the frequency at which a line fitted to the DC peak cuts the horizontal axis).</para>
+    </sect2>
+    <sect2><title>Optimise Triangles?</title>
+      <para>Triangle optimisation is not yet implemented.</para>
     </sect2>
     <sect2><title>Interpreting results</title>
       <para>The program will give values for the visibility of fringes and the domain shift (If calculate chirp was selected from the advanced menu, then this will be shown as well).</para>
@@ -108,11 +114,11 @@
   </sect1>
   <sect1 id="save"><title>Exporting Results</title>
     <sect2><title>Saving data</title>
-      <para>Saving data is unfortunatley not implemented yet.</para>
+      <para>Saving data is unfortunatley not completely implemented yet.</para>
     </sect2>
     <sect2><title>Saving graphs</title>
-      <para>Having selected the tab of the desired graph to save, from the file menu choose print and type in a file name ending in .eps for Encapsulated Postscript. EPS is a vector image format that allows for easy scaling without loss of image quality. EPS is the format used for publication by LaTEX and is chosen here to allow the smooth transfer of data results to a publication ready format without the need of an intermediary step of editing figures.</para>
-      <para>To convert to another format, such as tiff, use GIMP to first scale the image to the desired size and then save in the new format.</para>
+      <para>Select the tab of the desired graph to save and ensure that the graph looks how you want to print it (zoomed to the right scale and with axes labelled and sized as set up in Properties->Display Properties). From the file menu choose print and type in a file name ending in .eps for Encapsulated Postscript. EPS is a vector image format that allows for easy scaling without loss of image quality. EPS is the format used for publication by LaTEX and is chosen here to allow the smooth transfer of data results to a publication ready format without the need of an intermediary step of editing figures.</para>
+      <para>To convert to another format, such as tiff, use an image editing program such as GIMP to first scale the image to the desired size and then save in the new format.</para>
     </sect2>
   </sect1>
   <glossary>
@@ -132,6 +138,12 @@
       <glossentry>
         <glossterm>EPS</glossterm>
         <glossdef><para>Encapsulated Postscript. An image file that is described by a set of vectors rather than the usual bitmap format. An advantage of vector graphics is that they can be scaled to arbitrary sizes without losing resolution.</para></glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv><title>L</title>
+      <glossentry>
+        <glossterm>LaTEX</glossterm>
+        <glossdef><para>A professional typesetting program commonly used for publishing academic material.</para></glossdef>
       </glossentry>
     </glossdiv>
     <glossdiv><title>M</title>

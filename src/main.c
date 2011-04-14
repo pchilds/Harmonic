@@ -36,7 +36,6 @@
  *
  * DPR: change to be nonmodal
  * OPD: config writer (+overwrite confirm)
- * OPD: offset tracking.
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
  * FFT: window edge correction
@@ -58,7 +57,7 @@ GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; /* widget
 GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *sz, *nx, *delf, *vis, *doms, *chp, *msr, *bxr, *byr, *bsz, *bnx; /* arrays for windowing and data */
 GSList *group2=NULL; /* list for various traces available */
 gint lc, mx; /* number of data points and number of files in batch routine */
-guint jdim=0, kdim=0, jdimx=0, kdimx=0, jdimxf=0, kdimxf=0, satl=0, trc=1, flags=0, flagd=0; /* array indices, #of traces, trace number, and current processing state and display flags */
+guint jdim=0, kdim=0, jdimx=1, kdimx=1, jdimxf=1, kdimxf=1, satl=0, trc=1, flags=0, flagd=0; /* array indices, #of traces, trace number, and current processing state and display flags */
 gulong pr_id; /* id for disabling/enabling post-transform processing */
 gdouble oe; /* value to hold prior reference level for offset tracking */
 
