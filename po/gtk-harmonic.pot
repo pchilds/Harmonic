@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-04-14 14:24+0300\n"
+"POT-Creation-Date: 2011-04-15 06:56+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -182,13 +182,15 @@ msgstr ""
 msgid "Inverse Domain"
 msgstr ""
 
-#: src/main.c:401 src/data.c:188 src/data.c:252 src/disp.c:85 src/disp.c:633
-#: src/disp.c:1146 src/open.c:24232
+#: src/main.c:401 src/data.c:192 src/data.c:264 src/data.c:337 src/data.c:556
+#: src/data.c:613 src/data.c:671 src/disp.c:85 src/disp.c:633 src/disp.c:1146
+#: src/open.c:24232
 msgid "Visibility"
 msgstr ""
 
-#: src/main.c:407 src/data.c:188 src/data.c:252 src/disp.c:86 src/disp.c:634
-#: src/disp.c:1147 src/open.c:24238
+#: src/main.c:407 src/data.c:192 src/data.c:264 src/data.c:337 src/data.c:556
+#: src/data.c:613 src/data.c:671 src/disp.c:86 src/disp.c:634 src/disp.c:1147
+#: src/open.c:24238
 msgid "Domain Shift"
 msgstr ""
 
@@ -222,73 +224,173 @@ msgstr ""
 msgid "No available image."
 msgstr ""
 
-#: src/data.c:182 src/data.c:246 src/data.c:296 src/data.c:404 src/data.c:509
-#: src/data.c:674 src/data.c:840 src/open.c:24215
+#: src/data.c:182 src/data.c:546 src/data.c:835 src/data.c:943 src/data.c:1048
+#: src/data.c:1213 src/data.c:1379 src/open.c:24215
 msgid "Select Data File"
 msgstr ""
 
-#: src/data.c:188 src/data.c:252 src/data.c:515 src/data.c:680 src/data.c:846
+#: src/data.c:192 src/data.c:264 src/data.c:337 src/data.c:409 src/data.c:556
+#: src/data.c:613 src/data.c:671 src/data.c:728 src/data.c:1054
+#: src/data.c:1219 src/data.c:1385
 msgid "Parameter selection"
 msgstr ""
 
-#: src/data.c:188 src/proc.c:176 src/proc.c:430 src/disp.c:88 src/disp.c:636
-#: src/disp.c:1149
+#: src/data.c:192 src/data.c:264 src/data.c:337 src/proc.c:176 src/proc.c:430
+#: src/disp.c:88 src/disp.c:636 src/disp.c:1149
 msgid "Chirp"
 msgstr ""
 
-#: src/data.c:190 src/data.c:254 src/data.c:517 src/data.c:682 src/data.c:848
-#: src/open.c:24134
+#: src/data.c:192 src/data.c:264 src/data.c:337
+msgid "All"
+msgstr ""
+
+#: src/data.c:194 src/data.c:266 src/data.c:339 src/data.c:411 src/data.c:558
+#: src/data.c:615 src/data.c:673 src/data.c:730 src/data.c:1056
+#: src/data.c:1221 src/data.c:1387
 msgid "Select Parameter to save:"
 msgstr ""
 
-#: src/data.c:306
-msgid "VISIBILTY\tDOMN_SHFT\tCHIRP    "
+#: src/data.c:199 src/data.c:271 src/data.c:344 src/data.c:416 src/data.c:476
+msgid "MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr ""
 
-#: src/data.c:318 src/data.c:344 src/data.c:392 src/data.c:425 src/data.c:450
-#: src/data.c:496 src/data.c:576 src/data.c:650 src/data.c:741 src/data.c:815
-#: src/data.c:907 src/data.c:981
+#: src/data.c:207 src/data.c:222 src/data.c:237 src/data.c:252 src/data.c:279
+#: src/data.c:294 src/data.c:309 src/data.c:324 src/data.c:352 src/data.c:367
+#: src/data.c:382 src/data.c:397 src/data.c:424 src/data.c:439 src/data.c:454
+#: src/data.c:469 src/data.c:484 src/data.c:499 src/data.c:514 src/data.c:529
+#: src/data.c:571 src/data.c:586 src/data.c:601 src/data.c:628 src/data.c:643
+#: src/data.c:658 src/data.c:686 src/data.c:701 src/data.c:716 src/data.c:743
+#: src/data.c:758 src/data.c:773 src/data.c:788 src/data.c:803 src/data.c:818
+#: src/data.c:857 src/data.c:883 src/data.c:931 src/data.c:964 src/data.c:989
+#: src/data.c:1035 src/data.c:1115 src/data.c:1189 src/data.c:1280
+#: src/data.c:1354 src/data.c:1446 src/data.c:1520
 #, c-format
 msgid "Error Saving file: %s."
 msgstr ""
 
-#: src/data.c:326
+#: src/data.c:214 src/data.c:286 src/data.c:359 src/data.c:431 src/data.c:491
+msgid "MEAS     \tCHIRP    "
+msgstr ""
+
+#: src/data.c:229 src/data.c:301 src/data.c:374 src/data.c:446 src/data.c:506
+#: src/data.c:578 src/data.c:635 src/data.c:693 src/data.c:750 src/data.c:795
+msgid "MEAS     \tDOMN_SHFT"
+msgstr ""
+
+#: src/data.c:244 src/data.c:316 src/data.c:389 src/data.c:461 src/data.c:521
+#: src/data.c:593 src/data.c:650 src/data.c:708 src/data.c:765 src/data.c:810
+msgid "MEAS     \tVISIBILTY"
+msgstr ""
+
+#: src/data.c:409 src/data.c:728
+msgid ""
+"Visibility\n"
+"over J"
+msgstr ""
+
+#: src/data.c:409 src/data.c:728
+msgid ""
+"Domain Shift\n"
+"over J"
+msgstr ""
+
+#: src/data.c:409
+msgid ""
+"Chirp\n"
+"over J"
+msgstr ""
+
+#: src/data.c:409
+msgid ""
+"All\n"
+"over J"
+msgstr ""
+
+#: src/data.c:409 src/data.c:728
+msgid ""
+"Visibility\n"
+"over K"
+msgstr ""
+
+#: src/data.c:409 src/data.c:728
+msgid ""
+"Domain Shift\n"
+"over K"
+msgstr ""
+
+#: src/data.c:409
+msgid ""
+"Chirp\n"
+"over K"
+msgstr ""
+
+#: src/data.c:409
+msgid ""
+"All\n"
+"over K"
+msgstr ""
+
+#: src/data.c:556 src/data.c:613 src/data.c:671
+msgid "Both"
+msgstr ""
+
+#: src/data.c:563 src/data.c:620 src/data.c:678 src/data.c:735 src/data.c:780
+msgid "MEAS     \tVISIBILTY\tDOMN_SHFT"
+msgstr ""
+
+#: src/data.c:728
+msgid ""
+"Both\n"
+"over J"
+msgstr ""
+
+#: src/data.c:728
+msgid ""
+"Both\n"
+"over K"
+msgstr ""
+
+#: src/data.c:845
+msgid "VISIBILTY\tDOMN_SHFT\tCHIRP    "
+msgstr ""
+
+#: src/data.c:865
 msgid "K        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr ""
 
-#: src/data.c:353
+#: src/data.c:892
 msgid "J        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr ""
 
-#: src/data.c:414
+#: src/data.c:953
 msgid "VISIBILTY\tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:433
+#: src/data.c:972
 msgid "K        \tVISIBILTY\tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:459
+#: src/data.c:998
 msgid "J        \tVISIBILTY\tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:515 src/data.c:680 src/data.c:846
+#: src/data.c:1054 src/data.c:1219 src/data.c:1385
 msgid "Real/Imaginary"
 msgstr ""
 
-#: src/data.c:515 src/data.c:680 src/data.c:846
+#: src/data.c:1054 src/data.c:1219 src/data.c:1385
 msgid "Magnitude/Phase"
 msgstr ""
 
-#: src/data.c:522 src/data.c:687 src/data.c:853
+#: src/data.c:1061 src/data.c:1226 src/data.c:1392
 msgid "INVERSE_D\tREAL_VAL \tIMAG_VAL "
 msgstr ""
 
-#: src/data.c:584 src/data.c:749 src/data.c:915
+#: src/data.c:1123 src/data.c:1288 src/data.c:1454
 msgid "INVERSE_D\tMAGNITUDE\tPHASE    "
 msgstr ""
 
-#: src/data.c:666 src/data.c:831 src/data.c:996
+#: src/data.c:1205 src/data.c:1370 src/data.c:1535
 msgid "No available processed data."
 msgstr ""
 
@@ -454,6 +556,10 @@ msgstr ""
 
 #: src/open.c:24132
 msgid "Polar"
+msgstr ""
+
+#: src/open.c:24134
+msgid "Select Measurand Type:"
 msgstr ""
 
 #: src/open.c:24316

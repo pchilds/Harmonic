@@ -24131,7 +24131,7 @@ void opd(GtkWidget *widget, gpointer data)
 					}
 					dialog=gtk_dialog_new_with_buttons(_("Measurand Variable Type"), GTK_WINDOW(window), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Linear"), 1, _("Polar"), 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 					cont=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-					label=gtk_label_new(_("Select Parameter to save:"));
+					label=gtk_label_new(_("Select Measurand Type:"));
 					gtk_container_add(GTK_CONTAINER(cont), label);
 					switch (gtk_dialog_run(GTK_DIALOG(dialog)))
 					{

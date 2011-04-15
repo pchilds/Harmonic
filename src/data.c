@@ -185,56 +185,356 @@ void sav(GtkWidget *widget, gpointer data)
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Visibility"), 1, _("Domain Shift"), 2, _("Chirp"), 3, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
-				cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
-				label=gtk_label_new(_("Select Parameter to save:"));
-				gtk_container_add(GTK_CONTAINER(cont), label);
-				switch (gtk_dialog_run(GTK_DIALOG(dialog)))
+				if (jdimxf==1)
 				{
-					case 1:
-					/*
-					fill contents
-					g_file_set_contents(fout, contents, -1, &Err);
-					g_free(contents);
-					if (Err)
+					if (kdimxf==1)
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
-						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-						g_free(str);
-						g_error_free(Err);
+						dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Visibility"), 1, _("Domain Shift"), 2, _("Chirp"), 3, _("All"), 4, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+						cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
+						label=gtk_label_new(_("Select Parameter to save:"));
+						gtk_container_add(GTK_CONTAINER(cont), label);
+						switch (gtk_dialog_run(GTK_DIALOG(dialog)))
+						{
+							case 4:
+							contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "));
+							/*
+							fill contents further
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							case 3:
+							contents=g_strdup(_("MEAS     \tCHIRP    "));
+							/*
+							fill contents further
+							*/ 
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							case 2:
+							contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
+							/*
+							fill contents further
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							case 1:
+							contents=g_strdup(_("MEAS     \tVISIBILTY"));
+							/*
+							fill contents further
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							default:
+							break;
+						}
 					}
-					 */
-					break;
-					case 2:
-					/*
-					fill contents
-					g_file_set_contents(fout, contents, -1, &Err);
-					g_free(contents);
-					if (Err)
+					else
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
-						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-						g_free(str);
-						g_error_free(Err);
+						dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Visibility"), 1, _("Domain Shift"), 2, _("Chirp"), 3, _("All"), 4, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+						cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
+						label=gtk_label_new(_("Select Parameter to save:"));
+						gtk_container_add(GTK_CONTAINER(cont), label);
+						switch (gtk_dialog_run(GTK_DIALOG(dialog)))
+						{
+							case 4:
+							contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "));
+							/*
+							fill contents
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							case 3:
+							contents=g_strdup(_("MEAS     \tCHIRP    "));
+							/*
+							fill contents further
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							case 2:
+							contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
+							/*
+							fill contents further
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							case 1:
+							contents=g_strdup(_("MEAS     \tVISIBILTY"));
+							/*
+							fill contents further
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							default:
+							break;
+						}
 					}
-					 */
-					break;
-					case 3:
-					/*
-					fill contents
-					g_file_set_contents(fout, contents, -1, &Err);
-					g_free(contents);
-					if (Err)
+				}
+				else if (kdimxf==1)
+				{
+					dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Visibility"), 1, _("Domain Shift"), 2, _("Chirp"), 3, _("All"), 4, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+					cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
+					label=gtk_label_new(_("Select Parameter to save:"));
+					gtk_container_add(GTK_CONTAINER(cont), label);
+					switch (gtk_dialog_run(GTK_DIALOG(dialog)))
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
-						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-						g_free(str);
-						g_error_free(Err);
+						case 4:
+						contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 3:
+						contents=g_strdup(_("MEAS     \tCHIRP    "));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 2:
+						contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 1:
+						contents=g_strdup(_("MEAS     \tVISIBILTY"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						default:
+						break;
 					}
-					*/
-					break;
-					default:
-					break;
+				}
+				else
+				{
+					dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Visibility\nover J"), 1, _("Domain Shift\nover J"), 2, _("Chirp\nover J"), 3, _("All\nover J"), 4, _("Visibility\nover K"), 5, _("Domain Shift\nover K"), 6, _("Chirp\nover K"), 7, _("All\nover K"), 8, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+					cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
+					label=gtk_label_new(_("Select Parameter to save:"));
+					gtk_container_add(GTK_CONTAINER(cont), label);
+					switch (gtk_dialog_run(GTK_DIALOG(dialog)))
+					{
+						case 8:
+						contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 7:
+						contents=g_strdup(_("MEAS     \tCHIRP    "));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 6:
+						contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 5:
+						contents=g_strdup(_("MEAS     \tVISIBILTY"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 4:
+						contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 3:
+						contents=g_strdup(_("MEAS     \tCHIRP    "));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 2:
+						contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 1:
+						contents=g_strdup(_("MEAS     \tVISIBILTY"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						default:
+						break;
+					}
 				}
 				gtk_widget_destroy(dialog);
 				g_free(fout);
@@ -249,42 +549,281 @@ void sav(GtkWidget *widget, gpointer data)
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Visibility"), 1, _("Domain Shift"), 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
-				cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
-				label=gtk_label_new(_("Select Parameter to save:"));
-				gtk_container_add(GTK_CONTAINER(cont), label);
-				switch (gtk_dialog_run(GTK_DIALOG(dialog)))
+				if (jdimxf==1)
 				{
-					case 1:
-					/*
-					fill contents
-					g_file_set_contents(fout, contents, -1, &Err);
-					g_free(contents);
-					if (Err)
+					if (kdimxf==1)
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
-						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-						g_free(str);
-						g_error_free(Err);
+						dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Visibility"), 1, _("Domain Shift"), 2, _("Both"), 3, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+						cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
+						label=gtk_label_new(_("Select Parameter to save:"));
+						gtk_container_add(GTK_CONTAINER(cont), label);
+						switch (gtk_dialog_run(GTK_DIALOG(dialog)))
+						{
+							case 3:
+							contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT"));
+							/*
+							fill contents further
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							case 2:
+							contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
+							/*
+							fill contents further
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							case 1:
+							contents=g_strdup(_("MEAS     \tVISIBILTY"));
+							/*
+							fill contents further
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							default:
+							break;
+						}
 					}
-					 */
-					break;
-					case 2:
-					/*
-					fill contents
-					g_file_set_contents(fout, contents, -1, &Err);
-					g_free(contents);
-					if (Err)
+					else
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
-						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-						g_free(str);
-						g_error_free(Err);
+						dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Visibility"), 1, _("Domain Shift"), 2, _("Both"), 3, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+						cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
+						label=gtk_label_new(_("Select Parameter to save:"));
+						gtk_container_add(GTK_CONTAINER(cont), label);
+						switch (gtk_dialog_run(GTK_DIALOG(dialog)))
+						{
+							case 3:
+							contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT"));
+							/*
+							fill contents further
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							case 2:
+							contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
+							/*
+							fill contents further
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							case 1:
+							contents=g_strdup(_("MEAS     \tVISIBILTY"));
+							/*
+							fill contents further
+							 */
+							g_file_set_contents(fout, contents, -1, &Err);
+							g_free(contents);
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							break;
+							default:
+							break;
+						}
 					}
-					 */
-					break;
-					default:
-					break;
+				}
+				else if (kdimxf==1)
+				{
+					dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Visibility"), 1, _("Domain Shift"), 2, _("Both"), 3, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+					cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
+					label=gtk_label_new(_("Select Parameter to save:"));
+					gtk_container_add(GTK_CONTAINER(cont), label);
+					switch (gtk_dialog_run(GTK_DIALOG(dialog)))
+					{
+						case 3:
+						contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 2:
+						contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 1:
+						contents=g_strdup(_("MEAS     \tVISIBILTY"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						default:
+						break;
+					}
+				}
+				else
+				{
+					dialog=gtk_dialog_new_with_buttons(_("Parameter selection"), GTK_WINDOW(wfile), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Visibility\nover J"), 1, _("Domain Shift\nover J"), 2, _("Both\nover J"), 3, _("Visibility\nover K"), 4, _("Domain Shift\nover K"), 5, _("Both\nover K"), 6, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+					cont=gtk_dialog_get_content_area(GTK_DIALOG (dialog));
+					label=gtk_label_new(_("Select Parameter to save:"));
+					gtk_container_add(GTK_CONTAINER(cont), label);
+					switch (gtk_dialog_run(GTK_DIALOG(dialog)))
+					{
+						case 6:
+						contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 5:
+						contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 4:
+						contents=g_strdup(_("MEAS     \tVISIBILTY"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 3:
+						contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 2:
+						contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						case 1:
+						contents=g_strdup(_("MEAS     \tVISIBILTY"));
+						/*
+						fill contents further
+						 */
+						g_file_set_contents(fout, contents, -1, &Err);
+						g_free(contents);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						break;
+						default:
+						break;
+					}
 				}
 				gtk_widget_destroy(dialog);
 				g_free(fout);
@@ -299,9 +838,9 @@ void sav(GtkWidget *widget, gpointer data)
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				if (jdimxf==0)
+				if (jdimxf==1)
 				{
-					if (kdimxf==0)
+					if (kdimxf==1)
 					{
 						str=g_strdup(_("VISIBILTY\tDOMN_SHFT\tCHIRP    "));
 						g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, 0));
@@ -407,9 +946,9 @@ void sav(GtkWidget *widget, gpointer data)
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				if (jdimxf==0)
+				if (jdimxf==1)
 				{
-					if (kdimxf==0)
+					if (kdimxf==1)
 					{
 						str=g_strdup(_("VISIBILTY\tDOMN_SHFT"));
 						g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, 0));
