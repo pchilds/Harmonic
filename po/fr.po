@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-04-15 06:56+0300\n"
+"POT-Creation-Date: 2011-04-16 03:54+0300\n"
 "PO-Revision-Date: 2011-04-04 21:10+0300\n"
 "Last-Translator: Matthieu Bellec <>\n"
 "Language-Team: French <>\n"
@@ -18,51 +18,51 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/main.c:80
+#: src/main.c:79
 msgid "Harmonic Spectrum Analyser"
 msgstr "Analyseur de spectre harmonique"
 
-#: src/main.c:114
+#: src/main.c:113
 msgid "_File"
 msgstr "_Fichier"
 
-#: src/main.c:137
+#: src/main.c:136
 msgid "Raw Delimited Data"
 msgstr "Données délimitées brutes"
 
-#: src/main.c:141
+#: src/main.c:140
 msgid "Data Format:"
 msgstr "Format de données:"
 
-#: src/main.c:146
+#: src/main.c:145
 msgid "Trace:"
 msgstr "Trace:"
 
-#: src/main.c:153
+#: src/main.c:152
 msgid "Transmission Measurement?"
 msgstr "Mesure par transmission?"
 
-#: src/main.c:157
+#: src/main.c:156
 msgid "Data in dBs?"
 msgstr "Données en dBs?"
 
-#: src/main.c:161
+#: src/main.c:160
 msgid "Negate?"
 msgstr "Mettre au négatif?"
 
-#: src/main.c:168
+#: src/main.c:167
 msgid "Display Properties:"
 msgstr "Propriétés d'affichage:"
 
-#: src/main.c:173
+#: src/main.c:172
 msgid "_Properties"
 msgstr "_Proprietes"
 
-#: src/main.c:179
+#: src/main.c:178
 msgid "None"
 msgstr "Aucun"
 
-#: src/main.c:183
+#: src/main.c:182
 msgid ""
 "1st order\n"
 "spectral shadowing"
@@ -70,7 +70,7 @@ msgstr ""
 "Obscurcissement spectrale\n"
 "du premier ordre"
 
-#: src/main.c:187
+#: src/main.c:186
 msgid ""
 "Nonlinear\n"
 "Compensation:"
@@ -78,11 +78,11 @@ msgstr ""
 "Compensation\n"
 "non linéaire:"
 
-#: src/main.c:191
+#: src/main.c:190
 msgid "Invert domain?"
 msgstr "Inverser le domaine?"
 
-#: src/main.c:195
+#: src/main.c:194
 msgid ""
 "Apply correction\n"
 "to Window edges?"
@@ -90,55 +90,55 @@ msgstr ""
 "Appliquer à la fenêtre\n"
 "de correction bords?"
 
-#: src/main.c:202
+#: src/main.c:201
 msgid "Optimise Triangle fit?"
 msgstr "Optimiser l'ajustement du triangle?"
 
-#: src/main.c:206
+#: src/main.c:205
 msgid "Calculate Chirp?"
 msgstr "Calculer le chirp?"
 
-#: src/main.c:213
+#: src/main.c:212
 msgid "Batch Process Data?"
 msgstr "Données de traitement par lots?"
 
-#: src/main.c:217
+#: src/main.c:216
 msgid "Autotrack Offset?"
 msgstr "Automatiser décalage"
 
-#: src/main.c:221
+#: src/main.c:220
 msgid "_Advanced"
 msgstr "A_vances"
 
-#: src/main.c:226
+#: src/main.c:225
 msgid "Instructions"
 msgstr "Instructions"
 
-#: src/main.c:235
+#: src/main.c:234
 msgid "_Help"
 msgstr "_Aide"
 
-#: src/main.c:264
+#: src/main.c:263
 msgid "Spectrum Start:"
 msgstr "Début du spectre:"
 
-#: src/main.c:272
+#: src/main.c:271
 msgid "Spectrum Stop:"
 msgstr "Fin du spectre:"
 
-#: src/main.c:280
+#: src/main.c:279
 msgid "Offset:"
 msgstr "Décalage:"
 
-#: src/main.c:287 src/main.c:353
+#: src/main.c:286 src/main.c:352
 msgid "j index:"
 msgstr "index j:"
 
-#: src/main.c:295
+#: src/main.c:294
 msgid "Zero Padding 2^:"
 msgstr "zero padding 2^:"
 
-#: src/main.c:302 src/main.c:369
+#: src/main.c:301 src/main.c:368
 msgid ""
 "Reset\n"
 "Arrays"
@@ -146,39 +146,39 @@ msgstr ""
 "Réinitialiser\n"
 "les rangees"
 
-#: src/main.c:306
+#: src/main.c:305
 msgid "Transform Spectrum"
 msgstr "Transformer le spectre"
 
-#: src/main.c:309 src/main.c:388
+#: src/main.c:308 src/main.c:387
 msgid "Spectrum"
 msgstr "Spectre"
 
-#: src/main.c:313
+#: src/main.c:312
 msgid "Inverse Spectrum Start:"
 msgstr "Début du spectre inverse:"
 
-#: src/main.c:321
+#: src/main.c:320
 msgid "Inverse Spectrum Stop:"
 msgstr "Fin du spectre inverse:"
 
-#: src/main.c:329
+#: src/main.c:328
 msgid "Triangle Centre:"
 msgstr "Centre du triangle:"
 
-#: src/main.c:337
+#: src/main.c:336
 msgid "Triangle Full Width:"
 msgstr "Largeur totale du triangle:"
 
-#: src/main.c:345
+#: src/main.c:344
 msgid "DC Peak Width:"
 msgstr "Largeur du pic DC:"
 
-#: src/main.c:361
+#: src/main.c:360
 msgid "k index:"
 msgstr "index k:"
 
-#: src/main.c:373
+#: src/main.c:372
 msgid ""
 "Process\n"
 "Spectrum"
@@ -186,27 +186,27 @@ msgstr ""
 "Traiter\n"
 "le spectre"
 
-#: src/main.c:376 src/main.c:397
+#: src/main.c:375 src/main.c:396
 msgid "Inverse Spectrum"
 msgstr "Spectre inverse"
 
-#: src/main.c:393
+#: src/main.c:392
 msgid "Inverse Domain"
 msgstr "Domaine inverse"
 
-#: src/main.c:401 src/data.c:192 src/data.c:264 src/data.c:337 src/data.c:556
-#: src/data.c:613 src/data.c:671 src/disp.c:85 src/disp.c:633 src/disp.c:1146
-#: src/open.c:24232
+#: src/main.c:400 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
+#: src/data.c:1120 src/data.c:1261 src/disp.c:85 src/disp.c:633
+#: src/disp.c:1146 src/open.c:24232
 msgid "Visibility"
 msgstr "Visibilité"
 
-#: src/main.c:407 src/data.c:192 src/data.c:264 src/data.c:337 src/data.c:556
-#: src/data.c:613 src/data.c:671 src/disp.c:86 src/disp.c:634 src/disp.c:1147
-#: src/open.c:24238
+#: src/main.c:406 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
+#: src/data.c:1120 src/data.c:1261 src/disp.c:86 src/disp.c:634
+#: src/disp.c:1147 src/open.c:24238
 msgid "Domain Shift"
 msgstr "Décalage du domaine"
 
-#: src/main.c:413 src/open.c:24148 src/open.c:24161 src/open.c:24184
+#: src/main.c:412 src/open.c:24148 src/open.c:24161 src/open.c:24184
 #: src/open.c:24244
 msgid "Analysis Results"
 msgstr "Résultats de l'analyse"
@@ -239,177 +239,181 @@ msgstr "Choisissez le fichier image"
 msgid "No available image."
 msgstr "Aucune image disponible."
 
-#: src/data.c:182 src/data.c:546 src/data.c:835 src/data.c:943 src/data.c:1048
-#: src/data.c:1213 src/data.c:1379 src/open.c:24215
+#: src/data.c:182 src/data.c:1028 src/data.c:1674 src/data.c:1782
+#: src/data.c:1887 src/data.c:2052 src/data.c:2218 src/open.c:24215
 msgid "Select Data File"
 msgstr "Choisissez le fichier de données"
 
-#: src/data.c:192 src/data.c:264 src/data.c:337 src/data.c:409 src/data.c:556
-#: src/data.c:613 src/data.c:671 src/data.c:728 src/data.c:1054
-#: src/data.c:1219 src/data.c:1385
+#: src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:667 src/data.c:1038
+#: src/data.c:1120 src/data.c:1261 src/data.c:1401 src/data.c:1893
+#: src/data.c:2058 src/data.c:2224
 msgid "Parameter selection"
 msgstr "Choix du paramètre"
 
-#: src/data.c:192 src/data.c:264 src/data.c:337 src/proc.c:176 src/proc.c:430
+#: src/data.c:192 src/data.c:298 src/data.c:483 src/proc.c:176 src/proc.c:430
 #: src/disp.c:88 src/disp.c:636 src/disp.c:1149
 msgid "Chirp"
 msgstr "Chirp"
 
-#: src/data.c:192 src/data.c:264 src/data.c:337
+#: src/data.c:192 src/data.c:298 src/data.c:483
 msgid "All"
 msgstr ""
 
-#: src/data.c:194 src/data.c:266 src/data.c:339 src/data.c:411 src/data.c:558
-#: src/data.c:615 src/data.c:673 src/data.c:730 src/data.c:1056
-#: src/data.c:1221 src/data.c:1387
+#: src/data.c:194 src/data.c:300 src/data.c:485 src/data.c:669 src/data.c:1040
+#: src/data.c:1122 src/data.c:1263 src/data.c:1403 src/data.c:1895
+#: src/data.c:2060 src/data.c:2226
 msgid "Select Parameter to save:"
 msgstr "Choisissez le paramètre a sauver:"
 
-#: src/data.c:199 src/data.c:271 src/data.c:344 src/data.c:416 src/data.c:476
+#: src/data.c:199 src/data.c:305 src/data.c:490 src/data.c:674 src/data.c:846
 msgid "MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr ""
 
-#: src/data.c:207 src/data.c:222 src/data.c:237 src/data.c:252 src/data.c:279
-#: src/data.c:294 src/data.c:309 src/data.c:324 src/data.c:352 src/data.c:367
-#: src/data.c:382 src/data.c:397 src/data.c:424 src/data.c:439 src/data.c:454
-#: src/data.c:469 src/data.c:484 src/data.c:499 src/data.c:514 src/data.c:529
-#: src/data.c:571 src/data.c:586 src/data.c:601 src/data.c:628 src/data.c:643
-#: src/data.c:658 src/data.c:686 src/data.c:701 src/data.c:716 src/data.c:743
-#: src/data.c:758 src/data.c:773 src/data.c:788 src/data.c:803 src/data.c:818
-#: src/data.c:857 src/data.c:883 src/data.c:931 src/data.c:964 src/data.c:989
-#: src/data.c:1035 src/data.c:1115 src/data.c:1189 src/data.c:1280
-#: src/data.c:1354 src/data.c:1446 src/data.c:1520
+#: src/data.c:217 src/data.c:240 src/data.c:263 src/data.c:286 src/data.c:344
+#: src/data.c:386 src/data.c:428 src/data.c:470 src/data.c:529 src/data.c:571
+#: src/data.c:613 src/data.c:655 src/data.c:713 src/data.c:755 src/data.c:797
+#: src/data.c:839 src/data.c:885 src/data.c:927 src/data.c:969 src/data.c:1011
+#: src/data.c:1062 src/data.c:1085 src/data.c:1108 src/data.c:1164
+#: src/data.c:1206 src/data.c:1248 src/data.c:1305 src/data.c:1347
+#: src/data.c:1389 src/data.c:1445 src/data.c:1487 src/data.c:1529
+#: src/data.c:1573 src/data.c:1615 src/data.c:1657 src/data.c:1696
+#: src/data.c:1722 src/data.c:1770 src/data.c:1803 src/data.c:1828
+#: src/data.c:1874 src/data.c:1954 src/data.c:2028 src/data.c:2119
+#: src/data.c:2193 src/data.c:2285 src/data.c:2359
 #, c-format
 msgid "Error Saving file: %s."
 msgstr "Fichier d'erreur sauvée: %s."
 
-#: src/data.c:214 src/data.c:286 src/data.c:359 src/data.c:431 src/data.c:491
+#: src/data.c:224 src/data.c:351 src/data.c:536 src/data.c:720 src/data.c:892
 msgid "MEAS     \tCHIRP    "
 msgstr ""
 
-#: src/data.c:229 src/data.c:301 src/data.c:374 src/data.c:446 src/data.c:506
-#: src/data.c:578 src/data.c:635 src/data.c:693 src/data.c:750 src/data.c:795
+#: src/data.c:247 src/data.c:393 src/data.c:578 src/data.c:762 src/data.c:934
+#: src/data.c:1069 src/data.c:1171 src/data.c:1312 src/data.c:1452
+#: src/data.c:1580
 msgid "MEAS     \tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:244 src/data.c:316 src/data.c:389 src/data.c:461 src/data.c:521
-#: src/data.c:593 src/data.c:650 src/data.c:708 src/data.c:765 src/data.c:810
+#: src/data.c:270 src/data.c:435 src/data.c:620 src/data.c:804 src/data.c:976
+#: src/data.c:1092 src/data.c:1213 src/data.c:1354 src/data.c:1494
+#: src/data.c:1622
 msgid "MEAS     \tVISIBILTY"
 msgstr ""
 
-#: src/data.c:409 src/data.c:728
+#: src/data.c:667 src/data.c:1401
 #, fuzzy
 msgid ""
 "Visibility\n"
 "over J"
 msgstr "Visibilité"
 
-#: src/data.c:409 src/data.c:728
+#: src/data.c:667 src/data.c:1401
 #, fuzzy
 msgid ""
 "Domain Shift\n"
 "over J"
 msgstr "Décalage du domaine"
 
-#: src/data.c:409
+#: src/data.c:667
 msgid ""
 "Chirp\n"
 "over J"
 msgstr ""
 
-#: src/data.c:409
+#: src/data.c:667
 msgid ""
 "All\n"
 "over J"
 msgstr ""
 
-#: src/data.c:409 src/data.c:728
+#: src/data.c:667 src/data.c:1401
 #, fuzzy
 msgid ""
 "Visibility\n"
 "over K"
 msgstr "Visibilité"
 
-#: src/data.c:409 src/data.c:728
+#: src/data.c:667 src/data.c:1401
 #, fuzzy
 msgid ""
 "Domain Shift\n"
 "over K"
 msgstr "Décalage du domaine"
 
-#: src/data.c:409
+#: src/data.c:667
 msgid ""
 "Chirp\n"
 "over K"
 msgstr ""
 
-#: src/data.c:409
+#: src/data.c:667
 msgid ""
 "All\n"
 "over K"
 msgstr ""
 
-#: src/data.c:556 src/data.c:613 src/data.c:671
+#: src/data.c:1038 src/data.c:1120 src/data.c:1261
 msgid "Both"
 msgstr ""
 
-#: src/data.c:563 src/data.c:620 src/data.c:678 src/data.c:735 src/data.c:780
+#: src/data.c:1045 src/data.c:1127 src/data.c:1268 src/data.c:1408
+#: src/data.c:1536
 msgid "MEAS     \tVISIBILTY\tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:728
+#: src/data.c:1401
 msgid ""
 "Both\n"
 "over J"
 msgstr ""
 
-#: src/data.c:728
+#: src/data.c:1401
 msgid ""
 "Both\n"
 "over K"
 msgstr ""
 
-#: src/data.c:845
+#: src/data.c:1684
 msgid "VISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr ""
 
-#: src/data.c:865
+#: src/data.c:1704
 msgid "K        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr ""
 
-#: src/data.c:892
+#: src/data.c:1731
 msgid "J        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr ""
 
-#: src/data.c:953
+#: src/data.c:1792
 msgid "VISIBILTY\tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:972
+#: src/data.c:1811
 msgid "K        \tVISIBILTY\tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:998
+#: src/data.c:1837
 msgid "J        \tVISIBILTY\tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:1054 src/data.c:1219 src/data.c:1385
+#: src/data.c:1893 src/data.c:2058 src/data.c:2224
 msgid "Real/Imaginary"
 msgstr ""
 
-#: src/data.c:1054 src/data.c:1219 src/data.c:1385
+#: src/data.c:1893 src/data.c:2058 src/data.c:2224
 msgid "Magnitude/Phase"
 msgstr ""
 
-#: src/data.c:1061 src/data.c:1226 src/data.c:1392
+#: src/data.c:1900 src/data.c:2065 src/data.c:2231
 msgid "INVERSE_D\tREAL_VAL \tIMAG_VAL "
 msgstr "D_INVERSE\tVAL_REELL\tVAL_IMAG "
 
-#: src/data.c:1123 src/data.c:1288 src/data.c:1454
+#: src/data.c:1962 src/data.c:2127 src/data.c:2293
 msgid "INVERSE_D\tMAGNITUDE\tPHASE    "
 msgstr "D_INVERSE\tGRANDEUR \tPHASE    "
 
-#: src/data.c:1205 src/data.c:1370 src/data.c:1535
+#: src/data.c:2044 src/data.c:2209 src/data.c:2374
 msgid "No available processed data."
 msgstr "Aucunes données traitées disponibles."
 

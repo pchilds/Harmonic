@@ -114,7 +114,8 @@
   </sect1>
   <sect1 id="save"><title>Exporting Results</title>
     <sect2><title>Saving data</title>
-      <para>Saving data is unfortunatley not completely implemented yet.</para>
+      <para>To save data switch to the notebook page which represents the results you want to save and press save from the file menu. Once you have chosen a file to save to, you will then be given options if available on what subset of your results to save. Select the desired option and press save.</para>
+      <para>The format of the data will be tab-delimited divided into categorised columns that repeat over the variable (J or K) over which iteration was desired for the case of batch processed data, or over the variable alternate to the row variable for the case of data from a single file.</para>
     </sect2>
     <sect2><title>Saving graphs</title>
       <para>Select the tab of the desired graph to save and ensure that the graph looks how you want to print it (zoomed to the right scale and with axes labelled and sized as set up in Properties->Display Properties). From the file menu choose print and type in a file name ending in .eps for Encapsulated Postscript. EPS is a vector image format that allows for easy scaling without loss of image quality. EPS is the format used for publication by LaTEX and is chosen here to allow the smooth transfer of data results to a publication ready format without the need of an intermediary step of editing figures.</para>

@@ -39,7 +39,6 @@
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
  * FFT: window edge correction
- * SAVE: case for batch processed data
  */
 
 #include <gdk/gdkkeysyms.h>

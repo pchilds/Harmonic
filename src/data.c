@@ -197,9 +197,19 @@ void sav(GtkWidget *widget, gpointer data)
 						{
 							case 4:
 							contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "));
-							/*
-							fill contents further
-							 */
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, j));
+								g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, j));
+								g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, j));
+								str2=g_strjoin("\t", s1, s2, s3, s4, NULL);
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -212,9 +222,17 @@ void sav(GtkWidget *widget, gpointer data)
 							break;
 							case 3:
 							contents=g_strdup(_("MEAS     \tCHIRP    "));
-							/*
-							fill contents further
-							*/ 
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(chp, gdouble, j));
+								str2=g_strjoin("\t", s1, s2, NULL);
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -227,9 +245,17 @@ void sav(GtkWidget *widget, gpointer data)
 							break;
 							case 2:
 							contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
-							/*
-							fill contents further
-							 */
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, j));
+								str2=g_strjoin("\t", s1, s2, NULL);
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -242,9 +268,17 @@ void sav(GtkWidget *widget, gpointer data)
 							break;
 							case 1:
 							contents=g_strdup(_("MEAS     \tVISIBILTY"));
-							/*
-							fill contents further
-							 */
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, j));
+								str2=g_strjoin("\t", s1, s2, NULL);
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -269,9 +303,40 @@ void sav(GtkWidget *widget, gpointer data)
 						{
 							case 4:
 							contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "));
-							/*
-							fill contents
-							 */
+							str2=g_strdup(contents);
+							for (k=1; k<kdimxf; k++)
+							{
+								str=g_strjoin("\t", contents, str2, NULL);
+								g_free(contents);
+								contents=g_strdup(str);
+								g_free(str);
+							}
+							g_free(str2);
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (jdim+(j*jdimxf))*kdimxf));
+								g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, (jdim+(j*jdimxf))*kdimxf));
+								g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, (jdim+(j*jdimxf))*kdimxf));
+								str2=g_strjoin("\t", s1, s2, s3, s4, NULL);
+								k=1;
+								while (k<kdimxf)
+								{
+									g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+									g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+									g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+									str=g_strjoin("\t", str2, s1, s2, s3, s4, NULL);
+									g_free(str2);
+									str2=g_strdup(str);
+									g_free(str);
+									k++;
+								}
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -284,9 +349,36 @@ void sav(GtkWidget *widget, gpointer data)
 							break;
 							case 3:
 							contents=g_strdup(_("MEAS     \tCHIRP    "));
-							/*
-							fill contents further
-							 */
+							str2=g_strdup(contents);
+							for (k=1; k<kdimxf; k++)
+							{
+								str=g_strjoin("\t", contents, str2, NULL);
+								g_free(contents);
+								contents=g_strdup(str);
+								g_free(str);
+							}
+							g_free(str2);
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(chp, gdouble, (jdim+(j*jdimxf))*kdimxf));
+								str2=g_strjoin("\t", s1, s2, NULL);
+								k=1;
+								while (k<kdimxf)
+								{
+									g_snprintf(s2, 10, "%f", g_array_index(chp, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+									str=g_strjoin("\t", str2, s1, s2, NULL);
+									g_free(str2);
+									str2=g_strdup(str);
+									g_free(str);
+									k++;
+								}
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -299,9 +391,36 @@ void sav(GtkWidget *widget, gpointer data)
 							break;
 							case 2:
 							contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
-							/*
-							fill contents further
-							 */
+							str2=g_strdup(contents);
+							for (k=1; k<kdimxf; k++)
+							{
+								str=g_strjoin("\t", contents, str2, NULL);
+								g_free(contents);
+								contents=g_strdup(str);
+								g_free(str);
+							}
+							g_free(str2);
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, (jdim+(j*jdimxf))*kdimxf));
+								str2=g_strjoin("\t", s1, s2, NULL);
+								k=1;
+								while (k<kdimxf)
+								{
+									g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+									str=g_strjoin("\t", str2, s1, s2, NULL);
+									g_free(str2);
+									str2=g_strdup(str);
+									g_free(str);
+									k++;
+								}
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -314,9 +433,36 @@ void sav(GtkWidget *widget, gpointer data)
 							break;
 							case 1:
 							contents=g_strdup(_("MEAS     \tVISIBILTY"));
-							/*
-							fill contents further
-							 */
+							str2=g_strdup(contents);
+							for (k=1; k<kdimxf; k++)
+							{
+								str=g_strjoin("\t", contents, str2, NULL);
+								g_free(contents);
+								contents=g_strdup(str);
+								g_free(str);
+							}
+							g_free(str2);
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (jdim+(j*jdimxf))*kdimxf));
+								str2=g_strjoin("\t", s1, s2, NULL);
+								k=1;
+								while (k<kdimxf)
+								{
+									g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+									str=g_strjoin("\t", str2, s1, s2, NULL);
+									g_free(str2);
+									str2=g_strdup(str);
+									g_free(str);
+									k++;
+								}
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -342,9 +488,40 @@ void sav(GtkWidget *widget, gpointer data)
 					{
 						case 4:
 						contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (k*jdimxf*kdimxf)+kdim));
+							g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, (k*jdimxf*kdimxf)+kdim));
+							g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, s3, s4, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, s3, s4, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -357,9 +534,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 3:
 						contents=g_strdup(_("MEAS     \tCHIRP    "));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(chp, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(chp, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -372,9 +576,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 2:
 						contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -387,9 +618,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 1:
 						contents=g_strdup(_("MEAS     \tVISIBILTY"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -414,9 +672,40 @@ void sav(GtkWidget *widget, gpointer data)
 					{
 						case 8:
 						contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (k=1; k<kdimxf; k++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (j=0; j<mx; j++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (jdim+(j*jdimxf))*kdimxf));
+							g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, (jdim+(j*jdimxf))*kdimxf));
+							g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, (jdim+(j*jdimxf))*kdimxf));
+							str2=g_strjoin("\t", s1, s2, s3, s4, NULL);
+							k=1;
+							while (k<kdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+								g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+								g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+								str=g_strjoin("\t", str2, s1, s2, s3, s4, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								k++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -429,9 +718,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 7:
 						contents=g_strdup(_("MEAS     \tCHIRP    "));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (k=1; k<kdimxf; k++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (j=0; j<mx; j++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+							g_snprintf(s2, 10, "%f", g_array_index(chp, gdouble, (jdim+(j*jdimxf))*kdimxf));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							k=1;
+							while (k<kdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(chp, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								k++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -444,9 +760,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 6:
 						contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (k=1; k<kdimxf; k++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (j=0; j<mx; j++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+							g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, (jdim+(j*jdimxf))*kdimxf));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							k=1;
+							while (k<kdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								k++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -459,9 +802,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 5:
 						contents=g_strdup(_("MEAS     \tVISIBILTY"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (k=1; k<kdimxf; k++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (j=0; j<mx; j++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (jdim+(j*jdimxf))*kdimxf));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							k=1;
+							while (k<kdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								k++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -474,9 +844,40 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 4:
 						contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (k*jdimxf*kdimxf)+kdim));
+							g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, (k*jdimxf*kdimxf)+kdim));
+							g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, s3, s4, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								g_snprintf(s4, 10, "%f", g_array_index(chp, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, s3, s4, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -489,9 +890,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 3:
 						contents=g_strdup(_("MEAS     \tCHIRP    "));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(chp, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(chp, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -504,9 +932,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 2:
 						contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -519,9 +974,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 1:
 						contents=g_strdup(_("MEAS     \tVISIBILTY"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -561,9 +1043,18 @@ void sav(GtkWidget *widget, gpointer data)
 						{
 							case 3:
 							contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT"));
-							/*
-							fill contents further
-							 */
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, j));
+								g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, j));
+								str2=g_strjoin("\t", s1, s2, s3, NULL);
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -576,9 +1067,17 @@ void sav(GtkWidget *widget, gpointer data)
 							break;
 							case 2:
 							contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
-							/*
-							fill contents further
-							 */
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, j));
+								str2=g_strjoin("\t", s1, s2, NULL);
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -591,9 +1090,17 @@ void sav(GtkWidget *widget, gpointer data)
 							break;
 							case 1:
 							contents=g_strdup(_("MEAS     \tVISIBILTY"));
-							/*
-							fill contents further
-							 */
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, j));
+								str2=g_strjoin("\t", s1, s2, NULL);
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -618,9 +1125,38 @@ void sav(GtkWidget *widget, gpointer data)
 						{
 							case 3:
 							contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT"));
-							/*
-							fill contents further
-							 */
+							str2=g_strdup(contents);
+							for (k=1; k<kdimxf; k++)
+							{
+								str=g_strjoin("\t", contents, str2, NULL);
+								g_free(contents);
+								contents=g_strdup(str);
+								g_free(str);
+							}
+							g_free(str2);
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (jdim+(j*jdimxf))*kdimxf));
+								g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, (jdim+(j*jdimxf))*kdimxf));
+								str2=g_strjoin("\t", s1, s2, s3, NULL);
+								k=1;
+								while (k<kdimxf)
+								{
+									g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+									g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+									str=g_strjoin("\t", str2, s1, s2, s3, NULL);
+									g_free(str2);
+									str2=g_strdup(str);
+									g_free(str);
+									k++;
+								}
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -633,9 +1169,36 @@ void sav(GtkWidget *widget, gpointer data)
 							break;
 							case 2:
 							contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
-							/*
-							fill contents further
-							 */
+							str2=g_strdup(contents);
+							for (k=1; k<kdimxf; k++)
+							{
+								str=g_strjoin("\t", contents, str2, NULL);
+								g_free(contents);
+								contents=g_strdup(str);
+								g_free(str);
+							}
+							g_free(str2);
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, (jdim+(j*jdimxf))*kdimxf));
+								str2=g_strjoin("\t", s1, s2, NULL);
+								k=1;
+								while (k<kdimxf)
+								{
+									g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+									str=g_strjoin("\t", str2, s1, s2, NULL);
+									g_free(str2);
+									str2=g_strdup(str);
+									g_free(str);
+									k++;
+								}
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -648,9 +1211,36 @@ void sav(GtkWidget *widget, gpointer data)
 							break;
 							case 1:
 							contents=g_strdup(_("MEAS     \tVISIBILTY"));
-							/*
-							fill contents further
-							 */
+							str2=g_strdup(contents);
+							for (k=1; k<kdimxf; k++)
+							{
+								str=g_strjoin("\t", contents, str2, NULL);
+								g_free(contents);
+								contents=g_strdup(str);
+								g_free(str);
+							}
+							g_free(str2);
+							for (j=0; j<mx; j++)
+							{
+								g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (jdim+(j*jdimxf))*kdimxf));
+								str2=g_strjoin("\t", s1, s2, NULL);
+								k=1;
+								while (k<kdimxf)
+								{
+									g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+									str=g_strjoin("\t", str2, s1, s2, NULL);
+									g_free(str2);
+									str2=g_strdup(str);
+									g_free(str);
+									k++;
+								}
+								str=g_strdup(contents);
+								g_free(contents);
+								contents=g_strjoin(DLMT, str, str2, NULL);
+								g_free(str);
+								g_free(str2);
+							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
@@ -676,9 +1266,38 @@ void sav(GtkWidget *widget, gpointer data)
 					{
 						case 3:
 						contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (k*jdimxf*kdimxf)+kdim));
+							g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, s3, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, s3, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -691,9 +1310,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 2:
 						contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -706,9 +1352,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 1:
 						contents=g_strdup(_("MEAS     \tVISIBILTY"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -733,9 +1406,38 @@ void sav(GtkWidget *widget, gpointer data)
 					{
 						case 6:
 						contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (k=1; k<kdimxf; k++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (j=0; j<mx; j++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (jdim+(j*jdimxf))*kdimxf));
+							g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, (jdim+(j*jdimxf))*kdimxf));
+							str2=g_strjoin("\t", s1, s2, s3, NULL);
+							k=1;
+							while (k<kdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+								g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+								str=g_strjoin("\t", str2, s1, s2, s3, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								k++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -748,9 +1450,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 5:
 						contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (k=1; k<kdimxf; k++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (j=0; j<mx; j++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+							g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, (jdim+(j*jdimxf))*kdimxf));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							k=1;
+							while (k<kdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								k++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -763,9 +1492,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 4:
 						contents=g_strdup(_("MEAS     \tVISIBILTY"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (k=1; k<kdimxf; k++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (j=0; j<mx; j++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, j));
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (jdim+(j*jdimxf))*kdimxf));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							k=1;
+							while (k<kdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((jdim+(j*jdimxf))*kdimxf)+k));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								k++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -778,9 +1534,38 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 3:
 						contents=g_strdup(_("MEAS     \tVISIBILTY\tDOMN_SHFT"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (k*jdimxf*kdimxf)+kdim));
+							g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, s3, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								g_snprintf(s3, 10, "%f", g_array_index(doms, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, s3, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -793,9 +1578,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 2:
 						contents=g_strdup(_("MEAS     \tDOMN_SHFT"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(doms, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)
@@ -808,9 +1620,36 @@ void sav(GtkWidget *widget, gpointer data)
 						break;
 						case 1:
 						contents=g_strdup(_("MEAS     \tVISIBILTY"));
-						/*
-						fill contents further
-						 */
+						str2=g_strdup(contents);
+						for (j=1; j<jdimxf; j++)
+						{
+							str=g_strjoin("\t", contents, str2, NULL);
+							g_free(contents);
+							contents=g_strdup(str);
+							g_free(str);
+						}
+						g_free(str2);
+						for (k=0; k<mx; k++)
+						{
+							g_snprintf(s1, 10, "%f", g_array_index(msr, gdouble, k));
+							g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, (k*jdimxf*kdimxf)+kdim));
+							str2=g_strjoin("\t", s1, s2, NULL);
+							j=1;
+							while (j<jdimxf)
+							{
+								g_snprintf(s2, 10, "%f", g_array_index(vis, gdouble, ((j+(k*jdimxf))*kdimxf)+kdim));
+								str=g_strjoin("\t", str2, s1, s2, NULL);
+								g_free(str2);
+								str2=g_strdup(str);
+								g_free(str);
+								j++;
+							}
+							str=g_strdup(contents);
+							g_free(contents);
+							contents=g_strjoin(DLMT, str, str2, NULL);
+							g_free(str);
+							g_free(str2);
+						}
 						g_file_set_contents(fout, contents, -1, &Err);
 						g_free(contents);
 						if (Err)

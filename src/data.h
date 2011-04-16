@@ -26,8 +26,9 @@
 #	define __DATA_H__
 #	include "main.h"
 	extern GtkWidget *window, *statusbar, *plot1, *plot2, *plot3, *notebook2;
-	extern GArray *stars, *delf, *vis, *doms, *chp;
-	extern guint jdimxf, kdimxf, flags;
+	extern GArray *stars, *delf, *vis, *doms, *chp, *msr;
+	extern guint jdim, kdim, jdimxf, kdimxf, flags;
+	extern gint mx;
 	void prt(GtkWidget*, gpointer);
 	void sav(GtkWidget*, gpointer);
 #endif
