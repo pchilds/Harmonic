@@ -84,7 +84,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	yw=(widget->allocation.height);
 	priv=PLOT_LINEAR_GET_PRIVATE(plot);
 	(priv->flaga)&=48;
-	dtt=(plot->afsize)+(plot->lfsize);
+	dtt=(pango_font_description_get_size(plot->afont)+pango_font_description_get_size(plot->lfont))/PANGO_SCALE;
 	xr=MIN(xw*ARP,dtt);
 	xr2=(xr-2)*IRTR;
 	yr=MIN(yw*ARP,dtt);
@@ -153,7 +153,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		cairo_restore(cr);
 	}
 	cairo_select_font_face(cr, "sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-	cairo_set_font_size(cr, (plot->afsize));
+	cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 	if ((priv->bounds.ymax)<=DZE) /* determine positions of axes */
 	{
 		(priv->flaga)|=32;
@@ -318,19 +318,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		cairo_line_to(cr, xa, ya-(WFP*yw));
 		cairo_curve_to(cr, xa-(WHP*yw), ya-(WMP*yw), xa+(WHP*yw), ya-(WMP*yw), xa, ya-(WGP*yw));
 	}
-	yr--;
-	yr--;
+	{yr--; yr--;}
 	cairo_line_to(cr, xa, 0); /* draw y axis */
 	cairo_line_to(cr, xa-yr2, yr); /* draw y arrow */
 	cairo_move_to(cr, xa, 0);
 	cairo_line_to(cr, xa+yr2, yr);
 	cairo_stroke(cr);
-	dscr=pango_font_description_new(); /* draw ticks, grid and labels */
-	pango_font_description_set_family(dscr, "sans");
-	pango_font_description_set_weight(dscr, PANGO_WEIGHT_NORMAL);
-	pango_font_description_set_absolute_size(dscr, (plot->lfsize)*PANGO_SCALE);
-	lyt=pango_cairo_create_layout(cr);
-	pango_layout_set_font_description(lyt, dscr);
+	lyt=pango_cairo_create_layout(cr); /* draw ticks, grid and labels */
+	pango_layout_set_font_description(lyt, (plot->lfont));
 	pango_layout_set_text(lyt, (plot->xlab), -1);
 	pango_layout_get_pixel_size(lyt, &wd, &hg);
 	dt=5;
@@ -342,7 +337,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			cairo_move_to(cr, (xu+xl-wd)/2, ya-dtt);
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			cairo_move_to(cr, to, ya);
 			cairo_line_to(cr, to, ya-JT);
 			cairo_stroke(cr);
@@ -441,7 +436,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			cairo_move_to(cr, (xu+xl-wd)/2, ya+dtt-hg);
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			cairo_move_to(cr, to, ya);
 			cairo_line_to(cr, to, ya+JT);
 			cairo_stroke(cr);
@@ -544,7 +539,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			cairo_move_to(cr, (xu+xl-wd)/2, ya-dtt);
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			cairo_move_to(cr, to, ya);
 			cairo_line_to(cr, to, ya-JT);
 			cairo_stroke(cr);
@@ -661,7 +656,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			cairo_move_to(cr, (xu+xl-wd)/2, ya+dtt-hg);
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			cairo_move_to(cr, to, ya);
 			cairo_line_to(cr, to, ya+JT);
 			cairo_stroke(cr);
@@ -785,7 +780,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			cairo_move_to(cr, (xu+xa-wd)/2, ya-dtt);
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			cairo_move_to(cr, to, ya);
 			cairo_line_to(cr, to, ya-JT);
 			cairo_stroke(cr);
@@ -924,7 +919,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			cairo_move_to(cr, (xu+xa-wd)/2, ya+dtt-hg);
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			cairo_move_to(cr, to, ya);
 			cairo_line_to(cr, to, ya+JT);
 			cairo_stroke(cr);
@@ -1070,7 +1065,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			cairo_move_to(cr, (xa+xl-wd)/2, ya-dtt);
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			cairo_move_to(cr, to, ya);
 			cairo_line_to(cr, to, ya-JT);
 			cairo_stroke(cr);
@@ -1238,7 +1233,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			cairo_move_to(cr, (xa+xl-wd)/2, ya+dtt-hg);
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			cairo_move_to(cr, to, ya);
 			cairo_line_to(cr, to, ya+JT);
 			cairo_stroke(cr);
@@ -1418,7 +1413,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
 			cairo_set_matrix(cr, &mtr);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			if ((priv->bounds.ymax)>=10)
 			{
 				lr1=G_LN10*((priv->ycs)-floor(log10(priv->bounds.ymax))-1);
@@ -1524,7 +1519,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
 			cairo_set_matrix(cr, &mtr);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			if ((priv->bounds.ymax)>=10)
 			{
 				lr1=G_LN10*((priv->ycs)-floor(log10(priv->bounds.ymax))-1);
@@ -1634,7 +1629,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
 			cairo_set_matrix(cr, &mtr);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			cairo_move_to(cr, xa, to);
 			cairo_line_to(cr, xa+JT, to);
 			cairo_stroke(cr);
@@ -1709,7 +1704,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
 			cairo_set_matrix(cr, &mtr);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			cairo_move_to(cr, xa, to);
 			cairo_line_to(cr, xa-JT, to);
 			cairo_stroke(cr);
@@ -1791,7 +1786,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
 			cairo_set_matrix(cr, &mtr);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			cairo_move_to(cr, xa, to);
 			cairo_line_to(cr, xa+JT, to);
 			cairo_stroke(cr);
@@ -1937,7 +1932,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
 			cairo_set_matrix(cr, &mtr);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			cairo_move_to(cr, xa, to);
 			cairo_line_to(cr, xa-JT, to);
 			cairo_stroke(cr);
@@ -2090,7 +2085,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
 			cairo_set_matrix(cr, &mtr);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			if ((priv->bounds.ymin)>=10)
 			{
 				lr1=G_LN10*((priv->ycs)-floor(log10(priv->bounds.ymin))-1);
@@ -2267,7 +2262,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
 			cairo_set_matrix(cr, &mtr);
-			cairo_set_font_size(cr, (plot->afsize));
+			cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 			if ((priv->bounds.ymin)>=10)
 			{
 				lr1=G_LN10*((priv->ycs)-floor(log10(priv->bounds.ymin))-1);
@@ -3733,6 +3728,8 @@ static void plot_linear_finalise(PlotLinear *plot)
 	priv=PLOT_LINEAR_GET_PRIVATE(plot);
 	if (plot->xlab) g_free(plot->xlab);
 	if (plot->ylab) g_free(plot->ylab);
+	if (plot->afont) pango_font_description_free(plot->afont);
+	if (plot->lfont) pango_font_description_free(plot->lfont);
 	if (plot->xdata) g_array_free((plot->xdata), FALSE);
 	if (plot->ydata) g_array_free((plot->ydata), FALSE);
 	if (plot->ind) g_array_free((plot->ind), FALSE);
@@ -3842,10 +3839,13 @@ static void plot_linear_init(PlotLinear *plot)
 	{(priv->flaga)=0; (priv->flagr)=0;}
 	{(plot->xdata)=NULL; (plot->ydata)=NULL; (plot->ind)=NULL; (plot->sizes)=NULL;}
 	{(plot->xlab)=g_strdup("Domain"); (plot->ylab)=g_strdup("Amplitude");}
-	{(plot->afsize)=12; (plot->lfsize)=12;}
 	{(plot->flagd)=1; (plot->ptsize)=5; (plot->linew)=2;}
 	(plot->zmode)=6;
 	{(plot->xps)=0; (plot->yps)=0;}
+	{(plot->afont)=pango_font_description_new(); (plot->lfont)=pango_font_description_new();}
+	{pango_font_description_set_family((plot->afont), "sans"); pango_font_description_set_family((plot->lfont), "sans");}
+	{pango_font_description_set_style((plot->afont), PANGO_STYLE_NORMAL); pango_font_description_set_style((plot->lfont), PANGO_STYLE_NORMAL);}
+	{pango_font_description_set_size((plot->afont), 12*PANGO_SCALE); pango_font_description_set_size((plot->lfont), 12*PANGO_SCALE);}
 	(priv->rd)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 10);
 	(priv->gr)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 10);
 	(priv->bl)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 10);

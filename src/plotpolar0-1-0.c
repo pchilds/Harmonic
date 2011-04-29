@@ -99,8 +99,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	gchar *str1=NULL, *str2=NULL, *str3;
 	cairo_text_extents_t extents;
 	PangoLayout *lyt;
-	PangoFontDescription *dscr1, *dscr2;
-	cairo_matrix_t mtr, mtr2;
+	cairo_matrix_t mtr;
 
 	xw=(widget->allocation.width);
 	yw=(widget->allocation.height);
@@ -181,22 +180,18 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	cairo_set_source_rgb(cr, 0, 0, 0);
 	cairo_set_line_width(cr, 2);
 	cairo_select_font_face(cr, "sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-	cairo_set_font_size(cr, plot->afsize);
+	cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
 	cairo_text_extents(cr, "8", &extents);
 	ctx=(extents.width)*((priv->thcs)-1);
 	ctx*=ctx;
-	tt=(plot->afsize);
+	tt=pango_font_description_get_size(plot->afont)/PANGO_SCALE;
 	tt*=tt;
 	tt+=ctx;
 	tt=sqrt(tt);
-	dtr=(plot->lfsize)+JTI;
+	dtr=(pango_font_description_get_size(plot->lfont)/PANGO_SCALE)+JTI;
 	dtt=tt+dtr;
-	dtr+=(plot->afsize);
+	dtr+=pango_font_description_get_size(plot->afont)/PANGO_SCALE;
 	tt=(tt/2)+JTI;
-	mtr.xx=1;
-	mtr.xy=0;
-	mtr.yx=0;
-	mtr.yy=1;
 	dr1=(priv->bounds.rmax)-(priv->bounds.rmin);
 	drs=((priv->centre.r)-(priv->bounds.rmin))*sin(priv->centre.th);
 	drc=((priv->centre.r)-(priv->bounds.rmin))*cos(priv->centre.th);
@@ -207,10 +202,6 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	while (thn>G_PI) thn-=MY_2PI;
 	while (thn<NMY_PI) thn+=MY_2PI;
 	dt=thx-thn;
-	dscr1=pango_font_description_new();
-	pango_font_description_set_family(dscr1, "sans");
-	pango_font_description_set_weight(dscr1, PANGO_WEIGHT_NORMAL);
-	pango_font_description_set_absolute_size(dscr1, (plot->lfsize)*PANGO_SCALE);
 	if (((dt>DZE)||(dt<NZE))&&(((dt+MY_2PI)>DZE)||((dt+MY_2PI)<NZE))&&(((dt-MY_2PI)>DZE)||((dt-MY_2PI)<NZE)))
 	{
 		if (((priv->centre.th)>(priv->bounds.thmax))||((priv->centre.th)<(priv->bounds.thmin)))
@@ -925,10 +916,6 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			csx=fmod(dwr,1);
 			if ((csx<DZE)||((1-csx)<DZE)) /* check if angles can be rationalised */
 			{
-				dscr2=pango_font_description_new();
-				pango_font_description_set_family(dscr2, "sans");
-				pango_font_description_set_weight(dscr2, PANGO_WEIGHT_NORMAL);
-				pango_font_description_set_absolute_size(dscr2, (plot->afsize)*PANGO_SCALE);
 				j0=round(dwr);
 				jl=2+floor(log10(j0));
 				g_ascii_dtostr(lbl, jl, j0);
@@ -961,7 +948,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 						g_free(str1);
 					}
 					lyt=pango_cairo_create_layout(cr); /* draw azimuthal tick labels */
-					pango_layout_set_font_description(lyt, dscr2);
+					pango_layout_set_font_description(lyt, (plot->afont));
 					pango_layout_set_text(lyt, str3, -1);
 					pango_layout_get_pixel_size(lyt, &wd, &hg);
 					rl=(priv->wr)+tt+((priv->s)*dr1);
@@ -970,7 +957,6 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					g_object_unref(lyt);
 					g_free(str3);
 				}
-				pango_font_description_free(dscr2);
 				g_free(str2);
 			}
 			else
@@ -1017,10 +1003,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		kx=1;
 		if ((priv->flaga)==0)
 		{
-			mtr2.xx=ctx;
-			mtr2.xy=stx;
-			mtr2.yx=-stx;
-			mtr2.yy=ctx;
+			{mtr.xx=ctx; mtr.xy=stx; mtr.yx=-stx; mtr.yy=ctx;}
 			for (j=1; j<(priv->ticks.r); j++)
 			{
 				rt+=dwr;
@@ -1050,35 +1033,32 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				sx=rt-((extents.width)/2)-(extents.x_bearing);
 				dz=-JTI-(extents.height)-(extents.y_bearing);
 				cairo_move_to(cr, (priv->x0)+(sx*ctx)+(dz*stx), (priv->y0)+(dz*ctx)-(sx*stx));
-				cairo_set_matrix(cr, &mtr2);
-				cairo_show_text(cr, lbl);/* draw radial tick labels*/
 				cairo_set_matrix(cr, &mtr);
+				cairo_show_text(cr, lbl);/* draw radial tick labels*/
+				cairo_identity_matrix(cr);
 			}
 			rt+=dwr;
 			cairo_new_sub_path(cr);
 			cairo_arc(cr, (priv->x0), (priv->y0), rt, -thx, -thn);
 			cairo_stroke(cr);
 			lyt=pango_cairo_create_layout(cr); /* draw radial label */
-			pango_layout_set_font_description(lyt, dscr1);
+			pango_layout_set_font_description(lyt, (plot->lfont));
 			pango_layout_set_text(lyt, (plot->rlab), -1);
 			pango_layout_get_pixel_size(lyt, &wd, &hg);
 			sx=(priv->wr)+(((dr1*(priv->s))-wd)/2);
 			cairo_move_to(cr, (priv->x0)+(sx*ctx)-(dtr*stx), (priv->y0)-(dtr*ctx)-(sx*stx));
-			cairo_set_matrix(cr, &mtr2);
+			cairo_set_matrix(cr, &mtr);
 			pango_cairo_update_layout(cr, lyt);
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
-			cairo_set_matrix(cr, &mtr);
+			cairo_identity_matrix(cr);
 			lyt=pango_cairo_create_layout(cr); /* draw azimuthal label */
-			pango_layout_set_font_description(lyt, dscr1);
+			pango_layout_set_font_description(lyt, (plot->lfont));
 			g_object_unref(lyt);
 		}
 		else if ((priv->flaga)==2)
 		{
-			mtr2.xx=-ctx;
-			mtr2.xy=-stx;
-			mtr2.yx=stx;
-			mtr2.yy=-ctx;
+			{mtr.xx=-ctx; mtr.xy=-stx; mtr.yx=stx; mtr.yy=-ctx;}
 			for (j=1; j<(priv->ticks.r); j++)
 			{
 				rt+=dwr;
@@ -1108,36 +1088,33 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				sx=rt+((extents.width)/2)+(extents.x_bearing);
 				dz=-JTI+(extents.y_bearing);
 				cairo_move_to(cr, (priv->x0)+(sx*ctx)+(dz*stx), (priv->y0)+(dz*ctx)-(sx*stx));
-				cairo_set_matrix(cr, &mtr2);
-				cairo_show_text(cr, lbl);/* draw radial tick labels*/
 				cairo_set_matrix(cr, &mtr);
+				cairo_show_text(cr, lbl);/* draw radial tick labels*/
+				cairo_identity_matrix(cr);
 			}
 			rt+=dwr;
 			cairo_new_sub_path(cr);
 			cairo_arc(cr, (priv->x0), (priv->y0), rt, -thx, -thn);
 			cairo_stroke(cr);
 			lyt=pango_cairo_create_layout(cr); /* draw radial label */
-			pango_layout_set_font_description(lyt, dscr1);
+			pango_layout_set_font_description(lyt, (plot->lfont));
 			pango_layout_set_text(lyt, (plot->rlab), -1);
 			pango_layout_get_pixel_size(lyt, &wd, &hg);
 			sx=(priv->wr)+(((dr1*(priv->s))+wd)/2);
 			dz=hg-dtr;
 			cairo_move_to(cr, (priv->x0)+(sx*ctx)+(dz*stx), (priv->y0)+(dz*ctx)-(sx*stx));
-			cairo_set_matrix(cr, &mtr2);
+			cairo_set_matrix(cr, &mtr);
 			pango_cairo_update_layout(cr, lyt);
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
-			cairo_set_matrix(cr, &mtr);
+			cairo_identity_matrix(cr);
 			lyt=pango_cairo_create_layout(cr); /* draw azimuthal label */
-			pango_layout_set_font_description(lyt, dscr1);
+			pango_layout_set_font_description(lyt, (plot->lfont));
 			g_object_unref(lyt);
 		}
 		else if ((priv->flaga)==3)
 		{
-			mtr2.xx=ctn;
-			mtr2.xy=stn;
-			mtr2.yx=-stn;
-			mtr2.yy=ctn;
+			{mtr.xx=ctn; mtr.xy=stn; mtr.yx=-stn; mtr.yy=ctn;}
 			for (j=1; j<(priv->ticks.r); j++)
 			{
 				rt+=dwr;
@@ -1167,36 +1144,33 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				sx=rt-((extents.width)/2)-(extents.x_bearing);
 				dz=JTI-(extents.y_bearing);
 				cairo_move_to(cr, (priv->x0)+(sx*ctn)+(dz*stn), (priv->y0)+(dz*ctn)-(sx*stn));
-				cairo_set_matrix(cr, &mtr2);
-				cairo_show_text(cr, lbl);/* draw radial tick labels*/
 				cairo_set_matrix(cr, &mtr);
+				cairo_show_text(cr, lbl);/* draw radial tick labels*/
+				cairo_identity_matrix(cr);
 			}
 			rt+=dwr;
 			cairo_new_sub_path(cr);
 			cairo_arc(cr, (priv->x0), (priv->y0), rt, -thx, -thn);
 			cairo_stroke(cr);
 			lyt=pango_cairo_create_layout(cr); /* draw radial label */
-			pango_layout_set_font_description(lyt, dscr1);
+			pango_layout_set_font_description(lyt, (plot->lfont));
 			pango_layout_set_text(lyt, (plot->rlab), -1);
 			pango_layout_get_pixel_size(lyt, &wd, &hg);
 			sx=(priv->wr)+(((dr1*(priv->s))-wd)/2);
 			dz=dtr-hg;
 			cairo_move_to(cr, (priv->x0)+(sx*ctn)+(dz*stn), (priv->y0)+(dz*ctn)-(sx*stn));
-			cairo_set_matrix(cr, &mtr2);
+			cairo_set_matrix(cr, &mtr);
 			pango_cairo_update_layout(cr, lyt);
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
-			cairo_set_matrix(cr, &mtr);
+			cairo_identity_matrix(cr);
 			lyt=pango_cairo_create_layout(cr); /* draw azimuthal label */
-			pango_layout_set_font_description(lyt, dscr1);
+			pango_layout_set_font_description(lyt, (plot->lfont));
 			g_object_unref(lyt);
 		}
 		else
 		{
-			mtr2.xx=-ctn;
-			mtr2.xy=-stn;
-			mtr2.yx=stn;
-			mtr2.yy=-ctn;
+			{mtr.xx=-ctn; mtr.xy=-stn; mtr.yx=stn; mtr.yy=-ctn;}
 			for (j=1; j<(priv->ticks.r); j++)
 			{
 				rt+=dwr;
@@ -1226,27 +1200,27 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				sx=rt+((extents.width)/2)+(extents.x_bearing);
 				dz=JTI+(extents.height)+(extents.y_bearing);
 				cairo_move_to(cr, (priv->x0)+(sx*ctn)+(dz*stn), (priv->y0)+(dz*ctn)-(sx*stn));
-				cairo_set_matrix(cr, &mtr2);
-				cairo_show_text(cr, lbl);/* draw radial tick labels*/
 				cairo_set_matrix(cr, &mtr);
+				cairo_show_text(cr, lbl);/* draw radial tick labels*/
+				cairo_identity_matrix(cr);
 			}
 			rt+=dwr;
 			cairo_new_sub_path(cr);
 			cairo_arc(cr, (priv->x0), (priv->y0), rt, -thx, -thn);
 			cairo_stroke(cr);
 			lyt=pango_cairo_create_layout(cr); /* draw radial label */
-			pango_layout_set_font_description(lyt, dscr1);
+			pango_layout_set_font_description(lyt, (plot->lfont));
 			pango_layout_set_text(lyt, (plot->rlab), -1);
 			pango_layout_get_pixel_size(lyt, &wd, &hg);
 			sx=(priv->wr)+(((dr1*(priv->s))+wd)/2);
 			cairo_move_to(cr, (priv->x0)+(sx*ctn)+(dtr*stn), (priv->y0)+(dtr*ctn)-(sx*stn));
-			cairo_set_matrix(cr, &mtr2);
+			cairo_set_matrix(cr, &mtr);
 			pango_cairo_update_layout(cr, lyt);
 			pango_cairo_show_layout(cr, lyt);
 			g_object_unref(lyt);
-			cairo_set_matrix(cr, &mtr);
+			cairo_identity_matrix(cr);
 			lyt=pango_cairo_create_layout(cr); /* draw azimuthal label */
-			pango_layout_set_font_description(lyt, dscr1);
+			pango_layout_set_font_description(lyt, (plot->lfont));
 			g_object_unref(lyt);
 		}
 	}
@@ -1308,12 +1282,8 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_show_text(cr, lbl);
 			}
 		}
-		else if (fmod((priv->ticks.zin),2)==0) /* change if necessary */
+		else if (fmod((priv->ticks.zin),2)==0)
 		{
-			dscr2=pango_font_description_new();
-			pango_font_description_set_family(dscr2, "sans");
-			pango_font_description_set_weight(dscr2, PANGO_WEIGHT_NORMAL);
-			pango_font_description_set_absolute_size(dscr2, (plot->afsize)*PANGO_SCALE);
 			jl=2+floor(log10((priv->ticks.zin)/2));
 			g_ascii_dtostr(lbl, jl, ((priv->ticks.zin)/2));
 			str2=g_strdup(lbl);
@@ -1345,7 +1315,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					g_free(str1);
 				}
 				lyt=pango_cairo_create_layout(cr); /* draw azimuthal tick labels */
-				pango_layout_set_font_description(lyt, dscr2);
+				pango_layout_set_font_description(lyt, (plot->afont));
 				pango_layout_set_text(lyt, str3, -1);
 				pango_layout_get_pixel_size(lyt, &wd, &hg);
 				rl=tt+((priv->s)*dr1);
@@ -1354,15 +1324,10 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				g_object_unref(lyt);
 				g_free(str3);
 			}
-			pango_font_description_free(dscr2);
 			g_free(str2);
 		}
 		else
 		{
-			dscr2=pango_font_description_new();
-			pango_font_description_set_family(dscr2, "sans");
-			pango_font_description_set_weight(dscr2, PANGO_WEIGHT_NORMAL);
-			pango_font_description_set_absolute_size(dscr2, (plot->afsize)*PANGO_SCALE);
 			jl=2+floor(log10(priv->ticks.zin));
 			g_ascii_dtostr(lbl, jl, (priv->ticks.zin));
 			str2=g_strdup(lbl);
@@ -1394,7 +1359,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					g_free(str1);
 				}
 				lyt=pango_cairo_create_layout(cr); /* draw azimuthal tick labels */
-				pango_layout_set_font_description(lyt, dscr2);
+				pango_layout_set_font_description(lyt, (plot->afont));
 				pango_layout_set_text(lyt, str3, -1);
 				pango_layout_get_pixel_size(lyt, &wd, &hg);
 				rl=tt+((priv->s)*dr1);
@@ -1403,7 +1368,6 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				g_object_unref(lyt);
 				g_free(str3);
 			}
-			pango_font_description_free(dscr2);
 			g_free(str2);
 		}
 		for (k=1; k<kx; k++)
@@ -1452,14 +1416,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		cairo_arc(cr, (priv->x0), (priv->y0), rt, NMY_PI, G_PI);
 		cairo_stroke(cr);
 		lyt=pango_cairo_create_layout(cr); /* draw radial label */
-		pango_layout_set_font_description(lyt, dscr1);
+		pango_layout_set_font_description(lyt, (plot->lfont));
 		pango_layout_set_text(lyt, (plot->rlab), -1);
 		pango_layout_get_pixel_size(lyt, &wd, &hg);
 		cairo_move_to(cr, (priv->x0)+(((dr1*(priv->s))-wd)/2), (priv->y0)+dtr-hg);
 		pango_cairo_show_layout(cr, lyt);
 		g_object_unref(lyt);
 		lyt=pango_cairo_create_layout(cr); /* draw azimuthal label */
-		pango_layout_set_font_description(lyt, dscr1);
+		pango_layout_set_font_description(lyt, (plot->lfont));
 		g_object_unref(lyt);
 	}
 	else
@@ -1532,10 +1496,6 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		}
 		else if (fmod((priv->ticks.zin),2)==0)
 		{
-			dscr2=pango_font_description_new();
-			pango_font_description_set_family(dscr2, "sans");
-			pango_font_description_set_weight(dscr2, PANGO_WEIGHT_NORMAL);
-			pango_font_description_set_absolute_size(dscr2, (plot->afsize)*PANGO_SCALE);
 			jl=2+floor(log10((priv->ticks.zin)/2));
 			g_ascii_dtostr(lbl, jl, ((priv->ticks.zin)/2));
 			str2=g_strdup(lbl);
@@ -1574,7 +1534,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					g_free(str1);
 				}
 				lyt=pango_cairo_create_layout(cr); /* draw azimuthal tick labels */
-				pango_layout_set_font_description(lyt, dscr2);
+				pango_layout_set_font_description(lyt, (plot->afont));
 				pango_layout_set_text(lyt, str3, -1);
 				pango_layout_get_pixel_size(lyt, &wd, &hg);
 				rl=(priv->wr)+tt+((priv->s)*dr1);
@@ -1583,15 +1543,10 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				g_object_unref(lyt);
 				g_free(str3);
 			}
-			pango_font_description_free(dscr2);
 			g_free(str2);
 		}
 		else
 		{
-			dscr2=pango_font_description_new();
-			pango_font_description_set_family(dscr2, "sans");
-			pango_font_description_set_weight(dscr2, PANGO_WEIGHT_NORMAL);
-			pango_font_description_set_absolute_size(dscr2, (plot->afsize)*PANGO_SCALE);
 			jl=2+floor(log10(priv->ticks.zin));
 			g_ascii_dtostr(lbl, jl, (priv->ticks.zin));
 			str2=g_strdup(lbl);
@@ -1630,7 +1585,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					g_free(str1);
 				}
 				lyt=pango_cairo_create_layout(cr); /* draw azimuthal tick labels */
-				pango_layout_set_font_description(lyt, dscr2);
+				pango_layout_set_font_description(lyt, (plot->afont));
 				pango_layout_set_text(lyt, str3, -1);
 				pango_layout_get_pixel_size(lyt, &wd, &hg);
 				rl=(priv->wr)+tt+((priv->s)*dr1);
@@ -1639,7 +1594,6 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				g_object_unref(lyt);
 				g_free(str3);
 			}
-			pango_font_description_free(dscr2);
 			g_free(str2);
 		}
 		for (k=1; k<kx; k++)
@@ -1690,17 +1644,16 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		cairo_arc(cr, (priv->x0), (priv->y0), rt, NMY_PI, G_PI);
 		cairo_stroke(cr);
 		lyt=pango_cairo_create_layout(cr); /* draw radial label */
-		pango_layout_set_font_description(lyt, dscr1);
+		pango_layout_set_font_description(lyt, (plot->lfont));
 		pango_layout_set_text(lyt, (plot->rlab), -1);
 		pango_layout_get_pixel_size(lyt, &wd, &hg);
 		cairo_move_to(cr, (priv->x0)+(priv->wr)+(((dr1*(priv->s))-wd)/2), (priv->y0)+dtr-hg);
 		pango_cairo_show_layout(cr, lyt);
 		g_object_unref(lyt);
 		lyt=pango_cairo_create_layout(cr); /* draw azimuthal label */
-		pango_layout_set_font_description(lyt, dscr1);
+		pango_layout_set_font_description(lyt, (plot->lfont));
 		g_object_unref(lyt);
 	}
-	pango_font_description_free(dscr1);
 	if (plot->rdata && plot->thdata) /* plot data */
 	{
 		if (((plot->flags)&2)!=0)
@@ -5031,7 +4984,7 @@ gboolean plot_polar_update_scale_pretty(GtkWidget *widget, gdouble xn, gdouble x
 	(priv->ticks.zc)=WGS;
 	if (xx<0) {xx=-xx; xn=-xn;}
 	if (xx<xn) {num=xx; xx=xn; xn=num;}
-	dtt=((plot->afsize)+(plot->lfsize)+JTI)*(xx-xn)/(((priv->bounds.rmax)-(priv->bounds.rmin))*(priv->s));
+	dtt=(((pango_font_description_get_size(plot->afont)+pango_font_description_get_size(plot->lfont))/PANGO_SCALE)+JTI)*(xx-xn)/(((priv->bounds.rmax)-(priv->bounds.rmin))*(priv->s));
 	(priv->rcs)=2; /* determine number of characters needed for radial labels and pretty max/min values */
 	if (xn<=0)
 	{
@@ -5614,6 +5567,8 @@ static void plot_polar_finalise(PlotPolar *plot)
 	priv=PLOT_POLAR_GET_PRIVATE(plot);
 	if (plot->rlab) g_free(plot->rlab);
 	if (plot->thlab) g_free(plot->thlab);
+	if (plot->afont) pango_font_description_free(plot->afont);
+	if (plot->lfont) pango_font_description_free(plot->lfont);
 	if (plot->rdata) g_free(plot->rdata);
 	if (plot->thdata) g_free(plot->thdata);
 	if (plot->ind) g_array_free((plot->ind), FALSE);
@@ -5726,10 +5681,13 @@ static void plot_polar_init(PlotPolar *plot)
 	{(priv->flagr)=0; (priv->flaga)=0;}
 	{(plot->rdata)=NULL; (plot->thdata)=NULL; (plot->ind)=NULL; (plot->sizes)=NULL;}
 	{(plot->rlab)=g_strdup("Amplitude"); (plot->thlab)=g_strdup("Azimuth");}
-	{(plot->afsize)=12; (plot->lfsize)=12;}
 	{(plot->flags)=4; (plot->ptsize)=5; (plot->linew)=2;}
 	(plot->zmode)=6;
 	{(plot->rps)=0; (plot->thps)=0;}
+	{(plot->afont)=pango_font_description_new(); (plot->lfont)=pango_font_description_new();}
+	{pango_font_description_set_family((plot->afont), "sans"); pango_font_description_set_family((plot->lfont), "sans");}
+	{pango_font_description_set_style((plot->afont), PANGO_STYLE_NORMAL); pango_font_description_set_style((plot->lfont), PANGO_STYLE_NORMAL);}
+	{pango_font_description_set_size((plot->afont), 12*PANGO_SCALE); pango_font_description_set_size((plot->lfont), 12*PANGO_SCALE);}
 	(priv->rd)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 10);
 	(priv->gr)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 10);
 	(priv->bl)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 10);

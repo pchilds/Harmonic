@@ -122,6 +122,13 @@
       <para>To convert to another format, such as tiff, use an image editing program such as GIMP to first scale the image to the desired size and then save in the new format.</para>
     </sect2>
   </sect1>
+  <sect1 id="examples"><title>Examples</title>
+    <sect2><title>Processing a measurement of a single Interferometric element</title>
+      <para>A single Fabry Perot element has a sinusoidal spectrum over wavenumber <inlineequation>k=lambda/2pi</inlineequation>). If measurements are made over wavelength then select Properties->Invert Domain. Otherwise if measurements are actually made over wavenumber then leave Invert Domain unchecked.</para>
+      <para>Select File->Open and locate the file of your measurement of the spectrum. Press Open and ensure that the graph that appears is what is expected.</para>
+      <para>As interferometers are in general not band-limited for Spectrum Start and Spectrum Stop select the full range of measurement available. I.e. move your mouse on the plot to the left most data point and read off the x coordinate displayed in the statusbar at the bottom of the screen. Choose a value just above this (Else the program may look for a value that does not exist in your data set) for the Spectrum Start. Similarly for Spectrum Stop, choose a value just below that of the rightmost data point.</para>
+    </sect2>
+  </sect1>
   <glossary>
     <glossdiv><title>B</title>
       <glossentry>

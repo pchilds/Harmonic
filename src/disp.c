@@ -26,13 +26,14 @@
 
 void dpr(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *helpwin, *content, *table, *vbox, *entry1, *entry2, *label, *spin1, *spin2, *hsp, *ck, *ck2, *ck3, *ck4;
+	GtkWidget *helpwin, *content, *table, *vbox, *entry1, *entry2, *label, *butt1, *butt2, *hsp, *ck, *ck2, *ck3, *ck4;
 	GtkAdjustment *adj;
 	PlotLinear *plt;
 	PlotPolar *plt2;
 	gdouble xi, xf, mny, mxy, iv, clc, rcn, thc;
 	gint dx, dx2, j, k, l, bl1, bl2, bl3;
 	gchar *str;
+	const gchar *ast, *lstr;
 	
 	helpwin=gtk_dialog_new_with_buttons(_("Display Properties"), GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, GTK_STOCK_APPLY, GTK_RESPONSE_APPLY, NULL);
 	g_signal_connect_swapped(G_OBJECT(helpwin), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
@@ -44,10 +45,10 @@ void dpr(GtkWidget *widget, gpointer data)
 	{
 		table=gtk_table_new(4, 2, FALSE);
 		gtk_widget_show(table);
-		label=gtk_label_new(_("Text size:"));
+		label=gtk_label_new(_("Axis label font:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		label=gtk_label_new(_("Tick label size:"));
+		label=gtk_label_new(_("Tick label font:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		entry1=gtk_entry_new();
@@ -67,18 +68,30 @@ void dpr(GtkWidget *widget, gpointer data)
 		str=g_strdup(plt2->thlab);
 		gtk_entry_set_text(GTK_ENTRY(entry2), str);
 		g_free(str);
-		adj=(GtkAdjustment *) gtk_adjustment_new((plt2->lfsize), 8, 64, 1.0, 5.0, 0.0);
-		spin1=gtk_spin_button_new(adj, 0, 0);
-		adj=(GtkAdjustment *) gtk_adjustment_new((plt2->afsize), 8, 64, 1.0, 5.0, 0.0);
-		spin2=gtk_spin_button_new(adj, 0, 0);
+		str=pango_font_description_to_string(plt2->lfont);
+		butt1=gtk_font_button_new_with_font(str);
+		g_free(str);
+		gtk_font_button_set_show_style(GTK_FONT_BUTTON(butt1), TRUE);
+		gtk_font_button_set_show_size(GTK_FONT_BUTTON(butt1), TRUE);
+		gtk_font_button_set_use_font(GTK_FONT_BUTTON(butt1), TRUE);
+		gtk_font_button_set_use_size(GTK_FONT_BUTTON(butt1), FALSE);
+		gtk_font_button_set_title(GTK_FONT_BUTTON(butt1), _("Font Selection for Axis Labels"));
+		str=pango_font_description_to_string(plt2->afont);
+		butt2=gtk_font_button_new_with_font(str);
+		g_free(str);
+		gtk_font_button_set_show_style(GTK_FONT_BUTTON(butt2), TRUE);
+		gtk_font_button_set_show_size(GTK_FONT_BUTTON(butt2), TRUE);
+		gtk_font_button_set_use_font(GTK_FONT_BUTTON(butt2), TRUE);
+		gtk_font_button_set_use_size(GTK_FONT_BUTTON(butt2), FALSE);
+		gtk_font_button_set_title(GTK_FONT_BUTTON(butt2), _("Font Selection for Tick Mark Labels"));
 		gtk_widget_show(entry1);
 		gtk_widget_show(entry2);
-		gtk_widget_show(spin1);
-		gtk_widget_show(spin2);
+		gtk_widget_show(butt1);
+		gtk_widget_show(butt2);
 		gtk_table_attach(GTK_TABLE(table), entry1, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		gtk_table_attach(GTK_TABLE(table), entry2, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		gtk_table_attach(GTK_TABLE(table), spin1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		gtk_table_attach(GTK_TABLE(table), spin2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_table_attach(GTK_TABLE(table), butt1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_table_attach(GTK_TABLE(table), butt2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 		gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
 		ck4=gtk_combo_box_new_text();
@@ -101,10 +114,16 @@ void dpr(GtkWidget *widget, gpointer data)
 		{
 			g_free(plt2->rlab);
 			g_free(plt2->thlab);
+			pango_font_description_free(plt2->lfont);
+			pango_font_description_free(plt2->afont);
 			(plt2->rlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 			(plt2->thlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
-			(plt2->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
-			(plt2->afsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin2));
+			str=g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(butt1)));
+			(plt2->lfont)=pango_font_description_from_string(str);
+			g_free(str);
+			str=g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(butt2)));
+			(plt2->afont)=pango_font_description_from_string(str);
+			g_free(str);
 			g_object_get(G_OBJECT(plot3), "thmin", &xi, "thmax", &xf, "rmin", &mny, "rmax", &mxy, "rcnt", &rcn, "thcnt", &thc, NULL);
 			bl1=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2));
 			bl2=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3));
@@ -592,10 +611,10 @@ void dpr(GtkWidget *widget, gpointer data)
 	{
 		table=gtk_table_new(4, 2, FALSE);
 		gtk_widget_show(table);
-		label=gtk_label_new(_("Text size:"));
+		label=gtk_label_new(_("Axis label font:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		label=gtk_label_new(_("Tick label size:"));
+		label=gtk_label_new(_("Tick label font:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		entry1=gtk_entry_new();
@@ -615,18 +634,30 @@ void dpr(GtkWidget *widget, gpointer data)
 		str=g_strdup(plt->ylab);
 		gtk_entry_set_text(GTK_ENTRY(entry2), str);
 		g_free(str);
-		adj=(GtkAdjustment *) gtk_adjustment_new((plt->lfsize), 8, 64, 1.0, 5.0, 0.0);
-		spin1=gtk_spin_button_new(adj, 0, 0);
-		adj=(GtkAdjustment *) gtk_adjustment_new((plt->afsize), 8, 64, 1.0, 5.0, 0.0);
-		spin2=gtk_spin_button_new(adj, 0, 0);
+		str=pango_font_description_to_string(plt->lfont);
+		butt1=gtk_font_button_new_with_font(str);
+		g_free(str);
+		gtk_font_button_set_show_style(GTK_FONT_BUTTON(butt1), TRUE);
+		gtk_font_button_set_show_size(GTK_FONT_BUTTON(butt1), TRUE);
+		gtk_font_button_set_use_font(GTK_FONT_BUTTON(butt1), TRUE);
+		gtk_font_button_set_use_size(GTK_FONT_BUTTON(butt1), FALSE);
+		gtk_font_button_set_title(GTK_FONT_BUTTON(butt1), _("Font Selection for Axis Labels"));
+		str=pango_font_description_to_string(plt->afont);
+		butt2=gtk_font_button_new_with_font(str);
+		g_free(str);
+		gtk_font_button_set_show_style(GTK_FONT_BUTTON(butt2), TRUE);
+		gtk_font_button_set_show_size(GTK_FONT_BUTTON(butt2), TRUE);
+		gtk_font_button_set_use_font(GTK_FONT_BUTTON(butt2), TRUE);
+		gtk_font_button_set_use_size(GTK_FONT_BUTTON(butt2), FALSE);
+		gtk_font_button_set_title(GTK_FONT_BUTTON(butt2), _("Font Selection for Tick Mark Labels"));
 		gtk_widget_show(entry1);
 		gtk_widget_show(entry2);
-		gtk_widget_show(spin1);
-		gtk_widget_show(spin2);
+		gtk_widget_show(butt1);
+		gtk_widget_show(butt2);
 		gtk_table_attach(GTK_TABLE(table), entry1, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		gtk_table_attach(GTK_TABLE(table), entry2, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		gtk_table_attach(GTK_TABLE(table), spin1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		gtk_table_attach(GTK_TABLE(table), spin2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_table_attach(GTK_TABLE(table), butt1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_table_attach(GTK_TABLE(table), butt2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 		gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
 		ck4=gtk_combo_box_new_text();
@@ -649,10 +680,16 @@ void dpr(GtkWidget *widget, gpointer data)
 		{
 			g_free(plt->xlab);
 			g_free(plt->ylab);
+			pango_font_description_free(plt->lfont);
+			pango_font_description_free(plt->afont);
 			(plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 			(plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
-			(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
-			(plt->afsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin2));
+			str=g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(butt1)));
+			(plt->lfont)=pango_font_description_from_string(str);
+			g_free(str);
+			str=g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(butt2)));
+			(plt->afont)=pango_font_description_from_string(str);
+			g_free(str);
 			g_object_get(G_OBJECT(plot3), "xmin", &xi, "xmax", &xf, "ymin", &mny, "ymax", &mxy, NULL);
 			bl1=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2));
 			bl2=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3));
@@ -1171,10 +1208,10 @@ void dpr(GtkWidget *widget, gpointer data)
 			case 1:
 			table=gtk_table_new(4, 2, FALSE);
 			gtk_widget_show(table);
-			label=gtk_label_new(_("Text size:"));
+			label=gtk_label_new(_("Axis label font:"));
 			gtk_widget_show(label);
 			gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			label=gtk_label_new(_("Tick label size:"));
+			label=gtk_label_new(_("Tick label font:"));
 			gtk_widget_show(label);
 			gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			entry1=gtk_entry_new();
@@ -1194,18 +1231,30 @@ void dpr(GtkWidget *widget, gpointer data)
 			str=g_strdup(plt->ylab);
 			gtk_entry_set_text(GTK_ENTRY(entry2), str);
 			g_free(str);
-			adj=(GtkAdjustment *) gtk_adjustment_new((plt->lfsize), 8, 64, 1.0, 5.0, 0.0);
-			spin1=gtk_spin_button_new(adj, 0, 0);
-			adj=(GtkAdjustment *) gtk_adjustment_new((plt->afsize), 8, 64, 1.0, 5.0, 0.0);
-			spin2=gtk_spin_button_new(adj, 0, 0);
+			str=pango_font_description_to_string(plt->lfont);
+			butt1=gtk_font_button_new_with_font(str);
+			g_free(str);
+			gtk_font_button_set_show_style(GTK_FONT_BUTTON(butt1), TRUE);
+			gtk_font_button_set_show_size(GTK_FONT_BUTTON(butt1), TRUE);
+			gtk_font_button_set_use_font(GTK_FONT_BUTTON(butt1), TRUE);
+			gtk_font_button_set_use_size(GTK_FONT_BUTTON(butt1), FALSE);
+			gtk_font_button_set_title(GTK_FONT_BUTTON(butt1), _("Font Selection for Axis Labels"));
+			str=pango_font_description_to_string(plt->afont);
+			butt2=gtk_font_button_new_with_font(str);
+			g_free(str);
+			gtk_font_button_set_show_style(GTK_FONT_BUTTON(butt2), TRUE);
+			gtk_font_button_set_show_size(GTK_FONT_BUTTON(butt2), TRUE);
+			gtk_font_button_set_use_font(GTK_FONT_BUTTON(butt2), TRUE);
+			gtk_font_button_set_use_size(GTK_FONT_BUTTON(butt2), FALSE);
+			gtk_font_button_set_title(GTK_FONT_BUTTON(butt2), _("Font Selection for Tick Mark Labels"));
 			gtk_widget_show(entry1);
 			gtk_widget_show(entry2);
-			gtk_widget_show(spin1);
-			gtk_widget_show(spin2);
+			gtk_widget_show(butt1);
+			gtk_widget_show(butt2);
 			gtk_table_attach(GTK_TABLE(table), entry1, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_table_attach(GTK_TABLE(table), entry2, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			gtk_table_attach(GTK_TABLE(table), spin1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			gtk_table_attach(GTK_TABLE(table), spin2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_table_attach(GTK_TABLE(table), butt1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_table_attach(GTK_TABLE(table), butt2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 			gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
 			ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
@@ -1227,10 +1276,16 @@ void dpr(GtkWidget *widget, gpointer data)
 				{
 					g_free(plt->xlab);
 					g_free(plt->ylab);
+					pango_font_description_free(plt->lfont);
+					pango_font_description_free(plt->afont);
 					(plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 					(plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
-					(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
-					(plt->afsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin2));
+					str=g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(butt1)));
+					(plt->lfont)=pango_font_description_from_string(str);
+					g_free(str);
+					str=g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(butt2)));
+					(plt->afont)=pango_font_description_from_string(str);
+					g_free(str);
 					g_object_get(G_OBJECT(plot2), "xmin", &xi, "xmax", &xf, "ymin", &mny, "ymax", &mxy, NULL);
 					if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck)))
 					{
@@ -1335,10 +1390,16 @@ void dpr(GtkWidget *widget, gpointer data)
 				{
 					g_free(plt->xlab);
 					g_free(plt->ylab);
+					pango_font_description_free(plt->lfont);
+					pango_font_description_free(plt->afont);
 					(plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 					(plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
-					(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
-					(plt->afsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin2));
+					str=g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(butt1)));
+					(plt->lfont)=pango_font_description_from_string(str);
+					g_free(str);
+					str=g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(butt2)));
+					(plt->afont)=pango_font_description_from_string(str);
+					g_free(str);
 					g_object_get(G_OBJECT(plot2), "xmin", &xi, "xmax", &xf, "ymin", &mny, "ymax", &mxy, NULL);
 					if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck)))
 					{
@@ -1436,10 +1497,10 @@ void dpr(GtkWidget *widget, gpointer data)
 			default:
 			table=gtk_table_new(4, 2, FALSE);
 			gtk_widget_show(table);
-			label=gtk_label_new(_("Text size:"));
+			label=gtk_label_new(_("Axis label font:"));
 			gtk_widget_show(label);
 			gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			label=gtk_label_new(_("Tick label size:"));
+			label=gtk_label_new(_("Tick label font:"));
 			gtk_widget_show(label);
 			gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			entry1=gtk_entry_new();
@@ -1459,18 +1520,30 @@ void dpr(GtkWidget *widget, gpointer data)
 			str=g_strdup(plt->ylab);
 			gtk_entry_set_text(GTK_ENTRY(entry2), str);
 			g_free(str);
-			adj=(GtkAdjustment *) gtk_adjustment_new((plt->lfsize), 8, 64, 1.0, 5.0, 0.0);
-			spin1=gtk_spin_button_new(adj, 0, 0);
-			adj=(GtkAdjustment *) gtk_adjustment_new((plt->afsize), 8, 64, 1.0, 5.0, 0.0);
-			spin2=gtk_spin_button_new(adj, 0, 0);
+			str=pango_font_description_to_string(plt->lfont);
+			butt1=gtk_font_button_new_with_font(str);
+			g_free(str);
+			gtk_font_button_set_show_style(GTK_FONT_BUTTON(butt1), TRUE);
+			gtk_font_button_set_show_size(GTK_FONT_BUTTON(butt1), TRUE);
+			gtk_font_button_set_use_font(GTK_FONT_BUTTON(butt1), TRUE);
+			gtk_font_button_set_use_size(GTK_FONT_BUTTON(butt1), FALSE);
+			gtk_font_button_set_title(GTK_FONT_BUTTON(butt1), _("Font Selection for Axis Labels"));
+			str=pango_font_description_to_string(plt->afont);
+			butt2=gtk_font_button_new_with_font(str);
+			g_free(str);
+			gtk_font_button_set_show_style(GTK_FONT_BUTTON(butt2), TRUE);
+			gtk_font_button_set_show_size(GTK_FONT_BUTTON(butt2), TRUE);
+			gtk_font_button_set_use_font(GTK_FONT_BUTTON(butt2), TRUE);
+			gtk_font_button_set_use_size(GTK_FONT_BUTTON(butt2), FALSE);
+			gtk_font_button_set_title(GTK_FONT_BUTTON(butt2), _("Font Selection for Tick Mark Labels"));
 			gtk_widget_show(entry1);
 			gtk_widget_show(entry2);
-			gtk_widget_show(spin1);
-			gtk_widget_show(spin2);
+			gtk_widget_show(butt1);
+			gtk_widget_show(butt2);
 			gtk_table_attach(GTK_TABLE(table), entry1, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_table_attach(GTK_TABLE(table), entry2, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			gtk_table_attach(GTK_TABLE(table), spin1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			gtk_table_attach(GTK_TABLE(table), spin2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_table_attach(GTK_TABLE(table), butt1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_table_attach(GTK_TABLE(table), butt2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 			gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
 			ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
@@ -1492,10 +1565,16 @@ void dpr(GtkWidget *widget, gpointer data)
 				{
 					g_free(plt->xlab);
 					g_free(plt->ylab);
+					pango_font_description_free(plt->lfont);
+					pango_font_description_free(plt->afont);
 					(plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 					(plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
-					(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
-					(plt->afsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin2));
+					str=g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(butt1)));
+					(plt->lfont)=pango_font_description_from_string(str);
+					g_free(str);
+					str=g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(butt2)));
+					(plt->afont)=pango_font_description_from_string(str);
+					g_free(str);
 					if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck)))
 					{
 						if ((flagd&1)==0)
@@ -1604,10 +1683,16 @@ void dpr(GtkWidget *widget, gpointer data)
 				{
 					g_free(plt->xlab);
 					g_free(plt->ylab);
+					pango_font_description_free(plt->lfont);
+					pango_font_description_free(plt->afont);
 					(plt->xlab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry1)));
 					(plt->ylab)=g_strdup(gtk_entry_get_text(GTK_ENTRY(entry2)));
-					(plt->lfsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin1));
-					(plt->afsize)=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(spin2));
+					str=g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(butt1)));
+					(plt->lfont)=pango_font_description_from_string(str);
+					g_free(str);
+					str=g_strdup(gtk_font_button_get_font_name(GTK_FONT_BUTTON(butt2)));
+					(plt->afont)=pango_font_description_from_string(str);
+					g_free(str);
 					if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck)))
 					{
 						if ((flagd&1)==0)

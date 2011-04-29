@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-04-16 03:54+0300\n"
-"PO-Revision-Date: 2011-04-15 06:59+0300\n"
+"POT-Creation-Date: 2011-04-23 09:05+0300\n"
+"PO-Revision-Date: 2011-04-23 09:19+0300\n"
 "Last-Translator: Alessandro Candiani <>\n"
 "Language-Team: Italian <>\n"
 "MIME-Version: 1.0\n"
@@ -18,51 +18,51 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/main.c:79
+#: src/main.c:80
 msgid "Harmonic Spectrum Analyser"
 msgstr "Analizzatore di spettro armonico"
 
-#: src/main.c:113
+#: src/main.c:114
 msgid "_File"
 msgstr "_File"
 
-#: src/main.c:136
+#: src/main.c:137
 msgid "Raw Delimited Data"
 msgstr "Dati delimitati senza intestazione"
 
-#: src/main.c:140
+#: src/main.c:141
 msgid "Data Format:"
 msgstr "Disposizione di dati:"
 
-#: src/main.c:145
+#: src/main.c:146
 msgid "Trace:"
 msgstr "Traccia:"
 
-#: src/main.c:152
+#: src/main.c:153
 msgid "Transmission Measurement?"
 msgstr "Misura in trasmissione?"
 
-#: src/main.c:156
+#: src/main.c:157
 msgid "Data in dBs?"
 msgstr "Dati in dB?"
 
-#: src/main.c:160
+#: src/main.c:161
 msgid "Negate?"
 msgstr "Negare?"
 
-#: src/main.c:167
+#: src/main.c:168
 msgid "Display Properties:"
 msgstr "Proprietà di visualizzazione:"
 
-#: src/main.c:172
+#: src/main.c:173
 msgid "_Properties"
 msgstr "_Proprietà"
 
-#: src/main.c:178
+#: src/main.c:179
 msgid "None"
 msgstr "Nessun"
 
-#: src/main.c:182
+#: src/main.c:183
 msgid ""
 "1st order\n"
 "spectral shadowing"
@@ -70,7 +70,7 @@ msgstr ""
 "Compensazione della coda\n"
 "spettrale (di primo ordine)"
 
-#: src/main.c:186
+#: src/main.c:187
 msgid ""
 "Nonlinear\n"
 "Compensation:"
@@ -78,11 +78,11 @@ msgstr ""
 "Compensazione\n"
 "non lineare"
 
-#: src/main.c:190
+#: src/main.c:191
 msgid "Invert domain?"
 msgstr "Invertire il dominio?"
 
-#: src/main.c:194
+#: src/main.c:195
 msgid ""
 "Apply correction\n"
 "to Window edges?"
@@ -90,93 +90,93 @@ msgstr ""
 "Applicare le correzioni alla\n"
 "estremità della finestra?"
 
-#: src/main.c:201
+#: src/main.c:202
 msgid "Optimise Triangle fit?"
 msgstr "Ottimizzare la misura dei triangoli?"
 
-#: src/main.c:205
+#: src/main.c:206
 msgid "Calculate Chirp?"
 msgstr "Calcolare il chirp?"
 
-#: src/main.c:212
+#: src/main.c:213
 msgid "Batch Process Data?"
 msgstr "Elaborazione batch per gruppi di files."
 
-#: src/main.c:216
+#: src/main.c:217
 msgid "Autotrack Offset?"
 msgstr "Automatizzare lo slittamento?"
 
-#: src/main.c:220
+#: src/main.c:221
 msgid "_Advanced"
 msgstr "A_vanzato"
 
-#: src/main.c:225
+#: src/main.c:226
 msgid "Instructions"
 msgstr "Istruzioni"
 
-#: src/main.c:234
+#: src/main.c:235
 msgid "_Help"
 msgstr "_Aiuto"
 
-#: src/main.c:263
+#: src/main.c:264
 msgid "Spectrum Start:"
 msgstr "Inizio dello spettro:"
 
-#: src/main.c:271
+#: src/main.c:272
 msgid "Spectrum Stop:"
 msgstr "Conclusione dello spettro:"
 
-#: src/main.c:279
+#: src/main.c:280
 msgid "Offset:"
 msgstr "Slittamento:"
 
-#: src/main.c:286 src/main.c:352
+#: src/main.c:287 src/main.c:353
 msgid "j index:"
 msgstr "Indice di J"
 
-#: src/main.c:294
+#: src/main.c:295
 msgid "Zero Padding 2^:"
 msgstr "Zero padding 2^:"
 
-#: src/main.c:301 src/main.c:368
+#: src/main.c:302 src/main.c:369
 msgid ""
 "Reset\n"
 "Arrays"
 msgstr "Resettare"
 
-#: src/main.c:305
+#: src/main.c:306
 msgid "Transform Spectrum"
 msgstr "Trasformare lo spettro"
 
-#: src/main.c:308 src/main.c:387
+#: src/main.c:309 src/main.c:388
 msgid "Spectrum"
 msgstr "Spettro"
 
-#: src/main.c:312
+#: src/main.c:313
 msgid "Inverse Spectrum Start:"
 msgstr "Inizio dello spettro inverso:"
 
-#: src/main.c:320
+#: src/main.c:321
 msgid "Inverse Spectrum Stop:"
 msgstr "Conclusione dello spettro inverso:"
 
-#: src/main.c:328
+#: src/main.c:329
 msgid "Triangle Centre:"
 msgstr "Centro del triangolo:"
 
-#: src/main.c:336
+#: src/main.c:337
 msgid "Triangle Full Width:"
 msgstr "Larghezza completa del triangolo:"
 
-#: src/main.c:344
+#: src/main.c:345
 msgid "DC Peak Width:"
 msgstr "Larghezza massima della CC:"
 
-#: src/main.c:360
+#: src/main.c:361
 msgid "k index:"
 msgstr "Indice di K"
 
-#: src/main.c:372
+#: src/main.c:373
 msgid ""
 "Process\n"
 "Spectrum"
@@ -184,27 +184,27 @@ msgstr ""
 "Analisi dello\n"
 "spettro"
 
-#: src/main.c:375 src/main.c:396
+#: src/main.c:376 src/main.c:397
 msgid "Inverse Spectrum"
 msgstr "Spettro inverso"
 
-#: src/main.c:392
+#: src/main.c:393
 msgid "Inverse Domain"
 msgstr "Dominio inverso"
 
-#: src/main.c:400 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
-#: src/data.c:1120 src/data.c:1261 src/disp.c:85 src/disp.c:633
-#: src/disp.c:1146 src/open.c:24232
+#: src/main.c:401 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
+#: src/data.c:1120 src/data.c:1261 src/disp.c:94 src/disp.c:656
+#: src/disp.c:1175 src/open.c:24232
 msgid "Visibility"
 msgstr "Visibilità"
 
-#: src/main.c:406 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
-#: src/data.c:1120 src/data.c:1261 src/disp.c:86 src/disp.c:634
-#: src/disp.c:1147 src/open.c:24238
+#: src/main.c:407 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
+#: src/data.c:1120 src/data.c:1261 src/disp.c:95 src/disp.c:657
+#: src/disp.c:1176 src/open.c:24238
 msgid "Domain Shift"
 msgstr "Sposti nel dominio"
 
-#: src/main.c:412 src/open.c:24148 src/open.c:24161 src/open.c:24184
+#: src/main.c:413 src/open.c:24148 src/open.c:24161 src/open.c:24184
 #: src/open.c:24244
 msgid "Analysis Results"
 msgstr "Risultati dell'analisi"
@@ -249,7 +249,7 @@ msgid "Parameter selection"
 msgstr "Selezionare i parametri"
 
 #: src/data.c:192 src/data.c:298 src/data.c:483 src/proc.c:176 src/proc.c:430
-#: src/disp.c:88 src/disp.c:636 src/disp.c:1149
+#: src/disp.c:97 src/disp.c:659 src/disp.c:1178
 msgid "Chirp"
 msgstr "Chirp"
 
@@ -472,45 +472,53 @@ msgstr "Lo slittamento deve essere diverso da zero per le misure lineari."
 msgid "Open a file for analysis first."
 msgstr "In primo luogo aprire un file per l'analisi."
 
-#: src/disp.c:37
+#: src/disp.c:38
 msgid "Display Properties"
 msgstr "Proprietà di visualizzazione"
 
-#: src/disp.c:47 src/disp.c:595 src/disp.c:1174 src/disp.c:1439
-msgid "Text size:"
-msgstr "Formato del testo:"
+#: src/disp.c:48 src/disp.c:610 src/disp.c:1203 src/disp.c:1488
+msgid "Axis label font:"
+msgstr "Tipo di carattere per le etichette degli assi:"
 
-#: src/disp.c:50 src/disp.c:598 src/disp.c:1177 src/disp.c:1442
-msgid "Tick label size:"
-msgstr "Formato numerico degli assi"
+#: src/disp.c:51 src/disp.c:613 src/disp.c:1206 src/disp.c:1491
+msgid "Tick label font:"
+msgstr "Tipo di carattere per le numerico degli assi:"
 
-#: src/disp.c:57
+#: src/disp.c:58
 msgid "Radial axis text:"
 msgstr "Testo per l'asse radiale"
 
-#: src/disp.c:60
+#: src/disp.c:61
 msgid "Azimuthal axis text:"
 msgstr "Testo per l'asse azimutale"
 
-#: src/disp.c:91 src/disp.c:639 src/disp.c:1152 src/disp.c:1217
-#: src/disp.c:1482
+#: src/disp.c:76 src/disp.c:638 src/disp.c:1231 src/disp.c:1516
+msgid "Font Selection for Axis Labels"
+msgstr "Selezione tipo di carattere per le etichette degli assi"
+
+#: src/disp.c:82 src/disp.c:644 src/disp.c:1237 src/disp.c:1522
+msgid "Font Selection for Tick Mark Labels"
+msgstr "Selezione tipo di carattere per le numerico degli assi"
+
+#: src/disp.c:100 src/disp.c:662 src/disp.c:1181 src/disp.c:1254
+#: src/disp.c:1539
 msgid "Multiple plots for Results over index j"
 msgstr "Trame multiple per risultati di indice J"
 
-#: src/disp.c:95 src/disp.c:643 src/disp.c:1156 src/disp.c:1221
-#: src/disp.c:1486
+#: src/disp.c:104 src/disp.c:666 src/disp.c:1185 src/disp.c:1258
+#: src/disp.c:1543
 msgid "Multiple plots for Results over index k"
 msgstr "Trame multiple per risultati di indice K"
 
-#: src/disp.c:605 src/disp.c:1184 src/disp.c:1449
+#: src/disp.c:620 src/disp.c:1213 src/disp.c:1498
 msgid "X axis text:"
 msgstr "Testo per asse delle ascisse"
 
-#: src/disp.c:608 src/disp.c:1187 src/disp.c:1452
+#: src/disp.c:623 src/disp.c:1216 src/disp.c:1501
 msgid "Y axis text:"
 msgstr "Testo per asse delle ordinate"
 
-#: src/disp.c:1211 src/disp.c:1476
+#: src/disp.c:1248 src/disp.c:1533
 msgid "Multiple plots for Inverse Domain"
 msgstr "Trame multiple per dominio inverso"
 
@@ -607,6 +615,9 @@ msgstr "Selezionare il metodo di misurazione:"
 #, c-format
 msgid "File: %s successfully loaded."
 msgstr "Il file: %s è stato caricato con successo."
+
+#~ msgid "Text size:"
+#~ msgstr "Formato del testo:"
 
 #~ msgid "Variable Parameter"
 #~ msgstr "Il metodo di misurazione"

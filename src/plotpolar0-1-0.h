@@ -47,8 +47,9 @@ struct _PlotPolar
 	GArray *rdata, *thdata; /* radial and azimuthal data values */
 	GArray *ind, *sizes; /* indices of first element and number of elements for each trace */
 	gchar *rlab, *thlab; /* labels for the radial and azimuthal axis */
+	PangoFontDescription *afont, *lfont; /* font descriptions for the tick mark and axis labels */
 	gdouble rps, thps; /* radial and azimuthal position of mouse */
-	guint afsize, lfsize, ptsize, linew; /* font size for the tick mark and axis labels, the point radii and line width */
+	guint ptsize, linew; /* point radii and line width */
 	gint zmode; /* zoom mode flags xxxx0b/xxxx1b = zoom in/out,1001xb = zoom radial only, 1010xb = zoom azimuthal only, 1011xb = zoom both, 0xxxxb = cartesian shift mode, x1xxxb = single click zoom */
 	gint flags; /* flags: 01xb = lines only, 10xb = points only, 11x = both, xx0b/xx1b = Degrees/Radians */
 };

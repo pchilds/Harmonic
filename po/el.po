@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-04-16 03:54+0300\n"
-"PO-Revision-Date: 2011-04-04 21:09+0300\n"
+"POT-Creation-Date: 2011-04-23 09:05+0300\n"
+"PO-Revision-Date: 2011-04-16 06:45+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Greek <>\n"
 "MIME-Version: 1.0\n"
@@ -17,51 +17,51 @@ msgstr ""
 "Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/main.c:79
+#: src/main.c:80
 msgid "Harmonic Spectrum Analyser"
 msgstr "Αρμονική αναλυτής φάσματος"
 
-#: src/main.c:113
+#: src/main.c:114
 msgid "_File"
 msgstr "_Αρχείο"
 
-#: src/main.c:136
+#: src/main.c:137
 msgid "Raw Delimited Data"
 msgstr "Πρώτες οριοθετημένη δεδομένα "
 
-#: src/main.c:140
+#: src/main.c:141
 msgid "Data Format:"
 msgstr "Μορφή δεδομένων"
 
-#: src/main.c:145
+#: src/main.c:146
 msgid "Trace:"
 msgstr "Ίχνος:"
 
-#: src/main.c:152
+#: src/main.c:153
 msgid "Transmission Measurement?"
 msgstr "Μέτρηση της μετάδοσης;"
 
-#: src/main.c:156
+#: src/main.c:157
 msgid "Data in dBs?"
 msgstr "Δεδομένα σε dBs;"
 
-#: src/main.c:160
+#: src/main.c:161
 msgid "Negate?"
 msgstr "Ανατρέπει;"
 
-#: src/main.c:167
+#: src/main.c:168
 msgid "Display Properties:"
 msgstr "Ιδιότητες εμφάνισης:"
 
-#: src/main.c:172
+#: src/main.c:173
 msgid "_Properties"
 msgstr "_Ιδιοτητες"
 
-#: src/main.c:178
+#: src/main.c:179
 msgid "None"
 msgstr "Τίποτα"
 
-#: src/main.c:182
+#: src/main.c:183
 msgid ""
 "1st order\n"
 "spectral shadowing"
@@ -69,7 +69,7 @@ msgstr ""
 "Πρώτα αποζημίωση\n"
 "προκειμένου φασματική σκίαση"
 
-#: src/main.c:186
+#: src/main.c:187
 msgid ""
 "Nonlinear\n"
 "Compensation:"
@@ -77,11 +77,11 @@ msgstr ""
 "Μη γραμμική\n"
 "αποζημίωση:"
 
-#: src/main.c:190
+#: src/main.c:191
 msgid "Invert domain?"
 msgstr "Αναστρέψει την περιοχή;"
 
-#: src/main.c:194
+#: src/main.c:195
 msgid ""
 "Apply correction\n"
 "to Window edges?"
@@ -89,57 +89,57 @@ msgstr ""
 "Εφαρμόστε τις διορθώσεις\n"
 "στο παράθυρο άκρα;"
 
-#: src/main.c:201
+#: src/main.c:202
 msgid "Optimise Triangle fit?"
 msgstr ""
 "βελτιστοποίηση Ταιριάζουν\n"
 "των τριγώνων;"
 
-#: src/main.c:205
+#: src/main.c:206
 msgid "Calculate Chirp?"
-msgstr "Υπολογίσει το τερέτισμα;"
+msgstr "Υπολογίσει το chirp;"
 
-#: src/main.c:212
+#: src/main.c:213
 msgid "Batch Process Data?"
 msgstr "Μαζική επεξεργασία τα στοιχεία;"
 
-#: src/main.c:216
+#: src/main.c:217
 msgid "Autotrack Offset?"
 msgstr "Aυτοματοποίηση Όφσετ;"
 
-#: src/main.c:220
+#: src/main.c:221
 msgid "_Advanced"
 msgstr "Προηγμένη"
 
-#: src/main.c:225
+#: src/main.c:226
 msgid "Instructions"
 msgstr "Οδηγίες"
 
-#: src/main.c:234
+#: src/main.c:235
 msgid "_Help"
 msgstr "_Βοήθεια"
 
-#: src/main.c:263
+#: src/main.c:264
 msgid "Spectrum Start:"
 msgstr "Έναρξη του φάσματος"
 
-#: src/main.c:271
+#: src/main.c:272
 msgid "Spectrum Stop:"
 msgstr "Τέλος του φάσματος"
 
-#: src/main.c:279
+#: src/main.c:280
 msgid "Offset:"
 msgstr "Όφσετ:"
 
-#: src/main.c:286 src/main.c:352
+#: src/main.c:287 src/main.c:353
 msgid "j index:"
 msgstr "η δείκτη"
 
-#: src/main.c:294
+#: src/main.c:295
 msgid "Zero Padding 2^:"
 msgstr "Μηδέν υλικό παραγεμίσματος 2^:"
 
-#: src/main.c:301 src/main.c:368
+#: src/main.c:302 src/main.c:369
 msgid ""
 "Reset\n"
 "Arrays"
@@ -147,65 +147,65 @@ msgstr ""
 "Επαναφέρετε\n"
 "το συστοιχίες"
 
-#: src/main.c:305
+#: src/main.c:306
 msgid "Transform Spectrum"
 msgstr "Μεταμορφώστε το φάσμα"
 
-#: src/main.c:308 src/main.c:387
+#: src/main.c:309 src/main.c:388
 msgid "Spectrum"
 msgstr "Φάσμα"
 
-#: src/main.c:312
+#: src/main.c:313
 msgid "Inverse Spectrum Start:"
 msgstr "Έναρξη της αντίστροφης φάσματος"
 
-#: src/main.c:320
+#: src/main.c:321
 msgid "Inverse Spectrum Stop:"
 msgstr "Τέλος της αντίστροφης φάσματος"
 
-#: src/main.c:328
+#: src/main.c:329
 msgid "Triangle Centre:"
 msgstr "Κέντρο του τριγώνου:"
 
-#: src/main.c:336
+#: src/main.c:337
 msgid "Triangle Full Width:"
 msgstr "Πλάτος του τριγώνου:"
 
-#: src/main.c:344
+#: src/main.c:345
 msgid "DC Peak Width:"
 msgstr "Πλάτος της κορυφής μηδενική συχνότητα:"
 
-#: src/main.c:360
+#: src/main.c:361
 msgid "k index:"
 msgstr "ζ δείκτη"
 
-#: src/main.c:372
+#: src/main.c:373
 msgid ""
 "Process\n"
 "Spectrum"
 msgstr "Διαδικασία του φάσματος"
 
-#: src/main.c:375 src/main.c:396
+#: src/main.c:376 src/main.c:397
 msgid "Inverse Spectrum"
 msgstr "Αντίστροφης φάσματος"
 
-#: src/main.c:392
+#: src/main.c:393
 msgid "Inverse Domain"
 msgstr "Αντίστροφη περιοχή"
 
-#: src/main.c:400 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
-#: src/data.c:1120 src/data.c:1261 src/disp.c:85 src/disp.c:633
-#: src/disp.c:1146 src/open.c:24232
+#: src/main.c:401 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
+#: src/data.c:1120 src/data.c:1261 src/disp.c:94 src/disp.c:656
+#: src/disp.c:1175 src/open.c:24232
 msgid "Visibility"
 msgstr "Προβολή"
 
-#: src/main.c:406 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
-#: src/data.c:1120 src/data.c:1261 src/disp.c:86 src/disp.c:634
-#: src/disp.c:1147 src/open.c:24238
+#: src/main.c:407 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
+#: src/data.c:1120 src/data.c:1261 src/disp.c:95 src/disp.c:657
+#: src/disp.c:1176 src/open.c:24238
 msgid "Domain Shift"
 msgstr "Μετατόπιση περιοχών"
 
-#: src/main.c:412 src/open.c:24148 src/open.c:24161 src/open.c:24184
+#: src/main.c:413 src/open.c:24148 src/open.c:24161 src/open.c:24184
 #: src/open.c:24244
 msgid "Analysis Results"
 msgstr "Αποτελέσματα της ανάλυσης"
@@ -250,13 +250,13 @@ msgid "Parameter selection"
 msgstr "Παράμετρος επιλογής"
 
 #: src/data.c:192 src/data.c:298 src/data.c:483 src/proc.c:176 src/proc.c:430
-#: src/disp.c:88 src/disp.c:636 src/disp.c:1149
+#: src/disp.c:97 src/disp.c:659 src/disp.c:1178
 msgid "Chirp"
-msgstr "Τερέτισμα"
+msgstr "Chirp"
 
 #: src/data.c:192 src/data.c:298 src/data.c:483
 msgid "All"
-msgstr ""
+msgstr "Ολα"
 
 #: src/data.c:194 src/data.c:300 src/data.c:485 src/data.c:669 src/data.c:1040
 #: src/data.c:1122 src/data.c:1263 src/data.c:1403 src/data.c:1895
@@ -266,7 +266,7 @@ msgstr "Επιλέξτε την παράμετρο για να αποθηκεύ�
 
 #: src/data.c:199 src/data.c:305 src/data.c:490 src/data.c:674 src/data.c:846
 msgid "MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
-msgstr ""
+msgstr "ΜEΤΡΗΣΗ  \tΠΡOBOΛΗ  \tΜΤΠΣ_ΠΡΧΝ\tCHIRP    "
 
 #: src/data.c:217 src/data.c:240 src/data.c:263 src/data.c:286 src/data.c:344
 #: src/data.c:386 src/data.c:428 src/data.c:470 src/data.c:529 src/data.c:571
@@ -285,19 +285,19 @@ msgstr "Σφάλμα κατά την αποθήκευση αρχείου: %s."
 
 #: src/data.c:224 src/data.c:351 src/data.c:536 src/data.c:720 src/data.c:892
 msgid "MEAS     \tCHIRP    "
-msgstr ""
+msgstr "ΜEΤΡΗΣΗ  \tCHIRP    "
 
 #: src/data.c:247 src/data.c:393 src/data.c:578 src/data.c:762 src/data.c:934
 #: src/data.c:1069 src/data.c:1171 src/data.c:1312 src/data.c:1452
 #: src/data.c:1580
 msgid "MEAS     \tDOMN_SHFT"
-msgstr ""
+msgstr "ΜEΤΡΗΣΗ  \tΜΤΠΣ_ΠΡΧΝ"
 
 #: src/data.c:270 src/data.c:435 src/data.c:620 src/data.c:804 src/data.c:976
 #: src/data.c:1092 src/data.c:1213 src/data.c:1354 src/data.c:1494
 #: src/data.c:1622
 msgid "MEAS     \tVISIBILTY"
-msgstr ""
+msgstr "ΜEΤΡΗΣΗ  \tΠΡOBOΛΗ  "
 
 #: src/data.c:667 src/data.c:1401
 #, fuzzy
@@ -358,7 +358,7 @@ msgstr ""
 #: src/data.c:1045 src/data.c:1127 src/data.c:1268 src/data.c:1408
 #: src/data.c:1536
 msgid "MEAS     \tVISIBILTY\tDOMN_SHFT"
-msgstr ""
+msgstr "ΜEΤΡΗΣΗ  \tΠΡOBOΛΗ  \tΜΤΠΣ_ΠΡΧΝ"
 
 #: src/data.c:1401
 msgid ""
@@ -374,27 +374,27 @@ msgstr ""
 
 #: src/data.c:1684
 msgid "VISIBILTY\tDOMN_SHFT\tCHIRP    "
-msgstr ""
+msgstr "ΠΡOBOΛΗ  \tΜΤΠΣ_ΠΡΧΝ\tCHIRP    "
 
 #: src/data.c:1704
 msgid "K        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
-msgstr ""
+msgstr "Ζ        \tΠΡOBOΛΗ  \tΜΤΠΣ_ΠΡΧΝ\tCHIRP    "
 
 #: src/data.c:1731
 msgid "J        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
-msgstr ""
+msgstr "Η        \tΠΡOBOΛΗ  \tΜΤΠΣ_ΠΡΧΝ\tCHIRP    "
 
 #: src/data.c:1792
 msgid "VISIBILTY\tDOMN_SHFT"
-msgstr ""
+msgstr "ΠΡOBOΛΗ  \tΜΤΠΣ_ΠΡΧΝ"
 
 #: src/data.c:1811
 msgid "K        \tVISIBILTY\tDOMN_SHFT"
-msgstr ""
+msgstr "Ζ        \tΠΡOBOΛΗ  \tΜΤΠΣ_ΠΡΧΝ"
 
 #: src/data.c:1837
 msgid "J        \tVISIBILTY\tDOMN_SHFT"
-msgstr ""
+msgstr "Η        \tΠΡOBOΛΗ  \tΜΤΠΣ_ΠΡΧΝ"
 
 #: src/data.c:1893 src/data.c:2058 src/data.c:2224
 msgid "Real/Imaginary"
@@ -402,7 +402,7 @@ msgstr ""
 
 #: src/data.c:1893 src/data.c:2058 src/data.c:2224
 msgid "Magnitude/Phase"
-msgstr ""
+msgstr "Μεγεθος/Φαση"
 
 #: src/data.c:1900 src/data.c:2065 src/data.c:2231
 msgid "INVERSE_D\tREAL_VAL \tIMAG_VAL "
@@ -458,45 +458,54 @@ msgstr ""
 msgid "Open a file for analysis first."
 msgstr "Ανοίξτε ένα αρχείο για ανάλυση πρώτη."
 
-#: src/disp.c:37
+#: src/disp.c:38
 msgid "Display Properties"
 msgstr "Ιδιότητες εμφάνισης"
 
-#: src/disp.c:47 src/disp.c:595 src/disp.c:1174 src/disp.c:1439
-msgid "Text size:"
-msgstr "Μέγεθος κειμένου:"
+#: src/disp.c:48 src/disp.c:610 src/disp.c:1203 src/disp.c:1488
+msgid "Axis label font:"
+msgstr ""
 
-#: src/disp.c:50 src/disp.c:598 src/disp.c:1177 src/disp.c:1442
-msgid "Tick label size:"
+#: src/disp.c:51 src/disp.c:613 src/disp.c:1206 src/disp.c:1491
+#, fuzzy
+msgid "Tick label font:"
 msgstr "Μέγεθος ετικέτας:"
 
-#: src/disp.c:57
+#: src/disp.c:58
 msgid "Radial axis text:"
 msgstr "Κείμενο για τον ακτινικό άξονα:"
 
-#: src/disp.c:60
+#: src/disp.c:61
 msgid "Azimuthal axis text:"
 msgstr "Κείμενο για τον αζιμουθιακό άξονα:"
 
-#: src/disp.c:91 src/disp.c:639 src/disp.c:1152 src/disp.c:1217
-#: src/disp.c:1482
+#: src/disp.c:76 src/disp.c:638 src/disp.c:1231 src/disp.c:1516
+msgid "Font Selection for Axis Labels"
+msgstr ""
+
+#: src/disp.c:82 src/disp.c:644 src/disp.c:1237 src/disp.c:1522
+msgid "Font Selection for Tick Mark Labels"
+msgstr ""
+
+#: src/disp.c:100 src/disp.c:662 src/disp.c:1181 src/disp.c:1254
+#: src/disp.c:1539
 msgid "Multiple plots for Results over index j"
 msgstr "Πολλαπλές επιφάνειες για τα αποτελέσματα πάνω δείκτη η"
 
-#: src/disp.c:95 src/disp.c:643 src/disp.c:1156 src/disp.c:1221
-#: src/disp.c:1486
+#: src/disp.c:104 src/disp.c:666 src/disp.c:1185 src/disp.c:1258
+#: src/disp.c:1543
 msgid "Multiple plots for Results over index k"
 msgstr "Πολλαπλές επιφάνειες για τα αποτελέσματα πάνω δείκτη ζ"
 
-#: src/disp.c:605 src/disp.c:1184 src/disp.c:1449
+#: src/disp.c:620 src/disp.c:1213 src/disp.c:1498
 msgid "X axis text:"
 msgstr "Κείμενο για τον άξονα Χ:"
 
-#: src/disp.c:608 src/disp.c:1187 src/disp.c:1452
+#: src/disp.c:623 src/disp.c:1216 src/disp.c:1501
 msgid "Y axis text:"
 msgstr "Κείμενο για τον άξονα Υ:"
 
-#: src/disp.c:1211 src/disp.c:1476
+#: src/disp.c:1248 src/disp.c:1533
 msgid "Multiple plots for Inverse Domain"
 msgstr "Πολλαπλές επιφάνειες για την αντίστροφη περιοχή"
 
@@ -592,6 +601,9 @@ msgstr "Παράμετρος για την ανάλυση"
 #, c-format
 msgid "File: %s successfully loaded."
 msgstr "Αρχείο: %s φορτωθεί επιτυχώς."
+
+#~ msgid "Text size:"
+#~ msgstr "Μέγεθος κειμένου:"
 
 #~ msgid "Variable Parameter"
 #~ msgstr "Παράμετρος για την ανάλυση"
