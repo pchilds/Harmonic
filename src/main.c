@@ -35,7 +35,6 @@
  * TO DO:
  *
  * DPR: change to be nonmodal
- * PLOT: use of pango_font_description_from_string(const char*)
  * OPD: config writer (+overwrite confirm)
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation

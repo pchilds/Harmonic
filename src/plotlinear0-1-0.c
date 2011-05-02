@@ -62,47 +62,16 @@ struct xs {gdouble xmin, ymin, xmax, ymax;};
 struct tk {guint xj, yj, xn, yn;};
 struct _PlotLinearPrivate {struct xs bounds, rescale; struct tk ticks, range; GArray *rd, *gr, *bl, *al; guint xcs, ycs, flaga, flagr;};
 
-static void draw(GtkWidget *widget, cairo_t *cr)
+static void drawz(GtkWidget *widget, cairo_t *cr)
 {
-	PlotLinearPrivate *priv;
+	gint xw;
+	gdouble dt;
 	PlotLinear *plot;
-	guint xs;
-	gint j, k, xw, yw, xr, xr2, yr, yr2, xa, ya, xl, yl, xu, yu, tf, tz, to, tn, tnn, xv, yv, xvn, yvn, dtt, tx, wd, hg, ft, lt;
-	gdouble vv, wv, zv, av, dt, lr1, lr2, lr3;
-	gchar *str1=NULL, *str2=".", *str3=NULL;
-	gchar lbl[10];
-	PangoLayout *lyt;
-	cairo_matrix_t mtr2, mtr3;
 
-	{mtr2.xx=0; mtr2.xy=1; mtr2.yx=-1; mtr2.yy=0;}/* initialise */
-	{mtr3.xx=0; mtr3.xy=-1; mtr3.yx=1; mtr3.yy=0;}
-	plot=PLOT_LINEAR(widget);
 	xw=(widget->allocation.width);
-	yw=(widget->allocation.height);
-	priv=PLOT_LINEAR_GET_PRIVATE(plot);
-	(priv->flaga)&=48;
-	lyt=pango_cairo_create_layout(cr);
-	pango_layout_set_font_description(lyt, (plot->lfont));
-	str1=g_strconcat((plot->xlab), (plot->ylab), NULL);
-	pango_layout_set_text(lyt, str1, -1);
-	pango_layout_get_pixel_size(lyt, &wd, &dtt);
-	g_free(str1);
-	g_object_unref(lyt);
-	lyt=pango_cairo_create_layout(cr);
-	pango_layout_set_font_description(lyt, (plot->afont));
-	str1=g_strdup("27");
-	pango_layout_set_text(lyt, str1, -1);
-	pango_layout_get_pixel_size(lyt, &wd, &hg);
-	dtt+=hg;
-	g_free(str1);
-	g_object_unref(lyt);
-	xr=MIN(xw*ARP,dtt);
-	xr2=(xr-2)*IRTR;
-	yr=MIN(yw*ARP,dtt);
-	yr2=(yr-2)*IRTR;
-	dtt+=JTI;
+	plot=PLOT_LINEAR(widget);
 	cairo_set_source_rgba(cr, 0, 0, 0, 1);
-	cairo_set_line_width(cr, 1); /* draw zoom boxes */
+	cairo_set_line_width(cr, 1);
 	cairo_rectangle(cr, xw-21.5, 0.5, 10, 10);
 	cairo_rectangle(cr, xw-10.5, 0.5, 10, 10);
 	cairo_move_to(cr, xw-9, 5.5);
@@ -163,6 +132,47 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		}
 		cairo_restore(cr);
 	}
+}
+
+static void draw(GtkWidget *widget, cairo_t *cr)
+{
+	PlotLinearPrivate *priv;
+	PlotLinear *plot;
+	guint xs;
+	gint j, k, xw, yw, xr, xr2, yr, yr2, xa, ya, xl, yl, xu, yu, tf, tz, to, tn, tnn, xv, yv, xvn, yvn, dtt, tx, wd, hg, ft, lt;
+	gdouble vv, wv, zv, av, dt, lr1, lr2, lr3;
+	gchar *str1=NULL, *str2=".", *str3=NULL;
+	gchar lbl[10];
+	PangoLayout *lyt;
+	cairo_matrix_t mtr2, mtr3;
+
+	{mtr2.xx=0; mtr2.xy=1; mtr2.yx=-1; mtr2.yy=0;}/* initialise */
+	{mtr3.xx=0; mtr3.xy=-1; mtr3.yx=1; mtr3.yy=0;}
+	plot=PLOT_LINEAR(widget);
+	xw=(widget->allocation.width);
+	yw=(widget->allocation.height);
+	priv=PLOT_LINEAR_GET_PRIVATE(plot);
+	(priv->flaga)&=48;
+	lyt=pango_cairo_create_layout(cr);
+	pango_layout_set_font_description(lyt, (plot->lfont));
+	str1=g_strconcat((plot->xlab), (plot->ylab), NULL);
+	pango_layout_set_text(lyt, str1, -1);
+	pango_layout_get_pixel_size(lyt, &wd, &dtt);
+	g_free(str1);
+	g_object_unref(lyt);
+	lyt=pango_cairo_create_layout(cr);
+	pango_layout_set_font_description(lyt, (plot->afont));
+	str1=g_strdup("27");
+	pango_layout_set_text(lyt, str1, -1);
+	pango_layout_get_pixel_size(lyt, &wd, &hg);
+	dtt+=hg;
+	g_free(str1);
+	g_object_unref(lyt);
+	xr=MIN(xw*ARP,dtt);
+	xr2=(xr-2)*IRTR;
+	yr=MIN(yw*ARP,dtt);
+	yr2=(yr-2)*IRTR;
+	dtt+=JTI;
 	lyt=pango_cairo_create_layout(cr);
 	pango_layout_set_font_description(lyt, (plot->afont));
 	if ((priv->bounds.ymax)<=DZE) /* determine positions of axes */
@@ -309,7 +319,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	(priv->range.yj)=yu;
 	(priv->range.xn)=xu;
 	(priv->range.yn)=yl;
-	cairo_set_source_rgb(cr, 0, 0, 0);
+	cairo_set_source_rgba(cr, 0, 0, 0, 1);
 	cairo_set_line_width(cr, 2);
 	cairo_move_to(cr, 0, ya);
 	if (((priv->flaga)&1)!=0) /* draw x wiggles */
@@ -3940,14 +3950,15 @@ static void plot_linear_get_property(GObject *object, guint prop_id, GValue *val
 	}
 }
 
-static gboolean plot_linear_expose(GtkWidget *plot, GdkEventExpose *event)
+static gboolean plot_linear_expose(GtkWidget *widget, GdkEventExpose *event)
 {
 	cairo_t *cr;
 
-	cr=gdk_cairo_create(plot->window);
+	cr=gdk_cairo_create(widget->window);
 	cairo_rectangle(cr, event->area.x, event->area.y, event->area.width, event->area.height);
 	cairo_clip(cr);
-	draw(plot, cr);
+	draw(widget, cr);
+	drawz(widget, cr);
 	cairo_destroy(cr);
 	return FALSE;
 }

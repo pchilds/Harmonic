@@ -89,22 +89,16 @@ struct pt {gdouble r, th;};
 typedef struct _PlotPolarPrivate PlotPolarPrivate;
 struct _PlotPolarPrivate {struct xs bounds, rescale; struct pt centre; struct tk ticks; GArray *rd, *gr, *bl, *al; gint x0, y0; gdouble s, wr; guint rcs, thcs, flaga, flagr;};
 
-static void draw(GtkWidget *widget, cairo_t *cr)
+static void drawz(GtkWidget *widget, cairo_t *cr)
 {
-	PlotPolarPrivate *priv;
 	PlotPolar *plot;
-	gint j, k, xw, yw, kx, j0, jl, xs, wd, hg, ft, lt;
-	gdouble dtt, tt, dtr, thx, thn, dt, sx, csx, ssx, dr1, drs, drc, dz, rt, dwr, rl, ctx, ctn, stx, stn, r, th, rn, tn, x, y, vv, wv, xv, yv;
-	gchar lbl[10];
-	gchar *str1=NULL, *str2=NULL, *str3;
-	cairo_text_extents_t extents;
-	PangoLayout *lyt;
-	cairo_matrix_t mtr;
+	gint xw;
+	gdouble dt;
 
 	xw=(widget->allocation.width);
-	yw=(widget->allocation.height);
 	plot=PLOT_POLAR(widget);
-	cairo_set_line_width(cr, 1); /* draw zoom boxes */
+	cairo_set_source_rgba(cr, 0, 0, 0, 1);
+	cairo_set_line_width(cr, 1);
 	cairo_rectangle(cr, xw-21.5, 0.5, 10, 10);
 	cairo_rectangle(cr, xw-10.5, 0.5, 10, 10);
 	cairo_move_to(cr, xw-9, 5.5);
@@ -165,6 +159,23 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		}
 		cairo_restore(cr);
 	}
+}
+
+static void draw(GtkWidget *widget, cairo_t *cr)
+{
+	PlotPolarPrivate *priv;
+	PlotPolar *plot;
+	gint j, k, xw, yw, kx, j0, jl, xs, wd, hg, ft, lt;
+	gdouble dtt, tt, dtr, thx, thn, dt, sx, csx, ssx, dr1, drs, drc, dz, rt, dwr, rl, ctx, ctn, stx, stn, r, th, rn, tn, x, y, vv, wv, xv, yv;
+	gchar lbl[10];
+	gchar *str1=NULL, *str2=NULL, *str3;
+	cairo_text_extents_t extents;
+	PangoLayout *lyt;
+	cairo_matrix_t mtr;
+
+	xw=(widget->allocation.width);
+	yw=(widget->allocation.height);
+	plot=PLOT_POLAR(widget);
 	priv=PLOT_POLAR_GET_PRIVATE(plot);/* determine scale and fit for graph */
 	if ((priv->bounds.rmax)<0) {(priv->bounds.rmax)=-(priv->bounds.rmax); (priv->bounds.rmin)=-(priv->bounds.rmin);}
 	if ((priv->bounds.rmax)<(priv->bounds.rmin))
@@ -177,20 +188,30 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	else (priv->wr)=WGP*sqrt(xw*yw);
 	if ((priv->centre.r)<=0) (priv->centre.r)=0;
 	else if ((priv->centre.r)<(priv->bounds.rmax)) (priv->centre.r)=(priv->bounds.rmax);
-	cairo_set_source_rgb(cr, 0, 0, 0);
+	cairo_set_source_rgba(cr, 0, 0, 0, 1);
 	cairo_set_line_width(cr, 2);
-	cairo_select_font_face(cr, "sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-	cairo_set_font_size(cr, (pango_font_description_get_size(plot->afont))/PANGO_SCALE);/* change to use pango */
-	cairo_text_extents(cr, "8", &extents);
-	ctx=(extents.width)*((priv->thcs)-1);
+	lyt=pango_cairo_create_layout(cr);
+	pango_layout_set_font_description(lyt, (plot->afont));
+	str1=g_strdup("8");
+	pango_layout_set_text(lyt, str1, -1);
+	pango_layout_get_pixel_size(lyt, &ctx, &hg);
+	g_free(str1);
+	g_object_unref(lyt);
+	ctx*=((priv->thcs)-1);
 	ctx*=ctx;
-	tt=pango_font_description_get_size(plot->afont)/PANGO_SCALE;
-	tt*=tt;
+	tt=hg*hg;
 	tt+=ctx;
 	tt=sqrt(tt);
-	dtr=(pango_font_description_get_size(plot->lfont)/PANGO_SCALE)+JTI;
+	lyt=pango_cairo_create_layout(cr);
+	pango_layout_set_font_description(lyt, (plot->lfont));
+	str1=g_strdup("8");
+	pango_layout_set_text(lyt, str1, -1);
+	pango_layout_get_pixel_size(lyt, &wd, &dtr);
+	g_free(str1);
+	g_object_unref(lyt);
+	dtr+=JTI;
 	dtt=tt+dtr;
-	dtr+=pango_font_description_get_size(plot->afont)/PANGO_SCALE;
+	dtr+=hg;
 	tt=(tt/2)+JTI;
 	dr1=(priv->bounds.rmax)-(priv->bounds.rmin);
 	drs=((priv->centre.r)-(priv->bounds.rmin))*sin(priv->centre.th);
@@ -902,11 +923,15 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, (priv->x0)+((priv->wr)*csx), (priv->y0)-((priv->wr)*ssx));
 				cairo_line_to(cr, (priv->x0)+(((priv->wr)+JT+((priv->s)*dr1))*csx), (priv->y0)-(((priv->wr)+JT+((priv->s)*dr1))*ssx));
 				cairo_stroke(cr);
+				lyt=pango_cairo_create_layout(cr);
+				pango_layout_set_font_description(lyt, (plot->afont));
 				g_ascii_dtostr(lbl, (priv->thcs), round(sx*I180_MY_PI));/* draw zaimuthal tick labels */
-				cairo_text_extents(cr, lbl, &extents);
+				pango_layout_set_text(lyt, lbl, -1);
+				pango_layout_get_pixel_size(lyt, &wd, &hg);
 				rl=(priv->wr)+tt+((priv->s)*dr1);
-				cairo_move_to(cr, (priv->x0)+(rl*csx)-((extents.width)/2)-(extents.x_bearing), (priv->y0)-(rl*ssx)-((extents.height)/2)-(extents.y_bearing));
-				cairo_show_text(cr, lbl);
+				cairo_move_to(cr, (priv->x0)+(rl*csx)-(wd/2), (priv->y0)-(rl*ssx)-(hg/2));
+				pango_cairo_show_layout(cr, lyt);
+				g_object_unref(lyt);
 			}
 		}
 		else
@@ -977,11 +1002,15 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					cairo_move_to(cr, (priv->x0)+((priv->wr)*csx), (priv->y0)-((priv->wr)*ssx));
 					cairo_line_to(cr, (priv->x0)+(((priv->wr)+JT+((priv->s)*dr1))*csx), (priv->y0)-(((priv->wr)+JT+((priv->s)*dr1))*ssx));
 					cairo_stroke(cr);
+					lyt=pango_cairo_create_layout(cr);
+					pango_layout_set_font_description(lyt, (plot->afont));
 					g_snprintf(lbl, (priv->thcs), "%f", sx);/* output radial value as is */
-					cairo_text_extents(cr, lbl, &extents);
+					pango_layout_set_text(lyt, lbl, -1);
+					pango_layout_get_pixel_size(lyt, &wd, &hg);
 					rl=(priv->wr)+tt+((priv->s)*dr1);
-					cairo_move_to(cr, (priv->x0)+(rl*csx)-((extents.width)/2)-(extents.x_bearing), (priv->y0)-(rl*ssx)-((extents.height)/2)-(extents.y_bearing));
-					cairo_show_text(cr, lbl);
+					cairo_move_to(cr, (priv->x0)+(rl*csx)-(wd/2), (priv->y0)-(rl*ssx)-(hg/2));
+					pango_cairo_show_layout(cr, lyt);
+					g_object_unref(lyt);
 				}
 			}
 		}
@@ -5625,14 +5654,15 @@ static void plot_polar_get_property(GObject *object, guint prop_id, GValue *valu
 	}
 }
 
-static gboolean plot_polar_expose(GtkWidget *plot, GdkEventExpose *event)
+static gboolean plot_polar_expose(GtkWidget *widget, GdkEventExpose *event)
 {
 	cairo_t *cr;
 
-	cr=gdk_cairo_create(plot->window);
+	cr=gdk_cairo_create(widget->window);
 	cairo_rectangle(cr, (event->area.x), (event->area.y), (event->area.width), (event->area.height));
 	cairo_clip(cr);
-	draw(plot, cr);
+	drawz(widget, cr);
+	draw(widget, cr);
 	cairo_destroy(cr);
 	return FALSE;
 }
