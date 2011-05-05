@@ -169,7 +169,6 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	gdouble dtt, tt, dtr, thx, thn, dt, sx, csx, ssx, dr1, drs, drc, dz, rt, dwr, rl, ctx, ctn, stx, stn, r, th, rn, tn, x, y, vv, wv, xv, yv;
 	gchar lbl[10];
 	gchar *str1=NULL, *str2=NULL, *str3;
-	cairo_text_extents_t extents;
 	PangoLayout *lyt;
 	cairo_matrix_t mtr;
 
@@ -194,7 +193,8 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	pango_layout_set_font_description(lyt, (plot->afont));
 	str1=g_strdup("8");
 	pango_layout_set_text(lyt, str1, -1);
-	pango_layout_get_pixel_size(lyt, &ctx, &hg);
+	pango_layout_get_pixel_size(lyt, &wd, &hg);
+	ctx=wd;
 	g_free(str1);
 	g_object_unref(lyt);
 	ctx*=((priv->thcs)-1);
@@ -206,8 +206,10 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	pango_layout_set_font_description(lyt, (plot->lfont));
 	str1=g_strdup("8");
 	pango_layout_set_text(lyt, str1, -1);
-	pango_layout_get_pixel_size(lyt, &wd, &dtr);
+	pango_layout_get_pixel_size(lyt, &wd, &hg);
+	dtr=hg;
 	g_free(str1);
+	dtr=hg;
 	g_object_unref(lyt);
 	dtr+=JTI;
 	dtt=tt+dtr;
@@ -1057,13 +1059,18 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					kx*=2;
 				}
 				cairo_stroke(cr);
+				lyt=pango_cairo_create_layout(cr);
+				pango_layout_set_font_description(lyt, (plot->afont));
 				g_snprintf(lbl, (priv->rcs), "%f", (priv->bounds.rmin)+((rt-(priv->wr))/(priv->s)));
-				cairo_text_extents(cr, lbl, &extents);
-				sx=rt-((extents.width)/2)-(extents.x_bearing);
-				dz=-JTI-(extents.height)-(extents.y_bearing);
+				pango_layout_set_text(lyt, lbl, -1);
+				pango_layout_get_pixel_size(lyt, &wd, &hg);
+				sx=rt-(wd/2);
+				dz=-JTI-hg;
 				cairo_move_to(cr, (priv->x0)+(sx*ctx)+(dz*stx), (priv->y0)+(dz*ctx)-(sx*stx));
 				cairo_set_matrix(cr, &mtr);
-				cairo_show_text(cr, lbl);/* draw radial tick labels*/
+				pango_cairo_update_layout(cr, lyt);
+				pango_cairo_show_layout(cr, lyt);/* draw radial tick labels*/
+				g_object_unref(lyt);
 				cairo_identity_matrix(cr);
 			}
 			rt+=dwr;
@@ -1112,13 +1119,17 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					kx*=2;
 				}
 				cairo_stroke(cr);
+				lyt=pango_cairo_create_layout(cr);
+				pango_layout_set_font_description(lyt, (plot->afont));
 				g_snprintf(lbl, (priv->rcs), "%f", (priv->bounds.rmin)+((rt-(priv->wr))/(priv->s)));
-				cairo_text_extents(cr, lbl, &extents);
-				sx=rt+((extents.width)/2)+(extents.x_bearing);
-				dz=-JTI+(extents.y_bearing);
-				cairo_move_to(cr, (priv->x0)+(sx*ctx)+(dz*stx), (priv->y0)+(dz*ctx)-(sx*stx));
+				pango_layout_set_text(lyt, lbl, -1);
+				pango_layout_get_pixel_size(lyt, &wd, &hg);
+				sx=rt+(wd/2);
+				cairo_move_to(cr, (priv->x0)+(sx*ctx)-(JTI*stx), (priv->y0)-(JTI*ctx)-(sx*stx));
 				cairo_set_matrix(cr, &mtr);
-				cairo_show_text(cr, lbl);/* draw radial tick labels*/
+				pango_cairo_update_layout(cr, lyt);
+				pango_cairo_show_layout(cr, lyt);/* draw radial tick labels*/
+				g_object_unref(lyt);
 				cairo_identity_matrix(cr);
 			}
 			rt+=dwr;
@@ -1168,13 +1179,17 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					kx*=2;
 				}
 				cairo_stroke(cr);
+				lyt=pango_cairo_create_layout(cr);
+				pango_layout_set_font_description(lyt, (plot->afont));
 				g_snprintf(lbl, (priv->rcs), "%f", (priv->bounds.rmin)+((rt-(priv->wr))/(priv->s)));
-				cairo_text_extents(cr, lbl, &extents);
-				sx=rt-((extents.width)/2)-(extents.x_bearing);
-				dz=JTI-(extents.y_bearing);
-				cairo_move_to(cr, (priv->x0)+(sx*ctn)+(dz*stn), (priv->y0)+(dz*ctn)-(sx*stn));
+				pango_layout_set_text(lyt, lbl, -1);
+				pango_layout_get_pixel_size(lyt, &wd, &hg);
+				sx=rt-(wd/2);
+				cairo_move_to(cr, (priv->x0)+(sx*ctn)+(JTI*stn), (priv->y0)+(JTI*ctn)-(sx*stn));
 				cairo_set_matrix(cr, &mtr);
-				cairo_show_text(cr, lbl);/* draw radial tick labels*/
+				pango_cairo_update_layout(cr, lyt);
+				pango_cairo_show_layout(cr, lyt);/* draw radial tick labels*/
+				g_object_unref(lyt);
 				cairo_identity_matrix(cr);
 			}
 			rt+=dwr;
@@ -1224,13 +1239,18 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					kx*=2;
 				}
 				cairo_stroke(cr);
+				lyt=pango_cairo_create_layout(cr);
+				pango_layout_set_font_description(lyt, (plot->afont));
 				g_snprintf(lbl, (priv->rcs), "%f", (priv->bounds.rmin)+((rt-(priv->wr))/(priv->s)));
-				cairo_text_extents(cr, lbl, &extents);
-				sx=rt+((extents.width)/2)+(extents.x_bearing);
-				dz=JTI+(extents.height)+(extents.y_bearing);
+				pango_layout_set_text(lyt, lbl, -1);
+				pango_layout_get_pixel_size(lyt, &wd, &hg);
+				sx=rt+(wd/2);
+				dz=JTI+hg;
 				cairo_move_to(cr, (priv->x0)+(sx*ctn)+(dz*stn), (priv->y0)+(dz*ctn)-(sx*stn));
 				cairo_set_matrix(cr, &mtr);
-				cairo_show_text(cr, lbl);/* draw radial tick labels*/
+				pango_cairo_update_layout(cr, lyt);
+				pango_cairo_show_layout(cr, lyt);/* draw radial tick labels*/
+				g_object_unref(lyt);
 				cairo_identity_matrix(cr);
 			}
 			rt+=dwr;
@@ -1304,11 +1324,15 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, (priv->x0), (priv->y0));
 				cairo_line_to(cr, (priv->x0)+((JT+((priv->s)*dr1))*csx), (priv->y0)-((JT+((priv->s)*dr1))*ssx));
 				cairo_stroke(cr);
+				lyt=pango_cairo_create_layout(cr);
+				pango_layout_set_font_description(lyt, (plot->afont));
 				g_snprintf(lbl, (priv->thcs), "%d", (gint) round(sx*I180_MY_PI));/* draw azimuthal tick labels */
-				cairo_text_extents(cr, lbl, &extents);
+				pango_layout_set_text(lyt, lbl, -1);
+				pango_layout_get_pixel_size(lyt, &wd, &hg);
 				rl=tt+((priv->s)*dr1);
-				cairo_move_to(cr, (priv->x0)+(rl*csx)-((extents.width)/2)-(extents.x_bearing), (priv->y0)-(rl*ssx)-((extents.height)/2)-(extents.y_bearing));
-				cairo_show_text(cr, lbl);
+				cairo_move_to(cr, (priv->x0)+(rl*csx)-(wd/2), (priv->y0)-(rl*ssx)-(hg/2));
+				pango_cairo_show_layout(cr, lyt);
+				g_object_unref(lyt);
 			}
 		}
 		else if (fmod((priv->ticks.zin),2)==0)
@@ -1435,10 +1459,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				kx*=2;
 			}
 			cairo_stroke(cr);
+			lyt=pango_cairo_create_layout(cr);
+			pango_layout_set_font_description(lyt, (plot->afont));
 			g_snprintf(lbl, (priv->rcs), "%f", (rt/(priv->s)));
-			cairo_text_extents(cr, lbl, &extents);
-			cairo_move_to(cr, (priv->x0)+rt-((extents.width)/2)-(extents.x_bearing), (priv->y0)+JTI-(extents.y_bearing));
-			cairo_show_text(cr, lbl);/* draw radial tick labels*/
+			pango_layout_set_text(lyt, lbl, -1);
+			pango_layout_get_pixel_size(lyt, &wd, &hg);
+			cairo_move_to(cr, (priv->x0)+rt-(wd/2), (priv->y0)+JTI);
+			pango_cairo_show_layout(cr, lyt);/* draw radial tick labels*/
+			g_object_unref(lyt);
 		}
 		rt+=dwr;
 		cairo_new_sub_path(cr);
@@ -1516,11 +1544,15 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_restore(cr);
 				cairo_line_to(cr, (priv->x0)+(((priv->wr)+JT+((priv->s)*dr1))*csx), (priv->y0)-(((priv->wr)+JT+((priv->s)*dr1))*ssx));
 				cairo_stroke(cr);
-				g_snprintf(lbl, (priv->thcs), "%d", (gint) round(sx*I180_MY_PI));/* draw zaimuthal tick labels */
-				cairo_text_extents(cr, lbl, &extents);
+				lyt=pango_cairo_create_layout(cr); /* draw azimuthal tick labels */
+				pango_layout_set_font_description(lyt, (plot->afont));
+				g_snprintf(lbl, (priv->thcs), "%d", (gint) round(sx*I180_MY_PI));
+				pango_layout_set_text(lyt, lbl, -1);
+				pango_layout_get_pixel_size(lyt, &wd, &hg);
 				rl=(priv->wr)+tt+((priv->s)*dr1);
-				cairo_move_to(cr, (priv->x0)+(rl*csx)-((extents.width)/2)-(extents.x_bearing), (priv->y0)-(rl*ssx)-((extents.height)/2)-(extents.y_bearing));
-				cairo_show_text(cr, lbl);
+				cairo_move_to(cr, (priv->x0)+(rl*csx)-(wd/2), (priv->y0)-(rl*ssx)-(hg/2));
+				pango_cairo_show_layout(cr, lyt);
+				g_object_unref(lyt);
 			}
 		}
 		else if (fmod((priv->ticks.zin),2)==0)
@@ -1663,10 +1695,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				kx*=2;
 			}
 			cairo_stroke(cr);
+			lyt=pango_cairo_create_layout(cr);
+			pango_layout_set_font_description(lyt, (plot->afont));
 			g_snprintf(lbl, (priv->rcs), "%f", (priv->bounds.rmin)+((rt-(priv->wr))/(priv->s)));
-			cairo_text_extents(cr, lbl, &extents);
-			cairo_move_to(cr, (priv->x0)+rt-((extents.width)/2)-(extents.x_bearing), (priv->y0)+JTI-(extents.y_bearing));
-			cairo_show_text(cr, lbl);/* draw radial tick labels*/
+			pango_layout_set_text(lyt, lbl, -1);
+			pango_layout_get_pixel_size(lyt, &wd, &hg);
+			cairo_move_to(cr, (priv->x0)+rt-(wd/2), (priv->y0)+JTI);
+			pango_cairo_show_layout(cr, lyt);/* draw radial tick labels*/
+			g_object_unref(lyt);
 		}
 		rt+=dwr;
 		cairo_new_sub_path(cr);
