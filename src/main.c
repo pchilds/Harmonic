@@ -38,7 +38,6 @@
  * OPD: config writer (+overwrite confirm)
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
- * FFT: window edge correction
  */
 
 #include <gdk/gdkkeysyms.h>
@@ -294,7 +293,7 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("Zero Padding 2^:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(12, 0, 31, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment *) gtk_adjustment_new(12, 4, 31, 1.0, 5.0, 0.0);
 	zpd=gtk_spin_button_new(adj, 0, 0);
 	gtk_table_attach(GTK_TABLE(table), zpd, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(zpd);

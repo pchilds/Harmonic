@@ -8,195 +8,195 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-04-23 09:05+0300\n"
+"POT-Creation-Date: 2011-05-06 17:12+0300\n"
 "PO-Revision-Date: 2011-04-19 01:30+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Chinese (simplified) <>\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: zh_CN\n"
 
-#: src/main.c:80
+#: src/main.c:78
 msgid "Harmonic Spectrum Analyser"
 msgstr "谐波光谱分析仪"
 
-#: src/main.c:114
+#: src/main.c:112
 msgid "_File"
 msgstr "文件(_F)"
 
-#: src/main.c:137
+#: src/main.c:135
 msgid "Raw Delimited Data"
 msgstr "原始分隔的数据"
 
-#: src/main.c:141
+#: src/main.c:139
 msgid "Data Format:"
 msgstr "数据格式："
 
-#: src/main.c:146
+#: src/main.c:144
 msgid "Trace:"
 msgstr "丝："
 
-#: src/main.c:153
+#: src/main.c:151
 msgid "Transmission Measurement?"
 msgstr "传输测量"
 
-#: src/main.c:157
+#: src/main.c:155
 msgid "Data in dBs?"
 msgstr "数据在分贝"
 
-#: src/main.c:161
+#: src/main.c:159
 msgid "Negate?"
 msgstr "否定数据"
 
-#: src/main.c:168
+#: src/main.c:166
 msgid "Display Properties:"
 msgstr "属性的显示："
 
-#: src/main.c:173
+#: src/main.c:171
 msgid "_Properties"
 msgstr "特点(_P)"
 
-#: src/main.c:179
+#: src/main.c:177
 msgid "None"
 msgstr "无"
 
-#: src/main.c:183
+#: src/main.c:181
 msgid ""
 "1st order\n"
 "spectral shadowing"
 msgstr "第一阶光谱阴影"
 
-#: src/main.c:187
+#: src/main.c:185
 msgid ""
 "Nonlinear\n"
 "Compensation:"
 msgstr "非线性补偿"
 
-#: src/main.c:191
+#: src/main.c:189
 msgid "Invert domain?"
 msgstr "倒置域"
 
-#: src/main.c:195
+#: src/main.c:193
 msgid ""
 "Apply correction\n"
 "to Window edges?"
 msgstr "申请更正窗口优势"
 
-#: src/main.c:202
+#: src/main.c:200
 msgid "Optimise Triangle fit?"
 msgstr "优化合适三角"
 
-#: src/main.c:206
+#: src/main.c:204
 msgid "Calculate Chirp?"
 msgstr "计算啁啾"
 
-#: src/main.c:213
+#: src/main.c:211
 msgid "Batch Process Data?"
 msgstr "批量处理数据"
 
-#: src/main.c:217
+#: src/main.c:215
 msgid "Autotrack Offset?"
 msgstr "自动偏移"
 
-#: src/main.c:221
+#: src/main.c:219
 msgid "_Advanced"
 msgstr "先行(_A)"
 
-#: src/main.c:226
+#: src/main.c:224
 msgid "Instructions"
 msgstr "用法说明"
 
-#: src/main.c:235
+#: src/main.c:233
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: src/main.c:264
+#: src/main.c:262
 msgid "Spectrum Start:"
 msgstr "开始的光谱："
 
-#: src/main.c:272
+#: src/main.c:270
 msgid "Spectrum Stop:"
 msgstr "月底的光谱："
 
-#: src/main.c:280
+#: src/main.c:278
 msgid "Offset:"
 msgstr "偏移："
 
-#: src/main.c:287 src/main.c:353
+#: src/main.c:285 src/main.c:351
 msgid "j index:"
 msgstr "J多图："
 
-#: src/main.c:295
+#: src/main.c:293
 msgid "Zero Padding 2^:"
 msgstr "零填充2^："
 
-#: src/main.c:302 src/main.c:369
+#: src/main.c:300 src/main.c:367
 msgid ""
 "Reset\n"
 "Arrays"
 msgstr "重置数组"
 
-#: src/main.c:306
+#: src/main.c:304
 msgid "Transform Spectrum"
 msgstr "改变光谱"
 
-#: src/main.c:309 src/main.c:388
+#: src/main.c:307 src/main.c:386
 msgid "Spectrum"
 msgstr "光谱"
 
-#: src/main.c:313
+#: src/main.c:311
 msgid "Inverse Spectrum Start:"
 msgstr "相反的光谱开始："
 
-#: src/main.c:321
+#: src/main.c:319
 msgid "Inverse Spectrum Stop:"
 msgstr "相反的光谱月底："
 
-#: src/main.c:329
+#: src/main.c:327
 msgid "Triangle Centre:"
 msgstr "中心的三角："
 
-#: src/main.c:337
+#: src/main.c:335
 msgid "Triangle Full Width:"
 msgstr "全宽的三角："
 
-#: src/main.c:345
+#: src/main.c:343
 msgid "DC Peak Width:"
 msgstr "宽度直流峰值："
 
-#: src/main.c:361
+#: src/main.c:359
 msgid "k index:"
 msgstr "K多图："
 
-#: src/main.c:373
+#: src/main.c:371
 msgid ""
 "Process\n"
 "Spectrum"
 msgstr "审查光谱"
 
-#: src/main.c:376 src/main.c:397
+#: src/main.c:374 src/main.c:395
 msgid "Inverse Spectrum"
 msgstr "相反的光谱"
 
-#: src/main.c:393
+#: src/main.c:391
 msgid "Inverse Domain"
 msgstr "相反的域"
 
-#: src/main.c:401 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
-#: src/data.c:1120 src/data.c:1261 src/disp.c:94 src/disp.c:656
-#: src/disp.c:1175 src/open.c:24232
+#: src/main.c:399 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
+#: src/data.c:1120 src/data.c:1261 src/disp.c:98 src/disp.c:664
+#: src/disp.c:1183 src/open.c:23981
 msgid "Visibility"
 msgstr "振幅波"
 
-#: src/main.c:407 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
-#: src/data.c:1120 src/data.c:1261 src/disp.c:95 src/disp.c:657
-#: src/disp.c:1176 src/open.c:24238
+#: src/main.c:405 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
+#: src/data.c:1120 src/data.c:1261 src/disp.c:99 src/disp.c:665
+#: src/disp.c:1184 src/open.c:23987
 msgid "Domain Shift"
 msgstr "转移域"
 
-#: src/main.c:413 src/open.c:24148 src/open.c:24161 src/open.c:24184
-#: src/open.c:24244
+#: src/main.c:411 src/open.c:23897 src/open.c:23910 src/open.c:23933
+#: src/open.c:23993
 msgid "Analysis Results"
 msgstr "结果分析"
 
@@ -212,7 +212,11 @@ msgid ""
 msgstr ""
 "谐波是一个程序执行谐波分析（如傅立叶分析），以及测量振幅波和转移域和啁啾。"
 
-#: src/util.c:98 src/util.c:107
+#: src/util.c:54
+msgid "translator-credits"
+msgstr ""
+
+#: src/util.c:99 src/util.c:108
 #, c-format
 msgid "x: %f, y: %f"
 msgstr "x: %f, y: %f"
@@ -227,7 +231,7 @@ msgid "No available image."
 msgstr "没有可用的图片。"
 
 #: src/data.c:182 src/data.c:1028 src/data.c:1674 src/data.c:1782
-#: src/data.c:1887 src/data.c:2052 src/data.c:2218 src/open.c:24215
+#: src/data.c:1887 src/data.c:2052 src/data.c:2218 src/open.c:23964
 msgid "Select Data File"
 msgstr "选择数据文件"
 
@@ -238,7 +242,7 @@ msgid "Parameter selection"
 msgstr "参数选择"
 
 #: src/data.c:192 src/data.c:298 src/data.c:483 src/proc.c:176 src/proc.c:430
-#: src/disp.c:97 src/disp.c:659 src/disp.c:1178
+#: src/disp.c:101 src/disp.c:667 src/disp.c:1186
 msgid "Chirp"
 msgstr "啁啾"
 
@@ -417,27 +421,27 @@ msgstr "没有变换分析还不存在。"
 #: src/proc.c:1128 src/proc.c:1157 src/proc.c:1178 src/proc.c:1200
 #: src/proc.c:1221 src/proc.c:1243 src/proc.c:1264 src/proc.c:1291
 #: src/proc.c:1312 src/proc.c:1334 src/proc.c:1355 src/proc.c:1378
-#: src/proc.c:1400 src/proc.c:1431 src/proc.c:1463 src/proc.c:1496
-#: src/proc.c:1519 src/proc.c:1543 src/proc.c:1572 src/proc.c:1605
-#: src/proc.c:1633 src/proc.c:1662 src/proc.c:1685 src/proc.c:1709
-#: src/proc.c:1736 src/proc.c:1774 src/proc.c:1806 src/proc.c:1839
-#: src/proc.c:1862 src/proc.c:1886 src/proc.c:1915 src/proc.c:1948
-#: src/proc.c:1976 src/proc.c:2005 src/proc.c:2028 src/proc.c:2052
-#: src/proc.c:2079 src/proc.c:2110 src/proc.c:2142 src/proc.c:2175
-#: src/proc.c:2198 src/proc.c:2230 src/proc.c:2268 src/proc.c:2303
-#: src/proc.c:2332 src/proc.c:2361 src/proc.c:2384 src/proc.c:2417
-#: src/proc.c:2454
+#: src/proc.c:1400 src/proc.c:1430 src/proc.c:1483 src/proc.c:1538
+#: src/proc.c:1562 src/proc.c:1586 src/proc.c:1642 src/proc.c:1675
+#: src/proc.c:1724 src/proc.c:1775 src/proc.c:1799 src/proc.c:1823
+#: src/proc.c:1877 src/proc.c:1915 src/proc.c:1947 src/proc.c:1980
+#: src/proc.c:2003 src/proc.c:2027 src/proc.c:2056 src/proc.c:2089
+#: src/proc.c:2117 src/proc.c:2146 src/proc.c:2169 src/proc.c:2193
+#: src/proc.c:2220 src/proc.c:2251 src/proc.c:2283 src/proc.c:2316
+#: src/proc.c:2339 src/proc.c:2371 src/proc.c:2409 src/proc.c:2444
+#: src/proc.c:2473 src/proc.c:2502 src/proc.c:2525 src/proc.c:2558
+#: src/proc.c:2595
 #, c-format
 msgid "Some clipping occured in channel %d. Increase zero padding."
 msgstr "在频道%d一些剪报发生。增加零填充。"
 
-#: src/proc.c:2213 src/proc.c:2251 src/proc.c:2400 src/proc.c:2437
-#: src/open.c:18720 src/open.c:18921 src/open.c:19884 src/open.c:20083
-#: src/open.c:22465 src/open.c:22622 src/open.c:23365 src/open.c:23521
+#: src/proc.c:2354 src/proc.c:2392 src/proc.c:2541 src/proc.c:2578
+#: src/open.c:18592 src/open.c:18789 src/open.c:19732 src/open.c:19927
+#: src/open.c:22243 src/open.c:22396 src/open.c:23121 src/open.c:23274
 msgid "Offset must be nonzero for linear measurements."
 msgstr "偏移量必须为线性测量非零。"
 
-#: src/proc.c:2575
+#: src/proc.c:2716
 msgid "Open a file for analysis first."
 msgstr "打开一个文件的第一个进行分析。"
 
@@ -445,11 +449,11 @@ msgstr "打开一个文件的第一个进行分析。"
 msgid "Display Properties"
 msgstr "属性的显示"
 
-#: src/disp.c:48 src/disp.c:610 src/disp.c:1203 src/disp.c:1488
+#: src/disp.c:48 src/disp.c:614 src/disp.c:1211 src/disp.c:1500
 msgid "Axis label font:"
 msgstr ""
 
-#: src/disp.c:51 src/disp.c:613 src/disp.c:1206 src/disp.c:1491
+#: src/disp.c:51 src/disp.c:617 src/disp.c:1214 src/disp.c:1503
 #, fuzzy
 msgid "Tick label font:"
 msgstr "刻度标签大小："
@@ -462,33 +466,33 @@ msgstr "径向轴文本："
 msgid "Azimuthal axis text:"
 msgstr "方位轴文本："
 
-#: src/disp.c:76 src/disp.c:638 src/disp.c:1231 src/disp.c:1516
+#: src/disp.c:78 src/disp.c:644 src/disp.c:1241 src/disp.c:1530
 msgid "Font Selection for Axis Labels"
 msgstr ""
 
-#: src/disp.c:82 src/disp.c:644 src/disp.c:1237 src/disp.c:1522
+#: src/disp.c:86 src/disp.c:652 src/disp.c:1249 src/disp.c:1538
 msgid "Font Selection for Tick Mark Labels"
 msgstr ""
 
-#: src/disp.c:100 src/disp.c:662 src/disp.c:1181 src/disp.c:1254
-#: src/disp.c:1539
+#: src/disp.c:104 src/disp.c:670 src/disp.c:1189 src/disp.c:1266
+#: src/disp.c:1555
 msgid "Multiple plots for Results over index j"
 msgstr "超过指数结果J多图"
 
-#: src/disp.c:104 src/disp.c:666 src/disp.c:1185 src/disp.c:1258
-#: src/disp.c:1543
+#: src/disp.c:108 src/disp.c:674 src/disp.c:1193 src/disp.c:1270
+#: src/disp.c:1559
 msgid "Multiple plots for Results over index k"
 msgstr "超过指数结果K多图"
 
-#: src/disp.c:620 src/disp.c:1213 src/disp.c:1498
+#: src/disp.c:624 src/disp.c:1221 src/disp.c:1510
 msgid "X axis text:"
 msgstr "X轴文本："
 
-#: src/disp.c:623 src/disp.c:1216 src/disp.c:1501
+#: src/disp.c:627 src/disp.c:1224 src/disp.c:1513
 msgid "Y axis text:"
 msgstr "Y轴文本："
 
-#: src/disp.c:1248 src/disp.c:1533
+#: src/disp.c:1260 src/disp.c:1549
 msgid "Multiple plots for Inverse Domain"
 msgstr "超过指数相反的域"
 
@@ -520,64 +524,64 @@ msgstr "被测值:"
 msgid "File:"
 msgstr "文件:"
 
-#: src/open.c:306 src/open.c:481 src/open.c:657 src/open.c:832 src/open.c:1008
-#: src/open.c:1183 src/open.c:1363 src/open.c:1538 src/open.c:1714
-#: src/open.c:1889 src/open.c:2065 src/open.c:2240 src/open.c:2442
-#: src/open.c:2637 src/open.c:2824 src/open.c:3010 src/open.c:3203
-#: src/open.c:3394 src/open.c:3590 src/open.c:3781 src/open.c:3968
-#: src/open.c:4154 src/open.c:4345 src/open.c:4531 src/open.c:4672
-#: src/open.c:4803 src/open.c:4935 src/open.c:5066 src/open.c:5198
-#: src/open.c:5329 src/open.c:5465 src/open.c:5596 src/open.c:5728
-#: src/open.c:5859 src/open.c:5991 src/open.c:6122 src/open.c:6281
-#: src/open.c:6432 src/open.c:6575 src/open.c:6717 src/open.c:6866
-#: src/open.c:7013 src/open.c:7166 src/open.c:7313 src/open.c:7456
-#: src/open.c:7598 src/open.c:7746 src/open.c:7889 src/open.c:8084
-#: src/open.c:8262 src/open.c:8441 src/open.c:8619 src/open.c:8798
-#: src/open.c:8976 src/open.c:9159 src/open.c:9337 src/open.c:9516
-#: src/open.c:9694 src/open.c:9873 src/open.c:10051 src/open.c:10256
-#: src/open.c:10454 src/open.c:10644 src/open.c:10833 src/open.c:11029
-#: src/open.c:11223 src/open.c:11422 src/open.c:11616 src/open.c:11806
-#: src/open.c:11995 src/open.c:12189 src/open.c:12378 src/open.c:12522
-#: src/open.c:12656 src/open.c:12791 src/open.c:12925 src/open.c:13060
-#: src/open.c:13194 src/open.c:13333 src/open.c:13467 src/open.c:13602
-#: src/open.c:13736 src/open.c:13871 src/open.c:14005 src/open.c:14167
-#: src/open.c:14321 src/open.c:14467 src/open.c:14612 src/open.c:14764
-#: src/open.c:14914 src/open.c:15070 src/open.c:15220 src/open.c:15366
-#: src/open.c:15511 src/open.c:15662 src/open.c:15808 src/open.c:16000
-#: src/open.c:16177 src/open.c:16353 src/open.c:16528 src/open.c:16704
-#: src/open.c:16879 src/open.c:17059 src/open.c:17234 src/open.c:17410
-#: src/open.c:17585 src/open.c:17761 src/open.c:17936 src/open.c:18138
-#: src/open.c:18333 src/open.c:18520 src/open.c:18706 src/open.c:18907
-#: src/open.c:19107 src/open.c:19306 src/open.c:19497 src/open.c:19684
-#: src/open.c:19870 src/open.c:20069 src/open.c:20264 src/open.c:20406
-#: src/open.c:20537 src/open.c:20669 src/open.c:20800 src/open.c:20932
-#: src/open.c:21063 src/open.c:21199 src/open.c:21330 src/open.c:21462
-#: src/open.c:21593 src/open.c:21725 src/open.c:21856 src/open.c:22015
-#: src/open.c:22166 src/open.c:22309 src/open.c:22451 src/open.c:22608
-#: src/open.c:22764 src/open.c:22918 src/open.c:23065 src/open.c:23208
-#: src/open.c:23350 src/open.c:23506 src/open.c:23658 src/open.c:24203
-#: src/open.c:24335
+#: src/open.c:301 src/open.c:472 src/open.c:645 src/open.c:817 src/open.c:989
+#: src/open.c:1161 src/open.c:1337 src/open.c:1508 src/open.c:1681
+#: src/open.c:1853 src/open.c:2025 src/open.c:2197 src/open.c:2418
+#: src/open.c:2632 src/open.c:2816 src/open.c:2999 src/open.c:3216
+#: src/open.c:3404 src/open.c:3619 src/open.c:3829 src/open.c:4013
+#: src/open.c:4196 src/open.c:4411 src/open.c:4594 src/open.c:4731
+#: src/open.c:4858 src/open.c:4987 src/open.c:5115 src/open.c:5243
+#: src/open.c:5371 src/open.c:5503 src/open.c:5630 src/open.c:5759
+#: src/open.c:5887 src/open.c:6015 src/open.c:6143 src/open.c:6321
+#: src/open.c:6491 src/open.c:6631 src/open.c:6770 src/open.c:6943
+#: src/open.c:7087 src/open.c:7259 src/open.c:7425 src/open.c:7565
+#: src/open.c:7704 src/open.c:7876 src/open.c:8016 src/open.c:8207
+#: src/open.c:8381 src/open.c:8556 src/open.c:8730 src/open.c:8905
+#: src/open.c:9079 src/open.c:9258 src/open.c:9432 src/open.c:9607
+#: src/open.c:9781 src/open.c:9956 src/open.c:10130 src/open.c:10331
+#: src/open.c:10525 src/open.c:10711 src/open.c:10896 src/open.c:11088
+#: src/open.c:11278 src/open.c:11473 src/open.c:11663 src/open.c:11849
+#: src/open.c:12034 src/open.c:12224 src/open.c:12409 src/open.c:12549
+#: src/open.c:12679 src/open.c:12810 src/open.c:12940 src/open.c:13071
+#: src/open.c:13201 src/open.c:13336 src/open.c:13466 src/open.c:13597
+#: src/open.c:13727 src/open.c:13858 src/open.c:13988 src/open.c:14146
+#: src/open.c:14296 src/open.c:14438 src/open.c:14579 src/open.c:14727
+#: src/open.c:14873 src/open.c:15025 src/open.c:15171 src/open.c:15313
+#: src/open.c:15454 src/open.c:15601 src/open.c:15743 src/open.c:15932
+#: src/open.c:16105 src/open.c:16277 src/open.c:16448 src/open.c:16620
+#: src/open.c:16791 src/open.c:16967 src/open.c:17138 src/open.c:17310
+#: src/open.c:17481 src/open.c:17653 src/open.c:17824 src/open.c:18022
+#: src/open.c:18213 src/open.c:18396 src/open.c:18578 src/open.c:18775
+#: src/open.c:18971 src/open.c:19166 src/open.c:19353 src/open.c:19536
+#: src/open.c:19718 src/open.c:19913 src/open.c:20104 src/open.c:20243
+#: src/open.c:20370 src/open.c:20498 src/open.c:20625 src/open.c:20753
+#: src/open.c:20880 src/open.c:21012 src/open.c:21139 src/open.c:21267
+#: src/open.c:21394 src/open.c:21522 src/open.c:21649 src/open.c:21805
+#: src/open.c:21952 src/open.c:22091 src/open.c:22229 src/open.c:22382
+#: src/open.c:22534 src/open.c:22685 src/open.c:22828 src/open.c:22967
+#: src/open.c:23105 src/open.c:23258 src/open.c:23407 src/open.c:23952
+#: src/open.c:24084
 #, c-format
 msgid "Loading failed for file: %s, Error: %s."
 msgstr "加载失败的文件： %s，错误： %s。"
 
-#: src/open.c:24132
+#: src/open.c:23881
 msgid "Measurand Variable Type"
 msgstr "被测变量类型"
 
-#: src/open.c:24132
+#: src/open.c:23881
 msgid "Linear"
 msgstr "线性"
 
-#: src/open.c:24132
+#: src/open.c:23881
 msgid "Polar"
 msgstr "极地"
 
-#: src/open.c:24134
+#: src/open.c:23883
 msgid "Select Measurand Type:"
 msgstr "选择测量类型"
 
-#: src/open.c:24316
+#: src/open.c:24065
 #, c-format
 msgid "File: %s successfully loaded."
 msgstr "文件： %s 成功加载。"

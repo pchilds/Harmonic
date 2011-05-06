@@ -565,7 +565,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 	PlotLinear *plt;
 	guint j, k, st, sp;
 	gint n, zp, dx, dx2;
-	gdouble iv, clc, ofs, xx, yx, ce;
+	gdouble iv, clc, ofs, ofe, xx, yx, ce;
 	gchar *str;
 	double *y, *star;
 	fftw_plan p;
@@ -1408,14 +1408,13 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(wll)))/* window based offset */
 		{
-			ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 			{
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 				{
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 					{
-						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
+						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssw+ */
 						{
 							for (j=0; j<jdimx; j++)
 							{
@@ -1432,13 +1431,33 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									sp=zp;
+									{ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl)); k=1;}
+									while (k<8)
+									{
+										ofs+=g_array_index(specs, gdouble, trc-1+((st+k)*satl));
+										k++;
+										ofe+=g_array_index(specs, gdouble, trc-1+((sp+st-k)*satl));
+									}
+									{ofs/=8; ofe/=8;}
+								}
+								else if (sp<16) {ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl));}
+								else
+								{
+									{ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl)); k=1;}
+									while (k<8)
+									{
+										ofs+=g_array_index(specs, gdouble, trc-1+((st+k)*satl));
+										k++;
+										ofe+=g_array_index(specs, gdouble, trc-1+((sp+st-k)*satl));
+									}
+									{ofs/=8; ofe/=8;}
 								}
 								iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 								g_array_append_val(delf, iv);
 								for (k=0; k<sp; k++)
 								{
-									clc=ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl));
-									if (clc<0)
+									clc=ofs+(k*(ofe-ofs)/(sp-1))-g_array_index(specs, gdouble, trc-1+((k+st)*satl));
+									if (clc<NZE)
 									{
 										clc=-exp(LNTOT*clc);
 										y[k+(j*zp)]=log(++clc);
@@ -1446,8 +1465,9 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 									else y[k+(j*zp)]=-G_MAXDOUBLE;
 								}
 							}
+							gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), (ofs+ofe)/2);
 						}
-						else /* +TdBss+ */
+						else /* +TdBssw+ */
 						{
 							for (j=0; j<jdimx; j++)
 							{
@@ -1464,13 +1484,33 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 									g_free(str);
 									sp=zp;
+									{ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl)); k=1;}
+									while (k<8)
+									{
+										ofs+=g_array_index(specs, gdouble, trc-1+((st+k)*satl));
+										k++;
+										ofe+=g_array_index(specs, gdouble, trc-1+((sp+st-k)*satl));
+									}
+									{ofs/=8; ofe/=8;}
+								}
+								else if (sp<16) {ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl));}
+								else
+								{
+									{ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl)); k=1;}
+									while (k<8)
+									{
+										ofs+=g_array_index(specs, gdouble, trc-1+((st+k)*satl));
+										k++;
+										ofe+=g_array_index(specs, gdouble, trc-1+((sp+st-k)*satl));
+									}
+									{ofs/=8; ofe/=8;}
 								}
 								iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 								g_array_append_val(delf, iv);
 								for (k=0; k<sp; k++)
 								{
-									clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))-ofs;
-									if (clc<0)
+									clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))-ofs-(k*(ofe-ofs)/(sp-1));
+									if (clc<NZE)
 									{
 										clc=-exp(LNTOT*clc);
 										y[k+(j*zp)]=log(++clc);
@@ -1478,10 +1518,12 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 									else y[k+(j*zp)]=-G_MAXDOUBLE;
 								}
 							}
+							gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), (ofs+ofe)/2);
 						}
 					}
-					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
+					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBssw+ */
 					{
+						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
@@ -1503,8 +1545,9 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 							for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl)));
 						}
 					}
-					else /* +RdBss+ */
+					else /* +RdBssw+ */
 					{
+						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						for (j=0; j<jdimx; j++)
 						{
 							iv=g_array_index(bsra, gdouble, j);
@@ -1527,7 +1570,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 					}
 				}
-				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
+				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssw+ +Tlssw+ */
 				{
 					for (j=0; j<jdimx; j++)
 					{
@@ -1544,20 +1587,47 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							sp=zp;
+							{ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl)); k=1;}
+							while (k<8)
+							{
+								ofs+=g_array_index(specs, gdouble, trc-1+((st+k)*satl));
+								k++;
+								ofe+=g_array_index(specs, gdouble, trc-1+((sp+st-k)*satl));
+							}
+							{ofs/=8; ofe/=8;}
+						}
+						else if (sp<16) {ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl));}
+						else
+						{
+							{ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl)); k=1;}
+							while (k<8)
+							{
+								ofs+=g_array_index(specs, gdouble, trc-1+((st+k)*satl));
+								k++;
+								ofe+=g_array_index(specs, gdouble, trc-1+((sp+st-k)*satl));
+							}
+							{ofs/=8; ofe/=8;}
 						}
 						iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 						g_array_append_val(delf, iv);
 						for (k=0; k<sp; k++)
 						{
-							clc=-g_array_index(specs, gdouble, trc-1+((k+st)*satl))/ofs;
-							clc++;
-							if (clc>0) y[k+(j*zp)]=log(clc);
-							else y[k+(j*zp)]=-G_MAXDOUBLE;
+							clc=ofs+(k*(ofe-ofs)/(sp-1));
+							if (clc<DZE && clc>NZE) y[k+(j*zp)]=-G_MAXDOUBLE;
+							else
+							{
+								clc=-g_array_index(specs, gdouble, trc-1+((k+st)*satl))/clc;
+								clc++;
+								if (clc>DZE) y[k+(j*zp)]=log(clc);
+								else y[k+(j*zp)]=-G_MAXDOUBLE;
+							}
 						}
 					}
+					gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), (ofs+ofe)/2);
 				}
-				else /* -Rlss+ +Rlss+ */
+				else /* -Rlssw+ +Rlssw+ */
 				{
+					ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
@@ -1589,7 +1659,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			{
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 				{
-					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
+					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0w+ */
 					{
 						for (j=0; j<jdimx; j++)
 						{
@@ -1606,18 +1676,39 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								sp=zp;
+								{ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl)); k=1;}
+								while (k<8)
+								{
+									ofs+=g_array_index(specs, gdouble, trc-1+((st+k)*satl));
+									k++;
+									ofe+=g_array_index(specs, gdouble, trc-1+((sp+st-k)*satl));
+								}
+								{ofs/=8; ofe/=8;}
+							}
+							else if (sp<16) {ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl));}
+							else
+							{
+								{ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl)); k=1;}
+								while (k<8)
+								{
+									ofs+=g_array_index(specs, gdouble, trc-1+((st+k)*satl));
+									k++;
+									ofe+=g_array_index(specs, gdouble, trc-1+((sp+st-k)*satl));
+								}
+								{ofs/=8; ofe/=8;}
 							}
 							iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 							g_array_append_val(delf, iv);
 							for (k=0; k<sp; k++)
 							{
-								clc=ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl));
+								clc=ofs+(k*(ofe-ofs)/(sp-1))-g_array_index(specs, gdouble, trc-1+((k+st)*satl));
 								clc=-exp(LNTOT*clc);
 								y[k+(j*zp)]=++clc;
 							}
 						}
+						gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), (ofs+ofe)/2);
 					}
-					else /* +TdB0+ */
+					else /* +TdB0w+ */
 					{
 						for (j=0; j<jdimx; j++)
 						{
@@ -1634,20 +1725,42 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								sp=zp;
+								{ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl)); k=1;}
+								while (k<8)
+								{
+									ofs+=g_array_index(specs, gdouble, trc-1+((st+k)*satl));
+									k++;
+									ofe+=g_array_index(specs, gdouble, trc-1+((sp+st-k)*satl));
+								}
+								{ofs/=8; ofe/=8;}
+							}
+							else if (sp<16) {ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl));}
+							else
+							{
+								{ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl)); k=1;}
+								while (k<8)
+								{
+									ofs+=g_array_index(specs, gdouble, trc-1+((st+k)*satl));
+									k++;
+									ofe+=g_array_index(specs, gdouble, trc-1+((sp+st-k)*satl));
+								}
+								{ofs/=8; ofe/=8;}
 							}
 							iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 							g_array_append_val(delf, iv);
 							for (k=0; k<sp; k++)
 							{
-								clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))-ofs;
+								clc=g_array_index(specs, gdouble, trc-1+((k+st)*satl))-ofs-(k*(ofe-ofs)/(sp-1));
 								clc=-exp(LNTOT*clc);
 								y[k+(j*zp)]=++clc;
 							}
 						}
+						gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), (ofs+ofe)/2);
 					}
 				}
-				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
+				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0w+ */
 				{
+					ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
@@ -1669,8 +1782,9 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						for (k=0; k<sp; k++) y[k+(j*zp)]=exp(LNTOT*(ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl))));
 					}
 				}
-				else /* +RdB0+ */
+				else /* +RdB0w+ */
 				{
+					ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 					for (j=0; j<jdimx; j++)
 					{
 						iv=g_array_index(bsra, gdouble, j);
@@ -1693,7 +1807,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 				}
 			}
-			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ +Tl0+ */
+			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0w+ +Tl0w+ */
 			{
 				for (j=0; j<jdimx; j++)
 				{
@@ -1710,18 +1824,45 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						sp=zp;
+						{ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl)); k=1;}
+						while (k<8)
+						{
+							ofs+=g_array_index(specs, gdouble, trc-1+((st+k)*satl));
+							k++;
+							ofe+=g_array_index(specs, gdouble, trc-1+((sp+st-k)*satl));
+						}
+						{ofs/=8; ofe/=8;}
+					}
+					else if (sp<16) {ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl));}
+					else
+					{
+						{ofs=g_array_index(specs, gdouble, trc-1+(st*satl)); ofe=g_array_index(specs, gdouble, trc-1+((sp+st-1)*satl)); k=1;}
+						while (k<8)
+						{
+							ofs+=g_array_index(specs, gdouble, trc-1+((st+k)*satl));
+							k++;
+							ofe+=g_array_index(specs, gdouble, trc-1+((sp+st-k)*satl));
+						}
+						{ofs/=8; ofe/=8;}
 					}
 					iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 					g_array_append_val(delf, iv);
 					for (k=0; k<sp; k++)
 					{
-						clc=-g_array_index(specs, gdouble, trc-1+((k+st)*satl))/ofs;
-						y[k+(j*zp)]=++clc;
+						clc=ofs+(k*(ofe-ofs)/(sp-1));
+						if (clc<DZE && clc>NZE) y[k+(j*zp)]=-G_MAXDOUBLE;
+						else
+						{
+							clc=-g_array_index(specs, gdouble, trc-1+((k+st)*satl))/ofs;
+							y[k+(j*zp)]=++clc;
+						}
 					}
 				}
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), (ofs+ofe)/2);
 			}
-			else /* -Rl0+ +Rl0+ */
+			else /* -Rl0w+ +Rl0w+ */
 			{
+				ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 				for (j=0; j<jdimx; j++)
 				{
 					iv=g_array_index(bsra, gdouble, j);
@@ -1758,7 +1899,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				{
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 					{
-						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
+						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssh+ */
 						{
 							for (j=0; j<jdimx; j++)
 							{
@@ -1790,7 +1931,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 								}
 							}
 						}
-						else /* +TdBss+ */
+						else /* +TdBssh+ */
 						{
 							for (j=0; j<jdimx; j++)
 							{
@@ -1823,7 +1964,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 							}
 						}
 					}
-					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
+					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBssh+ */
 					{
 						for (j=0; j<jdimx; j++)
 						{
@@ -1846,7 +1987,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 							for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl)));
 						}
 					}
-					else /* +RdBss+ */
+					else /* +RdBssh+ */
 					{
 						for (j=0; j<jdimx; j++)
 						{
@@ -1870,7 +2011,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 					}
 				}
-				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
+				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssh+ +Tlssh+ */
 				{
 					for (j=0; j<jdimx; j++)
 					{
@@ -1899,7 +2040,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 					}
 				}
-				else /* -Rlss+ +Rlss+ */
+				else /* -Rlssh+ +Rlssh+ */
 				{
 					for (j=0; j<jdimx; j++)
 					{
@@ -1932,7 +2073,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			{
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 				{
-					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
+					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0h+ */
 					{
 						for (j=0; j<jdimx; j++)
 						{
@@ -1960,7 +2101,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 							}
 						}
 					}
-					else /* +TdB0+ */
+					else /* +TdB0h+ */
 					{
 						for (j=0; j<jdimx; j++)
 						{
@@ -1989,7 +2130,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 					}
 				}
-				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
+				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0h+ */
 				{
 					for (j=0; j<jdimx; j++)
 					{
@@ -2012,7 +2153,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						for (k=0; k<sp; k++) y[k+(j*zp)]=exp(LNTOT*(ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl))));
 					}
 				}
-				else /* +RdB0+ */
+				else /* +RdB0h+ */
 				{
 					for (j=0; j<jdimx; j++)
 					{
@@ -2036,7 +2177,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 				}
 			}
-			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ +Tl0+ */
+			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h+ +Tl0h+ */
 			{
 				for (j=0; j<jdimx; j++)
 				{
@@ -2063,7 +2204,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 				}
 			}
-			else /* -Rl0+ +Rl0+ */
+			else /* -Rl0h+ +Rl0h+ */
 			{
 				for (j=0; j<jdimx; j++)
 				{
@@ -2094,7 +2235,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			{
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 				{
-					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
+					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBsso+ */
 					{
 						for (j=0; j<jdimx; j++)
 						{
@@ -2126,7 +2267,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 							}
 						}
 					}
-					else /* +TdBss+ */
+					else /* +TdBsso+ */
 					{
 						for (j=0; j<jdimx; j++)
 						{
@@ -2159,7 +2300,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 					}
 				}
-				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
+				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBsso+ */
 				{
 					for (j=0; j<jdimx; j++)
 					{
@@ -2182,7 +2323,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl)));
 					}
 				}
-				else /* +RdBss+ */
+				else /* +RdBsso+ */
 				{
 					for (j=0; j<jdimx; j++)
 					{
@@ -2206,7 +2347,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 				}
 			}
-			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
+			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlsso+ +Tlsso+ */
 			{
 				if ((ofs<DZE)&&(ofs>NZE))
 				{
@@ -2244,7 +2385,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 				}
 			}
-			else /* -Rlss+ +Rlss+ */
+			else /* -Rlsso+ +Rlsso+ */
 			{
 				if ((ofs<DZE)&&(ofs>NZE))
 				{
@@ -2287,7 +2428,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 			{
-				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
+				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o+ */
 				{
 					for (j=0; j<jdimx; j++)
 					{
@@ -2315,7 +2456,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 						}
 					}
 				}
-				else /* +TdB0+ */
+				else /* +TdB0o+ */
 				{
 					j=0;
 					for (j=0; j<jdimx; j++)
@@ -2345,7 +2486,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					}
 				}
 			}
-			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
+			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0o+ */
 			{
 				for (j=0; j<jdimx; j++)
 				{
@@ -2368,7 +2509,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 					for (k=0; k<sp; k++) y[k+(j*zp)]=exp(LNTOT*(ofs-g_array_index(specs, gdouble, trc-1+((k+st)*satl))));
 				}
 			}
-			else /* +RdB0+ */
+			else /* +RdB0o+ */
 			{
 				for (j=0; j<jdimx; j++)
 				{
@@ -2392,7 +2533,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 			}
 		}
-		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ and +Tl0+ */ 
+		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0o+ and +Tl0o+ */ 
 		{
 			ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 			if ((ofs<DZE)&&(ofs>NZE))
@@ -2429,7 +2570,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 				}
 			}
 		}
-		else /* -Rl0+ and +Rl0+ */ 
+		else /* -Rl0o+ and +Rl0o+ */ 
 		{
 			ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 			if ((ofs<DZE)&&(ofs>NZE))

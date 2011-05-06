@@ -30,7 +30,7 @@ void opd(GtkWidget *widget, gpointer data)
 	PlotPolar *plt2;
 	GtkWidget *wfile, *dialog, *content, *vbox, *table, *spin, *butt, *label, *cont, *trace;
 	GtkAdjustment *adj;
-	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, clc, dx2, xx, ce;
+	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, ofe, clc, dx2, xx, ce;
 	guint j, k, l, m, sal, st, sp, kib;
 	gint n, zp, lcib, dr;
 	gchar s[5];
@@ -104,7 +104,6 @@ void opd(GtkWidget *widget, gpointer data)
 					mx=g_strv_length(strary2);
 					zp=1<<(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(zpd)));
 					n=zp*jdimx;
-					ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 					y=fftw_malloc(sizeof(double)*n);
 					star=fftw_malloc(sizeof(double)*n);
 					p=fftw_plan_many_r2r(1, &zp, jdimx, y, NULL, 1, zp, star, NULL, 1, zp, &type, FFTW_ESTIMATE);
@@ -137,25 +136,21 @@ void opd(GtkWidget *widget, gpointer data)
 									{
 										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 										{
-											if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss- */
+											if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssw- */
 											{
 												for (m=0; m<mx; m++)
 												{
 													strat2=g_strsplit_set(strary2[m], "\t,", 0);
 													if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 													{
+														{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 														lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 														g_array_append_val(msr, lcl);
 														if (lcl<xi) xi=lcl;
 														else if (lcl>xf) xf=lcl;
 														strary=g_strsplit_set(contents, "\r\n", 0);
 														sal=g_strv_length(strary);
-														g_array_free(x, TRUE);
-														g_array_free(yb, TRUE);
-														g_array_free(delf, TRUE);
-														g_array_free(stars, TRUE);
-														x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-														yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+														{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 														lc=lcib;
 														for (k=kib; k<sal; k++)
 														{
@@ -312,25 +307,21 @@ void opd(GtkWidget *widget, gpointer data)
 													g_strfreev(strat2);
 												}
 											}
-											else /* +TdBss- */
+											else /* +TdBssw- */
 											{
 												for (m=0; m<mx; m++)
 												{
 													strat2=g_strsplit_set(strary2[m], "\t,", 0);
 													if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 													{
+														{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 														lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 														g_array_append_val(msr, lcl);
 														if (lcl<xi) xi=lcl;
 														else if (lcl>xf) xf=lcl;
 														strary=g_strsplit_set(contents, "\r\n", 0);
 														sal=g_strv_length(strary);
-														g_array_free(x, TRUE);
-														g_array_free(yb, TRUE);
-														g_array_free(delf, TRUE);
-														g_array_free(stars, TRUE);
-														x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-														yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+														{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 														lc=lcib;
 														for (k=kib; k<sal; k++)
 														{
@@ -488,25 +479,22 @@ void opd(GtkWidget *widget, gpointer data)
 												}
 											}
 										}
-										else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss- */
+										else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBssw- */
 										{
+											ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -663,25 +651,22 @@ void opd(GtkWidget *widget, gpointer data)
 												g_strfreev(strat2);
 											}
 										}
-										else /* +RdBss- */
+										else /* +RdBssw- */
 										{
+											ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -839,25 +824,21 @@ void opd(GtkWidget *widget, gpointer data)
 											}
 										}
 									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss- +Tlss- */
+									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssw- +Tlssw- */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -1014,25 +995,22 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* -Rlss- +Rlss- */
+									else /* -Rlssw- +Rlssw- */
 									{
+										ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -1194,25 +1172,21 @@ void opd(GtkWidget *widget, gpointer data)
 								{
 									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 									{
-										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0- */
+										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0w- */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -1369,25 +1343,21 @@ void opd(GtkWidget *widget, gpointer data)
 												g_strfreev(strat2);
 											}
 										}
-										else /* +TdB0- */
+										else /* +TdB0w- */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -1545,25 +1515,22 @@ void opd(GtkWidget *widget, gpointer data)
 											}
 										}
 									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0- */
+									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0w- */
 									{
+										ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -1720,25 +1687,22 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +RdB0- */
+									else /* +RdB0w- */
 									{
+										ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -1896,25 +1860,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0- +Tl0- */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0w- +Tl0w- */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -2071,25 +2031,22 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* -Rl0- +Rl0- */
+								else /* -Rl0w- +Rl0w- */
 								{
+									ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -2253,25 +2210,21 @@ void opd(GtkWidget *widget, gpointer data)
 								{
 									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 									{
-										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
+										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssw+ */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -2301,13 +2254,36 @@ void opd(GtkWidget *widget, gpointer data)
 														iv=g_array_index(bspa, gdouble, j);
 														while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
 														sp=k-st;
-														if (sp>zp) sp=zp;
+														if (sp>zp)
+														{
+															sp=zp;
+															{ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+															while (k<8)
+															{
+																ofs+=g_array_index(yb, gdouble, st+k);
+																k++;
+																ofe+=g_array_index(yb, gdouble, sp+st-k);
+															}
+															{ofs/=8; ofe/=8;}
+														}
+														else if (sp<16) {ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1);}
+														else
+														{
+															{ofs=g_array_index(yb, gdouble, st*satl); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+															while (k<8)
+															{
+																ofs+=g_array_index(yb, gdouble, st+k);
+																k++;
+																ofe+=g_array_index(yb, gdouble, sp+st-k);
+															}
+															{ofs/=8; ofe/=8;}
+														}
 														iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 														g_array_append_val(delf, iv);
 														for (k=0; k<sp; k++)
 														{
-															clc=ofs-g_array_index(yb, gdouble, k+st);
-															if (clc<0)
+															clc=ofs+(k*(ofe-ofs)/(sp-1))-g_array_index(yb, gdouble, k+st);
+															if (clc<NZE)
 															{
 																clc=-exp(LNTOT*clc);
 																y[k+(j*zp)]=log(++clc);
@@ -2448,25 +2424,21 @@ void opd(GtkWidget *widget, gpointer data)
 												g_strfreev(strat2);
 											}
 										}
-										else /* +TdBss+ */
+										else /* +TdBssw+ */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -2496,13 +2468,36 @@ void opd(GtkWidget *widget, gpointer data)
 														iv=g_array_index(bspa, gdouble, j);
 														while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
 														sp=k-st;
-														if (sp>zp) sp=zp;
+														if (sp>zp)
+														{
+															sp=zp;
+															{ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+															while (k<8)
+															{
+																ofs+=g_array_index(yb, gdouble, st+k);
+																k++;
+																ofe+=g_array_index(yb, gdouble, sp+st-k);
+															}
+															{ofs/=8; ofe/=8;}
+														}
+														else if (sp<16) {ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1);}
+														else
+														{
+															{ofs=g_array_index(yb, gdouble, st*satl); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+															while (k<8)
+															{
+																ofs+=g_array_index(yb, gdouble, st+k);
+																k++;
+																ofe+=g_array_index(yb, gdouble, sp+st-k);
+															}
+															{ofs/=8; ofe/=8;}
+														}
 														iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 														g_array_append_val(delf, iv);
 														for (k=0; k<sp; k++)
 														{
-															clc=g_array_index(yb, gdouble, k+st)-ofs;
-															if (clc<0)
+															clc=g_array_index(yb, gdouble, k+st)-ofs-(k*(ofe-ofs)/(sp-1));
+															if (clc<NZE)
 															{
 																clc=-exp(LNTOT*clc);
 																y[k+(j*zp)]=log(++clc);
@@ -2644,25 +2639,22 @@ void opd(GtkWidget *widget, gpointer data)
 											}
 										}
 									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
+									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBssw+ */
 									{
+										ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -2830,25 +2822,22 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +RdBss+ */
+									else /* +RdBssw+ */
 									{
+										ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -3017,25 +3006,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssw+ +Tlssw+ */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -3065,15 +3050,43 @@ void opd(GtkWidget *widget, gpointer data)
 												iv=g_array_index(bspa, gdouble, j);
 												while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
 												sp=k-st;
-												if (sp>zp) sp=zp;
+												if (sp>zp)
+												{
+													sp=zp;
+													{ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+													while (k<8)
+													{
+														ofs+=g_array_index(yb, gdouble, st+k);
+														k++;
+														ofe+=g_array_index(yb, gdouble, sp+st-k);
+													}
+													{ofs/=8; ofe/=8;}
+												}
+												else if (sp<16) {ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1);}
+												else
+												{
+													{ofs=g_array_index(yb, gdouble, st*satl); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+													while (k<8)
+													{
+														ofs+=g_array_index(yb, gdouble, st+k);
+														k++;
+														ofe+=g_array_index(yb, gdouble, sp+st-k);
+													}
+													{ofs/=8; ofe/=8;}
+												}
 												iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 												g_array_append_val(delf, iv);
 												for (k=0; k<sp; k++)
 												{
-													clc=-g_array_index(yb, gdouble, k+st)/ofs;
-													clc++;
-													if (clc>0) y[k+(j*zp)]=log(clc);
-													else y[k+(j*zp)]=-G_MAXDOUBLE;
+													clc=ofs+(k*(ofe-ofs)/(sp-1));
+													if (clc<DZE && clc>NZE) y[k+(j*zp)]=-G_MAXDOUBLE;
+													else
+													{
+														clc=-g_array_index(yb, gdouble, k+st)/clc;
+														clc++;
+														if (clc>DZE) y[k+(j*zp)]=log(clc);
+														else y[k+(j*zp)]=-G_MAXDOUBLE;
+													}
 												}
 											}
 											fftw_execute(p);
@@ -3209,25 +3222,22 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* -Rlss+ +Rlss+ */
+								else /* -Rlssw+ +Rlssw+ */
 								{
+									ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -3263,7 +3273,7 @@ void opd(GtkWidget *widget, gpointer data)
 												for (k=0; k<sp; k++)
 												{
 													clc=g_array_index(yb, gdouble, k+st)/ofs;
-													if (clc>0) y[k+(j*zp)]=log(clc);
+													if (clc>DZE) y[k+(j*zp)]=log(clc);
 													else y[k+(j*zp)]=-G_MAXDOUBLE;
 												}
 											}
@@ -3405,25 +3415,21 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
+									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0w+ */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -3453,12 +3459,35 @@ void opd(GtkWidget *widget, gpointer data)
 													iv=g_array_index(bspa, gdouble, j);
 													while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
 													sp=k-st;
-													if (sp>zp) sp=zp;
+													if (sp>zp)
+													{
+														sp=zp;
+														{ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+														while (k<8)
+														{
+															ofs+=g_array_index(yb, gdouble, st+k);
+															k++;
+															ofe+=g_array_index(yb, gdouble, sp+st-k);
+														}
+														{ofs/=8; ofe/=8;}
+													}
+													else if (sp<16) {ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1);}
+													else
+													{
+														{ofs=g_array_index(yb, gdouble, st*satl); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+														while (k<8)
+														{
+															ofs+=g_array_index(yb, gdouble, st+k);
+															k++;
+															ofe+=g_array_index(yb, gdouble, sp+st-k);
+														}
+														{ofs/=8; ofe/=8;}
+													}
 													iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 													g_array_append_val(delf, iv);
 													for (k=0; k<sp; k++)
 													{
-														clc=ofs-g_array_index(yb, gdouble, k+st);
+														clc=ofs+(k*(ofe-ofs)/(sp-1))-g_array_index(yb, gdouble, k+st);
 														clc=-exp(LNTOT*clc);
 														y[k+(j*zp)]=++clc;
 													}
@@ -3596,25 +3625,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +TdB0+ */
+									else /* +TdB0w+ */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -3644,12 +3669,35 @@ void opd(GtkWidget *widget, gpointer data)
 													iv=g_array_index(bspa, gdouble, j);
 													while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
 													sp=k-st;
-													if (sp>zp) sp=zp;
+													if (sp>zp)
+													{
+														sp=zp;
+														{ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+														while (k<8)
+														{
+															ofs+=g_array_index(yb, gdouble, st+k);
+															k++;
+															ofe+=g_array_index(yb, gdouble, sp+st-k);
+														}
+														{ofs/=8; ofe/=8;}
+													}
+													else if (sp<16) {ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1);}
+													else
+													{
+														{ofs=g_array_index(yb, gdouble, st*satl); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+														while (k<8)
+														{
+															ofs+=g_array_index(yb, gdouble, st+k);
+															k++;
+															ofe+=g_array_index(yb, gdouble, sp+st-k);
+														}
+														{ofs/=8; ofe/=8;}
+													}
 													iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 													g_array_append_val(delf, iv);
 													for (k=0; k<sp; k++)
 													{
-														clc=g_array_index(yb, gdouble, k+st)-ofs;
+														clc=g_array_index(yb, gdouble, k+st)-ofs-(k*(ofe-ofs)/(sp-1));
 														clc=-exp(LNTOT*clc);
 														y[k+(j*zp)]=++clc;
 													}
@@ -3788,25 +3836,22 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0w+ */
 								{
+									ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -3974,25 +4019,22 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +RdB0+ */
+								else /* +RdB0w+ */
 								{
+									ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -4161,25 +4203,21 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ +Tl0+ */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0w+ +Tl0w+ */
 							{
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -4209,13 +4247,41 @@ void opd(GtkWidget *widget, gpointer data)
 											iv=g_array_index(bspa, gdouble, j);
 											while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
 											sp=k-st;
-											if (sp>zp) sp=zp;
+											if (sp>zp)
+											{
+												sp=zp;
+												{ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+												while (k<8)
+												{
+													ofs+=g_array_index(yb, gdouble, st+k);
+													k++;
+													ofe+=g_array_index(yb, gdouble, sp+st-k);
+												}
+												{ofs/=8; ofe/=8;}
+											}
+											else if (sp<16) {ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1);}
+											else
+											{
+												{ofs=g_array_index(yb, gdouble, st*satl); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+												while (k<8)
+												{
+													ofs+=g_array_index(yb, gdouble, st+k);
+													k++;
+													ofe+=g_array_index(yb, gdouble, sp+st-k);
+												}
+												{ofs/=8; ofe/=8;}
+											}
 											iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 											g_array_append_val(delf, iv);
 											for (k=0; k<sp; k++)
 											{
-												clc=-g_array_index(yb, gdouble, k+st)/ofs;
-												y[k+(j*zp)]=++clc;
+												clc=ofs+(k*(ofe-ofs)/(sp-1));
+												if (clc<DZE && clc>NZE) y[k+(j*zp)]=-G_MAXDOUBLE;
+												else
+												{
+													clc=-g_array_index(yb, gdouble, k+st)/clc;
+													y[k+(j*zp)]=++clc;
+												}
 											}
 										}
 										fftw_execute(p);
@@ -4351,25 +4417,22 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* -Rl0+ +Rl0+ */
+							else /* -Rl0w+ +Rl0w+ */
 							{
+								ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -4547,25 +4610,21 @@ void opd(GtkWidget *widget, gpointer data)
 								{
 									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 									{
-										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss- */
+										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssw- */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -4678,25 +4737,21 @@ void opd(GtkWidget *widget, gpointer data)
 												g_strfreev(strat2);
 											}
 										}
-										else /* +TdBss- */
+										else /* +TdBssw- */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -4810,25 +4865,22 @@ void opd(GtkWidget *widget, gpointer data)
 											}
 										}
 									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss- */
+									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBssw- */
 									{
+										ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -4941,25 +4993,22 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +RdBss- */
+									else /* +RdBssw- */
 									{
+										ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -5073,25 +5122,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss- +Tlss- */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssw- +Tlssw- */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -5204,25 +5249,22 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* -Rlss- +Rlss- */
+								else /* -Rlssw- +Rlssw- */
 								{
+									ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -5340,25 +5382,21 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0- */
+									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0w- */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -5471,25 +5509,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +TdB0- */
+									else /* +TdB0w- */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -5603,25 +5637,22 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0- */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0w- */
 								{
+									ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -5734,25 +5765,22 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +RdB0- */
+								else /* +RdB0w- */
 								{
+									ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -5866,25 +5894,21 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0- +Tl0- */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0w- +Tl0w- */
 							{
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -5997,25 +6021,22 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* -Rl0- +Rl0- */
+							else /* -Rl0w- +Rl0w- */
 							{
+								ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -6136,25 +6157,21 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
+									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssw+ */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -6184,13 +6201,36 @@ void opd(GtkWidget *widget, gpointer data)
 													iv=g_array_index(bspa, gdouble, j);
 													while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
 													sp=k-st;
-													if (sp>zp) sp=zp;
+													if (sp>zp)
+													{
+														sp=zp;
+														{ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+														while (k<8)
+														{
+															ofs+=g_array_index(yb, gdouble, st+k);
+															k++;
+															ofe+=g_array_index(yb, gdouble, sp+st-k);
+														}
+														{ofs/=8; ofe/=8;}
+													}
+													else if (sp<16) {ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1);}
+													else
+													{
+														{ofs=g_array_index(yb, gdouble, st*satl); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+														while (k<8)
+														{
+															ofs+=g_array_index(yb, gdouble, st+k);
+															k++;
+															ofe+=g_array_index(yb, gdouble, sp+st-k);
+														}
+														{ofs/=8; ofe/=8;}
+													}
 													iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 													g_array_append_val(delf, iv);
 													for (k=0; k<sp; k++)
 													{
-														clc=ofs-g_array_index(yb, gdouble, k+st);
-														if (clc<0)
+														clc=ofs+(k*(ofe-ofs)/(sp-1))-g_array_index(yb, gdouble, k+st);
+														if (clc<NZE)
 														{
 															clc=-exp(LNTOT*clc);
 															y[k+(j*zp)]=log(++clc);
@@ -6287,25 +6327,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +TdBss+ */
+									else /* +TdBssw+ */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -6335,13 +6371,36 @@ void opd(GtkWidget *widget, gpointer data)
 													iv=g_array_index(bspa, gdouble, j);
 													while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
 													sp=k-st;
-													if (sp>zp) sp=zp;
+													if (sp>zp)
+													{
+														sp=zp;
+														{ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+														while (k<8)
+														{
+															ofs+=g_array_index(yb, gdouble, st+k);
+															k++;
+															ofe+=g_array_index(yb, gdouble, sp+st-k);
+														}
+														{ofs/=8; ofe/=8;}
+													}
+													else if (sp<16) {ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1);}
+													else
+													{
+														{ofs=g_array_index(yb, gdouble, st*satl); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+														while (k<8)
+														{
+															ofs+=g_array_index(yb, gdouble, st+k);
+															k++;
+															ofe+=g_array_index(yb, gdouble, sp+st-k);
+														}
+														{ofs/=8; ofe/=8;}
+													}
 													iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 													g_array_append_val(delf, iv);
 													for (k=0; k<sp; k++)
 													{
-														clc=g_array_index(yb, gdouble, k+st)-ofs;
-														if (clc<0)
+														clc=g_array_index(yb, gdouble, k+st)-ofs-(k*(ofe-ofs)/(sp-1));
+														if (clc<NZE)
 														{
 															clc=-exp(LNTOT*clc);
 															y[k+(j*zp)]=log(++clc);
@@ -6439,25 +6498,22 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBssw+ */
 								{
+									ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -6581,25 +6637,22 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +RdBss+ */
+								else /* +RdBssw+ */
 								{
+									ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -6724,25 +6777,21 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssw+ +Tlssw+ */
 							{
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -6772,15 +6821,43 @@ void opd(GtkWidget *widget, gpointer data)
 											iv=g_array_index(bspa, gdouble, j);
 											while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
 											sp=k-st;
-											if (sp>zp) sp=zp;
+											if (sp>zp)
+											{
+												sp=zp;
+												{ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+												while (k<8)
+												{
+													ofs+=g_array_index(yb, gdouble, st+k);
+													k++;
+													ofe+=g_array_index(yb, gdouble, sp+st-k);
+												}
+												{ofs/=8; ofe/=8;}
+											}
+											else if (sp<16) {ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1);}
+											else
+											{
+												{ofs=g_array_index(yb, gdouble, st*satl); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+												while (k<8)
+												{
+													ofs+=g_array_index(yb, gdouble, st+k);
+													k++;
+													ofe+=g_array_index(yb, gdouble, sp+st-k);
+												}
+												{ofs/=8; ofe/=8;}
+											}
 											iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 											g_array_append_val(delf, iv);
 											for (k=0; k<sp; k++)
 											{
-												clc=-g_array_index(yb, gdouble, k+st)/ofs;
-												clc++;
-												if (clc>0) y[k+(j*zp)]=log(clc);
-												else y[k+(j*zp)]=-G_MAXDOUBLE;
+												clc=ofs+(k*(ofe-ofs)/(sp-1));
+												if (clc<DZE && clc>NZE) y[k+(j*zp)]=-G_MAXDOUBLE;
+												else
+												{
+													clc=-g_array_index(yb, gdouble, k+st)/ofs;
+													clc++;
+													if (clc>DZE) y[k+(j*zp)]=log(clc);
+													else y[k+(j*zp)]=-G_MAXDOUBLE;
+												}
 											}
 										}
 										fftw_execute(p);
@@ -6872,25 +6949,22 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* -Rlss+ +Rlss+ */
+							else /* -Rlssw+ +Rlssw+ */
 							{
+								ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -6926,7 +7000,7 @@ void opd(GtkWidget *widget, gpointer data)
 											for (k=0; k<sp; k++)
 											{
 												clc=g_array_index(yb, gdouble, k+st)/ofs;
-												if (clc>0) y[k+(j*zp)]=log(clc);
+												if (clc>DZE) y[k+(j*zp)]=log(clc);
 												else y[k+(j*zp)]=-G_MAXDOUBLE;
 											}											
 										}
@@ -7025,25 +7099,21 @@ void opd(GtkWidget *widget, gpointer data)
 							flags&=47;
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 							{
-								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
+								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0w+ */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -7073,12 +7143,35 @@ void opd(GtkWidget *widget, gpointer data)
 												iv=g_array_index(bspa, gdouble, j);
 												while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
 												sp=k-st;
-												if (sp>zp) sp=zp;
+												if (sp>zp)
+												{
+													sp=zp;
+													{ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+													while (k<8)
+													{
+														ofs+=g_array_index(yb, gdouble, st+k);
+														k++;
+														ofe+=g_array_index(yb, gdouble, sp+st-k);
+													}
+													{ofs/=8; ofe/=8;}
+												}
+												else if (sp<16) {ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1);}
+												else
+												{
+													{ofs=g_array_index(yb, gdouble, st*satl); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+													while (k<8)
+													{
+														ofs+=g_array_index(yb, gdouble, st+k);
+														k++;
+														ofe+=g_array_index(yb, gdouble, sp+st-k);
+													}
+													{ofs/=8; ofe/=8;}
+												}
 												iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 												g_array_append_val(delf, iv);
 												for (k=0; k<sp; k++)
 												{
-													clc=ofs-g_array_index(yb, gdouble, k+st);
+													clc=ofs+(k*(ofe-ofs)/(sp-1))-g_array_index(yb, gdouble, k+st);
 													clc=-exp(LNTOT*clc);
 													y[k+(j*zp)]=++clc;
 												}
@@ -7172,25 +7265,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +TdB0+ */
+								else /* +TdB0w+ */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -7220,12 +7309,35 @@ void opd(GtkWidget *widget, gpointer data)
 												iv=g_array_index(bspa, gdouble, j);
 												while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
 												sp=k-st;
-												if (sp>zp) sp=zp;
+												if (sp>zp)
+												{
+													sp=zp;
+													{ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+													while (k<8)
+													{
+														ofs+=g_array_index(yb, gdouble, st+k);
+														k++;
+														ofe+=g_array_index(yb, gdouble, sp+st-k);
+													}
+													{ofs/=8; ofe/=8;}
+												}
+												else if (sp<16) {ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1);}
+												else
+												{
+													{ofs=g_array_index(yb, gdouble, st*satl); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+													while (k<8)
+													{
+														ofs+=g_array_index(yb, gdouble, st+k);
+														k++;
+														ofe+=g_array_index(yb, gdouble, sp+st-k);
+													}
+													{ofs/=8; ofe/=8;}
+												}
 												iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 												g_array_append_val(delf, iv);
 												for (k=0; k<sp; k++)
 												{
-													clc=g_array_index(yb, gdouble, k+st)-ofs;
+													clc=g_array_index(yb, gdouble, k+st)-ofs-(k*(ofe-ofs)/(sp-1));
 													clc=-exp(LNTOT*clc);
 													y[k+(j*zp)]=++clc;
 												}
@@ -7320,25 +7432,22 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0w+ */
 							{
+								ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -7462,25 +7571,22 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* +RdB0+ */
+							else /* +RdB0w+ */
 							{
+								ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -7605,7 +7711,7 @@ void opd(GtkWidget *widget, gpointer data)
 								}
 							}
 						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ +Tl0+ */
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0w+ +Tl0w+ */
 						{
 							flags&=47;
 							for (m=0; m<mx; m++)
@@ -7613,18 +7719,14 @@ void opd(GtkWidget *widget, gpointer data)
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
+									{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 									g_array_append_val(msr, lcl);
 									if (lcl<xi) xi=lcl;
 									else if (lcl>xf) xf=lcl;
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
-									g_array_free(x, TRUE);
-									g_array_free(yb, TRUE);
-									g_array_free(delf, TRUE);
-									g_array_free(stars, TRUE);
-									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+									{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -7654,13 +7756,41 @@ void opd(GtkWidget *widget, gpointer data)
 										iv=g_array_index(bspa, gdouble, j);
 										while ((k<lc)&&(iv>=g_array_index(x, gdouble, k))) k++;
 										sp=k-st;
-										if (sp>zp) sp=zp;
+										if (sp>zp)
+										{
+											sp=zp;
+											{ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+											while (k<8)
+											{
+												ofs+=g_array_index(yb, gdouble, st+k);
+												k++;
+												ofe+=g_array_index(yb, gdouble, sp+st-k);
+											}
+											{ofs/=8; ofe/=8;}
+										}
+										else if (sp<16) {ofs=g_array_index(yb, gdouble, st); ofe=g_array_index(yb, gdouble, sp+st-1);}
+										else
+										{
+											{ofs=g_array_index(yb, gdouble, st*satl); ofe=g_array_index(yb, gdouble, sp+st-1); k=1;}
+											while (k<8)
+											{
+												ofs+=g_array_index(yb, gdouble, st+k);
+												k++;
+												ofe+=g_array_index(yb, gdouble, sp+st-k);
+											}
+											{ofs/=8; ofe/=8;}
+										}
 										iv=(sp-1)/(zp*(g_array_index(x, gdouble, sp+st-1)-g_array_index(x, gdouble, st)));
 										g_array_append_val(delf, iv);
 										for (k=0; k<sp; k++)
 										{
-											clc=-g_array_index(yb, gdouble, k+st)/ofs;
-											y[k+(j*zp)]=++clc;
+											clc=ofs+(k*(ofe-ofs)/(sp-1));
+											if (clc<DZE && clc>NZE) y[k+(j*zp)]=-G_MAXDOUBLE;
+											else
+											{
+												clc=-g_array_index(yb, gdouble, k+st)/clc;
+												y[k+(j*zp)]=++clc;
+											}
 										}
 									}
 									fftw_execute(p);
@@ -7752,26 +7882,23 @@ void opd(GtkWidget *widget, gpointer data)
 								g_strfreev(strat2);
 							}
 						}
-						else /* -Rl0+ +Rl0+ */
+						else /* -Rl0w+ +Rl0w+ */
 						{
+							ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 							flags&=47;
 							for (m=0; m<mx; m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
+									{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 									g_array_append_val(msr, lcl);
 									if (lcl<xi) xi=lcl;
 									else if (lcl>xf) xf=lcl;
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
-									g_array_free(x, TRUE);
-									g_array_free(yb, TRUE);
-									g_array_free(delf, TRUE);
-									g_array_free(stars, TRUE);
-									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+									{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -7912,25 +8039,21 @@ void opd(GtkWidget *widget, gpointer data)
 									{
 										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 										{
-											if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss- */
+											if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssh- */
 											{
 												for (m=0; m<mx; m++)
 												{
 													strat2=g_strsplit_set(strary2[m], "\t,", 0);
 													if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 													{
+														{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 														lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 														g_array_append_val(msr, lcl);
 														if (lcl<xi) xi=lcl;
 														else if (lcl>xf) xf=lcl;
 														strary=g_strsplit_set(contents, "\r\n", 0);
 														sal=g_strv_length(strary);
-														g_array_free(x, TRUE);
-														g_array_free(yb, TRUE);
-														g_array_free(delf, TRUE);
-														g_array_free(stars, TRUE);
-														x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-														yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+														{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 														lc=lcib;
 														for (k=kib; k<sal; k++)
 														{
@@ -8090,25 +8213,21 @@ void opd(GtkWidget *widget, gpointer data)
 													g_strfreev(strat2);
 												}
 											}
-											else /* +TdBss- */
+											else /* +TdBssh- */
 											{
 												for (m=0; m<mx; m++)
 												{
 													strat2=g_strsplit_set(strary2[m], "\t,", 0);
 													if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 													{
+														{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 														lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 														g_array_append_val(msr, lcl);
 														if (lcl<xi) xi=lcl;
 														else if (lcl>xf) xf=lcl;
 														strary=g_strsplit_set(contents, "\r\n", 0);
 														sal=g_strv_length(strary);
-														g_array_free(x, TRUE);
-														g_array_free(yb, TRUE);
-														g_array_free(delf, TRUE);
-														g_array_free(stars, TRUE);
-														x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-														yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+														{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 														lc=lcib;
 														for (k=kib; k<sal; k++)
 														{
@@ -8276,18 +8395,14 @@ void opd(GtkWidget *widget, gpointer data)
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -8447,25 +8562,21 @@ void opd(GtkWidget *widget, gpointer data)
 												g_strfreev(strat2);
 											}
 										}
-										else /* +RdBss- */
+										else /* +RdBssh- */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -8626,25 +8737,21 @@ void opd(GtkWidget *widget, gpointer data)
 											}
 										}
 									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss- +Tlss- */
+									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssh- +Tlssh- */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -8804,25 +8911,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* -Rlss- +Rlss- */
+									else /* -Rlssh- +Rlssh- */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -8994,18 +9097,14 @@ void opd(GtkWidget *widget, gpointer data)
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -9165,25 +9264,21 @@ void opd(GtkWidget *widget, gpointer data)
 												g_strfreev(strat2);
 											}
 										}
-										else /* +TdB0- */
+										else /* +TdB0h- */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -9344,25 +9439,21 @@ void opd(GtkWidget *widget, gpointer data)
 											}
 										}
 									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0- */
+									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0h- */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -9522,25 +9613,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +RdB0- */
+									else /* +RdB0h- */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -9701,25 +9788,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0- +Tl0- */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h- +Tl0h- */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -9879,25 +9962,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* -Rl0- +Rl0- */
+								else /* -Rl0h- +Rl0h- */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -10064,25 +10143,21 @@ void opd(GtkWidget *widget, gpointer data)
 								{
 									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 									{
-										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
+										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssh+ */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -10262,25 +10337,21 @@ void opd(GtkWidget *widget, gpointer data)
 												g_strfreev(strat2);
 											}
 										}
-										else /* +TdBss+ */
+										else /* +TdBssh+ */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -10461,25 +10532,21 @@ void opd(GtkWidget *widget, gpointer data)
 											}
 										}
 									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
+									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBssh+ */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -10650,25 +10717,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +RdBss+ */
+									else /* +RdBssh+ */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -10840,25 +10903,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssh+ +Tlssh+ */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -11035,25 +11094,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* -Rlss+ +Rlss+ */
+								else /* -Rlssh+ +Rlssh+ */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -11234,25 +11289,21 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
+									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0h+ */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -11428,25 +11479,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +TdB0+ */
+									else /* +TdB0h+ */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -11623,25 +11670,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0h+ */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -11812,25 +11855,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +RdB0+ */
+								else /* +RdB0h+ */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -12002,25 +12041,21 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ +Tl0+ */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h+ +Tl0h+ */
 							{
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -12195,25 +12230,21 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* -Rl0+ +Rl0+ */
+							else /* -Rl0h+ +Rl0h+ */
 							{
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -12394,25 +12425,21 @@ void opd(GtkWidget *widget, gpointer data)
 								{
 									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 									{
-										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss- */
+										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssh- */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -12528,25 +12555,21 @@ void opd(GtkWidget *widget, gpointer data)
 												g_strfreev(strat2);
 											}
 										}
-										else /* +TdBss- */
+										else /* +TdBssh- */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -12663,25 +12686,21 @@ void opd(GtkWidget *widget, gpointer data)
 											}
 										}
 									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss- */
+									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBssh- */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -12797,25 +12816,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +RdBss- */
+									else /* +RdBssh- */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -12932,25 +12947,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss- +Tlss- */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssh- +Tlssh- */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -13066,25 +13077,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* -Rlss- +Rlss- */
+								else /* -Rlssh- +Rlssh- */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -13205,25 +13212,21 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0- */
+									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0h- */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -13339,25 +13342,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +TdB0- */
+									else /* +TdB0h- */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -13474,25 +13473,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0- */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0h- */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -13608,25 +13603,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +RdB0- */
+								else /* +RdB0h- */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -13743,25 +13734,21 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0- +Tl0- */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h- +Tl0h- */
 							{
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -13877,25 +13864,21 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* -Rl0- +Rl0- */
+							else /* -Rl0h- +Rl0h- */
 							{
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -14019,25 +14002,21 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
+									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssh+ */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -14173,25 +14152,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +TdBss+ */
+									else /* +TdBssh+ */
 									{
 										for (m=0; m<mx; m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -14328,25 +14303,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBssh+ */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -14473,25 +14444,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +RdBss+ */
+								else /* +RdBssh+ */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -14619,25 +14586,21 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssh+ +Tlssh+ */
 							{
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -14770,25 +14733,21 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* -Rlss+ +Rlss+ */
+							else /* -Rlssh+ +Rlssh+ */
 							{
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -14926,25 +14885,21 @@ void opd(GtkWidget *widget, gpointer data)
 							flags&=47;
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 							{
-								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
+								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0h+ */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -15076,25 +15031,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +TdB0+ */
+								else /* +TdB0h+ */
 								{
 									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -15227,25 +15178,21 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0h+ */
 							{
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -15372,25 +15319,21 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* +RdB0+ */
+							else /* +RdB0h+ */
 							{
 								for (m=0; m<mx; m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -15518,7 +15461,7 @@ void opd(GtkWidget *widget, gpointer data)
 								}
 							}
 						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ +Tl0+ */
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h+ +Tl0h+ */
 						{
 							flags&=47;
 							for (m=0; m<mx; m++)
@@ -15526,18 +15469,14 @@ void opd(GtkWidget *widget, gpointer data)
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
+									{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 									g_array_append_val(msr, lcl);
 									if (lcl<xi) xi=lcl;
 									else if (lcl>xf) xf=lcl;
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
-									g_array_free(x, TRUE);
-									g_array_free(yb, TRUE);
-									g_array_free(delf, TRUE);
-									g_array_free(stars, TRUE);
-									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+									{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -15668,7 +15607,7 @@ void opd(GtkWidget *widget, gpointer data)
 								g_strfreev(strat2);
 							}
 						}
-						else /* -Rl0+ +Rl0+ */
+						else /* -Rl0h+ +Rl0h+ */
 						{
 							flags&=47;
 							for (m=0; m<mx; m++)
@@ -15676,18 +15615,14 @@ void opd(GtkWidget *widget, gpointer data)
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
+									{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 									g_array_append_val(msr, lcl);
 									if (lcl<xi) xi=lcl;
 									else if (lcl>xf) xf=lcl;
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
-									g_array_free(x, TRUE);
-									g_array_free(yb, TRUE);
-									g_array_free(delf, TRUE);
-									g_array_free(stars, TRUE);
-									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+									{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -15820,6 +15755,7 @@ void opd(GtkWidget *widget, gpointer data)
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
 					{
+						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						flags|=16;
 						g_array_free(chp, TRUE);
 						chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
@@ -15831,25 +15767,21 @@ void opd(GtkWidget *widget, gpointer data)
 								{
 									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 									{
-										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss- */
+										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBsso-c */
 										{
 											for (m=0; m<mx; m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -16006,25 +15938,21 @@ void opd(GtkWidget *widget, gpointer data)
 												g_strfreev(strat2);
 											}
 										}
-										else /* +TdBss- */
+										else /* +TdBsso-c */
 										{
 											for (m=0; m<g_strv_length(strary2); m++)
 											{
 												strat2=g_strsplit_set(strary2[m], "\t,", 0);
 												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 												{
+													{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 													g_array_append_val(msr, lcl);
 													if (lcl<xi) xi=lcl;
 													else if (lcl>xf) xf=lcl;
 													strary=g_strsplit_set(contents, "\r\n", 0);
 													sal=g_strv_length(strary);
-													g_array_free(x, TRUE);
-													g_array_free(yb, TRUE);
-													g_array_free(delf, TRUE);
-													g_array_free(stars, TRUE);
-													x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-													yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+													{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 													lc=lcib;
 													for (k=kib; k<sal; k++)
 													{
@@ -16184,25 +16112,21 @@ void opd(GtkWidget *widget, gpointer data)
 											}
 										}
 									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss- */
+									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBsso-c */
 									{
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -16359,25 +16283,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +RdBss- */
+									else /* +RdBsso-c */
 									{
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -16535,25 +16455,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss- +Tlss- */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlsso-c +Tlsso-c */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -16710,25 +16626,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* -Rlss- +Rlss- */
+								else /* -Rlsso-c +Rlsso-c */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -16890,25 +16802,21 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0- */
+									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o-c */
 									{
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -17065,25 +16973,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +TdB0- */
+									else /* +TdB0o-c */
 									{
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -17241,25 +17145,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0- */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0o-c */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -17416,25 +17316,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +RdB0- */
+								else /* +RdB0o-c */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -17592,25 +17488,21 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0- +Tl0- */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0o-c +Tl0o-c */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -17767,25 +17659,21 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* -Rl0- +Rl0- */
+							else /* -Rl0o-c +Rl0o-c */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -17949,25 +17837,21 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
+									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBsso+c */
 									{
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -18144,25 +18028,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +TdBss+ */
+									else /* +TdBsso+c */
 									{
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -18340,25 +18220,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBsso+c */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -18526,25 +18402,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +RdBss+ */
+								else /* +RdBsso+c */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -18713,7 +18585,7 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlsso+c +Tlsso+c */
 							{
 								if ((ofs<DZE)&&(ofs>NZE))
 								{
@@ -18728,18 +18600,14 @@ void opd(GtkWidget *widget, gpointer data)
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -18914,7 +18782,7 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else /* -Rlss+ +Rlss+ */
+							else /* -Rlsso+c +Rlsso+c */
 							{
 								if ((ofs<DZE)&&(ofs>NZE))
 								{
@@ -18929,18 +18797,14 @@ void opd(GtkWidget *widget, gpointer data)
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -19119,25 +18983,21 @@ void opd(GtkWidget *widget, gpointer data)
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 							{
-								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
+								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o+c */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -19312,25 +19172,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +TdB0+ */
+								else /* +TdB0o+c */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -19504,25 +19360,21 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0o+c */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -19690,25 +19542,21 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* +RdB0+ */
+							else /* +RdB0o+c */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -19877,7 +19725,7 @@ void opd(GtkWidget *widget, gpointer data)
 								}
 							}
 						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ +Tl0+ */
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0o+c +Tl0o+c */
 						{
 							if ((ofs<DZE)&&(ofs>NZE))
 							{
@@ -19892,18 +19740,14 @@ void opd(GtkWidget *widget, gpointer data)
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -20076,7 +19920,7 @@ void opd(GtkWidget *widget, gpointer data)
 								}
 							}
 						}
-						else /* -Rl0+ +Rl0+ */
+						else /* -Rl0o+c +Rl0o+c */
 						{
 							if ((ofs<DZE)&&(ofs>NZE))
 							{
@@ -20091,18 +19935,14 @@ void opd(GtkWidget *widget, gpointer data)
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -20274,6 +20114,7 @@ void opd(GtkWidget *widget, gpointer data)
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
 					{
+						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						flags&=47;
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 						{
@@ -20281,25 +20122,21 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss- */
+									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBsso- */
 									{
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -20412,25 +20249,21 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +TdBss- */
+									else /* +TdBsso- */
 									{
 										for (m=0; m<g_strv_length(strary2); m++)
 										{
 											strat2=g_strsplit_set(strary2[m], "\t,", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
+												{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 												g_array_append_val(msr, lcl);
 												if (lcl<xi) xi=lcl;
 												else if (lcl>xf) xf=lcl;
 												strary=g_strsplit_set(contents, "\r\n", 0);
 												sal=g_strv_length(strary);
-												g_array_free(x, TRUE);
-												g_array_free(yb, TRUE);
-												g_array_free(delf, TRUE);
-												g_array_free(stars, TRUE);
-												x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-												yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+												{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 												lc=lcib;
 												for (k=kib; k<sal; k++)
 												{
@@ -20544,25 +20377,21 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss- */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBsso- */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -20675,25 +20504,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +RdBss- */
+								else /* +RdBsso- */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -20807,25 +20632,21 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss- +Tlss- */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlsso- +Tlsso- */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -20938,25 +20759,21 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* -Rlss- +Rlss- */
+							else /* -Rlsso- +Rlsso- */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -21074,25 +20891,21 @@ void opd(GtkWidget *widget, gpointer data)
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 							{
-								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0- */
+								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o- */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -21205,25 +21018,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +TdB0- */
+								else /* +TdB0o- */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -21337,25 +21146,21 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0- */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0o- */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -21468,25 +21273,21 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* +RdB0- */
+							else /* +RdB0o- */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -21600,25 +21401,21 @@ void opd(GtkWidget *widget, gpointer data)
 								}
 							}
 						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0- +Tl0- */
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0o- +Tl0o- */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
+									{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 									g_array_append_val(msr, lcl);
 									if (lcl<xi) xi=lcl;
 									else if (lcl>xf) xf=lcl;
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
-									g_array_free(x, TRUE);
-									g_array_free(yb, TRUE);
-									g_array_free(delf, TRUE);
-									g_array_free(stars, TRUE);
-									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+									{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -21731,25 +21528,21 @@ void opd(GtkWidget *widget, gpointer data)
 								g_strfreev(strat2);
 							}
 						}
-						else /* -Rl0- +Rl0- */
+						else /* -Rl0o- +Rl0o- */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
+									{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 									g_array_append_val(msr, lcl);
 									if (lcl<xi) xi=lcl;
 									else if (lcl>xf) xf=lcl;
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
-									g_array_free(x, TRUE);
-									g_array_free(yb, TRUE);
-									g_array_free(delf, TRUE);
-									g_array_free(stars, TRUE);
-									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+									{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -21865,30 +21658,27 @@ void opd(GtkWidget *widget, gpointer data)
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 					{
+						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						flags&=47;
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 							{
-								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBss+ */
+								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBsso+ */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -22021,25 +21811,21 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +TdBss+ */
+								else /* +TdBsso+ */
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
+											{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 											g_array_append_val(msr, lcl);
 											if (lcl<xi) xi=lcl;
 											else if (lcl>xf) xf=lcl;
 											strary=g_strsplit_set(contents, "\r\n", 0);
 											sal=g_strv_length(strary);
-											g_array_free(x, TRUE);
-											g_array_free(yb, TRUE);
-											g_array_free(delf, TRUE);
-											g_array_free(stars, TRUE);
-											x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-											yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+											{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 											lc=lcib;
 											for (k=kib; k<sal; k++)
 											{
@@ -22173,25 +21959,21 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss+ */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBsso+ */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -22315,25 +22097,21 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* +RdBss+ */
+							else /* +RdBsso+ */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -22458,7 +22236,7 @@ void opd(GtkWidget *widget, gpointer data)
 								}
 							}
 						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlss+ +Tlss+ */
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlsso+ +Tlsso+ */
 						{
 							if ((ofs<DZE)&&(ofs>NZE))
 							{
@@ -22473,18 +22251,14 @@ void opd(GtkWidget *widget, gpointer data)
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -22615,7 +22389,7 @@ void opd(GtkWidget *widget, gpointer data)
 								}
 							}
 						}
-						else /* -Rlss+ +Rlss+ */
+						else /* -Rlsso+ +Rlsso+ */
 						{
 							if ((ofs<DZE)&&(ofs>NZE))
 							{
@@ -22630,18 +22404,14 @@ void opd(GtkWidget *widget, gpointer data)
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -22774,28 +22544,25 @@ void opd(GtkWidget *widget, gpointer data)
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 					{
+						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						flags&=47;
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 						{
-							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0+ */
+							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o+ */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -22924,25 +22691,21 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* +TdB0+ */
+							else /* +TdB0o+ */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
 									strat2=g_strsplit_set(strary2[m], "\t,", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
+										{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 										g_array_append_val(msr, lcl);
 										if (lcl<xi) xi=lcl;
 										else if (lcl>xf) xf=lcl;
 										strary=g_strsplit_set(contents, "\r\n", 0);
 										sal=g_strv_length(strary);
-										g_array_free(x, TRUE);
-										g_array_free(yb, TRUE);
-										g_array_free(delf, TRUE);
-										g_array_free(stars, TRUE);
-										x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-										yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+										{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 										lc=lcib;
 										for (k=kib; k<sal; k++)
 										{
@@ -23072,25 +22835,21 @@ void opd(GtkWidget *widget, gpointer data)
 								}
 							}
 						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0+ */
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0o+ */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
+									{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 									g_array_append_val(msr, lcl);
 									if (lcl<xi) xi=lcl;
 									else if (lcl>xf) xf=lcl;
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
-									g_array_free(x, TRUE);
-									g_array_free(yb, TRUE);
-									g_array_free(delf, TRUE);
-									g_array_free(stars, TRUE);
-									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+									{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -23214,25 +22973,21 @@ void opd(GtkWidget *widget, gpointer data)
 								g_strfreev(strat2);
 							}
 						}
-						else /* +RdB0+ */
+						else /* +RdB0o+ */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
+									{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 									g_array_append_val(msr, lcl);
 									if (lcl<xi) xi=lcl;
 									else if (lcl>xf) xf=lcl;
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
-									g_array_free(x, TRUE);
-									g_array_free(yb, TRUE);
-									g_array_free(delf, TRUE);
-									g_array_free(stars, TRUE);
-									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+									{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -23357,8 +23112,9 @@ void opd(GtkWidget *widget, gpointer data)
 							}
 						}
 					}
-					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0+ +Tl0+ */
+					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0o+ +Tl0o+ */
 					{
+						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						flags&=47;
 						if ((ofs<DZE)&&(ofs>NZE))
 						{
@@ -23373,18 +23129,14 @@ void opd(GtkWidget *widget, gpointer data)
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
+									{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 									g_array_append_val(msr, lcl);
 									if (lcl<xi) xi=lcl;
 									else if (lcl>xf) xf=lcl;
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
-									g_array_free(x, TRUE);
-									g_array_free(yb, TRUE);
-									g_array_free(delf, TRUE);
-									g_array_free(stars, TRUE);
-									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+									{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -23513,8 +23265,9 @@ void opd(GtkWidget *widget, gpointer data)
 							}
 						}
 					}
-					else /* -Rl0+ +Rl0+ */
+					else /* -Rl0o+ +Rl0o+ */
 					{
+						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						flags&=47;
 						if ((ofs<DZE)&&(ofs>NZE))
 						{
@@ -23529,18 +23282,14 @@ void opd(GtkWidget *widget, gpointer data)
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
+									{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(delf, TRUE); g_array_free(stars, TRUE);}
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 									g_array_append_val(msr, lcl);
 									if (lcl<xi) xi=lcl;
 									else if (lcl>xf) xf=lcl;
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
-									g_array_free(x, TRUE);
-									g_array_free(yb, TRUE);
-									g_array_free(delf, TRUE);
-									g_array_free(stars, TRUE);
-									x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-									yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+									{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); yb=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{

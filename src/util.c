@@ -51,6 +51,7 @@ void about(GtkWidget *widget, gpointer data)
 	gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(helpwin), "0.1.0");
 	gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(helpwin), "(c) Paul Childs, 2011");
 	gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(helpwin), _("Harmonic is a program for performing harmonic analysis (e.g. Fourier analysis) and obtaining visibility of fringes, domain shift and chirp measurements."));
+	gtk_about_dialog_set_translator_credits(GTK_ABOUT_DIALOG(helpwin), _("translator-credits"));
 	gtk_widget_show(helpwin);
 	g_signal_connect_swapped(G_OBJECT(helpwin), "response", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
 }
