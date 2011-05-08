@@ -34,10 +34,13 @@
 /*
  * TO DO:
  *
- * DPR: change to be nonmodal
- * OPD: config writer (+overwrite confirm)
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
+ * OPD: improve config writing utility to reorder post entry
+ * DPR: change to be nonmodal
+ * DPR: plot colour editor
+ * DPR: fix problems with editing plot3
+ * TRS: wavelets
  */
 
 #include <gdk/gdkkeysyms.h>

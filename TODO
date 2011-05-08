@@ -3,9 +3,10 @@ Known Bugs/Issues
 
 Future Proposals
 ----------------
-* config writer
 * nonmodal display properties window
 * invert to 2pi/
 * triangle optimisation
-* saving data
 * translations
+* zoom box
+* colour editing
+* wavelets

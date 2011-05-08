@@ -16,6 +16,7 @@ Usage
 -----
 Data is loaded (A variety of devices are supported -- see Data Format in the Properties menu -- if none work please send a sample to the email in AUTHORS to update the list) and transformed to the inverse domain using a Fourier transform that takes data windowed according to the spectrum start and stop values. Multiple windows can be selected using the j index. As the Fourier transform is most efficient when a power of 2, the zero pad vaue adds clips or extends the window with zeros to meet this. Make sure to set the offset to a good baseline to avoid ripples in the inverse domain due to Gibbs phenomenon.
 Similar analysis is applied in the inverse domain. The domain shift does a triangular weighted mean over the harmonic peak (set the centre and full width of the triangle to get best results). The visibility also requires the full width of the peak at zero frequency to normalise itself. Multiple peaks can also be analysed using the k index.
+See the documentation obtained through the help menu for more detailed instructions.
 
 References
 ----------
