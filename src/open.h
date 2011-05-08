@@ -41,4 +41,5 @@
 	extern void pltmvp(PlotPolar*, gpointer);
 	extern void upg(GtkWidget*, gpointer);
 	void opd(GtkWidget*, gpointer);
+	void upt(GtkWidget*, gpointer);
 #endif

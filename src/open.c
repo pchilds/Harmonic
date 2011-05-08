@@ -24,19 +24,57 @@
 
 #include "open.h"
 
+GtkWidget *dialog;
+
+void upt(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *wwfile, *spin, *lbl;
+	GtkAdjustment *adj;
+	GList *chld;
+	guint rw;
+	gdouble val;
+	gchar *fin=NULL;
+
+	wwfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(dialog), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+	g_signal_connect(G_OBJECT(wwfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wwfile));
+	if (gtk_dialog_run(GTK_DIALOG(wwfile))==GTK_RESPONSE_ACCEPT)
+	{
+		chld=g_list_last(GTK_TABLE(data)->children);
+		val=gtk_spin_button_get_value(GTK_SPIN_BUTTON(chld->data));
+		g_object_get(G_OBJECT(data), "n-rows", &rw, NULL);
+		gtk_table_resize(GTK_TABLE(data), ++rw, 2);
+		g_object_ref(G_OBJECT(widget));
+		gtk_container_remove(GTK_CONTAINER(data), widget);
+		fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wwfile));
+		lbl=gtk_label_new(fin);
+		g_free(fin);
+		gtk_widget_show(lbl);
+		gtk_table_attach(GTK_TABLE(data), lbl, 0, 1, rw-2, rw-1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_table_attach(GTK_TABLE(data), widget, 0, 1, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		g_object_unref(G_OBJECT(widget));
+		adj=(GtkAdjustment*) gtk_adjustment_new(val, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+		spin=gtk_spin_button_new(adj, 0, 0);
+		gtk_widget_show(spin);
+		gtk_table_attach(GTK_TABLE(data), spin, 1, 2, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+	}
+	gtk_widget_destroy(wwfile);
+}
+
 void opd(GtkWidget *widget, gpointer data)
 {
 	PlotLinear *plt;
 	PlotPolar *plt2;
-	GtkWidget *wfile, *dialog, *content, *vbox, *table, *spin, *butt, *label, *cont, *trace;
+	GtkWidget *wfile, *content, *vbox, *table, *butt, *spin, *label, *cont, *trace;
 	GtkAdjustment *adj;
 	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, ofe, clc, dx2, xx, ce;
 	guint j, k, l, m, sal, st, sp, kib;
 	gint n, zp, lcib, dr;
 	gchar s[5];
-	gchar *contents, *contents2, *str, *fin=NULL;
+	gchar *contents, *contents2, *str, *s2, *fin=NULL;
 	gchar **strary, **strary2, **strat, **strat2;
+	gchar s1[10];
 	GSList *list;
+	GList *chld, *chld2;
 	GError *Err=NULL;
 	double *y, *star;
 	fftw_plan p;
@@ -63,34 +101,73 @@ void opd(GtkWidget *widget, gpointer data)
 			dr=gtk_dialog_run(GTK_DIALOG(wfile));
 			if (dr==GTK_RESPONSE_APPLY)
 			{
-				fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile)); /* overwrite confirmation? */
-				dialog=gtk_dialog_new_with_buttons(_("Configuration file generation"), GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_APPLY, NULL);
-				g_signal_connect_swapped(G_OBJECT(dialog), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(dialog));
-				gtk_widget_show(dialog);
-				content=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-				vbox=gtk_vbox_new(FALSE, 0);
-				gtk_widget_show(vbox);
-				table=gtk_table_new(2, 2, FALSE);
-				gtk_widget_show(table);
-				label=gtk_label_new(_("Measurand\nValue:"));
-				gtk_widget_show(label);
-				gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-				label=gtk_label_new(_("File:"));
-				gtk_widget_show(label);
-				gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-				adj=(GtkAdjustment *) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
-				spin=gtk_spin_button_new(adj, 0, 0);
-				gtk_widget_show(spin);
-				gtk_table_attach(GTK_TABLE(table), spin, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-				butt=gtk_button_new(); /* thread to control updating table? */
-				gtk_widget_show(butt);
-				gtk_table_attach(GTK_TABLE(table), butt, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-				gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
-				gtk_container_add(GTK_CONTAINER(content), vbox);
-				if (gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_APPLY)
+				fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
+				if (fin)/* also overwrite confirmation? */
 				{
-					dr=GTK_RESPONSE_ACCEPT;
+					dialog=gtk_dialog_new_with_buttons(_("Configuration file generation"), GTK_WINDOW(wfile), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_APPLY, NULL);
+					g_signal_connect_swapped(G_OBJECT(dialog), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(dialog));
+					gtk_widget_show(dialog);
+					content=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+					vbox=gtk_vbox_new(FALSE, 0);
+					gtk_widget_show(vbox);
+					table=gtk_table_new(2, 2, FALSE);
+					gtk_widget_show(table);
+					label=gtk_label_new(_("File:"));
+					gtk_widget_show(label);
+					gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+					label=gtk_label_new(_("Measurand\nValue:"));
+					gtk_widget_show(label);
+					gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+					butt=gtk_button_new_with_label(_("Add another file"));
+					gtk_widget_show(butt);
+					gtk_table_attach(GTK_TABLE(table), butt, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+					g_signal_connect(G_OBJECT(butt), "clicked", G_CALLBACK(upt), (gpointer) table);
+					adj=(GtkAdjustment*) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+					spin=gtk_spin_button_new(adj, 0, 0);
+					gtk_widget_show(spin);
+					gtk_table_attach(GTK_TABLE(table), spin, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+					gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
+					gtk_container_add(GTK_CONTAINER(content), vbox);
+					if (gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_APPLY)
+					{
+						g_object_get(G_OBJECT(data), "n-rows", &mx, NULL);
+						mx--;
+						chld=g_list_first(GTK_TABLE(table)->children);
+						s2=g_strdup(gtk_label_get_text(chld->data));
+						chld2=(chld->next);
+						g_list_free(chld);
+						g_snprintf(s1, 10, "%f", gtk_spin_button_get_value(GTK_SPIN_BUTTON(chld2->data)));
+						chld=(chld2->next);
+						g_list_free(chld2);
+						contents2=g_strjoin("\t", s1, s2, NULL);
+						for (j=1; j<mx; j++)
+						{
+							s2=g_strdup(gtk_label_get_text(chld->data));
+							chld2=(chld->next);
+							g_list_free(chld);
+							g_snprintf(s1, 10, "%f", gtk_spin_button_get_value(GTK_SPIN_BUTTON(chld2->data)));
+							chld=(chld2->next);
+							g_list_free(chld2);
+							str=g_strjoin("\t", s1, s2, NULL);
+							contents=g_strdup(contents2);
+							contents2=g_strjoin(DLMT, contents, str, NULL);
+							g_free(contents);
+							g_free(str);
+						}
+						g_list_free(chld);
+						g_file_set_contents(fin, contents2, -1, &Err);
+						g_free(contents2);
+						if (Err)
+						{
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+							g_error_free(Err);
+						}
+						dr=GTK_RESPONSE_ACCEPT;
+					}
 				}
+				g_free(fin);
 				gtk_widget_destroy(dialog);
 			}
 			if (dr!=GTK_RESPONSE_ACCEPT) gtk_widget_destroy(wfile);
@@ -100,6 +177,7 @@ void opd(GtkWidget *widget, gpointer data)
 				gtk_widget_destroy(wfile);
 				if (g_file_get_contents(fin, &contents2, NULL, &Err))
 				{
+					{g_array_free(vis, TRUE); g_array_free(doms, TRUE); g_array_free(msr, TRUE); g_array_free(bnx, TRUE); g_array_free(bsz, TRUE);}
 					strary2=g_strsplit_set(contents2, DLMT, 0);
 					mx=g_strv_length(strary2);
 					zp=1<<(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(zpd)));
@@ -110,11 +188,6 @@ void opd(GtkWidget *widget, gpointer data)
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(anosa))) {kib=2; lcib=-1;}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(sws))) {kib=0; lcib=-1;}
 					else {kib=0; lcib=0;}
-					g_array_free(vis, TRUE);
-					g_array_free(doms, TRUE);
-					g_array_free(msr, TRUE);
-					g_array_free(bnx, TRUE);
-					g_array_free(bsz, TRUE);
 					vis=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
 					doms=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
 					msr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
@@ -24053,7 +24126,7 @@ void opd(GtkWidget *widget, gpointer data)
 				}
 				while (j>satl)
 				{
-					list=group2->next;
+					list=(group2->next);
 					gtk_widget_destroy(group2->data);
 					group2=list;
 					j--;

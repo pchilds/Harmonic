@@ -214,7 +214,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -237,7 +237,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -260,7 +260,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -276,14 +276,13 @@ void sav(GtkWidget *widget, gpointer data)
 								str=g_strdup(contents);
 								g_free(contents);
 								contents=g_strjoin(DLMT, str, str2, NULL);
-								g_free(str);
-								g_free(str2);
+								{g_free(str); g_free(str2);}
 							}
 							g_file_set_contents(fout, contents, -1, &Err);
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -341,7 +340,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -383,7 +382,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -425,7 +424,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -467,7 +466,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -526,7 +525,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -568,7 +567,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -610,7 +609,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -652,7 +651,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -710,7 +709,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -752,7 +751,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -794,7 +793,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -836,7 +835,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -882,7 +881,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -924,7 +923,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -966,7 +965,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1008,7 +1007,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1059,7 +1058,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -1082,7 +1081,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -1105,7 +1104,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -1161,7 +1160,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -1203,7 +1202,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -1245,7 +1244,7 @@ void sav(GtkWidget *widget, gpointer data)
 							g_free(contents);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -1302,7 +1301,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1344,7 +1343,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1386,7 +1385,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1442,7 +1441,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1484,7 +1483,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1526,7 +1525,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1570,7 +1569,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1612,7 +1611,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1654,7 +1653,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1693,7 +1692,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1719,7 +1718,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1767,7 +1766,7 @@ void sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1800,7 +1799,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1825,7 +1824,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(contents);
 						if (Err)
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
 							g_error_free(Err);
@@ -1871,7 +1870,7 @@ void sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -1951,7 +1950,7 @@ void sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -2025,7 +2024,7 @@ void sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -2116,7 +2115,7 @@ void sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -2190,7 +2189,7 @@ void sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -2282,7 +2281,7 @@ void sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
@@ -2356,7 +2355,7 @@ void sav(GtkWidget *widget, gpointer data)
 					g_free(contents);
 					if (Err)
 					{
-						str=g_strdup_printf(_("Error Saving file: %s."), (gchar *) Err);
+						str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
 						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 						g_free(str);
 						g_error_free(Err);
