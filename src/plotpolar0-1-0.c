@@ -907,7 +907,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		else dz=dt/(kx*(priv->ticks.zin));
 		cairo_move_to(cr, (priv->x0)+((priv->wr)*ctn), (priv->y0)-((priv->wr)*stn));
 		cairo_line_to(cr, (priv->x0)+(((priv->wr)+((priv->s)*dr1))*ctn), (priv->y0)-(((priv->wr)+((priv->s)*dr1))*stn));
-		if (((plot->flags)&1)==0)
+		if (((plot->flagd)&1)==0)
 		{
 			for (j=1; j<(priv->ticks.zin); j++)
 			{
@@ -1306,7 +1306,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		ssx=sin(sx);
 		cairo_move_to(cr, (priv->x0), (priv->y0));
 		cairo_line_to(cr, (priv->x0)+((JT+((priv->s)*dr1))*csx), (priv->y0)-((JT+((priv->s)*dr1))*ssx));
-		if (((plot->flags)&1)==0)
+		if (((plot->flagd)&1)==0)
 		{
 			for (j=1; j<(priv->ticks.zin); j++)
 			{
@@ -1520,7 +1520,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		cairo_stroke(cr);
 		cairo_restore(cr);
 		cairo_line_to(cr, (priv->x0)+(priv->wr)+((priv->s)*dr1), (priv->y0));
-		if (((plot->flags)&1)==0)
+		if (((plot->flagd)&1)==0)
 		{
 			for (j=1; j<(priv->ticks.zin); j++)
 			{
@@ -1721,12 +1721,12 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	}
 	if (plot->rdata && plot->thdata) /* plot data */
 	{
-		if (((plot->flags)&2)!=0)
+		if (((plot->flagd)&2)!=0)
 		{
 			cairo_set_line_width(cr, (plot->linew));
-			if (((plot->flags)&4)!=0) /* lines and points */
+			if (((plot->flagd)&4)!=0) /* lines and points */
 			{
-				if (((plot->flags)&8)==0) /* straight lines */
+				if (((plot->flagd)&8)==0) /* straight lines */
 				{
 					for (k=0; k<(plot->ind->len); k++)
 					{
@@ -3343,7 +3343,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					}
 				}	
 			}
-			else if (((plot->flags)&8)==0) /* straight lines only */
+			else if (((plot->flagd)&8)==0) /* straight lines only */
 			{
 				for (k=0; k<(plot->ind->len); k++)
 				{
@@ -4950,7 +4950,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				}
 			}
 		}
-		else if (((plot->flags)&4)!=0) /* points only */
+		else if (((plot->flagd)&4)!=0) /* points only */
 		{
 			for (k=0; k<(plot->ind->len); k++)
 			{
@@ -5031,7 +5031,7 @@ gboolean plot_polar_update_scale(GtkWidget *widget, gdouble rn, gdouble rx, gdou
 	(priv->bounds.rmin)=rn;
 	(priv->bounds.rmax)=rx;
 	(priv->centre.r)=rcn;
-	if (((plot->flags)&1)==0) {(priv->bounds.thmin)=thn*MY_PI_180; (priv->centre.th)=thc*MY_PI_180; (priv->bounds.thmax)=thx*MY_PI_180;}
+	if (((plot->flagd)&1)==0) {(priv->bounds.thmin)=thn*MY_PI_180; (priv->centre.th)=thc*MY_PI_180; (priv->bounds.thmax)=thx*MY_PI_180;}
 	else {(priv->bounds.thmin)=thn; (priv->centre.th)=thc; (priv->bounds.thmax)=thx;}
 	plot_polar_redraw(widget);
 	return FALSE;
@@ -5197,7 +5197,7 @@ gboolean plot_polar_update_scale_pretty(GtkWidget *widget, gdouble xn, gdouble x
 		if (num3<1) (priv->rcs)+=1-floor(log10(num3));
 	}
 	if ((priv->rcs)>8) (priv->rcs)=8;
-	if (((plot->flags)&1)==0)
+	if (((plot->flagd)&1)==0)
 	{
 		num=(yx-yn);
 		if (num<0)
@@ -5469,7 +5469,7 @@ static gboolean plot_polar_motion_notify(GtkWidget *widget, GdkEventMotion *even
 		if ((dy>=(priv->bounds.rmin))&&(dy<=(priv->bounds.rmax)))
 		{
 			(plot->rps)=dy;
-			if (((plot->flags)&1)==0) (plot->thps)=dt*I180_MY_PI;
+			if (((plot->flagd)&1)==0) (plot->thps)=dt*I180_MY_PI;
 			else (plot->thps)=dt;
 			g_signal_emit(plot, plot_polar_signals[MOVED], 0);
 		}
@@ -5484,7 +5484,7 @@ static gboolean plot_polar_motion_notify(GtkWidget *widget, GdkEventMotion *even
 		if ((dy>=(priv->bounds.rmin))&&(dy<=(priv->bounds.rmax)))
 		{
 			(plot->rps)=dy;
-			if (((plot->flags)&1)==0) (plot->thps)=(dt*I180_MY_PI)+360;
+			if (((plot->flagd)&1)==0) (plot->thps)=(dt*I180_MY_PI)+360;
 			else (plot->thps)=dt+MY_2PI;
 			g_signal_emit(plot, plot_polar_signals[MOVED], 0);
 		}
@@ -5499,7 +5499,7 @@ static gboolean plot_polar_motion_notify(GtkWidget *widget, GdkEventMotion *even
 		if ((dy>=(priv->bounds.rmin))&&(dy<=(priv->bounds.rmax)))
 		{
 			(plot->rps)=dy;
-			if (((plot->flags)&1)==0) (plot->thps)=(dt*I180_MY_PI)-360;
+			if (((plot->flagd)&1)==0) (plot->thps)=(dt*I180_MY_PI)-360;
 			else (plot->thps)=dt-MY_2PI;
 			g_signal_emit(plot, plot_polar_signals[MOVED], 0);
 		}
@@ -5550,7 +5550,7 @@ static gboolean plot_polar_button_release(GtkWidget *widget, GdkEventButton *eve
 						xx=(priv->rescale.rmax);
 						yn=(priv->rescale.thmin);
 						yx=(priv->rescale.thmax);
-						if (((plot->flags)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
+						if (((plot->flagd)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
 						plot_polar_update_scale_pretty(widget, xn, xx, yn, yx);
 					}
 					else if ((priv->rescale.rmax)<(priv->rescale.rmin))
@@ -5559,7 +5559,7 @@ static gboolean plot_polar_button_release(GtkWidget *widget, GdkEventButton *eve
 						xx=(priv->rescale.rmin);
 						yn=(priv->rescale.thmin);
 						yx=(priv->rescale.thmax);
-						if (((plot->flags)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
+						if (((plot->flagd)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
 						plot_polar_update_scale_pretty(widget, xn, xx, yn, yx);
 					}
 				}
@@ -5576,7 +5576,7 @@ static gboolean plot_polar_button_release(GtkWidget *widget, GdkEventButton *eve
 				else if (s<0) {yn=((priv->rescale.thmax)-(priv->bounds.thmin))*s; yx=((priv->rescale.thmin)-(priv->bounds.thmax))*s;}
 				yn+=(priv->bounds.thmin);
 				yx+=(priv->bounds.thmax);
-				if (((plot->flags)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
+				if (((plot->flagd)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
 				plot_polar_update_scale_pretty(widget, xn, xx, yn, yx);
 			}
 		}
@@ -5586,7 +5586,7 @@ static gboolean plot_polar_button_release(GtkWidget *widget, GdkEventButton *eve
 			xx=((priv->rescale.rmax)*ZS)+(ZSC*(priv->bounds.rmax));
 			yn=((priv->rescale.thmax)*ZS)+(ZSC*(priv->bounds.thmin));
 			yx=((priv->rescale.thmax)*ZS)+(ZSC*(priv->bounds.thmax));
-			if (((plot->flags)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
+			if (((plot->flagd)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
 			plot_polar_update_scale_pretty(widget, xn, xx, yn, yx);
 		}
 		else
@@ -5595,7 +5595,7 @@ static gboolean plot_polar_button_release(GtkWidget *widget, GdkEventButton *eve
 			xx=((priv->bounds.rmax)*UZ)-(UZC*(priv->rescale.rmax));
 			yn=((priv->bounds.thmin)*UZ)-(UZC*(priv->rescale.thmax));
 			yx=((priv->bounds.thmax)*UZ)-(UZC*(priv->rescale.thmax));
-			if (((plot->flags)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
+			if (((plot->flagd)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
 			plot_polar_update_scale_pretty(widget, xn, xx, yn, yx);
 		}
 		(priv->flagr)=0;
@@ -5747,7 +5747,7 @@ static void plot_polar_init(PlotPolar *plot)
 	{(priv->flagr)=0; (priv->flaga)=0;}
 	{(plot->rdata)=NULL; (plot->thdata)=NULL; (plot->ind)=NULL; (plot->sizes)=NULL;}
 	{(plot->rlab)=g_strdup("Amplitude"); (plot->thlab)=g_strdup("Azimuth");}
-	{(plot->flags)=4; (plot->ptsize)=5; (plot->linew)=2;}
+	{(plot->flagd)=6; (plot->ptsize)=5; (plot->linew)=2;}
 	(plot->zmode)=6;
 	{(plot->rps)=0; (plot->thps)=0;}
 	{(plot->afont)=pango_font_description_new(); (plot->lfont)=pango_font_description_new();}

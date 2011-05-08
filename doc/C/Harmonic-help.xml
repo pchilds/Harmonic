@@ -83,7 +83,7 @@
       <para>The logarithm provides an isomorphism between scalar multiplication and linear addition: <inlineequation>log(AB)=log(A)+log(B).</inlineequation>It is thus possible to transform a (scalar) nonlinear system to the linear functional required by the Fourier transform by using the logarithmic mapping. This is what is done when selecting "1st order spectral shadowing" for Nonlinear compensation from the advanced menu. This method is, however, a scalar approximation and fails to account for effects such as multiple reflections between elements that occur when the transmission is matrix valued<footnote><para>For a study on the errors of the linear and scalar approximations in the context of optical Bragg reflectors see P. Childs, and Y.B. Liao "On the multiplexed limit capacity of spectrally overlapped continuous wave fibre Bragg grating sensor networks" in J. Opt., Vol. 12, Iss. 1, Jan. (2010) paper 015404.</para></footnote>. Also, as it introduces more computational steps it should be avoided for the simple cases where there is only a single element or situations where the spectrum is actually linear.</para>
     </sect2>
   </sect1>
-  <sect1 id="inverse"><title>The Inverse Domain</title>
+  <sect1 id="inv"><title>The Inverse Domain</title>
     <sect2><title>Selecting windowed regions for transformation</title>
       <para>Similar to the case of the base domain, regions of data can be defined with the "Inverse Spectrum Start" and "Inverse Spectrum Stop" parameters. Values should be given for each window defined by the j index. Multiple windows in the inverse spectrum can be selected with the k index.</para>
       <para> Differences for this case are mainly seen in the triangles parameters. Calculation of phase based values such as domain shifts and chirp is performed as a weighted average over these triangles, which are designed as the best fit to the peaks being analysed (in terms of centre value and width). In this way data at the edge of the triangles, where the magnitude is low (and hence noise in the phase is high), contributes less to the overall result and the reliable data in the centre contributes more.</para>
@@ -99,17 +99,20 @@
       <para>For real positive valued spectra the visibility takes values between 0 and 1 for zero and full visibility respectively. The measured value is generally lower than the actual value of the device due to factors such as detector bandwidths reducing the magnitude of higher frequency components. Other errors can be introduced, e.g. if the offset isn't correctly set a sinc+delta signal will be added to the transformed signal which will increase the area of the DC peak and reduce the visibility<footnote><para>In cases where the offset is not stable an analysis of just the area of the harmonic peak may be better. Future versions will look to include this option.</para></footnote>.</para>
     </sect2>
   </sect1>
-  <sect1 id="batch"><title>Batch Processing</title>
-    <sect2><title>The configuration file</title>
-      <para>The utility for writing the configuration files is not completely implemented in the software yet. This will be addressed soon in future releases.</para>
-      <para>Files can, however, be written manually. The format for the files is 2 columns of tab delimited data, the first being a numerical value for the variable parameter that differs from file to file, and the second being the file name.</para>
-      <tip><title>tip</title>
-        <para>Note that the format for the file name must include the full path to locate the file.</para>
-      </tip>
-    </sect2>
+  <sect1 id="batc"><title>Batch Processing</title>
     <sect2><title>Processing</title>
-      <para>To run a batch process, first run a test on one of the spectra that will be processed with the parameters that you intend to use throughout the batch process. Then, ensuring that Batch processing is checked in the Advanced menu, from the file menu select open and then select your configuration file or press new to open a window to input the values for one (yet to be done). Select whether to display on a linear or polar scale to graph the results.</para>
+      <para>To run a batch process, first run a test on one of the spectra that will be processed with the parameters that you intend to use throughout the batch process. Then, ensuring that Batch processing is checked in the Advanced menu, from the file menu select open and then select your configuration file or press new to open a window to input the values for one (see the <link linkend="batc_conf">next section</link> for instructions). Select whether to display on a linear or polar scale to graph the results.</para>
       <para>If the offset level is not consistent across the different measurement files, it is possible to automatically correct for changes in the overall amplitude by selecting "Autotrack Offset" from the Advanced menu (see what is documented earlier about <link linkend="base_autotrack">autotracking</link> for instructions on its use). Note that if "Apply correction to Window edges" is also selected, autotracking has no effect as the edge correction routine needs no offset value.</para>
+    </sect2>
+    <sect2 id="batc_conf"><title>The configuration file</title>
+      <para>After pressing "File->open" then "New" a configuration file can be created by adjusting the spin button to the value of the variable corresponding to the first file. Then press "Add another file" to select the file. Repeat this process over all required files that make up your measurement set and then press "Save".</para>
+      <warning><title>warning</title>
+        <para>It is important that the files be ordered properly for display in the plot (lower to higher values). It is also necessary to select the spin value before the filename as the value is fixed once the file is selected (fixing this problem will be addressed in future releases).</para>
+      </warning>
+      <para>Configuration files can also be written manually. The format for the files is 2 columns of tab delimited data, the first being a numerical value for the variable parameter that differs from file to file, and the second being the file name.</para>
+      <tip><title>tip</title>
+        <para>Note that when writing your own configuration file the format for the file name must include the full path to locate the file.</para>
+      </tip>
     </sect2>
   </sect1>
   <sect1 id="save"><title>Exporting Results</title>
@@ -122,7 +125,7 @@
       <para>To convert to another format, such as tiff, use an image editing program such as GIMP to first scale the image to the desired size and then save in the new format.</para>
     </sect2>
   </sect1>
-  <sect1 id="examples"><title>Examples</title>
+  <sect1 id="xmpl"><title>Examples</title>
     <sect2><title>Processing a measurement of a single Interferometric element</title>
       <para>A single Fabry Perot element has a sinusoidal spectrum over wavenumber <inlineequation>k=lambda/2pi</inlineequation>). If measurements are made over wavelength then select "Advanced->Invert Domain". Otherwise if measurements are actually made over wavenumber then leave it unchecked. Select "Advanced->Nonlinear Compensation:->None" and leave all remaining items in the Advanced menu deslected.</para>
       <para>Select "File->Open" and locate the file of your measurement of the spectrum. Press Open and ensure that the graph that appears is what is expected.</para>

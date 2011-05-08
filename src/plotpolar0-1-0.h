@@ -51,7 +51,7 @@ struct _PlotPolar
 	gdouble rps, thps; /* radial and azimuthal position of mouse */
 	guint ptsize, linew; /* point radii and line width */
 	gint zmode; /* zoom mode flags xxxx0b/xxxx1b = zoom in/out,1001xb = zoom radial only, 1010xb = zoom azimuthal only, 1011xb = zoom both, 0xxxxb = cartesian shift mode, x1xxxb = single click zoom */
-	gint flags; /* flags: 01xb = lines only, 10xb = points only, 11x = both, xx0b/xx1b = Degrees/Radians */
+	gint flagd; /* data displayflags: x01xb = lines only, x10xb = points only, x11x = both, xxx0b/xxx1b = Degrees/Radians 0xxxb/1xxxb = Connect the dots/Polar interpolation */
 };
 
 struct _PlotPolarClass

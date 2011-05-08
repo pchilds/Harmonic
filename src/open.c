@@ -24,11 +24,12 @@
 
 #include "open.h"
 
-GtkWidget *dialog;
+GtkWidget *dialog, *spin;
+GArray *fls, *vls;
 
-void upt(GtkWidget *widget, gpointer data)
+void upt(GtkWidget *widget, gpointer dta)
 {
-	GtkWidget *wwfile, *spin, *lbl;
+	GtkWidget *wwfile, *lbl;
 	GtkAdjustment *adj;
 	GList *chld;
 	guint rw;
@@ -39,23 +40,24 @@ void upt(GtkWidget *widget, gpointer data)
 	g_signal_connect(G_OBJECT(wwfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wwfile));
 	if (gtk_dialog_run(GTK_DIALOG(wwfile))==GTK_RESPONSE_ACCEPT)
 	{
-		chld=g_list_last(GTK_TABLE(data)->children);
-		val=gtk_spin_button_get_value(GTK_SPIN_BUTTON(chld->data));
-		g_object_get(G_OBJECT(data), "n-rows", &rw, NULL);
-		gtk_table_resize(GTK_TABLE(data), ++rw, 2);
+		g_object_get(G_OBJECT(dta), "n-rows", &rw, NULL);
+		gtk_table_resize(GTK_TABLE(dta), ++rw, 2);
 		g_object_ref(G_OBJECT(widget));
-		gtk_container_remove(GTK_CONTAINER(data), widget);
+		gtk_container_remove(GTK_CONTAINER(dta), widget);
 		fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wwfile));
 		lbl=gtk_label_new(fin);
+		g_array_append_val(fls, fin);
 		g_free(fin);
 		gtk_widget_show(lbl);
-		gtk_table_attach(GTK_TABLE(data), lbl, 0, 1, rw-2, rw-1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		gtk_table_attach(GTK_TABLE(data), widget, 0, 1, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_table_attach(GTK_TABLE(dta), lbl, 0, 1, rw-2, rw-1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_table_attach(GTK_TABLE(dta), widget, 0, 1, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		g_object_unref(G_OBJECT(widget));
+		val=gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin));
+		g_array_append_val(vls, val);
 		adj=(GtkAdjustment*) gtk_adjustment_new(val, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 		spin=gtk_spin_button_new(adj, 0, 0);
 		gtk_widget_show(spin);
-		gtk_table_attach(GTK_TABLE(data), spin, 1, 2, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_table_attach(GTK_TABLE(dta), spin, 1, 2, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	}
 	gtk_widget_destroy(wwfile);
 }
@@ -64,7 +66,7 @@ void opd(GtkWidget *widget, gpointer data)
 {
 	PlotLinear *plt;
 	PlotPolar *plt2;
-	GtkWidget *wfile, *content, *vbox, *table, *butt, *spin, *label, *cont, *trace;
+	GtkWidget *wfile, *content, *vbox, *table, *butt, *label, *cont, *trace;
 	GtkAdjustment *adj;
 	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, ofe, clc, dx2, xx, ce;
 	guint j, k, l, m, sal, st, sp, kib;
@@ -74,7 +76,7 @@ void opd(GtkWidget *widget, gpointer data)
 	gchar **strary, **strary2, **strat, **strat2;
 	gchar s1[10];
 	GSList *list;
-	GList *chld, *chld2;
+	GList *chld;
 	GError *Err=NULL;
 	double *y, *star;
 	fftw_plan p;
@@ -107,6 +109,8 @@ void opd(GtkWidget *widget, gpointer data)
 					dialog=gtk_dialog_new_with_buttons(_("Configuration file generation"), GTK_WINDOW(wfile), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_APPLY, NULL);
 					g_signal_connect_swapped(G_OBJECT(dialog), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(dialog));
 					gtk_widget_show(dialog);
+					fls=g_array_new(FALSE, FALSE, sizeof(gchar*));
+					vls=g_array_new(FALSE, FALSE, sizeof(gdouble));
 					content=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 					vbox=gtk_vbox_new(FALSE, 0);
 					gtk_widget_show(vbox);
@@ -130,31 +134,25 @@ void opd(GtkWidget *widget, gpointer data)
 					gtk_container_add(GTK_CONTAINER(content), vbox);
 					if (gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_APPLY)
 					{
-						g_object_get(G_OBJECT(data), "n-rows", &mx, NULL);
-						mx--;
-						chld=g_list_first(GTK_TABLE(table)->children);
-						s2=g_strdup(gtk_label_get_text(chld->data));
-						chld2=(chld->next);
-						g_list_free(chld);
-						g_snprintf(s1, 10, "%f", gtk_spin_button_get_value(GTK_SPIN_BUTTON(chld2->data)));
-						chld=(chld2->next);
-						g_list_free(chld2);
+						mx=(fls->len);
+						g_snprintf(s1, 10, "%f", g_array_index(vls, gdouble, 0));
+						s2=g_strdup(g_array_index(fls, gchar*, 0));
 						contents2=g_strjoin("\t", s1, s2, NULL);
-						for (j=1; j<mx; j++)
+						g_free(s2);
+						j=1;
+						while (j<mx)
 						{
-							s2=g_strdup(gtk_label_get_text(chld->data));
-							chld2=(chld->next);
-							g_list_free(chld);
-							g_snprintf(s1, 10, "%f", gtk_spin_button_get_value(GTK_SPIN_BUTTON(chld2->data)));
-							chld=(chld2->next);
-							g_list_free(chld2);
+							g_snprintf(s1, 10, "%f", g_array_index(vls, gdouble, j));
+							s2=g_strdup(g_array_index(fls, gchar*, j));
 							str=g_strjoin("\t", s1, s2, NULL);
+							g_free(s2);
 							contents=g_strdup(contents2);
+							g_free(contents2);
 							contents2=g_strjoin(DLMT, contents, str, NULL);
 							g_free(contents);
 							g_free(str);
+							j++;
 						}
-						g_list_free(chld);
 						g_file_set_contents(fin, contents2, -1, &Err);
 						g_free(contents2);
 						if (Err)
@@ -166,6 +164,8 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						dr=GTK_RESPONSE_ACCEPT;
 					}
+					g_array_free(fls, TRUE);
+					g_array_free(vls, TRUE);
 				}
 				g_free(fin);
 				gtk_widget_destroy(dialog);
@@ -23951,7 +23951,7 @@ void opd(GtkWidget *widget, gpointer data)
 							}
 						}
 					}
-					dialog=gtk_dialog_new_with_buttons(_("Measurand Variable Type"), GTK_WINDOW(window), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Linear"), 1, _("Polar"), 2, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
+					dialog=gtk_dialog_new_with_buttons(_("Measurand Variable Type"), GTK_WINDOW(window), GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, _("Linear"), 1, _("Polar\n(Degrees)"), 2, _("Polar\n(Radians)"), 3, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 					cont=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 					label=gtk_label_new(_("Select Measurand Type:"));
 					gtk_container_add(GTK_CONTAINER(cont), label);
@@ -23985,6 +23985,9 @@ void opd(GtkWidget *widget, gpointer data)
 							flags^=32;
 						}
 						plt=PLOT_LINEAR(plot3);
+						if (mx<8) {(plt->flagd)=3; (plt->ptsize)=4;}
+						else if (mx<20){(plt->flagd)=3; (plt->ptsize)=3;}
+						else if (mx<50){(plt->flagd)=3; (plt->ptsize)=2;}
 						(plt->xdata)=bxr;
 						(plt->ydata)=byr;
 						(plt->sizes)=bsz;
@@ -24008,6 +24011,37 @@ void opd(GtkWidget *widget, gpointer data)
 							flags|=47;
 						}
 						plt2=PLOT_POLAR(plot3);
+						if (mx<8) (plt2->ptsize)=4;
+						else if (mx<20)(plt2->ptsize)=3;
+						else if (mx<50)(plt2->ptsize)=2;
+						else (plt2->flagd)=2;
+						(plt2->thdata)=bxr;
+						(plt2->rdata)=byr;
+						(plt2->sizes)=bsz;
+						(plt2->ind)=bnx;
+						plot_polar_update_scale_pretty(plot3, mny, mxy, xi, xf);
+						gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
+						gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 2);
+						break;
+						case 3:
+						if (((flags&8)==0)||((flags&32)==0))
+						{
+							gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
+							table=gtk_table_new(1, 1, FALSE);
+							gtk_widget_show(table);
+							plot3=plot_polar_new();
+							g_signal_connect(plot3, "moved", G_CALLBACK(pltmvp), NULL);
+							gtk_widget_show(plot3);
+							gtk_table_attach(GTK_TABLE(table), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+							label=gtk_label_new(_("Analysis Results"));
+							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
+							flags|=47;
+						}
+						plt2=PLOT_POLAR(plot3);
+						if (mx<8) {(plt2->flagd)=7; (plt2->ptsize)=4;}
+						else if (mx<20){(plt2->flagd)=7; (plt2->ptsize)=3;}
+						else if (mx<50){(plt2->flagd)=7; (plt2->ptsize)=2;}
+						else (plt2->flagd)=3;
 						(plt2->thdata)=bxr;
 						(plt2->rdata)=byr;
 						(plt2->sizes)=bsz;
@@ -24019,6 +24053,7 @@ void opd(GtkWidget *widget, gpointer data)
 						default:
 						break;
 					}
+					gtk_widget_destroy(dialog);
 				}
 				else
 				{

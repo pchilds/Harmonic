@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-05-06 17:12+0300\n"
+"POT-Creation-Date: 2011-05-08 13:48+0300\n"
 "PO-Revision-Date: 2011-04-04 21:10+0300\n"
 "Last-Translator: Matthieu Bellec <>\n"
 "Language-Team: French <>\n"
@@ -194,20 +194,20 @@ msgstr "Spectre inverse"
 msgid "Inverse Domain"
 msgstr "Domaine inverse"
 
-#: src/main.c:399 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
-#: src/data.c:1120 src/data.c:1261 src/disp.c:98 src/disp.c:664
-#: src/disp.c:1183 src/open.c:23981
+#: src/main.c:399 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
+#: src/data.c:1119 src/data.c:1260 src/disp.c:98 src/disp.c:664
+#: src/disp.c:1183 src/open.c:24089
 msgid "Visibility"
 msgstr "Visibilité"
 
-#: src/main.c:405 src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:1038
-#: src/data.c:1120 src/data.c:1261 src/disp.c:99 src/disp.c:665
-#: src/disp.c:1184 src/open.c:23987
+#: src/main.c:405 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
+#: src/data.c:1119 src/data.c:1260 src/disp.c:99 src/disp.c:665
+#: src/disp.c:1184 src/open.c:24095
 msgid "Domain Shift"
 msgstr "Décalage du domaine"
 
-#: src/main.c:411 src/open.c:23897 src/open.c:23910 src/open.c:23933
-#: src/open.c:23993
+#: src/main.c:411 src/open.c:23970 src/open.c:23983 src/open.c:24009
+#: src/open.c:24036 src/open.c:24101
 msgid "Analysis Results"
 msgstr "Résultats de l'analyse"
 
@@ -243,181 +243,182 @@ msgstr "Choisissez le fichier image"
 msgid "No available image."
 msgstr "Aucune image disponible."
 
-#: src/data.c:182 src/data.c:1028 src/data.c:1674 src/data.c:1782
-#: src/data.c:1887 src/data.c:2052 src/data.c:2218 src/open.c:23964
+#: src/data.c:182 src/data.c:1027 src/data.c:1673 src/data.c:1781
+#: src/data.c:1886 src/data.c:2051 src/data.c:2217 src/open.c:39
+#: src/open.c:24072
 msgid "Select Data File"
 msgstr "Choisissez le fichier de données"
 
-#: src/data.c:192 src/data.c:298 src/data.c:483 src/data.c:667 src/data.c:1038
-#: src/data.c:1120 src/data.c:1261 src/data.c:1401 src/data.c:1893
-#: src/data.c:2058 src/data.c:2224
+#: src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:666 src/data.c:1037
+#: src/data.c:1119 src/data.c:1260 src/data.c:1400 src/data.c:1892
+#: src/data.c:2057 src/data.c:2223
 msgid "Parameter selection"
 msgstr "Choix du paramètre"
 
-#: src/data.c:192 src/data.c:298 src/data.c:483 src/proc.c:176 src/proc.c:430
+#: src/data.c:192 src/data.c:297 src/data.c:482 src/proc.c:176 src/proc.c:430
 #: src/disp.c:101 src/disp.c:667 src/disp.c:1186
 msgid "Chirp"
 msgstr "Chirp"
 
-#: src/data.c:192 src/data.c:298 src/data.c:483
+#: src/data.c:192 src/data.c:297 src/data.c:482
 msgid "All"
 msgstr ""
 
-#: src/data.c:194 src/data.c:300 src/data.c:485 src/data.c:669 src/data.c:1040
-#: src/data.c:1122 src/data.c:1263 src/data.c:1403 src/data.c:1895
-#: src/data.c:2060 src/data.c:2226
+#: src/data.c:194 src/data.c:299 src/data.c:484 src/data.c:668 src/data.c:1039
+#: src/data.c:1121 src/data.c:1262 src/data.c:1402 src/data.c:1894
+#: src/data.c:2059 src/data.c:2225
 msgid "Select Parameter to save:"
 msgstr "Choisissez le paramètre a sauver:"
 
-#: src/data.c:199 src/data.c:305 src/data.c:490 src/data.c:674 src/data.c:846
+#: src/data.c:199 src/data.c:304 src/data.c:489 src/data.c:673 src/data.c:845
 msgid "MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr ""
 
-#: src/data.c:217 src/data.c:240 src/data.c:263 src/data.c:286 src/data.c:344
-#: src/data.c:386 src/data.c:428 src/data.c:470 src/data.c:529 src/data.c:571
-#: src/data.c:613 src/data.c:655 src/data.c:713 src/data.c:755 src/data.c:797
-#: src/data.c:839 src/data.c:885 src/data.c:927 src/data.c:969 src/data.c:1011
-#: src/data.c:1062 src/data.c:1085 src/data.c:1108 src/data.c:1164
-#: src/data.c:1206 src/data.c:1248 src/data.c:1305 src/data.c:1347
-#: src/data.c:1389 src/data.c:1445 src/data.c:1487 src/data.c:1529
-#: src/data.c:1573 src/data.c:1615 src/data.c:1657 src/data.c:1696
-#: src/data.c:1722 src/data.c:1770 src/data.c:1803 src/data.c:1828
-#: src/data.c:1874 src/data.c:1954 src/data.c:2028 src/data.c:2119
-#: src/data.c:2193 src/data.c:2285 src/data.c:2359
+#: src/data.c:217 src/data.c:240 src/data.c:263 src/data.c:285 src/data.c:343
+#: src/data.c:385 src/data.c:427 src/data.c:469 src/data.c:528 src/data.c:570
+#: src/data.c:612 src/data.c:654 src/data.c:712 src/data.c:754 src/data.c:796
+#: src/data.c:838 src/data.c:884 src/data.c:926 src/data.c:968 src/data.c:1010
+#: src/data.c:1061 src/data.c:1084 src/data.c:1107 src/data.c:1163
+#: src/data.c:1205 src/data.c:1247 src/data.c:1304 src/data.c:1346
+#: src/data.c:1388 src/data.c:1444 src/data.c:1486 src/data.c:1528
+#: src/data.c:1572 src/data.c:1614 src/data.c:1656 src/data.c:1695
+#: src/data.c:1721 src/data.c:1769 src/data.c:1802 src/data.c:1827
+#: src/data.c:1873 src/data.c:1953 src/data.c:2027 src/data.c:2118
+#: src/data.c:2192 src/data.c:2284 src/data.c:2358 src/open.c:160
 #, c-format
 msgid "Error Saving file: %s."
 msgstr "Fichier d'erreur sauvée: %s."
 
-#: src/data.c:224 src/data.c:351 src/data.c:536 src/data.c:720 src/data.c:892
+#: src/data.c:224 src/data.c:350 src/data.c:535 src/data.c:719 src/data.c:891
 msgid "MEAS     \tCHIRP    "
 msgstr ""
 
-#: src/data.c:247 src/data.c:393 src/data.c:578 src/data.c:762 src/data.c:934
-#: src/data.c:1069 src/data.c:1171 src/data.c:1312 src/data.c:1452
-#: src/data.c:1580
+#: src/data.c:247 src/data.c:392 src/data.c:577 src/data.c:761 src/data.c:933
+#: src/data.c:1068 src/data.c:1170 src/data.c:1311 src/data.c:1451
+#: src/data.c:1579
 msgid "MEAS     \tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:270 src/data.c:435 src/data.c:620 src/data.c:804 src/data.c:976
-#: src/data.c:1092 src/data.c:1213 src/data.c:1354 src/data.c:1494
-#: src/data.c:1622
+#: src/data.c:270 src/data.c:434 src/data.c:619 src/data.c:803 src/data.c:975
+#: src/data.c:1091 src/data.c:1212 src/data.c:1353 src/data.c:1493
+#: src/data.c:1621
 msgid "MEAS     \tVISIBILTY"
 msgstr ""
 
-#: src/data.c:667 src/data.c:1401
+#: src/data.c:666 src/data.c:1400
 #, fuzzy
 msgid ""
 "Visibility\n"
 "over J"
 msgstr "Visibilité"
 
-#: src/data.c:667 src/data.c:1401
+#: src/data.c:666 src/data.c:1400
 #, fuzzy
 msgid ""
 "Domain Shift\n"
 "over J"
 msgstr "Décalage du domaine"
 
-#: src/data.c:667
+#: src/data.c:666
 msgid ""
 "Chirp\n"
 "over J"
 msgstr ""
 
-#: src/data.c:667
+#: src/data.c:666
 msgid ""
 "All\n"
 "over J"
 msgstr ""
 
-#: src/data.c:667 src/data.c:1401
+#: src/data.c:666 src/data.c:1400
 #, fuzzy
 msgid ""
 "Visibility\n"
 "over K"
 msgstr "Visibilité"
 
-#: src/data.c:667 src/data.c:1401
+#: src/data.c:666 src/data.c:1400
 #, fuzzy
 msgid ""
 "Domain Shift\n"
 "over K"
 msgstr "Décalage du domaine"
 
-#: src/data.c:667
+#: src/data.c:666
 msgid ""
 "Chirp\n"
 "over K"
 msgstr ""
 
-#: src/data.c:667
+#: src/data.c:666
 msgid ""
 "All\n"
 "over K"
 msgstr ""
 
-#: src/data.c:1038 src/data.c:1120 src/data.c:1261
+#: src/data.c:1037 src/data.c:1119 src/data.c:1260
 msgid "Both"
 msgstr ""
 
-#: src/data.c:1045 src/data.c:1127 src/data.c:1268 src/data.c:1408
-#: src/data.c:1536
+#: src/data.c:1044 src/data.c:1126 src/data.c:1267 src/data.c:1407
+#: src/data.c:1535
 msgid "MEAS     \tVISIBILTY\tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:1401
+#: src/data.c:1400
 msgid ""
 "Both\n"
 "over J"
 msgstr ""
 
-#: src/data.c:1401
+#: src/data.c:1400
 msgid ""
 "Both\n"
 "over K"
 msgstr ""
 
-#: src/data.c:1684
+#: src/data.c:1683
 msgid "VISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr ""
 
-#: src/data.c:1704
+#: src/data.c:1703
 msgid "K        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr ""
 
-#: src/data.c:1731
+#: src/data.c:1730
 msgid "J        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr ""
 
-#: src/data.c:1792
+#: src/data.c:1791
 msgid "VISIBILTY\tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:1811
+#: src/data.c:1810
 msgid "K        \tVISIBILTY\tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:1837
+#: src/data.c:1836
 msgid "J        \tVISIBILTY\tDOMN_SHFT"
 msgstr ""
 
-#: src/data.c:1893 src/data.c:2058 src/data.c:2224
+#: src/data.c:1892 src/data.c:2057 src/data.c:2223
 msgid "Real/Imaginary"
 msgstr ""
 
-#: src/data.c:1893 src/data.c:2058 src/data.c:2224
+#: src/data.c:1892 src/data.c:2057 src/data.c:2223
 msgid "Magnitude/Phase"
 msgstr ""
 
-#: src/data.c:1900 src/data.c:2065 src/data.c:2231
+#: src/data.c:1899 src/data.c:2064 src/data.c:2230
 msgid "INVERSE_D\tREAL_VAL \tIMAG_VAL "
 msgstr "D_INVERSE\tVAL_REELL\tVAL_IMAG "
 
-#: src/data.c:1962 src/data.c:2127 src/data.c:2293
+#: src/data.c:1961 src/data.c:2126 src/data.c:2292
 msgid "INVERSE_D\tMAGNITUDE\tPHASE    "
 msgstr "D_INVERSE\tGRANDEUR \tPHASE    "
 
-#: src/data.c:2044 src/data.c:2209 src/data.c:2374
+#: src/data.c:2043 src/data.c:2208 src/data.c:2373
 msgid "No available processed data."
 msgstr "Aucunes données traitées disponibles."
 
@@ -454,8 +455,8 @@ msgstr ""
 "Une coupure s'est produite dans le canal %d. Augmentez le zero padding."
 
 #: src/proc.c:2354 src/proc.c:2392 src/proc.c:2541 src/proc.c:2578
-#: src/open.c:18592 src/open.c:18789 src/open.c:19732 src/open.c:19927
-#: src/open.c:22243 src/open.c:22396 src/open.c:23121 src/open.c:23274
+#: src/open.c:18665 src/open.c:18862 src/open.c:19805 src/open.c:20000
+#: src/open.c:22316 src/open.c:22469 src/open.c:23194 src/open.c:23347
 msgid "Offset must be nonzero for linear measurements."
 msgstr "Décalage doit être égale à zéro pour des mesures linéaires."
 
@@ -514,11 +515,11 @@ msgstr "Texte de l'axe Y:"
 msgid "Multiple plots for Inverse Domain"
 msgstr "Traces multiples dans le domaine inverse"
 
-#: src/open.c:49
+#: src/open.c:89
 msgid "Perform an initial test of the parameters first."
 msgstr "Réalisez un premier essai des paramètres d'abord."
 
-#: src/open.c:55
+#: src/open.c:95
 msgid ""
 "Parameters have changed since the last test. Retest with the current values "
 "first."
@@ -526,15 +527,19 @@ msgstr ""
 "Les paramètres ont changé depuis le dernier test. Refaites le test avec les "
 "valeurs actuelles en premier."
 
-#: src/open.c:61
+#: src/open.c:101
 msgid "Select Config File"
 msgstr "Choisissez le fichier de configuration"
 
-#: src/open.c:67
+#: src/open.c:109
 msgid "Configuration file generation"
 msgstr "la génération de fichier de configuration"
 
-#: src/open.c:75
+#: src/open.c:119
+msgid "File:"
+msgstr "Fichier"
+
+#: src/open.c:122
 msgid ""
 "Measurand\n"
 "Value:"
@@ -542,72 +547,83 @@ msgstr ""
 "Valeur\n"
 "Measurand:"
 
-#: src/open.c:78
-msgid "File:"
-msgstr "Fichier"
+#: src/open.c:125
+msgid "Add another file"
+msgstr ""
 
-#: src/open.c:301 src/open.c:472 src/open.c:645 src/open.c:817 src/open.c:989
-#: src/open.c:1161 src/open.c:1337 src/open.c:1508 src/open.c:1681
-#: src/open.c:1853 src/open.c:2025 src/open.c:2197 src/open.c:2418
-#: src/open.c:2632 src/open.c:2816 src/open.c:2999 src/open.c:3216
-#: src/open.c:3404 src/open.c:3619 src/open.c:3829 src/open.c:4013
-#: src/open.c:4196 src/open.c:4411 src/open.c:4594 src/open.c:4731
-#: src/open.c:4858 src/open.c:4987 src/open.c:5115 src/open.c:5243
-#: src/open.c:5371 src/open.c:5503 src/open.c:5630 src/open.c:5759
-#: src/open.c:5887 src/open.c:6015 src/open.c:6143 src/open.c:6321
-#: src/open.c:6491 src/open.c:6631 src/open.c:6770 src/open.c:6943
-#: src/open.c:7087 src/open.c:7259 src/open.c:7425 src/open.c:7565
-#: src/open.c:7704 src/open.c:7876 src/open.c:8016 src/open.c:8207
-#: src/open.c:8381 src/open.c:8556 src/open.c:8730 src/open.c:8905
-#: src/open.c:9079 src/open.c:9258 src/open.c:9432 src/open.c:9607
-#: src/open.c:9781 src/open.c:9956 src/open.c:10130 src/open.c:10331
-#: src/open.c:10525 src/open.c:10711 src/open.c:10896 src/open.c:11088
-#: src/open.c:11278 src/open.c:11473 src/open.c:11663 src/open.c:11849
-#: src/open.c:12034 src/open.c:12224 src/open.c:12409 src/open.c:12549
-#: src/open.c:12679 src/open.c:12810 src/open.c:12940 src/open.c:13071
-#: src/open.c:13201 src/open.c:13336 src/open.c:13466 src/open.c:13597
-#: src/open.c:13727 src/open.c:13858 src/open.c:13988 src/open.c:14146
-#: src/open.c:14296 src/open.c:14438 src/open.c:14579 src/open.c:14727
-#: src/open.c:14873 src/open.c:15025 src/open.c:15171 src/open.c:15313
-#: src/open.c:15454 src/open.c:15601 src/open.c:15743 src/open.c:15932
-#: src/open.c:16105 src/open.c:16277 src/open.c:16448 src/open.c:16620
-#: src/open.c:16791 src/open.c:16967 src/open.c:17138 src/open.c:17310
-#: src/open.c:17481 src/open.c:17653 src/open.c:17824 src/open.c:18022
-#: src/open.c:18213 src/open.c:18396 src/open.c:18578 src/open.c:18775
-#: src/open.c:18971 src/open.c:19166 src/open.c:19353 src/open.c:19536
-#: src/open.c:19718 src/open.c:19913 src/open.c:20104 src/open.c:20243
-#: src/open.c:20370 src/open.c:20498 src/open.c:20625 src/open.c:20753
-#: src/open.c:20880 src/open.c:21012 src/open.c:21139 src/open.c:21267
-#: src/open.c:21394 src/open.c:21522 src/open.c:21649 src/open.c:21805
-#: src/open.c:21952 src/open.c:22091 src/open.c:22229 src/open.c:22382
-#: src/open.c:22534 src/open.c:22685 src/open.c:22828 src/open.c:22967
-#: src/open.c:23105 src/open.c:23258 src/open.c:23407 src/open.c:23952
-#: src/open.c:24084
+#: src/open.c:374 src/open.c:545 src/open.c:718 src/open.c:890 src/open.c:1062
+#: src/open.c:1234 src/open.c:1410 src/open.c:1581 src/open.c:1754
+#: src/open.c:1926 src/open.c:2098 src/open.c:2270 src/open.c:2491
+#: src/open.c:2705 src/open.c:2889 src/open.c:3072 src/open.c:3289
+#: src/open.c:3477 src/open.c:3692 src/open.c:3902 src/open.c:4086
+#: src/open.c:4269 src/open.c:4484 src/open.c:4667 src/open.c:4804
+#: src/open.c:4931 src/open.c:5060 src/open.c:5188 src/open.c:5316
+#: src/open.c:5444 src/open.c:5576 src/open.c:5703 src/open.c:5832
+#: src/open.c:5960 src/open.c:6088 src/open.c:6216 src/open.c:6394
+#: src/open.c:6564 src/open.c:6704 src/open.c:6843 src/open.c:7016
+#: src/open.c:7160 src/open.c:7332 src/open.c:7498 src/open.c:7638
+#: src/open.c:7777 src/open.c:7949 src/open.c:8089 src/open.c:8280
+#: src/open.c:8454 src/open.c:8629 src/open.c:8803 src/open.c:8978
+#: src/open.c:9152 src/open.c:9331 src/open.c:9505 src/open.c:9680
+#: src/open.c:9854 src/open.c:10029 src/open.c:10203 src/open.c:10404
+#: src/open.c:10598 src/open.c:10784 src/open.c:10969 src/open.c:11161
+#: src/open.c:11351 src/open.c:11546 src/open.c:11736 src/open.c:11922
+#: src/open.c:12107 src/open.c:12297 src/open.c:12482 src/open.c:12622
+#: src/open.c:12752 src/open.c:12883 src/open.c:13013 src/open.c:13144
+#: src/open.c:13274 src/open.c:13409 src/open.c:13539 src/open.c:13670
+#: src/open.c:13800 src/open.c:13931 src/open.c:14061 src/open.c:14219
+#: src/open.c:14369 src/open.c:14511 src/open.c:14652 src/open.c:14800
+#: src/open.c:14946 src/open.c:15098 src/open.c:15244 src/open.c:15386
+#: src/open.c:15527 src/open.c:15674 src/open.c:15816 src/open.c:16005
+#: src/open.c:16178 src/open.c:16350 src/open.c:16521 src/open.c:16693
+#: src/open.c:16864 src/open.c:17040 src/open.c:17211 src/open.c:17383
+#: src/open.c:17554 src/open.c:17726 src/open.c:17897 src/open.c:18095
+#: src/open.c:18286 src/open.c:18469 src/open.c:18651 src/open.c:18848
+#: src/open.c:19044 src/open.c:19239 src/open.c:19426 src/open.c:19609
+#: src/open.c:19791 src/open.c:19986 src/open.c:20177 src/open.c:20316
+#: src/open.c:20443 src/open.c:20571 src/open.c:20698 src/open.c:20826
+#: src/open.c:20953 src/open.c:21085 src/open.c:21212 src/open.c:21340
+#: src/open.c:21467 src/open.c:21595 src/open.c:21722 src/open.c:21878
+#: src/open.c:22025 src/open.c:22164 src/open.c:22302 src/open.c:22455
+#: src/open.c:22607 src/open.c:22758 src/open.c:22901 src/open.c:23040
+#: src/open.c:23178 src/open.c:23331 src/open.c:23480 src/open.c:24060
+#: src/open.c:24192
 #, c-format
 msgid "Loading failed for file: %s, Error: %s."
 msgstr "Échec du chargement du fichier: %s, Erreur: %s."
 
-#: src/open.c:23881
+#: src/open.c:23954
 msgid "Measurand Variable Type"
 msgstr "Paramètre variable"
 
-#: src/open.c:23881
+#: src/open.c:23954
 msgid "Linear"
 msgstr "Linear"
 
-#: src/open.c:23881
-msgid "Polar"
-msgstr "Polar"
+#: src/open.c:23954
+msgid ""
+"Polar\n"
+"(Degrees)"
+msgstr ""
 
-#: src/open.c:23883
+#: src/open.c:23954
+msgid ""
+"Polar\n"
+"(Radians)"
+msgstr ""
+
+#: src/open.c:23956
 #, fuzzy
 msgid "Select Measurand Type:"
 msgstr "Paramètre variable"
 
-#: src/open.c:24065
+#: src/open.c:24173
 #, c-format
 msgid "File: %s successfully loaded."
 msgstr "Fichier: %s charge avec succes."
+
+#~ msgid "Polar"
+#~ msgstr "Polar"
 
 #~ msgid "Text size:"
 #~ msgstr "Taille du texte:"
