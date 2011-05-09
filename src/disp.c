@@ -97,8 +97,12 @@ void dpr(GtkWidget *widget, gpointer data)
 		ck4=gtk_combo_box_new_text();
 		gtk_combo_box_append_text(GTK_COMBO_BOX(ck4), _("Visibility"));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(ck4), _("Domain Shift"));
-		gtk_combo_box_set_active(GTK_COMBO_BOX(ck4), 1);
-		if ((flags&16)!=0) gtk_combo_box_append_text(GTK_COMBO_BOX(ck4), _("Chirp"));
+		if ((flags&16)!=0)
+		{
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck4), _("Chirp"));
+			gtk_combo_box_set_active(GTK_COMBO_BOX(ck4), (flagd&24)/8);
+		}
+		else gtk_combo_box_set_active(GTK_COMBO_BOX(ck4), (flagd&8)/8);
 		gtk_widget_show(ck4);
 		gtk_box_pack_start(GTK_BOX(vbox), ck4, FALSE, FALSE, 2);
 		ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
@@ -141,6 +145,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					{
 						if (bl2)
 						{
+							bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf*jdimxf);
+							byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf*jdimxf);
+							bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf*jdimxf);
+							bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf*jdimxf);
 							iv=g_array_index(msr, gdouble, 0);
 							g_array_append_val(bxr, iv);
 							mny=g_array_index(vis, gdouble, 0);
@@ -196,6 +204,10 @@ void dpr(GtkWidget *widget, gpointer data)
 						}
 						else
 						{
+							bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimxf);
+							byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimxf);
+							bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+							bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
 							iv=g_array_index(msr, gdouble, 0);
 							g_array_append_val(bxr, iv);
 							mny=g_array_index(vis, gdouble, kdim);
@@ -234,6 +246,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					}
 					else if (bl2)
 					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf);
+						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
+						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
 						iv=g_array_index(msr, gdouble, 0);
 						g_array_append_val(bxr, iv);
 						mny=g_array_index(vis, gdouble, (jdim*kdimxf));
@@ -271,6 +287,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					}
 					else
 					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+						bsz=g_array_new(FALSE, FALSE, sizeof(gint));
+						bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 						iv=g_array_index(msr, gdouble, 0);
 						g_array_append_val(bxr, iv);
 						mny=g_array_index(vis, gdouble, kdim+(jdim*kdimxf));
@@ -296,6 +316,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					{
 						if (bl2)
 						{
+							bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf*jdimxf);
+							byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf*jdimxf);
+							bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf*jdimxf);
+							bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf*jdimxf);
 							iv=g_array_index(msr, gdouble, 0);
 							g_array_append_val(bxr, iv);
 							mny=g_array_index(doms, gdouble, 0);
@@ -351,6 +375,10 @@ void dpr(GtkWidget *widget, gpointer data)
 						}
 						else
 						{
+							bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimxf);
+							byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimxf);
+							bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+							bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
 							iv=g_array_index(msr, gdouble, 0);
 							g_array_append_val(bxr, iv);
 							mny=g_array_index(doms, gdouble, kdim);
@@ -389,6 +417,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					}
 					else if (bl2)
 					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf);
+						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
+						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
 						iv=g_array_index(msr, gdouble, 0);
 						g_array_append_val(bxr, iv);
 						mny=g_array_index(doms, gdouble, (jdim*kdimxf));
@@ -426,6 +458,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					}
 					else
 					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+						bsz=g_array_new(FALSE, FALSE, sizeof(gint));
+						bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 						iv=g_array_index(msr, gdouble, 0);
 						g_array_append_val(bxr, iv);
 						mny=g_array_index(doms, gdouble, kdim+(jdim*kdimxf));
@@ -450,6 +486,10 @@ void dpr(GtkWidget *widget, gpointer data)
 				{
 					if (bl2)
 					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf*jdimxf);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf*jdimxf);
+						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf*jdimxf);
+						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf*jdimxf);
 						iv=g_array_index(msr, gdouble, 0);
 						g_array_append_val(bxr, iv);
 						mny=g_array_index(chp, gdouble, 0);
@@ -505,6 +545,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					}
 					else
 					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimxf);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimxf);
+						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
 						iv=g_array_index(msr, gdouble, 0);
 						g_array_append_val(bxr, iv);
 						mny=g_array_index(chp, gdouble, kdim);
@@ -543,6 +587,10 @@ void dpr(GtkWidget *widget, gpointer data)
 				}
 				else if (bl2)
 				{
+					bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf);
+					byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf);
+					bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
+					bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
 					iv=g_array_index(msr, gdouble, 0);
 					g_array_append_val(bxr, iv);
 					mny=g_array_index(chp, gdouble, (jdim*kdimxf));
@@ -580,6 +628,10 @@ void dpr(GtkWidget *widget, gpointer data)
 				}
 				else
 				{
+					bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+					byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+					bsz=g_array_new(FALSE, FALSE, sizeof(gint));
+					bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 					iv=g_array_index(msr, gdouble, 0);
 					g_array_append_val(bxr, iv);
 					mny=g_array_index(chp, gdouble, kdim+(jdim*kdimxf));
@@ -663,8 +715,12 @@ void dpr(GtkWidget *widget, gpointer data)
 		ck4=gtk_combo_box_new_text();
 		gtk_combo_box_append_text(GTK_COMBO_BOX(ck4), _("Visibility"));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(ck4), _("Domain Shift"));
-		gtk_combo_box_set_active(GTK_COMBO_BOX(ck4), 1);
-		if ((flags&16)!=0) gtk_combo_box_append_text(GTK_COMBO_BOX(ck4), _("Chirp"));
+		if ((flags&16)!=0)
+		{
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck4), _("Chirp"));
+			gtk_combo_box_set_active(GTK_COMBO_BOX(ck4), (flagd&24)/8);
+		}
+		else gtk_combo_box_set_active(GTK_COMBO_BOX(ck4), (flagd&8)/8);
 		gtk_widget_show(ck4);
 		gtk_box_pack_start(GTK_BOX(vbox), ck4, FALSE, FALSE, 2);
 		ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
@@ -700,12 +756,17 @@ void dpr(GtkWidget *widget, gpointer data)
 				g_array_free(byr, TRUE);
 				g_array_free(bsz, TRUE);
 				g_array_free(bnx, TRUE);
+				dx2=0;
 				if (bl3==0)
 				{
 					if (bl1)
 					{
 						if (bl2)
 						{
+							bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf*jdimxf);
+							byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf*jdimxf);
+							bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf*jdimxf);
+							bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf*jdimxf);
 							iv=g_array_index(msr, gdouble, 0);
 							g_array_append_val(bxr, iv);
 							mny=g_array_index(vis, gdouble, 0);
@@ -761,6 +822,10 @@ void dpr(GtkWidget *widget, gpointer data)
 						}
 						else
 						{
+							bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimxf);
+							byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimxf);
+							bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+							bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
 							iv=g_array_index(msr, gdouble, 0);
 							g_array_append_val(bxr, iv);
 							mny=g_array_index(vis, gdouble, kdim);
@@ -799,6 +864,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					}
 					else if (bl2)
 					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf);
+						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
+						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
 						iv=g_array_index(msr, gdouble, 0);
 						g_array_append_val(bxr, iv);
 						mny=g_array_index(vis, gdouble, (jdim*kdimxf));
@@ -836,6 +905,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					}
 					else
 					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+						bsz=g_array_new(FALSE, FALSE, sizeof(gint));
+						bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 						iv=g_array_index(msr, gdouble, 0);
 						g_array_append_val(bxr, iv);
 						mny=g_array_index(vis, gdouble, kdim+(jdim*kdimxf));
@@ -861,6 +934,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					{
 						if (bl2)
 						{
+							bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf*jdimxf);
+							byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf*jdimxf);
+							bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf*jdimxf);
+							bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf*jdimxf);
 							iv=g_array_index(msr, gdouble, 0);
 							g_array_append_val(bxr, iv);
 							mny=g_array_index(doms, gdouble, 0);
@@ -916,6 +993,10 @@ void dpr(GtkWidget *widget, gpointer data)
 						}
 						else
 						{
+							bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimxf);
+							byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimxf);
+							bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+							bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
 							iv=g_array_index(msr, gdouble, 0);
 							g_array_append_val(bxr, iv);
 							mny=g_array_index(doms, gdouble, kdim);
@@ -954,6 +1035,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					}
 					else if (bl2)
 					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf);
+						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
+						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
 						iv=g_array_index(msr, gdouble, 0);
 						g_array_append_val(bxr, iv);
 						mny=g_array_index(doms, gdouble, (jdim*kdimxf));
@@ -991,6 +1076,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					}
 					else
 					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+						bsz=g_array_new(FALSE, FALSE, sizeof(gint));
+						bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 						iv=g_array_index(msr, gdouble, 0);
 						g_array_append_val(bxr, iv);
 						mny=g_array_index(doms, gdouble, kdim+(jdim*kdimxf));
@@ -1015,6 +1104,10 @@ void dpr(GtkWidget *widget, gpointer data)
 				{
 					if (bl2)
 					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf*jdimxf);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf*jdimxf);
+						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf*jdimxf);
+						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf*jdimxf);
 						iv=g_array_index(msr, gdouble, 0);
 						g_array_append_val(bxr, iv);
 						mny=g_array_index(chp, gdouble, 0);
@@ -1070,6 +1163,10 @@ void dpr(GtkWidget *widget, gpointer data)
 					}
 					else
 					{
+						bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimxf);
+						byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimxf);
+						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
 						iv=g_array_index(msr, gdouble, 0);
 						g_array_append_val(bxr, iv);
 						mny=g_array_index(chp, gdouble, kdim);
@@ -1108,6 +1205,10 @@ void dpr(GtkWidget *widget, gpointer data)
 				}
 				else if (bl2)
 				{
+					bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf);
+					byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*kdimxf);
+					bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
+					bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
 					iv=g_array_index(msr, gdouble, 0);
 					g_array_append_val(bxr, iv);
 					mny=g_array_index(chp, gdouble, (jdim*kdimxf));
@@ -1145,6 +1246,10 @@ void dpr(GtkWidget *widget, gpointer data)
 				}
 				else
 				{
+					bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+					byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
+					bsz=g_array_new(FALSE, FALSE, sizeof(gint));
+					bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 					iv=g_array_index(msr, gdouble, 0);
 					g_array_append_val(bxr, iv);
 					mny=g_array_index(chp, gdouble, kdim+(jdim*kdimxf));

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-05-08 13:48+0300\n"
-"PO-Revision-Date: 2011-04-04 21:10+0300\n"
+"POT-Creation-Date: 2011-05-09 13:05+0300\n"
+"PO-Revision-Date: 2011-05-09 13:37+0300\n"
 "Last-Translator: Matthieu Bellec <>\n"
 "Language-Team: French <>\n"
 "Language: fr\n"
@@ -18,51 +18,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/main.c:78
+#: src/main.c:81
 msgid "Harmonic Spectrum Analyser"
 msgstr "Analyseur de spectre harmonique"
 
-#: src/main.c:112
+#: src/main.c:115
 msgid "_File"
 msgstr "_Fichier"
 
-#: src/main.c:135
+#: src/main.c:138
 msgid "Raw Delimited Data"
 msgstr "Données délimitées brutes"
 
-#: src/main.c:139
+#: src/main.c:142
 msgid "Data Format:"
 msgstr "Format de données:"
 
-#: src/main.c:144
+#: src/main.c:147
 msgid "Trace:"
 msgstr "Trace:"
 
-#: src/main.c:151
+#: src/main.c:154
 msgid "Transmission Measurement?"
 msgstr "Mesure par transmission?"
 
-#: src/main.c:155
+#: src/main.c:158
 msgid "Data in dBs?"
 msgstr "Données en dBs?"
 
-#: src/main.c:159
+#: src/main.c:162
 msgid "Negate?"
 msgstr "Mettre au négatif?"
 
-#: src/main.c:166
+#: src/main.c:169
 msgid "Display Properties:"
 msgstr "Propriétés d'affichage:"
 
-#: src/main.c:171
+#: src/main.c:174
 msgid "_Properties"
 msgstr "_Proprietes"
 
-#: src/main.c:177
+#: src/main.c:180
 msgid "None"
 msgstr "Aucun"
 
-#: src/main.c:181
+#: src/main.c:184
 msgid ""
 "1st order\n"
 "spectral shadowing"
@@ -70,7 +70,7 @@ msgstr ""
 "Obscurcissement spectrale\n"
 "du premier ordre"
 
-#: src/main.c:185
+#: src/main.c:188
 msgid ""
 "Nonlinear\n"
 "Compensation:"
@@ -78,11 +78,35 @@ msgstr ""
 "Compensation\n"
 "non linéaire:"
 
-#: src/main.c:189
+#: src/main.c:193
+msgid "Fourier"
+msgstr "Fourier"
+
+#: src/main.c:197
+msgid "Daubechies 4"
+msgstr "Daubechies 4"
+
+#: src/main.c:201
+msgid "Daubechies 8"
+msgstr "Daubechies 8"
+
+#: src/main.c:205
+msgid "Meyer"
+msgstr "Meyer"
+
+#: src/main.c:209
+msgid "Morlet"
+msgstr "Morlet"
+
+#: src/main.c:213
+msgid "Basis Function:"
+msgstr "Fonctions de base:"
+
+#: src/main.c:217
 msgid "Invert domain?"
 msgstr "Inverser le domaine?"
 
-#: src/main.c:193
+#: src/main.c:221
 msgid ""
 "Apply correction\n"
 "to Window edges?"
@@ -90,55 +114,55 @@ msgstr ""
 "Appliquer à la fenêtre\n"
 "de correction bords?"
 
-#: src/main.c:200
+#: src/main.c:228
 msgid "Optimise Triangle fit?"
 msgstr "Optimiser l'ajustement du triangle?"
 
-#: src/main.c:204
+#: src/main.c:232
 msgid "Calculate Chirp?"
 msgstr "Calculer le chirp?"
 
-#: src/main.c:211
+#: src/main.c:239
 msgid "Batch Process Data?"
 msgstr "Données de traitement par lots?"
 
-#: src/main.c:215
+#: src/main.c:243
 msgid "Autotrack Offset?"
 msgstr "Automatiser décalage"
 
-#: src/main.c:219
+#: src/main.c:247
 msgid "_Advanced"
 msgstr "A_vances"
 
-#: src/main.c:224
+#: src/main.c:252
 msgid "Instructions"
 msgstr "Instructions"
 
-#: src/main.c:233
+#: src/main.c:261
 msgid "_Help"
 msgstr "_Aide"
 
-#: src/main.c:262
+#: src/main.c:290
 msgid "Spectrum Start:"
 msgstr "Début du spectre:"
 
-#: src/main.c:270
+#: src/main.c:298
 msgid "Spectrum Stop:"
 msgstr "Fin du spectre:"
 
-#: src/main.c:278
+#: src/main.c:306
 msgid "Offset:"
 msgstr "Décalage:"
 
-#: src/main.c:285 src/main.c:351
+#: src/main.c:313 src/main.c:379
 msgid "j index:"
 msgstr "index j:"
 
-#: src/main.c:293
+#: src/main.c:321
 msgid "Zero Padding 2^:"
 msgstr "zero padding 2^:"
 
-#: src/main.c:300 src/main.c:367
+#: src/main.c:328 src/main.c:395
 msgid ""
 "Reset\n"
 "Arrays"
@@ -146,39 +170,39 @@ msgstr ""
 "Réinitialiser\n"
 "les rangees"
 
-#: src/main.c:304
+#: src/main.c:332
 msgid "Transform Spectrum"
 msgstr "Transformer le spectre"
 
-#: src/main.c:307 src/main.c:386
+#: src/main.c:335 src/main.c:414
 msgid "Spectrum"
 msgstr "Spectre"
 
-#: src/main.c:311
+#: src/main.c:339
 msgid "Inverse Spectrum Start:"
 msgstr "Début du spectre inverse:"
 
-#: src/main.c:319
+#: src/main.c:347
 msgid "Inverse Spectrum Stop:"
 msgstr "Fin du spectre inverse:"
 
-#: src/main.c:327
+#: src/main.c:355
 msgid "Triangle Centre:"
 msgstr "Centre du triangle:"
 
-#: src/main.c:335
+#: src/main.c:363
 msgid "Triangle Full Width:"
 msgstr "Largeur totale du triangle:"
 
-#: src/main.c:343
+#: src/main.c:371
 msgid "DC Peak Width:"
 msgstr "Largeur du pic DC:"
 
-#: src/main.c:359
+#: src/main.c:387
 msgid "k index:"
 msgstr "index k:"
 
-#: src/main.c:371
+#: src/main.c:399
 msgid ""
 "Process\n"
 "Spectrum"
@@ -186,27 +210,27 @@ msgstr ""
 "Traiter\n"
 "le spectre"
 
-#: src/main.c:374 src/main.c:395
+#: src/main.c:402 src/main.c:423
 msgid "Inverse Spectrum"
 msgstr "Spectre inverse"
 
-#: src/main.c:391
+#: src/main.c:419
 msgid "Inverse Domain"
 msgstr "Domaine inverse"
 
-#: src/main.c:399 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
+#: src/main.c:427 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
 #: src/data.c:1119 src/data.c:1260 src/disp.c:98 src/disp.c:664
 #: src/disp.c:1183 src/open.c:24089
 msgid "Visibility"
 msgstr "Visibilité"
 
-#: src/main.c:405 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
+#: src/main.c:433 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
 #: src/data.c:1119 src/data.c:1260 src/disp.c:99 src/disp.c:665
 #: src/disp.c:1184 src/open.c:24095
 msgid "Domain Shift"
 msgstr "Décalage du domaine"
 
-#: src/main.c:411 src/open.c:23970 src/open.c:23983 src/open.c:24009
+#: src/main.c:439 src/open.c:23970 src/open.c:23983 src/open.c:24009
 #: src/open.c:24036 src/open.c:24101
 msgid "Analysis Results"
 msgstr "Résultats de l'analyse"
@@ -227,7 +251,7 @@ msgstr ""
 
 #: src/util.c:54
 msgid "translator-credits"
-msgstr ""
+msgstr "Matthieu Bellec"
 
 #: src/util.c:99 src/util.c:108
 #, c-format
@@ -262,7 +286,7 @@ msgstr "Chirp"
 
 #: src/data.c:192 src/data.c:297 src/data.c:482
 msgid "All"
-msgstr ""
+msgstr "Toutes"
 
 #: src/data.c:194 src/data.c:299 src/data.c:484 src/data.c:668 src/data.c:1039
 #: src/data.c:1121 src/data.c:1262 src/data.c:1402 src/data.c:1894
@@ -272,7 +296,7 @@ msgstr "Choisissez le paramètre a sauver:"
 
 #: src/data.c:199 src/data.c:304 src/data.c:489 src/data.c:673 src/data.c:845
 msgid "MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
-msgstr ""
+msgstr "MESURE   \tVISIBILTE\tDECAL_DOM\tCHIRP    "
 
 #: src/data.c:217 src/data.c:240 src/data.c:263 src/data.c:285 src/data.c:343
 #: src/data.c:385 src/data.c:427 src/data.c:469 src/data.c:528 src/data.c:570
@@ -291,124 +315,140 @@ msgstr "Fichier d'erreur sauvée: %s."
 
 #: src/data.c:224 src/data.c:350 src/data.c:535 src/data.c:719 src/data.c:891
 msgid "MEAS     \tCHIRP    "
-msgstr ""
+msgstr "MESURE   \tCHIRP    "
 
 #: src/data.c:247 src/data.c:392 src/data.c:577 src/data.c:761 src/data.c:933
 #: src/data.c:1068 src/data.c:1170 src/data.c:1311 src/data.c:1451
 #: src/data.c:1579
 msgid "MEAS     \tDOMN_SHFT"
-msgstr ""
+msgstr "MESURE   \tDECAL_DOM"
 
 #: src/data.c:270 src/data.c:434 src/data.c:619 src/data.c:803 src/data.c:975
 #: src/data.c:1091 src/data.c:1212 src/data.c:1353 src/data.c:1493
 #: src/data.c:1621
 msgid "MEAS     \tVISIBILTY"
-msgstr ""
+msgstr "MESURE   \tVISIBILTE"
 
 #: src/data.c:666 src/data.c:1400
-#, fuzzy
 msgid ""
 "Visibility\n"
 "over J"
-msgstr "Visibilité"
+msgstr ""
+"Visibilité\n"
+"sur J"
 
 #: src/data.c:666 src/data.c:1400
-#, fuzzy
 msgid ""
 "Domain Shift\n"
 "over J"
-msgstr "Décalage du domaine"
+msgstr ""
+"Décalage du\n"
+"domaine sur J"
 
 #: src/data.c:666
 msgid ""
 "Chirp\n"
 "over J"
 msgstr ""
+"Chirp\n"
+"sur J"
 
 #: src/data.c:666
 msgid ""
 "All\n"
 "over J"
 msgstr ""
+"Toutes\n"
+"sur J"
 
 #: src/data.c:666 src/data.c:1400
-#, fuzzy
 msgid ""
 "Visibility\n"
 "over K"
-msgstr "Visibilité"
+msgstr ""
+"Visibilité\n"
+"sur K"
 
 #: src/data.c:666 src/data.c:1400
-#, fuzzy
 msgid ""
 "Domain Shift\n"
 "over K"
-msgstr "Décalage du domaine"
+msgstr ""
+"Décalage du\n"
+"domaine sur K"
 
 #: src/data.c:666
 msgid ""
 "Chirp\n"
 "over K"
 msgstr ""
+"Chirp\n"
+"sur K"
 
 #: src/data.c:666
 msgid ""
 "All\n"
 "over K"
 msgstr ""
+"Toutes\n"
+"sur K"
 
 #: src/data.c:1037 src/data.c:1119 src/data.c:1260
 msgid "Both"
-msgstr ""
+msgstr "Deux"
 
 #: src/data.c:1044 src/data.c:1126 src/data.c:1267 src/data.c:1407
 #: src/data.c:1535
 msgid "MEAS     \tVISIBILTY\tDOMN_SHFT"
-msgstr ""
+msgstr "MESURE   \tVISIBILTE\tDECAL_DOM"
 
 #: src/data.c:1400
 msgid ""
 "Both\n"
 "over J"
 msgstr ""
+"Deux\n"
+"sur J"
 
 #: src/data.c:1400
 msgid ""
 "Both\n"
 "over K"
 msgstr ""
+"Deux\n"
+"sur K"
 
 #: src/data.c:1683
 msgid "VISIBILTY\tDOMN_SHFT\tCHIRP    "
-msgstr ""
+msgstr "VISIBILTE\tDECAL_DOM\tCHIRP    "
 
 #: src/data.c:1703
 msgid "K        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
-msgstr ""
+msgstr "K        \tVISIBILTE\tDECAL_DOM\tCHIRP    "
 
 #: src/data.c:1730
 msgid "J        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
-msgstr ""
+msgstr "J        \tVISIBILTE\tDECAL_DOM\tCHIRP    "
 
 #: src/data.c:1791
 msgid "VISIBILTY\tDOMN_SHFT"
-msgstr ""
+msgstr "VISIBILTE\tDECAL_DOM"
 
 #: src/data.c:1810
 msgid "K        \tVISIBILTY\tDOMN_SHFT"
-msgstr ""
+msgstr "K        \tVISIBILTE\tDECAL_DOM"
 
 #: src/data.c:1836
 msgid "J        \tVISIBILTY\tDOMN_SHFT"
-msgstr ""
+msgstr "J        \tVISIBILTE\tDECAL_DOM"
 
 #: src/data.c:1892 src/data.c:2057 src/data.c:2223
 msgid "Real/Imaginary"
-msgstr ""
+msgstr "Réelle/Imaginaire"
 
 #: src/data.c:1892 src/data.c:2057 src/data.c:2223
 msgid "Magnitude/Phase"
-msgstr ""
+msgstr "Grandeur/Phase"
 
 #: src/data.c:1899 src/data.c:2064 src/data.c:2230
 msgid "INVERSE_D\tREAL_VAL \tIMAG_VAL "
@@ -470,12 +510,11 @@ msgstr "Propriétés d'affichage"
 
 #: src/disp.c:48 src/disp.c:614 src/disp.c:1211 src/disp.c:1500
 msgid "Axis label font:"
-msgstr ""
+msgstr "Police pour les étiquettes:"
 
 #: src/disp.c:51 src/disp.c:617 src/disp.c:1214 src/disp.c:1503
-#, fuzzy
 msgid "Tick label font:"
-msgstr "Taille de l’étiquette:"
+msgstr "Police pour coche de numérotation:"
 
 #: src/disp.c:58
 msgid "Radial axis text:"
@@ -487,11 +526,11 @@ msgstr "Texte de l'axe azimutal:"
 
 #: src/disp.c:78 src/disp.c:644 src/disp.c:1241 src/disp.c:1530
 msgid "Font Selection for Axis Labels"
-msgstr ""
+msgstr "Sélection de polices pour les étiquettes des axes"
 
 #: src/disp.c:86 src/disp.c:652 src/disp.c:1249 src/disp.c:1538
 msgid "Font Selection for Tick Mark Labels"
-msgstr ""
+msgstr "Sélection de polices pour les coche de numérotation"
 
 #: src/disp.c:104 src/disp.c:670 src/disp.c:1189 src/disp.c:1266
 #: src/disp.c:1555
@@ -549,7 +588,7 @@ msgstr ""
 
 #: src/open.c:125
 msgid "Add another file"
-msgstr ""
+msgstr "Ajouter un autre fichier?"
 
 #: src/open.c:374 src/open.c:545 src/open.c:718 src/open.c:890 src/open.c:1062
 #: src/open.c:1234 src/open.c:1410 src/open.c:1581 src/open.c:1754
@@ -605,17 +644,20 @@ msgid ""
 "Polar\n"
 "(Degrees)"
 msgstr ""
+"Polaires\n"
+"(Degrés)"
 
 #: src/open.c:23954
 msgid ""
 "Polar\n"
 "(Radians)"
 msgstr ""
+"Polaires\n"
+"(Radians)"
 
 #: src/open.c:23956
-#, fuzzy
 msgid "Select Measurand Type:"
-msgstr "Paramètre variable"
+msgstr "Sélectionnez le type mesurande:"
 
 #: src/open.c:24173
 #, c-format

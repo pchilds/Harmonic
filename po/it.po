@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-05-08 13:48+0300\n"
-"PO-Revision-Date: 2011-05-08 14:01+0300\n"
+"POT-Creation-Date: 2011-05-09 13:05+0300\n"
+"PO-Revision-Date: 2011-05-09 13:09+0300\n"
 "Last-Translator: Alessandro Candiani <>\n"
 "Language-Team: Italian <>\n"
 "Language: it\n"
@@ -18,51 +18,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/main.c:78
+#: src/main.c:81
 msgid "Harmonic Spectrum Analyser"
 msgstr "Analizzatore di spettro armonico"
 
-#: src/main.c:112
+#: src/main.c:115
 msgid "_File"
 msgstr "_File"
 
-#: src/main.c:135
+#: src/main.c:138
 msgid "Raw Delimited Data"
 msgstr "Dati delimitati senza intestazione"
 
-#: src/main.c:139
+#: src/main.c:142
 msgid "Data Format:"
 msgstr "Disposizione di dati:"
 
-#: src/main.c:144
+#: src/main.c:147
 msgid "Trace:"
 msgstr "Traccia:"
 
-#: src/main.c:151
+#: src/main.c:154
 msgid "Transmission Measurement?"
 msgstr "Misura in trasmissione?"
 
-#: src/main.c:155
+#: src/main.c:158
 msgid "Data in dBs?"
 msgstr "Dati in dB?"
 
-#: src/main.c:159
+#: src/main.c:162
 msgid "Negate?"
 msgstr "Negare?"
 
-#: src/main.c:166
+#: src/main.c:169
 msgid "Display Properties:"
 msgstr "Proprietà di visualizzazione:"
 
-#: src/main.c:171
+#: src/main.c:174
 msgid "_Properties"
 msgstr "_Proprietà"
 
-#: src/main.c:177
+#: src/main.c:180
 msgid "None"
 msgstr "Nessun"
 
-#: src/main.c:181
+#: src/main.c:184
 msgid ""
 "1st order\n"
 "spectral shadowing"
@@ -70,7 +70,7 @@ msgstr ""
 "Compensazione della coda\n"
 "spettrale (di primo ordine)"
 
-#: src/main.c:185
+#: src/main.c:188
 msgid ""
 "Nonlinear\n"
 "Compensation:"
@@ -78,11 +78,35 @@ msgstr ""
 "Compensazione\n"
 "non lineare"
 
-#: src/main.c:189
+#: src/main.c:193
+msgid "Fourier"
+msgstr "Fourier"
+
+#: src/main.c:197
+msgid "Daubechies 4"
+msgstr "Daubechies 4"
+
+#: src/main.c:201
+msgid "Daubechies 8"
+msgstr "Daubechies 8"
+
+#: src/main.c:205
+msgid "Meyer"
+msgstr "Meyer"
+
+#: src/main.c:209
+msgid "Morlet"
+msgstr "Morlet"
+
+#: src/main.c:213
+msgid "Basis Function:"
+msgstr "Funzione di base:"
+
+#: src/main.c:217
 msgid "Invert domain?"
 msgstr "Invertire il dominio?"
 
-#: src/main.c:193
+#: src/main.c:221
 msgid ""
 "Apply correction\n"
 "to Window edges?"
@@ -90,93 +114,93 @@ msgstr ""
 "Applicare le correzioni alla\n"
 "estremità della finestra?"
 
-#: src/main.c:200
+#: src/main.c:228
 msgid "Optimise Triangle fit?"
 msgstr "Ottimizzare la misura dei triangoli?"
 
-#: src/main.c:204
+#: src/main.c:232
 msgid "Calculate Chirp?"
 msgstr "Calcolare il chirp?"
 
-#: src/main.c:211
+#: src/main.c:239
 msgid "Batch Process Data?"
 msgstr "Elaborazione batch per gruppi di files."
 
-#: src/main.c:215
+#: src/main.c:243
 msgid "Autotrack Offset?"
 msgstr "Automatizzare lo slittamento?"
 
-#: src/main.c:219
+#: src/main.c:247
 msgid "_Advanced"
 msgstr "A_vanzato"
 
-#: src/main.c:224
+#: src/main.c:252
 msgid "Instructions"
 msgstr "Istruzioni"
 
-#: src/main.c:233
+#: src/main.c:261
 msgid "_Help"
 msgstr "_Aiuto"
 
-#: src/main.c:262
+#: src/main.c:290
 msgid "Spectrum Start:"
 msgstr "Inizio dello spettro:"
 
-#: src/main.c:270
+#: src/main.c:298
 msgid "Spectrum Stop:"
 msgstr "Conclusione dello spettro:"
 
-#: src/main.c:278
+#: src/main.c:306
 msgid "Offset:"
 msgstr "Slittamento:"
 
-#: src/main.c:285 src/main.c:351
+#: src/main.c:313 src/main.c:379
 msgid "j index:"
 msgstr "Indice di J"
 
-#: src/main.c:293
+#: src/main.c:321
 msgid "Zero Padding 2^:"
 msgstr "Zero padding 2^:"
 
-#: src/main.c:300 src/main.c:367
+#: src/main.c:328 src/main.c:395
 msgid ""
 "Reset\n"
 "Arrays"
 msgstr "Resettare"
 
-#: src/main.c:304
+#: src/main.c:332
 msgid "Transform Spectrum"
 msgstr "Trasformare lo spettro"
 
-#: src/main.c:307 src/main.c:386
+#: src/main.c:335 src/main.c:414
 msgid "Spectrum"
 msgstr "Spettro"
 
-#: src/main.c:311
+#: src/main.c:339
 msgid "Inverse Spectrum Start:"
 msgstr "Inizio dello spettro inverso:"
 
-#: src/main.c:319
+#: src/main.c:347
 msgid "Inverse Spectrum Stop:"
 msgstr "Conclusione dello spettro inverso:"
 
-#: src/main.c:327
+#: src/main.c:355
 msgid "Triangle Centre:"
 msgstr "Centro del triangolo:"
 
-#: src/main.c:335
+#: src/main.c:363
 msgid "Triangle Full Width:"
 msgstr "Larghezza completa del triangolo:"
 
-#: src/main.c:343
+#: src/main.c:371
 msgid "DC Peak Width:"
 msgstr "Larghezza massima della CC:"
 
-#: src/main.c:359
+#: src/main.c:387
 msgid "k index:"
 msgstr "Indice di K"
 
-#: src/main.c:371
+#: src/main.c:399
 msgid ""
 "Process\n"
 "Spectrum"
@@ -184,27 +208,27 @@ msgstr ""
 "Analisi dello\n"
 "spettro"
 
-#: src/main.c:374 src/main.c:395
+#: src/main.c:402 src/main.c:423
 msgid "Inverse Spectrum"
 msgstr "Spettro inverso"
 
-#: src/main.c:391
+#: src/main.c:419
 msgid "Inverse Domain"
 msgstr "Dominio inverso"
 
-#: src/main.c:399 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
+#: src/main.c:427 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
 #: src/data.c:1119 src/data.c:1260 src/disp.c:98 src/disp.c:664
 #: src/disp.c:1183 src/open.c:24089
 msgid "Visibility"
 msgstr "Visibilità"
 
-#: src/main.c:405 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
+#: src/main.c:433 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
 #: src/data.c:1119 src/data.c:1260 src/disp.c:99 src/disp.c:665
 #: src/disp.c:1184 src/open.c:24095
 msgid "Domain Shift"
 msgstr "Sposti nel dominio"
 
-#: src/main.c:411 src/open.c:23970 src/open.c:23983 src/open.c:24009
+#: src/main.c:439 src/open.c:23970 src/open.c:23983 src/open.c:24009
 #: src/open.c:24036 src/open.c:24101
 msgid "Analysis Results"
 msgstr "Risultati dell'analisi"

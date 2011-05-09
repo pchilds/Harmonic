@@ -53,10 +53,10 @@
 #include "util.h"
 
 GtkWidget *window, *tr, *zpd, *pr, *tracmenu, *trac, *fst, *notebook, *notebook2, *plot1, *plot2, *plot3, *statusbar, *rest, *visl, *dsl, *chil;
-GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *ncmp, *lcmp, *bat, *chi, *twopionx, *opttri, *trans, *dBs, *neg, *wll, *oft;
+GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *ncmp, *lcmp, *frr, *db4, *db8, *myr, *mrl, *bat, *chi, *twopionx, *opttri, *trans, *dBs, *neg, *wll, *oft;
 GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; /* widgets for windowing */
 GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *sz, *nx, *delf, *vis, *doms, *chp, *msr, *bxr, *byr, *bsz, *bnx; /* arrays for windowing and data */
-GSList *group2=NULL; /* list for various traces available */
+GSList *group2=NULL; /* list for various traces available and Basis functions for Transformation*/
 gint lc, mx; /* number of data points and number of files in batch routine */
 guint jdim=0, kdim=0, jdimx=1, kdimx=1, jdimxf=1, kdimxf=1, satl=0, trc=1, flags=0, flagd=0; /* array indices, #of traces, trace number, and current processing state and display flags */
 gulong pr_id; /* id for disabling/enabling post-transform processing */
@@ -67,7 +67,7 @@ int main( int argc, char *argv[])
 	GtkAdjustment *adj;
 	GtkWidget *vbox, *mnb, *mnu, *smnu, *mni, *hpane, *table, *label, *butt;
 	GtkAccelGroup *accel_group=NULL;
-	GSList *group=NULL, *group3=NULL;
+	GSList *group=NULL, *group3=NULL, *group4=NULL;
 	gdouble fll=0;
 
 	bindtextdomain(PACKAGE, LOCALEDIR);
@@ -186,6 +186,31 @@ int main( int argc, char *argv[])
 	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), lcmp);
 	gtk_widget_show(lcmp);
 	mni=gtk_menu_item_new_with_label(_("Nonlinear\nCompensation:"));
+	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
+	gtk_widget_show(mni);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), smnu);
+	smnu=gtk_menu_new();
+	frr=gtk_radio_menu_item_new_with_label(group4, _("Fourier"));
+	group4=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(frr));
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), frr);
+	gtk_widget_show(frr);
+	db4=gtk_radio_menu_item_new_with_label(group4, _("Daubechies 4"));
+	group4=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(db4));
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), db4);
+	gtk_widget_show(db4);
+	db8=gtk_radio_menu_item_new_with_label(group4, _("Daubechies 8"));
+	group4=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(db8));
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), db8);
+	gtk_widget_show(db8);
+	myr=gtk_radio_menu_item_new_with_label(group4, _("Meyer"));
+	group4=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(myr));
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), myr);
+	gtk_widget_show(myr);
+	mrl=gtk_radio_menu_item_new_with_label(group4, _("Morlet"));
+	group4=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(mrl));
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), mrl);
+	gtk_widget_show(mrl);
+	mni=gtk_menu_item_new_with_label(_("Basis Function:"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), smnu);
@@ -429,6 +454,10 @@ int main( int argc, char *argv[])
 	doms=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	chp=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	msr=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	bxr=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	byr=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	bsz=g_array_new(FALSE, FALSE, sizeof(gint));
+	bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 	gtk_widget_show(window);
 	gtk_main();
 	gdk_threads_leave();

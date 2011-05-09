@@ -177,7 +177,7 @@ void opd(GtkWidget *widget, gpointer data)
 				gtk_widget_destroy(wfile);
 				if (g_file_get_contents(fin, &contents2, NULL, &Err))
 				{
-					{g_array_free(vis, TRUE); g_array_free(doms, TRUE); g_array_free(msr, TRUE); g_array_free(bnx, TRUE); g_array_free(bsz, TRUE);}
+					{g_array_free(vis, TRUE); g_array_free(doms, TRUE); g_array_free(msr, TRUE); g_array_free(bxr, TRUE); g_array_free(byr, TRUE); g_array_free(bnx, TRUE); g_array_free(bsz, TRUE);}
 					strary2=g_strsplit_set(contents2, DLMT, 0);
 					mx=g_strv_length(strary2);
 					zp=1<<(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(zpd)));
@@ -23958,7 +23958,7 @@ void opd(GtkWidget *widget, gpointer data)
 					switch (gtk_dialog_run(GTK_DIALOG(dialog)))
 					{
 						case 1:
-						if ((flags&8)==0)
+						if (((flags&8)==0)||((flags&32)!=0))
 						{
 							gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
 							table=gtk_table_new(1, 1, FALSE);
@@ -23969,20 +23969,7 @@ void opd(GtkWidget *widget, gpointer data)
 							gtk_table_attach(GTK_TABLE(table), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 							label=gtk_label_new(_("Analysis Results"));
 							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
-							flags|=15;
-						}
-						else if ((flags&32)!=0)
-						{
-							gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
-							table=gtk_table_new(1, 1, FALSE);
-							gtk_widget_show(table);
-							plot3=plot_linear_new();
-							g_signal_connect(plot3, "moved", G_CALLBACK(pltmv), NULL);
-							gtk_widget_show(plot3);
-							gtk_table_attach(GTK_TABLE(table), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-							label=gtk_label_new(_("Analysis Results"));
-							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
-							flags^=32;
+							{flags|=15; flags&=31;}
 						}
 						plt=PLOT_LINEAR(plot3);
 						if (mx<8) {(plt->flagd)=3; (plt->ptsize)=4;}
