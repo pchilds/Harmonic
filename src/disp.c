@@ -26,7 +26,7 @@
 
 void dpr(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *helpwin, *content, *table, *vbox, *entry1, *entry2, *label, *butt1, *butt2, *hsp, *ck, *ck2, *ck3, *ck4;
+	GtkWidget *helpwin, *content, *table, *vbox, *hbox, * hbox2, *colour, *entry1, *entry2, *label, *butt1, *butt2, *spr, *ck, *ck2, *ck3, *ck4, *jind3, *kind2;
 	GtkAdjustment *adj;
 	PlotLinear *plt;
 	PlotPolar *plt2;
@@ -39,6 +39,8 @@ void dpr(GtkWidget *widget, gpointer data)
 	g_signal_connect_swapped(G_OBJECT(helpwin), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
 	gtk_widget_show(helpwin);
 	content=gtk_dialog_get_content_area(GTK_DIALOG(helpwin));
+	hbox=gtk_hbox_new(FALSE, 0);
+	gtk_widget_show(hbox);
 	vbox=gtk_vbox_new(FALSE, 0);
 	gtk_widget_show(vbox);
 	if ((flags&32)!=0)
@@ -53,8 +55,8 @@ void dpr(GtkWidget *widget, gpointer data)
 		gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		entry1=gtk_entry_new();
 		entry2=gtk_entry_new();
-		hsp=gtk_hseparator_new();
-		gtk_widget_show(hsp);
+		spr=gtk_hseparator_new();
+		gtk_widget_show(spr);
 		label=gtk_label_new(_("Radial axis text:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -93,7 +95,7 @@ void dpr(GtkWidget *widget, gpointer data)
 		gtk_table_attach(GTK_TABLE(table), butt1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		gtk_table_attach(GTK_TABLE(table), butt2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
-		gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
+		gtk_box_pack_start(GTK_BOX(vbox), spr, FALSE, FALSE, 2);
 		ck4=gtk_combo_box_new_text();
 		gtk_combo_box_append_text(GTK_COMBO_BOX(ck4), _("Visibility"));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(ck4), _("Domain Shift"));
@@ -105,15 +107,36 @@ void dpr(GtkWidget *widget, gpointer data)
 		else gtk_combo_box_set_active(GTK_COMBO_BOX(ck4), (flagd&8)/8);
 		gtk_widget_show(ck4);
 		gtk_box_pack_start(GTK_BOX(vbox), ck4, FALSE, FALSE, 2);
+		table=gtk_table_new(2, 2, FALSE);
+		gtk_widget_show(table);
 		ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck2), (flagd&2));
 		gtk_widget_show(ck2);
-		gtk_box_pack_start(GTK_BOX(vbox), ck2, FALSE, FALSE, 2);
+		gtk_table_attach(GTK_TABLE(table), ck2, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		adj=(GtkAdjustment *) gtk_adjustment_new(jdim, 0, jdimx-1, 1.0, 5.0, 0.0);
+		jind3=gtk_spin_button_new(adj, 0, 0);
+		g_signal_connect(G_OBJECT(jind3), "value-changed", G_CALLBACK(upj), NULL);
+		gtk_widget_show(jind3);
+		gtk_table_attach(GTK_TABLE(table), jind3, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		ck3=gtk_check_button_new_with_label(_("Multiple plots for Results over index k"));
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&4));
 		gtk_widget_show(ck3);
-		gtk_box_pack_start(GTK_BOX(vbox), ck3, FALSE, FALSE, 2);
-		gtk_container_add(GTK_CONTAINER(content), vbox);
+		gtk_table_attach(GTK_TABLE(table), ck3, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		adj=(GtkAdjustment *) gtk_adjustment_new(kdim, 0, kdimx-1, 1.0, 5.0, 0.0);
+		kind2=gtk_spin_button_new(adj, 0, 0);
+		g_signal_connect(G_OBJECT(kind2), "value-changed", G_CALLBACK(upk), NULL);
+		gtk_widget_show(kind2);
+		gtk_table_attach(GTK_TABLE(table), kind2, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
+		gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
+		spr=gtk_vseparator_new();
+		gtk_widget_show(spr);
+		gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
+		colour=gtk_color_selection_new();
+		gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour), TRUE);
+		gtk_widget_show(colour);
+		gtk_box_pack_start(GTK_BOX(hbox), colour, FALSE, FALSE, 2);
+		gtk_container_add(GTK_CONTAINER(content), hbox);
 		if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 		{
 			g_free(plt2->rlab);
@@ -671,8 +694,8 @@ void dpr(GtkWidget *widget, gpointer data)
 		gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		entry1=gtk_entry_new();
 		entry2=gtk_entry_new();
-		hsp=gtk_hseparator_new();
-		gtk_widget_show(hsp);
+		spr=gtk_hseparator_new();
+		gtk_widget_show(spr);
 		label=gtk_label_new(_("X axis text:"));
 		gtk_widget_show(label);
 		gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -711,7 +734,7 @@ void dpr(GtkWidget *widget, gpointer data)
 		gtk_table_attach(GTK_TABLE(table), butt1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		gtk_table_attach(GTK_TABLE(table), butt2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
-		gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
+		gtk_box_pack_start(GTK_BOX(vbox), spr, FALSE, FALSE, 2);
 		ck4=gtk_combo_box_new_text();
 		gtk_combo_box_append_text(GTK_COMBO_BOX(ck4), _("Visibility"));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(ck4), _("Domain Shift"));
@@ -723,15 +746,36 @@ void dpr(GtkWidget *widget, gpointer data)
 		else gtk_combo_box_set_active(GTK_COMBO_BOX(ck4), (flagd&8)/8);
 		gtk_widget_show(ck4);
 		gtk_box_pack_start(GTK_BOX(vbox), ck4, FALSE, FALSE, 2);
+		table=gtk_table_new(2, 2, FALSE);
+		gtk_widget_show(table);
 		ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck2), (flagd&2));
 		gtk_widget_show(ck2);
-		gtk_box_pack_start(GTK_BOX(vbox), ck2, FALSE, FALSE, 2);
+		gtk_table_attach(GTK_TABLE(table), ck2, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		adj=(GtkAdjustment *) gtk_adjustment_new(jdim, 0, jdimx-1, 1.0, 5.0, 0.0);
+		jind3=gtk_spin_button_new(adj, 0, 0);
+		g_signal_connect(G_OBJECT(jind3), "value-changed", G_CALLBACK(upj), NULL);
+		gtk_widget_show(jind3);
+		gtk_table_attach(GTK_TABLE(table), jind3, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		ck3=gtk_check_button_new_with_label(_("Multiple plots for Results over index k"));
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&4));
 		gtk_widget_show(ck3);
-		gtk_box_pack_start(GTK_BOX(vbox), ck3, FALSE, FALSE, 2);
-		gtk_container_add(GTK_CONTAINER(content), vbox);
+		gtk_table_attach(GTK_TABLE(table), ck3, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		adj=(GtkAdjustment *) gtk_adjustment_new(kdim, 0, kdimx-1, 1.0, 5.0, 0.0);
+		kind2=gtk_spin_button_new(adj, 0, 0);
+		g_signal_connect(G_OBJECT(kind2), "value-changed", G_CALLBACK(upk), NULL);
+		gtk_widget_show(kind2);
+		gtk_table_attach(GTK_TABLE(table), kind2, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
+		gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
+		spr=gtk_vseparator_new();
+		gtk_widget_show(spr);
+		gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
+		colour=gtk_color_selection_new();
+		gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour), TRUE);
+		gtk_widget_show(colour);
+		gtk_box_pack_start(GTK_BOX(hbox), colour, FALSE, FALSE, 2);
+		gtk_container_add(GTK_CONTAINER(content), hbox);
 		if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 		{
 			g_free(plt->xlab);
@@ -1299,7 +1343,8 @@ void dpr(GtkWidget *widget, gpointer data)
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&4));
 				gtk_widget_show(ck3);
 				gtk_box_pack_start(GTK_BOX(vbox), ck3, FALSE, FALSE, 2);
-				gtk_container_add(GTK_CONTAINER(content), vbox);
+				gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
+				gtk_container_add(GTK_CONTAINER(content), hbox);
 				if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 				{
 					flagd&=1;
@@ -1321,8 +1366,8 @@ void dpr(GtkWidget *widget, gpointer data)
 			gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			entry1=gtk_entry_new();
 			entry2=gtk_entry_new();
-			hsp=gtk_hseparator_new();
-			gtk_widget_show(hsp);
+			spr=gtk_hseparator_new();
+			gtk_widget_show(spr);
 			label=gtk_label_new(_("X axis text:"));
 			gtk_widget_show(label);
 			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -1361,11 +1406,19 @@ void dpr(GtkWidget *widget, gpointer data)
 			gtk_table_attach(GTK_TABLE(table), butt1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_table_attach(GTK_TABLE(table), butt2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
-			gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
+			gtk_box_pack_start(GTK_BOX(vbox), spr, FALSE, FALSE, 2);
+			hbox2=gtk_hbox_new(FALSE, 0);
+			gtk_widget_show(hbox2);
 			ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck), (flagd&1));
 			gtk_widget_show(ck);
-			gtk_box_pack_start(GTK_BOX(vbox), ck, FALSE, FALSE, 2);
+			gtk_box_pack_start(GTK_BOX(hbox2), ck, FALSE, FALSE, 2);
+			adj=(GtkAdjustment *) gtk_adjustment_new(jdim, 0, jdimx-1, 1.0, 5.0, 0.0);
+			jind3=gtk_spin_button_new(adj, 0, 0);
+			g_signal_connect(G_OBJECT(jind3), "value-changed", G_CALLBACK(upj), NULL);
+			gtk_widget_show(jind3);
+			gtk_box_pack_start(GTK_BOX(hbox2), jind3, FALSE, FALSE, 2);
+			gtk_box_pack_start(GTK_BOX(vbox), hbox2, FALSE, FALSE, 2);
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(bat)))
 			{
 				ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));
@@ -1376,7 +1429,15 @@ void dpr(GtkWidget *widget, gpointer data)
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&4));
 				gtk_widget_show(ck3);
 				gtk_box_pack_start(GTK_BOX(vbox), ck3, FALSE, FALSE, 2);
-				gtk_container_add(GTK_CONTAINER(content), vbox);
+				gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
+				spr=gtk_vseparator_new();
+				gtk_widget_show(spr);
+				gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
+				colour=gtk_color_selection_new();
+				gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour), TRUE);
+				gtk_widget_show(colour);
+				gtk_box_pack_start(GTK_BOX(hbox), colour, FALSE, FALSE, 2);
+				gtk_container_add(GTK_CONTAINER(content), hbox);
 				if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 				{
 					g_free(plt->xlab);
@@ -1399,48 +1460,38 @@ void dpr(GtkWidget *widget, gpointer data)
 							flagd^=1;
 							if ((flags&2)!=0)/* merge into the one array */
 							{
-								dx=((plt->ydata)->len);
+								{xi=0; mny=0;}
 								dx2=0;
-								g_array_free(ysb, TRUE);
-								g_array_free(nx, TRUE);
-								ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx*(jdimxf+1));
-								nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), dx*(jdimxf+1));
-								mxy=fabs(g_array_index(stars, gdouble, 0));
-								g_array_append_val(ysb, mxy);
+								dx=g_array_index(sz, gint, 0);
+								{g_array_free(nx, TRUE); g_array_free(sz, TRUE);}
+								nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+								sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+								xf=g_array_index(xsb, gdouble, dx-1);
+								mxy=g_array_index(ysb, gdouble, 0);
 								for (j=1; j<dx; j++)
 								{
-									{iv=g_array_index(stars, gdouble, j); clc=g_array_index(stars, gdouble, (2*dx)-j);}
-									{iv*=iv; clc*=clc;}
-									iv=sqrt(iv+clc);
+									iv=g_array_index(ysb, gdouble, j);
 									if (mxy<iv) mxy=iv;
-									g_array_append_val(ysb, iv);
 								}
+								g_array_append_val(sz, dx);
 								g_array_append_val(nx, dx2);
-								for (k=1; k<=jdimxf; k++)
+								k=1;
+								while (k<jdimxf)
 								{
-									xf=0;
-									g_array_append_val(xsb, xf);
-									iv=fabs(g_array_index(stars, gdouble, 2*k*dx));
-									g_array_append_val(ysb, iv);
+									iv=g_array_index(ysb, gdouble, k*dx);
 									if (mxy<iv) mxy=iv;
 									for (j=1; j<dx; j++)
 									{
-										xf=j*g_array_index(delf, gdouble, 0);
-										g_array_append_val(xsb, xf);
-										{iv=g_array_index(stars, gdouble, j+(2*k*dx)); clc=g_array_index(stars, gdouble, (2*(k+1)*dx)-j);}
-										{iv*=iv; clc*=clc;}
-										iv=sqrt(iv+clc);
+										iv=g_array_index(ysb, gdouble, j+(k*dx));
 										if (mxy<iv) mxy=iv;
-										g_array_append_val(ysb, iv);
 									}
 									g_array_append_val(sz, dx);
 									dx2+=dx;
 									g_array_append_val(nx, dx2);
+									k++;
 								}
 								(plt->sizes)=sz;
 								(plt->ind)=nx;
-								(plt->xdata)=xsb;
-								(plt->ydata)=ysb;
 							}
 						}
 					}
@@ -1449,36 +1500,24 @@ void dpr(GtkWidget *widget, gpointer data)
 						flagd^=1;
 						if ((flags&2)!=0)/* narrow array to the one plot */
 						{
-							dx=g_array_index((plt->sizes), gint, 0);
-							g_array_free(xsb, TRUE);
-							g_array_free(ysb, TRUE);
+							{xi=0; mny=0;}
+							xf=g_array_index(xsb, gdouble, dx-1);
+							dx=g_array_index(sz, gint, 0);
 							g_array_free(sz, TRUE);
-							g_array_free(nx, TRUE);
-							xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
-							ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
 							sz=g_array_new(FALSE, FALSE, sizeof(gint));
-							nx=g_array_new(FALSE, FALSE, sizeof(gint));
-							xf=0;
-							g_array_append_val(xsb, xf);
-							mxy=fabs(g_array_index(stars, gdouble, 2*jdim*dx));
-							g_array_append_val(ysb, mxy);
-							for (j=1; j<dx; j++)
-							{
-								xf=j*g_array_index(delf, gdouble, 0);
-								g_array_append_val(xsb, xf);
-								{iv=g_array_index(stars, gdouble, j+(2*jdim*dx)); clc=g_array_index(stars, gdouble, (2*(jdim+1)*dx)-j);}
-								{iv*=iv; clc*=clc;}
-								iv=sqrt(iv+clc);
-								if (mxy<iv) mxy=iv;
-								g_array_append_val(ysb, iv);
-							}
 							g_array_append_val(sz, dx);
+							(plt->sizes)=sz;
+							mxy=g_array_index(ysb, gdouble, jdim*dx);
+							for (j=1+(jdim*dx); j<((jdim+1)*dx); j++)
+							{
+								iv=g_array_index(ysb, gdouble, j);
+								if (mxy<iv) mxy=iv;
+							}
+							g_array_free(nx, TRUE);
+							nx=g_array_new(FALSE, FALSE, sizeof(gint));
 							dx=0;
 							g_array_append_val(nx, dx);
-							(plt->sizes)=sz;
 							(plt->ind)=nx;
-							(plt->xdata)=xsb;
-							(plt->ydata)=ysb;
 						}
 					}
 					plot_linear_update_scale(plot2, xi, xf, mny, mxy);
@@ -1490,7 +1529,15 @@ void dpr(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				gtk_container_add(GTK_CONTAINER(content), vbox);
+				gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
+				spr=gtk_vseparator_new();
+				gtk_widget_show(spr);
+				gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
+				colour=gtk_color_selection_new();
+				gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour), TRUE);
+				gtk_widget_show(colour);
+				gtk_box_pack_start(GTK_BOX(hbox), colour, FALSE, FALSE, 2);
+				gtk_container_add(GTK_CONTAINER(content), hbox);
 				if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 				{
 					g_free(plt->xlab);
@@ -1513,48 +1560,38 @@ void dpr(GtkWidget *widget, gpointer data)
 							flagd^=1;
 							if ((flags&2)!=0)/* merge into the one array */
 							{
-								dx=((plt->ydata)->len);
+								{xi=0; mny=0;}
 								dx2=0;
-								g_array_free(ysb, TRUE);
-								g_array_free(nx, TRUE);
-								ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx*(jdimxf+1));
-								nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), dx*(jdimxf+1));
-								mxy=fabs(g_array_index(stars, gdouble, 0));
-								g_array_append_val(ysb, mxy);
+								dx=g_array_index(sz, gint, 0);
+								{g_array_free(nx, TRUE); g_array_free(sz, TRUE);}
+								nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+								sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+								xf=g_array_index(xsb, gdouble, dx-1);
+								mxy=g_array_index(ysb, gdouble, 0);
 								for (j=1; j<dx; j++)
 								{
-									{iv=g_array_index(stars, gdouble, j); clc=g_array_index(stars, gdouble, (2*dx)-j);}
-									{iv*=iv; clc*=clc;}
-									iv=sqrt(iv+clc);
+									iv=g_array_index(ysb, gdouble, j);
 									if (mxy<iv) mxy=iv;
-									g_array_append_val(ysb, iv);
 								}
+								g_array_append_val(sz, dx);
 								g_array_append_val(nx, dx2);
-								for (k=1; k<=jdimxf; k++)
+								k=1;
+								while (k<jdimxf)
 								{
-									xf=0;
-									g_array_append_val(xsb, xf);
-									iv=fabs(g_array_index(stars, gdouble, 2*k*dx));
-									g_array_append_val(ysb, iv);
+									iv=g_array_index(ysb, gdouble, k*dx);
 									if (mxy<iv) mxy=iv;
 									for (j=1; j<dx; j++)
 									{
-										xf=j*g_array_index(delf, gdouble, 0);
-										g_array_append_val(xsb, xf);
-										{iv=g_array_index(stars, gdouble, j+(2*k*dx)); clc=g_array_index(stars, gdouble, (2*(k+1)*dx)-j);}
-										{iv*=iv; clc*=clc;}
-										iv=sqrt(iv+clc);
+										iv=g_array_index(ysb, gdouble, j+(k*dx));
 										if (mxy<iv) mxy=iv;
-										g_array_append_val(ysb, iv);
 									}
 									g_array_append_val(sz, dx);
 									dx2+=dx;
 									g_array_append_val(nx, dx2);
+									k++;
 								}
 								(plt->sizes)=sz;
 								(plt->ind)=nx;
-								(plt->xdata)=xsb;
-								(plt->ydata)=ysb;
 							}
 						}
 					}
@@ -1563,36 +1600,24 @@ void dpr(GtkWidget *widget, gpointer data)
 						flagd^=1;
 						if ((flags&2)!=0)/* narrow array to the one plot */
 						{
-							dx=g_array_index((plt->sizes), gint, 0);
-							g_array_free(xsb, TRUE);
-							g_array_free(ysb, TRUE);
+							{xi=0; mny=0;}
+							xf=g_array_index(xsb, gdouble, dx-1);
+							dx=g_array_index(sz, gint, 0);
 							g_array_free(sz, TRUE);
-							g_array_free(nx, TRUE);
-							xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
-							ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
 							sz=g_array_new(FALSE, FALSE, sizeof(gint));
-							nx=g_array_new(FALSE, FALSE, sizeof(gint));
-							xf=0;
-							g_array_append_val(xsb, xf);
-							mxy=fabs(g_array_index(stars, gdouble, 2*jdim*dx));
-							g_array_append_val(ysb, mxy);
-							for (j=1; j<dx; j++)
-							{
-								xf=j*g_array_index(delf, gdouble, 0);
-								g_array_append_val(xsb, xf);
-								{iv=g_array_index(stars, gdouble, j+(2*jdim*dx)); clc=g_array_index(stars, gdouble, (2*(jdim+1)*dx)-j);}
-								{iv*=iv; clc*=clc;}
-								iv=sqrt(iv+clc);
-								if (mxy<iv) mxy=iv;
-								g_array_append_val(ysb, iv);
-							}
 							g_array_append_val(sz, dx);
+							(plt->sizes)=sz;
+							mxy=g_array_index(ysb, gdouble, jdim*dx);
+							for (j=1+(jdim*dx); j<((jdim+1)*dx); j++)
+							{
+								iv=g_array_index(ysb, gdouble, j);
+								if (mxy<iv) mxy=iv;
+							}
+							g_array_free(nx, TRUE);
+							nx=g_array_new(FALSE, FALSE, sizeof(gint));
 							dx=0;
 							g_array_append_val(nx, dx);
-							(plt->sizes)=sz;
 							(plt->ind)=nx;
-							(plt->xdata)=xsb;
-							(plt->ydata)=ysb;
 						}
 					}
 					plot_linear_update_scale(plot2, xi, xf, mny, mxy);
@@ -1610,8 +1635,8 @@ void dpr(GtkWidget *widget, gpointer data)
 			gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			entry1=gtk_entry_new();
 			entry2=gtk_entry_new();
-			hsp=gtk_hseparator_new();
-			gtk_widget_show(hsp);
+			spr=gtk_hseparator_new();
+			gtk_widget_show(spr);
 			label=gtk_label_new(_("X axis text:"));
 			gtk_widget_show(label);
 			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -1650,7 +1675,7 @@ void dpr(GtkWidget *widget, gpointer data)
 			gtk_table_attach(GTK_TABLE(table), butt1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_table_attach(GTK_TABLE(table), butt2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
-			gtk_box_pack_start(GTK_BOX(vbox), hsp, FALSE, FALSE, 2);
+			gtk_box_pack_start(GTK_BOX(vbox), spr, FALSE, FALSE, 2);
 			ck=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck), (flagd&1));
 			gtk_widget_show(ck);
@@ -1665,7 +1690,15 @@ void dpr(GtkWidget *widget, gpointer data)
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&4));
 				gtk_widget_show(ck3);
 				gtk_box_pack_start(GTK_BOX(vbox), ck3, FALSE, FALSE, 2);
-				gtk_container_add(GTK_CONTAINER(content), vbox);
+				gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
+				spr=gtk_vseparator_new();
+				gtk_widget_show(spr);
+				gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
+				colour=gtk_color_selection_new();
+				gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour), TRUE);
+				gtk_widget_show(colour);
+				gtk_box_pack_start(GTK_BOX(hbox), colour, FALSE, FALSE, 2);
+				gtk_container_add(GTK_CONTAINER(content), hbox);
 				if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 				{
 					g_free(plt->xlab);
@@ -1688,49 +1721,38 @@ void dpr(GtkWidget *widget, gpointer data)
 							if ((flags&2)!=0)/* merge into the one array */
 							{
 								plt=PLOT_LINEAR(plot2);
-								dx=((plt->ydata)->len);
+								{xi=0; mny=0;}
 								dx2=0;
-								g_array_free(ysb, TRUE);
-								g_array_free(nx, TRUE);
-								ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx*(jdimxf+1));
-								nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), dx*(jdimxf+1));
-								mxy=fabs(g_array_index(stars, gdouble, 0));
-								g_array_append_val(ysb, mxy);
+								dx=g_array_index(sz, gint, 0);
+								{g_array_free(nx, TRUE); g_array_free(sz, TRUE);}
+								nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+								sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+								xf=g_array_index(xsb, gdouble, dx-1);
+								mxy=g_array_index(ysb, gdouble, 0);
 								for (j=1; j<dx; j++)
 								{
-									{iv=g_array_index(stars, gdouble, j); clc=g_array_index(stars, gdouble, (2*dx)-j);}
-									{iv*=iv; clc*=clc;}
-									iv=sqrt(iv+clc);
+									iv=g_array_index(ysb, gdouble, j);
 									if (mxy<iv) mxy=iv;
-									g_array_append_val(ysb, iv);
 								}
+								g_array_append_val(sz, dx);
 								g_array_append_val(nx, dx2);
-								for (k=1; k<=jdimxf; k++)
+								k=1;
+								while (k<jdimxf)
 								{
-									xf=0;
-									g_array_append_val(xsb, xf);
-									iv=fabs(g_array_index(stars, gdouble, 2*k*dx));
-									g_array_append_val(ysb, iv);
+									iv=g_array_index(ysb, gdouble, k*dx);
 									if (mxy<iv) mxy=iv;
 									for (j=1; j<dx; j++)
 									{
-										xf=j*g_array_index(delf, gdouble, 0);
-										g_array_append_val(xsb, xf);
-										{iv=g_array_index(stars, gdouble, j+(2*k*dx)); clc=g_array_index(stars, gdouble, (2*(k+1)*dx)-j);}
-										{iv*=iv; clc*=clc;}
-										iv=sqrt(iv+clc);
+										iv=g_array_index(ysb, gdouble, j+(k*dx));
 										if (mxy<iv) mxy=iv;
-										g_array_append_val(ysb, iv);
 									}
 									g_array_append_val(sz, dx);
 									dx2+=dx;
 									g_array_append_val(nx, dx2);
+									k++;
 								}
 								(plt->sizes)=sz;
 								(plt->ind)=nx;
-								(plt->xdata)=xsb;
-								(plt->ydata)=ysb;
-								plot_linear_update_scale_pretty(plot2, 0, xf, 0, mxy);
 							}
 						}
 					}
@@ -1740,36 +1762,24 @@ void dpr(GtkWidget *widget, gpointer data)
 						if ((flags&2)!=0)
 						{
 							plt=PLOT_LINEAR(plot2);
-							dx=g_array_index((plt->sizes), gint, 0);
-							g_array_free(xsb, TRUE);
-							g_array_free(ysb, TRUE);
+							{xi=0; mny=0;}
+							xf=g_array_index(xsb, gdouble, dx-1);
+							dx=g_array_index(sz, gint, 0);
 							g_array_free(sz, TRUE);
-							g_array_free(nx, TRUE);
-							xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
-							ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
 							sz=g_array_new(FALSE, FALSE, sizeof(gint));
-							nx=g_array_new(FALSE, FALSE, sizeof(gint));
-							xf=0;
-							g_array_append_val(xsb, xf);
-							mxy=fabs(g_array_index(stars, gdouble, 2*jdim*dx));
-							g_array_append_val(ysb, mxy);
-							for (j=1; j<dx; j++)
-							{
-								xf=j*g_array_index(delf, gdouble, 0);
-								g_array_append_val(xsb, xf);
-								{iv=g_array_index(stars, gdouble, j+(2*jdim*dx)); clc=g_array_index(stars, gdouble, (2*(jdim+1)*dx)-j);}
-								{iv*=iv; clc*=clc;}
-								iv=sqrt(iv+clc);
-								if (mxy<iv) mxy=iv;
-								g_array_append_val(ysb, iv);
-							}
 							g_array_append_val(sz, dx);
+							(plt->sizes)=sz;
+							mxy=g_array_index(ysb, gdouble, jdim*dx);
+							for (j=1+(jdim*dx); j<((jdim+1)*dx); j++)
+							{
+								iv=g_array_index(ysb, gdouble, j);
+								if (mxy<iv) mxy=iv;
+							}
+							g_array_free(nx, TRUE);
+							nx=g_array_new(FALSE, FALSE, sizeof(gint));
 							dx=0;
 							g_array_append_val(nx, dx);
-							(plt->sizes)=sz;
 							(plt->ind)=nx;
-							(plt->xdata)=xsb;
-							(plt->ydata)=ysb;
 							plot_linear_update_scale_pretty(plot2, 0, xf, 0, mxy);
 						}
 					}
@@ -1783,7 +1793,15 @@ void dpr(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
-				gtk_container_add(GTK_CONTAINER(content), vbox);
+				gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
+				spr=gtk_vseparator_new();
+				gtk_widget_show(spr);
+				gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
+				colour=gtk_color_selection_new();
+				gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour), TRUE);
+				gtk_widget_show(colour);
+				gtk_box_pack_start(GTK_BOX(hbox), colour, FALSE, FALSE, 2);
+				gtk_container_add(GTK_CONTAINER(content), hbox);
 				if (gtk_dialog_run(GTK_DIALOG(helpwin))==GTK_RESPONSE_APPLY)
 				{
 					g_free(plt->xlab);
@@ -1806,48 +1824,38 @@ void dpr(GtkWidget *widget, gpointer data)
 							if ((flags&2)!=0)/* merge into the one array */
 							{
 								plt=PLOT_LINEAR(plot2);
-								dx=((plt->ydata)->len);
+								{xi=0; mny=0;}
 								dx2=0;
-								g_array_free(ysb, TRUE);
-								g_array_free(nx, TRUE);
-								ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx*(jdimxf+1));
-								nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), dx*(jdimxf+1));
-								mxy=fabs(g_array_index(stars, gdouble, 0));
-								g_array_append_val(ysb, mxy);
+								dx=g_array_index(sz, gint, 0);
+								{g_array_free(nx, TRUE); g_array_free(sz, TRUE);}
+								nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+								sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+								xf=g_array_index(xsb, gdouble, dx-1);
+								mxy=g_array_index(ysb, gdouble, 0);
 								for (j=1; j<dx; j++)
 								{
-									{iv=g_array_index(stars, gdouble, j); clc=g_array_index(stars, gdouble, (2*dx)-j);}
-									{iv*=iv; clc*=clc;}
-									iv=sqrt(iv+clc);
+									iv=g_array_index(ysb, gdouble, j);
 									if (mxy<iv) mxy=iv;
-									g_array_append_val(ysb, iv);
 								}
+								g_array_append_val(sz, dx);
 								g_array_append_val(nx, dx2);
-								for (k=1; k<=jdimxf; k++)
+								k=1;
+								while (k<jdimxf)
 								{
-									xf=0;
-									g_array_append_val(xsb, xf);
-									iv=fabs(g_array_index(stars, gdouble, 2*k*dx));
-									g_array_append_val(ysb, iv);
+									iv=g_array_index(ysb, gdouble, k*dx);
 									if (mxy<iv) mxy=iv;
 									for (j=1; j<dx; j++)
 									{
-										xf=j*g_array_index(delf, gdouble, 0);
-										g_array_append_val(xsb, xf);
-										{iv=g_array_index(stars, gdouble, j+(2*k*dx)); clc=g_array_index(stars, gdouble, (2*(k+1)*dx)-j);}
-										{iv*=iv; clc*=clc;}
-										iv=sqrt(iv+clc);
+										iv=g_array_index(ysb, gdouble, j+(k*dx));
 										if (mxy<iv) mxy=iv;
-										g_array_append_val(ysb, iv);
 									}
 									g_array_append_val(sz, dx);
 									dx2+=dx;
 									g_array_append_val(nx, dx2);
+									k++;
 								}
 								(plt->sizes)=sz;
 								(plt->ind)=nx;
-								(plt->xdata)=xsb;
-								(plt->ydata)=ysb;
 								plot_linear_update_scale_pretty(plot2, 0, xf, 0, mxy);
 							}
 						}
@@ -1858,36 +1866,24 @@ void dpr(GtkWidget *widget, gpointer data)
 						if ((flags&2)!=0)/* narrow array to just one plot */
 						{
 							plt=PLOT_LINEAR(plot2);
-							dx=g_array_index((plt->sizes), gint, 0);
-							g_array_free(xsb, TRUE);
-							g_array_free(ysb, TRUE);
+							{xi=0; mny=0;}
+							xf=g_array_index(xsb, gdouble, dx-1);
+							dx=g_array_index(sz, gint, 0);
 							g_array_free(sz, TRUE);
-							g_array_free(nx, TRUE);
-							xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
-							ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), dx);
 							sz=g_array_new(FALSE, FALSE, sizeof(gint));
-							nx=g_array_new(FALSE, FALSE, sizeof(gint));
-							xf=0;
-							g_array_append_val(xsb, xf);
-							mxy=fabs(g_array_index(stars, gdouble, 2*jdim*dx));
-							g_array_append_val(ysb, mxy);
-							for (j=1; j<dx; j++)
-							{
-								xf=j*g_array_index(delf, gdouble, 0);
-								g_array_append_val(xsb, xf);
-								{iv=g_array_index(stars, gdouble, j+(2*jdim*dx)); clc=g_array_index(stars, gdouble, (2*(jdim+1)*dx)-j);}
-								{iv*=iv; clc*=clc;}
-								iv=sqrt(iv+clc);
-								if (mxy<iv) mxy=iv;
-								g_array_append_val(ysb, iv);
-							}
 							g_array_append_val(sz, dx);
+							(plt->sizes)=sz;
+							mxy=g_array_index(ysb, gdouble, jdim*dx);
+							for (j=1+(jdim*dx); j<((jdim+1)*dx); j++)
+							{
+								iv=g_array_index(ysb, gdouble, j);
+								if (mxy<iv) mxy=iv;
+							}
+							g_array_free(nx, TRUE);
+							nx=g_array_new(FALSE, FALSE, sizeof(gint));
 							dx=0;
 							g_array_append_val(nx, dx);
-							(plt->sizes)=sz;
 							(plt->ind)=nx;
-							(plt->xdata)=xsb;
-							(plt->ydata)=ysb;
 							plot_linear_update_scale_pretty(plot2, 0, xf, 0, mxy);
 						}
 					}

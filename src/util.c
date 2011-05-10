@@ -127,6 +127,8 @@ void upj(GtkWidget *widget, gpointer data)
 	gchar *str;
 
 	jdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), jdim);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), jdim);
 	if (jdim>=jdimx)
 	{
 		num=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isr));
@@ -183,32 +185,18 @@ void upj(GtkWidget *widget, gpointer data)
 		{
 			plt2=PLOT_LINEAR(plot2);
 			sz2=g_array_index((plt2->sizes), gint, 0);
-			g_array_free(xsb, TRUE);
-			g_array_free(ysb, TRUE);
-			xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), sz2);
-			ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), sz2);
-			for (j=0; j<sz2; j++)
+			num=g_array_index(xsb, gdouble, sz2-1);
+			g_array_free(nx, TRUE);
+			nx=g_array_new(FALSE, FALSE, sizeof(gint));
+			k=jdim*sz2;
+			g_array_append_val(nx, k);
+			num2=g_array_index(ysb, gdouble, k);
+			for (j=k+1; j<k+sz2; j++)
 			{
-				num=j*g_array_index(delf, gdouble, jdim);
-				g_array_append_val(xsb, num);
+				num3=g_array_index(ysb, gdouble, j);
+				if (num3>num2) num2=num3;
 			}
-			j*=(2*jdim);
-			num2=fabs(g_array_index(stars, gdouble, j));
-			g_array_append_val(ysb, num2);
-			while (j<(((2*jdim)+1)*sz2))
-			{
-				num6=g_array_index(stars, gdouble, j);
-				num6*=num6;
-				num7=g_array_index(stars, gdouble, (2*sz2)-j);
-				num7*=num7;
-				num6+=num7;
-				num6=sqrt(num6);
-				if (num2<num6) num2=num6;
-				g_array_append_val(ysb, num6);
-				j++;
-			}
-			(plt2->xdata)=xsb;
-			(plt2->ydata)=ysb;
+			(plt2->ind)=nx;
 			plot_linear_update_scale_pretty(plot2, 0, num, 0, num2);
 		}
 		if ((flags&4)!=0)
@@ -406,6 +394,7 @@ void upk(GtkWidget *widget, gpointer data)
 	gchar *str;
 
 	kdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+	if (widget!=kind) gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), kdim);
 	if (kdim>=kdimx)
 	{
 		num=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isr));

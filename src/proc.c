@@ -573,10 +573,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 
 	if ((flags&1)!=0)
 	{
-		g_array_free(stars, TRUE);
-		g_array_free(xsb, TRUE);
-		g_array_free(ysb, TRUE);
-		g_array_free(delf, TRUE);
+		{g_array_free(stars, TRUE); g_array_free(xsb, TRUE); g_array_free(ysb, TRUE); g_array_free(nx, TRUE); g_array_free(sz, TRUE); g_array_free(delf, TRUE);}
 		delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
 		zp=1<<(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(zpd)));
 		n=zp*jdimx;
@@ -2614,38 +2611,81 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			iv=star[j];
 			g_array_append_val(stars, iv);
 		}
-		xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), zp/2);
-		sz=g_array_new(FALSE, FALSE, sizeof(gint));
-		nx=g_array_new(FALSE, FALSE, sizeof(gint));
+		xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n/2);
+		ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n/2);
 		dx=zp/2;
-		dx2=0;
 		if ((flagd&1)==0)
 		{
-			for (j=0; j<zp/2; j++)
+			sz=g_array_new(FALSE, FALSE, sizeof(gint));
+			nx=g_array_new(FALSE, FALSE, sizeof(gint));
+			dx2=jdim*dx;
+			k=0;
+			while (k<jdim)
+			{
+				xx=0;
+				g_array_append_val(xsb, xx);
+				iv=fabs(star[k*zp]);
+				g_array_append_val(ysb, iv);
+				for (j=1; j<zp/2; j++)
+				{
+					xx=j*g_array_index(delf, gdouble, 0);
+					g_array_append_val(xsb, xx);
+					iv=star[j+(k*zp)];
+					iv*=iv;
+					clc=star[((k+1)*zp)-j];
+					clc*=clc;
+					iv+=clc;
+					iv=sqrt(iv);
+					g_array_append_val(ysb, iv);
+				}
+				k++;
+			}
+			xx=0;
+			g_array_append_val(xsb, xx);
+			yx=fabs(star[k*zp]);
+			g_array_append_val(ysb, yx);
+			for (j=1; j<zp/2; j++)
 			{
 				xx=j*g_array_index(delf, gdouble, 0);
 				g_array_append_val(xsb, xx);
-			}
-			ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), zp/2);
-			yx=fabs(star[0]);
-			g_array_append_val(ysb, yx);
-			for (j=1; j<(zp/2); j++)
-			{
-				iv=star[j];
+				iv=star[j+(k*zp)];
 				iv*=iv;
-				clc=star[zp-j];
+				clc=star[((k+1)*zp)-j];
 				clc*=clc;
 				iv+=clc;
 				iv=sqrt(iv);
 				if (yx<iv) yx=iv;
 				g_array_append_val(ysb, iv);
 			}
-			g_array_append_val(sz, dx);
+			k++;
+			while (k<jdimx)
+			{
+				xx=0;
+				g_array_append_val(xsb, xx);
+				iv=fabs(star[k*zp]);
+				g_array_append_val(ysb, iv);
+				for (j=1; j<zp/2; j++)
+				{
+					xx=j*g_array_index(delf, gdouble, 0);
+					g_array_append_val(xsb, xx);
+					iv=star[j+(k*zp)];
+					iv*=iv;
+					clc=star[((k+1)*zp)-j];
+					clc*=clc;
+					iv+=clc;
+					iv=sqrt(iv);
+					g_array_append_val(ysb, iv);
+				}
+				k++;
+			}
 			g_array_append_val(nx, dx2);
+			g_array_append_val(sz, dx);
 		}
 		else
 		{
-			ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n/2);
+			sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx);
+			nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx);
+			dx2=0;
 			xx=0;
 			g_array_append_val(xsb, xx);
 			yx=fabs(star[0]);
@@ -2700,13 +2740,10 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		plot_linear_update_scale_pretty(plot2, 0, xx, 0, yx);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), 0);
-		adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, (jdimx-1), 1.0, 5.0, 0.0);
+		adj=(GtkAdjustment *) gtk_adjustment_new(jdim, 0, (jdimx-1), 1.0, 5.0, 0.0);
 		gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(jind2), adj);
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), 0);
 		adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, G_MAXINT8, 1.0, 5.0, 0.0);
 		gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(kind), adj);
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
 		jdimxf=jdimx;
 		flags|=2;
 		pr_id=g_signal_connect(G_OBJECT(pr), "clicked", G_CALLBACK(prs), NULL);

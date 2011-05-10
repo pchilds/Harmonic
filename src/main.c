@@ -456,6 +456,8 @@ int main( int argc, char *argv[])
 	msr=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	bxr=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	byr=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	sz=g_array_new(FALSE, FALSE, sizeof(gint));
+	nx=g_array_new(FALSE, FALSE, sizeof(gint));
 	bsz=g_array_new(FALSE, FALSE, sizeof(gint));
 	bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 	gtk_widget_show(window);

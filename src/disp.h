@@ -27,7 +27,9 @@
 #	include "main.h"
 	extern GtkWidget *window, *plot1, *plot2, *plot3, *notebook2, *bat, *chi;
 	extern GArray *bxr, *byr, *bsz, *bnx, *msr, *vis, *doms, *chp, *delf, *xsb, *ysb, *sz, *nx, *stars;
-	extern guint jdim, kdim, jdimxf, kdimxf, flags, flagd;
+	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, flags, flagd;
 	extern gint mx;
+	extern void upj(GtkWidget*, gpointer);
+	extern void upk(GtkWidget*, gpointer);
 	void dpr(GtkWidget*, gpointer);
 #endif
