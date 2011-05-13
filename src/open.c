@@ -66,8 +66,8 @@ void opd(GtkWidget *widget, gpointer data)
 {
 	PlotLinear *plt;
 	PlotPolar *plt2;
-	GtkWidget *wfile, *content, *vbox, *table, *butt, *label, *cont, *trace;
-	GtkAdjustment *adj;
+	GtkWidget *wfile, *content, *hbox, *vsc, *table, *scroll, *butt, *label, *cont, *trace;
+	GtkAdjustment *adj, *adj2;
 	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, ofe, clc, dx2, xx, ce;
 	guint j, k, l, m, sal, st, sp, kib;
 	gint n, zp, lcib, dr;
@@ -112,8 +112,6 @@ void opd(GtkWidget *widget, gpointer data)
 					fls=g_array_new(FALSE, FALSE, sizeof(gchar*));
 					vls=g_array_new(FALSE, FALSE, sizeof(gdouble));
 					content=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-					vbox=gtk_vbox_new(FALSE, 0);
-					gtk_widget_show(vbox);
 					table=gtk_table_new(2, 2, FALSE);
 					gtk_widget_show(table);
 					label=gtk_label_new(_("File:"));
@@ -130,8 +128,13 @@ void opd(GtkWidget *widget, gpointer data)
 					spin=gtk_spin_button_new(adj, 0, 0);
 					gtk_widget_show(spin);
 					gtk_table_attach(GTK_TABLE(table), spin, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-					gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
-					gtk_container_add(GTK_CONTAINER(content), vbox);
+					adj=(GtkAdjustment*) gtk_adjustment_new(0, 0, 0, 0.0, 0.0, 0.0);
+					adj2=(GtkAdjustment*) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+					scroll=gtk_scrolled_window_new(adj, adj2);
+					gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+					gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scroll), table);
+					gtk_widget_show(scroll);
+					gtk_box_pack_start(GTK_BOX(content), scroll, TRUE, TRUE, 2);
 					if (gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_APPLY)
 					{
 						mx=(fls->len);

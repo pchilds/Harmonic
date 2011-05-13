@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-05-09 13:05+0300\n"
+"POT-Creation-Date: 2011-05-13 16:07+0300\n"
 "PO-Revision-Date: 2011-05-07 07:52+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Russian <>\n"
@@ -23,47 +23,55 @@ msgstr ""
 msgid "Harmonic Spectrum Analyser"
 msgstr "Гармонического анализатора спектра"
 
-#: src/main.c:115
+#: src/main.c:110
+msgid "Restore Session"
+msgstr ""
+
+#: src/main.c:114
+msgid "Save Session"
+msgstr ""
+
+#: src/main.c:126
 msgid "_File"
 msgstr "_Файл"
 
-#: src/main.c:138
+#: src/main.c:149
 msgid "Raw Delimited Data"
 msgstr "сырья данных с разделителями"
 
-#: src/main.c:142
+#: src/main.c:153
 msgid "Data Format:"
 msgstr "Формат данных:"
 
-#: src/main.c:147
+#: src/main.c:158
 msgid "Trace:"
 msgstr "След:"
 
-#: src/main.c:154
+#: src/main.c:165
 msgid "Transmission Measurement?"
 msgstr "Передачи измерения"
 
-#: src/main.c:158
+#: src/main.c:169
 msgid "Data in dBs?"
 msgstr "Данных в децибелах"
 
-#: src/main.c:162
+#: src/main.c:173
 msgid "Negate?"
 msgstr "Отрицайте"
 
-#: src/main.c:169
+#: src/main.c:180
 msgid "Display Properties:"
 msgstr "Визуального свойство:"
 
-#: src/main.c:174
+#: src/main.c:185
 msgid "_Properties"
 msgstr "_Свойство"
 
-#: src/main.c:180
+#: src/main.c:191
 msgid "None"
 msgstr "Ничего"
 
-#: src/main.c:184
+#: src/main.c:195
 msgid ""
 "1st order\n"
 "spectral shadowing"
@@ -71,7 +79,7 @@ msgstr ""
 "Первого порядка\n"
 "спектральной слеъжка"
 
-#: src/main.c:188
+#: src/main.c:199
 msgid ""
 "Nonlinear\n"
 "Compensation:"
@@ -79,35 +87,35 @@ msgstr ""
 "Нелинейной\n"
 "компенсации:"
 
-#: src/main.c:193
+#: src/main.c:204
 msgid "Fourier"
 msgstr ""
 
-#: src/main.c:197
+#: src/main.c:208
 msgid "Daubechies 4"
 msgstr ""
 
-#: src/main.c:201
+#: src/main.c:212
 msgid "Daubechies 8"
 msgstr ""
 
-#: src/main.c:205
+#: src/main.c:216
 msgid "Meyer"
 msgstr ""
 
-#: src/main.c:209
+#: src/main.c:220
 msgid "Morlet"
 msgstr ""
 
-#: src/main.c:213
+#: src/main.c:224
 msgid "Basis Function:"
 msgstr ""
 
-#: src/main.c:217
+#: src/main.c:228
 msgid "Invert domain?"
 msgstr "Обратите области"
 
-#: src/main.c:221
+#: src/main.c:232
 msgid ""
 "Apply correction\n"
 "to Window edges?"
@@ -115,55 +123,55 @@ msgstr ""
 "Применить поправка\n"
 "к окно края"
 
-#: src/main.c:228
+#: src/main.c:239
 msgid "Optimise Triangle fit?"
 msgstr "Оптимизировайте припадке треугольников"
 
-#: src/main.c:232
+#: src/main.c:243
 msgid "Calculate Chirp?"
 msgstr "Измерите ЛЧМ"
 
-#: src/main.c:239
+#: src/main.c:250
 msgid "Batch Process Data?"
 msgstr "пакетной обработки данных"
 
-#: src/main.c:243
+#: src/main.c:254
 msgid "Autotrack Offset?"
 msgstr "Автоматизировать смещение"
 
-#: src/main.c:247
+#: src/main.c:258
 msgid "_Advanced"
 msgstr "_Дополнительные"
 
-#: src/main.c:252
+#: src/main.c:263
 msgid "Instructions"
 msgstr "Инструкции"
 
-#: src/main.c:261
+#: src/main.c:272
 msgid "_Help"
 msgstr "_Помощь"
 
-#: src/main.c:290
+#: src/main.c:301
 msgid "Spectrum Start:"
 msgstr "Начала спектра:"
 
-#: src/main.c:298
+#: src/main.c:309
 msgid "Spectrum Stop:"
 msgstr "Конце спектра:"
 
-#: src/main.c:306
+#: src/main.c:317
 msgid "Offset:"
 msgstr "Смещение:"
 
-#: src/main.c:313 src/main.c:379
+#: src/main.c:324 src/main.c:390
 msgid "j index:"
 msgstr "З Индекс:"
 
-#: src/main.c:321
+#: src/main.c:332
 msgid "Zero Padding 2^:"
 msgstr "Заполнение нулями 2^:"
 
-#: src/main.c:328 src/main.c:395
+#: src/main.c:339 src/main.c:406
 msgid ""
 "Reset\n"
 "Arrays"
@@ -171,39 +179,39 @@ msgstr ""
 "Сбросите\n"
 "массивов"
 
-#: src/main.c:332
+#: src/main.c:343
 msgid "Transform Spectrum"
 msgstr "Преобразите Спектра."
 
-#: src/main.c:335 src/main.c:414
+#: src/main.c:346 src/main.c:425
 msgid "Spectrum"
 msgstr "Спектра"
 
-#: src/main.c:339
+#: src/main.c:350
 msgid "Inverse Spectrum Start:"
 msgstr "Начала обратный спектр:"
 
-#: src/main.c:347
+#: src/main.c:358
 msgid "Inverse Spectrum Stop:"
 msgstr "Конце обратный спектр:"
 
-#: src/main.c:355
+#: src/main.c:366
 msgid "Triangle Centre:"
 msgstr "Центре Треугольника:"
 
-#: src/main.c:363
+#: src/main.c:374
 msgid "Triangle Full Width:"
 msgstr "Полная ширина треугольника:"
 
-#: src/main.c:371
+#: src/main.c:382
 msgid "DC Peak Width:"
 msgstr "Ширина пика DC:"
 
-#: src/main.c:387
+#: src/main.c:398
 msgid "k index:"
 msgstr "К Индекс:"
 
-#: src/main.c:399
+#: src/main.c:410
 msgid ""
 "Process\n"
 "Spectrum"
@@ -211,28 +219,28 @@ msgstr ""
 "Обработайте\n"
 "Спектра"
 
-#: src/main.c:402 src/main.c:423
+#: src/main.c:413 src/main.c:434
 msgid "Inverse Spectrum"
 msgstr "Обратный спектр"
 
-#: src/main.c:419
+#: src/main.c:430
 msgid "Inverse Domain"
 msgstr "Обратная области"
 
-#: src/main.c:427 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
-#: src/data.c:1119 src/data.c:1260 src/disp.c:98 src/disp.c:664
-#: src/disp.c:1183 src/open.c:24089
+#: src/main.c:438 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
+#: src/data.c:1119 src/data.c:1260 src/disp.c:102 src/disp.c:741
+#: src/disp.c:1334 src/open.c:24079
 msgid "Visibility"
 msgstr "Видимость"
 
-#: src/main.c:433 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
-#: src/data.c:1119 src/data.c:1260 src/disp.c:99 src/disp.c:665
-#: src/disp.c:1184 src/open.c:24095
+#: src/main.c:444 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
+#: src/data.c:1119 src/data.c:1260 src/disp.c:103 src/disp.c:742
+#: src/disp.c:1335 src/open.c:24085
 msgid "Domain Shift"
 msgstr "Сдвига области"
 
-#: src/main.c:439 src/open.c:23970 src/open.c:23983 src/open.c:24009
-#: src/open.c:24036 src/open.c:24101
+#: src/main.c:450 src/open.c:23973 src/open.c:23999 src/open.c:24026
+#: src/open.c:24091
 msgid "Analysis Results"
 msgstr "Результаты анализа"
 
@@ -258,6 +266,68 @@ msgstr "Paul Childs"
 msgid "x: %f, y: %f"
 msgstr "x: %f, y: %f"
 
+#: src/util.c:612 src/util.c:639
+#, fuzzy
+msgid "Select Session File"
+msgstr "Выберите файл конфигурации"
+
+#: src/util.c:622 src/data.c:217 src/data.c:240 src/data.c:263 src/data.c:285
+#: src/data.c:343 src/data.c:385 src/data.c:427 src/data.c:469 src/data.c:528
+#: src/data.c:570 src/data.c:612 src/data.c:654 src/data.c:712 src/data.c:754
+#: src/data.c:796 src/data.c:838 src/data.c:884 src/data.c:926 src/data.c:968
+#: src/data.c:1010 src/data.c:1061 src/data.c:1084 src/data.c:1107
+#: src/data.c:1163 src/data.c:1205 src/data.c:1247 src/data.c:1304
+#: src/data.c:1346 src/data.c:1388 src/data.c:1444 src/data.c:1486
+#: src/data.c:1528 src/data.c:1572 src/data.c:1614 src/data.c:1656
+#: src/data.c:1695 src/data.c:1721 src/data.c:1769 src/data.c:1802
+#: src/data.c:1827 src/data.c:1873 src/data.c:1953 src/data.c:2027
+#: src/data.c:2118 src/data.c:2192 src/data.c:2284 src/data.c:2358
+#: src/open.c:163
+#, c-format
+msgid "Error Saving file: %s."
+msgstr "Ошибка при сохранении файла: %s."
+
+#: src/util.c:649 src/open.c:377 src/open.c:548 src/open.c:721 src/open.c:893
+#: src/open.c:1065 src/open.c:1237 src/open.c:1413 src/open.c:1584
+#: src/open.c:1757 src/open.c:1929 src/open.c:2101 src/open.c:2273
+#: src/open.c:2494 src/open.c:2708 src/open.c:2892 src/open.c:3075
+#: src/open.c:3292 src/open.c:3480 src/open.c:3695 src/open.c:3905
+#: src/open.c:4089 src/open.c:4272 src/open.c:4487 src/open.c:4670
+#: src/open.c:4807 src/open.c:4934 src/open.c:5063 src/open.c:5191
+#: src/open.c:5319 src/open.c:5447 src/open.c:5579 src/open.c:5706
+#: src/open.c:5835 src/open.c:5963 src/open.c:6091 src/open.c:6219
+#: src/open.c:6397 src/open.c:6567 src/open.c:6707 src/open.c:6846
+#: src/open.c:7019 src/open.c:7163 src/open.c:7335 src/open.c:7501
+#: src/open.c:7641 src/open.c:7780 src/open.c:7952 src/open.c:8092
+#: src/open.c:8283 src/open.c:8457 src/open.c:8632 src/open.c:8806
+#: src/open.c:8981 src/open.c:9155 src/open.c:9334 src/open.c:9508
+#: src/open.c:9683 src/open.c:9857 src/open.c:10032 src/open.c:10206
+#: src/open.c:10407 src/open.c:10601 src/open.c:10787 src/open.c:10972
+#: src/open.c:11164 src/open.c:11354 src/open.c:11549 src/open.c:11739
+#: src/open.c:11925 src/open.c:12110 src/open.c:12300 src/open.c:12485
+#: src/open.c:12625 src/open.c:12755 src/open.c:12886 src/open.c:13016
+#: src/open.c:13147 src/open.c:13277 src/open.c:13412 src/open.c:13542
+#: src/open.c:13673 src/open.c:13803 src/open.c:13934 src/open.c:14064
+#: src/open.c:14222 src/open.c:14372 src/open.c:14514 src/open.c:14655
+#: src/open.c:14803 src/open.c:14949 src/open.c:15101 src/open.c:15247
+#: src/open.c:15389 src/open.c:15530 src/open.c:15677 src/open.c:15819
+#: src/open.c:16008 src/open.c:16181 src/open.c:16353 src/open.c:16524
+#: src/open.c:16696 src/open.c:16867 src/open.c:17043 src/open.c:17214
+#: src/open.c:17386 src/open.c:17557 src/open.c:17729 src/open.c:17900
+#: src/open.c:18098 src/open.c:18289 src/open.c:18472 src/open.c:18654
+#: src/open.c:18851 src/open.c:19047 src/open.c:19242 src/open.c:19429
+#: src/open.c:19612 src/open.c:19794 src/open.c:19989 src/open.c:20180
+#: src/open.c:20319 src/open.c:20446 src/open.c:20574 src/open.c:20701
+#: src/open.c:20829 src/open.c:20956 src/open.c:21088 src/open.c:21215
+#: src/open.c:21343 src/open.c:21470 src/open.c:21598 src/open.c:21725
+#: src/open.c:21881 src/open.c:22028 src/open.c:22167 src/open.c:22305
+#: src/open.c:22458 src/open.c:22610 src/open.c:22761 src/open.c:22904
+#: src/open.c:23043 src/open.c:23181 src/open.c:23334 src/open.c:23483
+#: src/open.c:24050 src/open.c:24182
+#, c-format
+msgid "Loading failed for file: %s, Error: %s."
+msgstr "Загрузка не удалась по файл: %s, ошибка: %s."
+
 #: src/data.c:38 src/data.c:56 src/data.c:73 src/data.c:99 src/data.c:116
 #: src/data.c:142
 msgid "Select Image File"
@@ -269,7 +339,7 @@ msgstr "Нет доступных изображений."
 
 #: src/data.c:182 src/data.c:1027 src/data.c:1673 src/data.c:1781
 #: src/data.c:1886 src/data.c:2051 src/data.c:2217 src/open.c:39
-#: src/open.c:24072
+#: src/open.c:24062
 msgid "Select Data File"
 msgstr "Выберите файл изображения"
 
@@ -280,7 +350,7 @@ msgid "Parameter selection"
 msgstr "Выбор параметр"
 
 #: src/data.c:192 src/data.c:297 src/data.c:482 src/proc.c:176 src/proc.c:430
-#: src/disp.c:101 src/disp.c:667 src/disp.c:1186
+#: src/disp.c:106 src/disp.c:745 src/disp.c:1337
 msgid "Chirp"
 msgstr "ЛЧМ"
 
@@ -297,21 +367,6 @@ msgstr "Выберите параметр сохранить:"
 #: src/data.c:199 src/data.c:304 src/data.c:489 src/data.c:673 src/data.c:845
 msgid "MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr "ИЗМЕРЕНИЯ\tВИДИМОСТЬ\tСДВЫГ_ОБЛ\tЛЧМ      "
-
-#: src/data.c:217 src/data.c:240 src/data.c:263 src/data.c:285 src/data.c:343
-#: src/data.c:385 src/data.c:427 src/data.c:469 src/data.c:528 src/data.c:570
-#: src/data.c:612 src/data.c:654 src/data.c:712 src/data.c:754 src/data.c:796
-#: src/data.c:838 src/data.c:884 src/data.c:926 src/data.c:968 src/data.c:1010
-#: src/data.c:1061 src/data.c:1084 src/data.c:1107 src/data.c:1163
-#: src/data.c:1205 src/data.c:1247 src/data.c:1304 src/data.c:1346
-#: src/data.c:1388 src/data.c:1444 src/data.c:1486 src/data.c:1528
-#: src/data.c:1572 src/data.c:1614 src/data.c:1656 src/data.c:1695
-#: src/data.c:1721 src/data.c:1769 src/data.c:1802 src/data.c:1827
-#: src/data.c:1873 src/data.c:1953 src/data.c:2027 src/data.c:2118
-#: src/data.c:2192 src/data.c:2284 src/data.c:2358 src/open.c:160
-#, c-format
-msgid "Error Saving file: %s."
-msgstr "Ошибка при сохранении файла: %s."
 
 #: src/data.c:224 src/data.c:350 src/data.c:535 src/data.c:719 src/data.c:891
 msgid "MEAS     \tCHIRP    "
@@ -471,87 +526,87 @@ msgstr "Недостаточное оконной диапазон в канал
 msgid "No transform for analysis exists yet."
 msgstr "Нет преобразования для анализа еще не существует."
 
-#: src/proc.c:612 src/proc.c:633 src/proc.c:655 src/proc.c:676 src/proc.c:698
-#: src/proc.c:719 src/proc.c:745 src/proc.c:766 src/proc.c:788 src/proc.c:809
-#: src/proc.c:831 src/proc.c:852 src/proc.c:888 src/proc.c:909 src/proc.c:931
-#: src/proc.c:952 src/proc.c:974 src/proc.c:995 src/proc.c:1021
-#: src/proc.c:1042 src/proc.c:1064 src/proc.c:1085 src/proc.c:1107
-#: src/proc.c:1128 src/proc.c:1157 src/proc.c:1178 src/proc.c:1200
-#: src/proc.c:1221 src/proc.c:1243 src/proc.c:1264 src/proc.c:1291
-#: src/proc.c:1312 src/proc.c:1334 src/proc.c:1355 src/proc.c:1378
-#: src/proc.c:1400 src/proc.c:1430 src/proc.c:1483 src/proc.c:1538
-#: src/proc.c:1562 src/proc.c:1586 src/proc.c:1642 src/proc.c:1675
-#: src/proc.c:1724 src/proc.c:1775 src/proc.c:1799 src/proc.c:1823
-#: src/proc.c:1877 src/proc.c:1915 src/proc.c:1947 src/proc.c:1980
-#: src/proc.c:2003 src/proc.c:2027 src/proc.c:2056 src/proc.c:2089
-#: src/proc.c:2117 src/proc.c:2146 src/proc.c:2169 src/proc.c:2193
-#: src/proc.c:2220 src/proc.c:2251 src/proc.c:2283 src/proc.c:2316
-#: src/proc.c:2339 src/proc.c:2371 src/proc.c:2409 src/proc.c:2444
-#: src/proc.c:2473 src/proc.c:2502 src/proc.c:2525 src/proc.c:2558
-#: src/proc.c:2595
+#: src/proc.c:609 src/proc.c:630 src/proc.c:652 src/proc.c:673 src/proc.c:695
+#: src/proc.c:716 src/proc.c:742 src/proc.c:763 src/proc.c:785 src/proc.c:806
+#: src/proc.c:828 src/proc.c:849 src/proc.c:885 src/proc.c:906 src/proc.c:928
+#: src/proc.c:949 src/proc.c:971 src/proc.c:992 src/proc.c:1018
+#: src/proc.c:1039 src/proc.c:1061 src/proc.c:1082 src/proc.c:1104
+#: src/proc.c:1125 src/proc.c:1154 src/proc.c:1175 src/proc.c:1197
+#: src/proc.c:1218 src/proc.c:1240 src/proc.c:1261 src/proc.c:1288
+#: src/proc.c:1309 src/proc.c:1331 src/proc.c:1352 src/proc.c:1375
+#: src/proc.c:1397 src/proc.c:1427 src/proc.c:1480 src/proc.c:1535
+#: src/proc.c:1559 src/proc.c:1583 src/proc.c:1639 src/proc.c:1672
+#: src/proc.c:1721 src/proc.c:1772 src/proc.c:1796 src/proc.c:1820
+#: src/proc.c:1874 src/proc.c:1912 src/proc.c:1944 src/proc.c:1977
+#: src/proc.c:2000 src/proc.c:2024 src/proc.c:2053 src/proc.c:2086
+#: src/proc.c:2114 src/proc.c:2143 src/proc.c:2166 src/proc.c:2190
+#: src/proc.c:2217 src/proc.c:2248 src/proc.c:2280 src/proc.c:2313
+#: src/proc.c:2336 src/proc.c:2368 src/proc.c:2406 src/proc.c:2441
+#: src/proc.c:2470 src/proc.c:2499 src/proc.c:2522 src/proc.c:2555
+#: src/proc.c:2592
 #, c-format
 msgid "Some clipping occured in channel %d. Increase zero padding."
 msgstr ""
 "Некоторые отсечения произошло в канале %d. Увеличите заполнение нулями."
 
-#: src/proc.c:2354 src/proc.c:2392 src/proc.c:2541 src/proc.c:2578
-#: src/open.c:18665 src/open.c:18862 src/open.c:19805 src/open.c:20000
-#: src/open.c:22316 src/open.c:22469 src/open.c:23194 src/open.c:23347
+#: src/proc.c:2351 src/proc.c:2389 src/proc.c:2538 src/proc.c:2575
+#: src/open.c:18668 src/open.c:18865 src/open.c:19808 src/open.c:20003
+#: src/open.c:22319 src/open.c:22472 src/open.c:23197 src/open.c:23350
 msgid "Offset must be nonzero for linear measurements."
 msgstr "Смещение должно быть отлично от нуля для линейных измерений."
 
-#: src/proc.c:2716
+#: src/proc.c:2753
 msgid "Open a file for analysis first."
 msgstr "Откройте файл для анализа в первую очередь."
 
-#: src/disp.c:38
+#: src/disp.c:40
 msgid "Display Properties"
 msgstr "Визуального свойство"
 
-#: src/disp.c:48 src/disp.c:614 src/disp.c:1211 src/disp.c:1500
+#: src/disp.c:52 src/disp.c:691 src/disp.c:1363 src/disp.c:1632
 msgid "Axis label font:"
 msgstr ""
 
-#: src/disp.c:51 src/disp.c:617 src/disp.c:1214 src/disp.c:1503
+#: src/disp.c:55 src/disp.c:694 src/disp.c:1366 src/disp.c:1635
 #, fuzzy
 msgid "Tick label font:"
 msgstr "Размер галочкой этикетки:"
 
-#: src/disp.c:58
+#: src/disp.c:62
 msgid "Radial axis text:"
 msgstr "Текст радиальном оси:"
 
-#: src/disp.c:61
+#: src/disp.c:65
 msgid "Azimuthal axis text:"
 msgstr "Текст азимутальной оси:"
 
-#: src/disp.c:78 src/disp.c:644 src/disp.c:1241 src/disp.c:1530
+#: src/disp.c:82 src/disp.c:721 src/disp.c:1393 src/disp.c:1662
 msgid "Font Selection for Axis Labels"
 msgstr ""
 
-#: src/disp.c:86 src/disp.c:652 src/disp.c:1249 src/disp.c:1538
+#: src/disp.c:90 src/disp.c:729 src/disp.c:1401 src/disp.c:1670
 msgid "Font Selection for Tick Mark Labels"
 msgstr ""
 
-#: src/disp.c:104 src/disp.c:670 src/disp.c:1189 src/disp.c:1266
-#: src/disp.c:1555
+#: src/disp.c:114 src/disp.c:753 src/disp.c:1340 src/disp.c:1426
+#: src/disp.c:1687
 msgid "Multiple plots for Results over index j"
 msgstr "Несколько участков результаты за индексом J"
 
-#: src/disp.c:108 src/disp.c:674 src/disp.c:1193 src/disp.c:1270
-#: src/disp.c:1559
+#: src/disp.c:123 src/disp.c:762 src/disp.c:1344 src/disp.c:1430
+#: src/disp.c:1691
 msgid "Multiple plots for Results over index k"
 msgstr "Несколько участков результаты за индексом K"
 
-#: src/disp.c:624 src/disp.c:1221 src/disp.c:1510
+#: src/disp.c:701 src/disp.c:1373 src/disp.c:1642
 msgid "X axis text:"
 msgstr "Текст оси x:"
 
-#: src/disp.c:627 src/disp.c:1224 src/disp.c:1513
+#: src/disp.c:704 src/disp.c:1376 src/disp.c:1645
 msgid "Y axis text:"
 msgstr "Текст оси y:"
 
-#: src/disp.c:1260 src/disp.c:1549
+#: src/disp.c:1414 src/disp.c:1681
 msgid "Multiple plots for Inverse Domain"
 msgstr "Несколько участков для обратной области"
 
@@ -575,87 +630,46 @@ msgstr "Выберите файл конфигурации"
 msgid "Configuration file generation"
 msgstr "Файл конфигурации поколения"
 
-#: src/open.c:119
+#: src/open.c:117
 msgid "File:"
 msgstr "Файл"
 
-#: src/open.c:122
+#: src/open.c:120
 msgid ""
 "Measurand\n"
 "Value:"
 msgstr "Измеряемой значение"
 
-#: src/open.c:125
+#: src/open.c:123
 msgid "Add another file"
 msgstr ""
 
-#: src/open.c:374 src/open.c:545 src/open.c:718 src/open.c:890 src/open.c:1062
-#: src/open.c:1234 src/open.c:1410 src/open.c:1581 src/open.c:1754
-#: src/open.c:1926 src/open.c:2098 src/open.c:2270 src/open.c:2491
-#: src/open.c:2705 src/open.c:2889 src/open.c:3072 src/open.c:3289
-#: src/open.c:3477 src/open.c:3692 src/open.c:3902 src/open.c:4086
-#: src/open.c:4269 src/open.c:4484 src/open.c:4667 src/open.c:4804
-#: src/open.c:4931 src/open.c:5060 src/open.c:5188 src/open.c:5316
-#: src/open.c:5444 src/open.c:5576 src/open.c:5703 src/open.c:5832
-#: src/open.c:5960 src/open.c:6088 src/open.c:6216 src/open.c:6394
-#: src/open.c:6564 src/open.c:6704 src/open.c:6843 src/open.c:7016
-#: src/open.c:7160 src/open.c:7332 src/open.c:7498 src/open.c:7638
-#: src/open.c:7777 src/open.c:7949 src/open.c:8089 src/open.c:8280
-#: src/open.c:8454 src/open.c:8629 src/open.c:8803 src/open.c:8978
-#: src/open.c:9152 src/open.c:9331 src/open.c:9505 src/open.c:9680
-#: src/open.c:9854 src/open.c:10029 src/open.c:10203 src/open.c:10404
-#: src/open.c:10598 src/open.c:10784 src/open.c:10969 src/open.c:11161
-#: src/open.c:11351 src/open.c:11546 src/open.c:11736 src/open.c:11922
-#: src/open.c:12107 src/open.c:12297 src/open.c:12482 src/open.c:12622
-#: src/open.c:12752 src/open.c:12883 src/open.c:13013 src/open.c:13144
-#: src/open.c:13274 src/open.c:13409 src/open.c:13539 src/open.c:13670
-#: src/open.c:13800 src/open.c:13931 src/open.c:14061 src/open.c:14219
-#: src/open.c:14369 src/open.c:14511 src/open.c:14652 src/open.c:14800
-#: src/open.c:14946 src/open.c:15098 src/open.c:15244 src/open.c:15386
-#: src/open.c:15527 src/open.c:15674 src/open.c:15816 src/open.c:16005
-#: src/open.c:16178 src/open.c:16350 src/open.c:16521 src/open.c:16693
-#: src/open.c:16864 src/open.c:17040 src/open.c:17211 src/open.c:17383
-#: src/open.c:17554 src/open.c:17726 src/open.c:17897 src/open.c:18095
-#: src/open.c:18286 src/open.c:18469 src/open.c:18651 src/open.c:18848
-#: src/open.c:19044 src/open.c:19239 src/open.c:19426 src/open.c:19609
-#: src/open.c:19791 src/open.c:19986 src/open.c:20177 src/open.c:20316
-#: src/open.c:20443 src/open.c:20571 src/open.c:20698 src/open.c:20826
-#: src/open.c:20953 src/open.c:21085 src/open.c:21212 src/open.c:21340
-#: src/open.c:21467 src/open.c:21595 src/open.c:21722 src/open.c:21878
-#: src/open.c:22025 src/open.c:22164 src/open.c:22302 src/open.c:22455
-#: src/open.c:22607 src/open.c:22758 src/open.c:22901 src/open.c:23040
-#: src/open.c:23178 src/open.c:23331 src/open.c:23480 src/open.c:24060
-#: src/open.c:24192
-#, c-format
-msgid "Loading failed for file: %s, Error: %s."
-msgstr "Загрузка не удалась по файл: %s, ошибка: %s."
-
-#: src/open.c:23954
+#: src/open.c:23957
 msgid "Measurand Variable Type"
 msgstr "Параметр интерес"
 
-#: src/open.c:23954
+#: src/open.c:23957
 msgid "Linear"
 msgstr "Линейные"
 
-#: src/open.c:23954
+#: src/open.c:23957
 msgid ""
 "Polar\n"
 "(Degrees)"
 msgstr ""
 
-#: src/open.c:23954
+#: src/open.c:23957
 msgid ""
 "Polar\n"
 "(Radians)"
 msgstr ""
 
-#: src/open.c:23956
+#: src/open.c:23959
 #, fuzzy
 msgid "Select Measurand Type:"
 msgstr "Параметр интерес"
 
-#: src/open.c:24173
+#: src/open.c:24163
 #, c-format
 msgid "File: %s successfully loaded."
 msgstr "Файл: %s успешно загружены."

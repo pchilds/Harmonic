@@ -46,6 +46,7 @@ struct _PlotPolar
 	GtkDrawingArea parent;
 	GArray *rdata, *thdata; /* radial and azimuthal data values */
 	GArray *ind, *sizes; /* indices of first element and number of elements for each trace */
+	GArray *rd, *gr, *bl, *al; /* colour and alpha of the plots */
 	gchar *rlab, *thlab; /* labels for the radial and azimuthal axis */
 	PangoFontDescription *afont, *lfont; /* font descriptions for the tick mark and axis labels */
 	gdouble rps, thps; /* radial and azimuthal position of mouse */

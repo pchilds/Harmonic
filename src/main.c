@@ -37,9 +37,12 @@
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
  * OPD: improve config writing utility to reorder post entry
+ * OPD: crash batch->nonbatch open
+ * OPD: extra zero on the end (varies due to situation)
+ * SAV: session save/restore routine
  * DPR: change to be nonmodal
  * DPR: plot colour editor
- * DPR: fix problems with editing plot3
+ * PLOT: disappearance of plot1
  * TRS: wavelets
  */
 
@@ -102,6 +105,17 @@ int main( int argc, char *argv[])
 	mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT, NULL);
 	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_p, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(prt), NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
+	gtk_widget_show(mni);
+	mni=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
+	gtk_widget_show(mni);
+	mni=gtk_menu_item_new_with_label(_("Restore Session"));
+	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(sessres), NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
+	gtk_widget_show(mni);
+	mni=gtk_menu_item_new_with_label(_("Save Session"));
+	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(sesssav), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
 	mni=gtk_separator_menu_item_new();

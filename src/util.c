@@ -603,6 +603,60 @@ void upk(GtkWidget *widget, gpointer data)
 	}
 }
 
+void sesssav(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *wfile;
+	gchar *contents, *str, *fout=NULL;
+	GError *Err=NULL;
+
+	wfile=gtk_file_chooser_dialog_new(_("Select Session File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+	g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
+	if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+	{
+		fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
+		g_file_set_contents(fout, contents, -1, &Err);
+		g_free(contents);
+		if (Err)
+		{
+			str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
+			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+			g_free(str);
+			g_error_free(Err);
+		}
+		g_free(contents);
+		g_free(fout);
+	}
+	gtk_widget_destroy(wfile);
+}
+
+void sessres(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *wfile;
+	gchar *contents, *str, *fin=NULL;
+	GError *Err=NULL;
+
+	wfile=gtk_file_chooser_dialog_new(_("Select Session File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+	g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+	if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+	{
+		fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
+		if (g_file_get_contents(fin, &contents, NULL, &Err))
+		{
+		}
+		else
+		{
+			str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar*) Err);
+			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+			g_free(str);
+			g_error_free(Err);
+		}
+		g_free(contents);
+		g_free(fin);
+	}
+	gtk_widget_destroy(wfile);
+}
+
 void upa2(GtkWidget *widget, gpointer data)
 {
 	gdouble *ptr;

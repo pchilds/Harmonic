@@ -60,7 +60,7 @@ static guint plot_linear_signals[LAST_SIGNAL]={0};
 typedef struct _PlotLinearPrivate PlotLinearPrivate;
 struct xs {gdouble xmin, ymin, xmax, ymax;};
 struct tk {guint xj, yj, xn, yn;};
-struct _PlotLinearPrivate {struct xs bounds, rescale; struct tk ticks, range; GArray *rd, *gr, *bl, *al; guint xcs, ycs, flaga, flagr;};
+struct _PlotLinearPrivate {struct xs bounds, rescale; struct tk ticks, range; guint xcs, ycs, flaga, flagr;};
 
 static void drawz(GtkWidget *widget, cairo_t *cr)
 {
@@ -2609,11 +2609,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			{
 				for (k=0; k<(plot->ind->len); k++)
 				{
-					dtt=fmod(k,(priv->rd->len));
-					vv=g_array_index((priv->rd), gdouble, dtt);
-					wv=g_array_index((priv->gr), gdouble, dtt);
-					zv=g_array_index((priv->bl), gdouble, dtt);
-					av=g_array_index((priv->al), gdouble, dtt);
+					dtt=fmod(k,(plot->rd->len));
+					vv=g_array_index((plot->rd), gdouble, dtt);
+					wv=g_array_index((plot->gr), gdouble, dtt);
+					zv=g_array_index((plot->bl), gdouble, dtt);
+					av=g_array_index((plot->al), gdouble, dtt);
 					cairo_set_source_rgba(cr, vv, wv, zv, av);
 					ft=g_array_index((plot->ind), gint, k);
 					lt=g_array_index((plot->sizes), gint, k)+ft;
@@ -2962,11 +2962,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			{
 				for (k=0;k<(plot->ind->len);k++)
 				{
-					dtt=fmod(k,(priv->rd->len));
-					vv=g_array_index((priv->rd), gdouble, dtt);
-					wv=g_array_index((priv->gr), gdouble, dtt);
-					zv=g_array_index((priv->bl), gdouble, dtt);
-					av=g_array_index((priv->al), gdouble, dtt);
+					dtt=fmod(k,(plot->rd->len));
+					vv=g_array_index((plot->rd), gdouble, dtt);
+					wv=g_array_index((plot->gr), gdouble, dtt);
+					zv=g_array_index((plot->bl), gdouble, dtt);
+					av=g_array_index((plot->al), gdouble, dtt);
 					cairo_set_source_rgba(cr, vv, wv, zv, av);
 					ft=g_array_index((plot->ind), gint, k);
 					lt=g_array_index((plot->sizes), gint, k)+ft;
@@ -3322,11 +3322,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		{
 			for (k=0;k<(plot->ind->len);k++)
 			{
-				dtt=fmod(k,(priv->rd->len));
-				vv=g_array_index((priv->rd), gdouble, dtt);
-				wv=g_array_index((priv->gr), gdouble, dtt);
-				zv=g_array_index((priv->bl), gdouble, dtt);
-				av=g_array_index((priv->al), gdouble, dtt);
+				dtt=fmod(k,(plot->rd->len));
+				vv=g_array_index((plot->rd), gdouble, dtt);
+				wv=g_array_index((plot->gr), gdouble, dtt);
+				zv=g_array_index((plot->bl), gdouble, dtt);
+				av=g_array_index((plot->al), gdouble, dtt);
 				cairo_set_source_rgba(cr, vv, wv, zv, av);
 				ft=g_array_index((plot->ind), gint, k);
 				lt=g_array_index((plot->sizes), gint, k)+ft;
@@ -3900,10 +3900,10 @@ static void plot_linear_finalise(PlotLinear *plot)
 	if (plot->ydata) g_array_free((plot->ydata), FALSE);
 	if (plot->ind) g_array_free((plot->ind), FALSE);
 	if (plot->sizes) g_array_free((plot->sizes), FALSE);
-	if (priv->rd) g_array_free((priv->rd), FALSE);
-	if (priv->gr) g_array_free((priv->gr), FALSE);
-	if (priv->bl) g_array_free((priv->bl), FALSE);
-	if (priv->al) g_array_free((priv->al), FALSE);
+	if (plot->rd) g_array_free((plot->rd), FALSE);
+	if (plot->gr) g_array_free((plot->gr), FALSE);
+	if (plot->bl) g_array_free((plot->bl), FALSE);
+	if (plot->al) g_array_free((plot->al), FALSE);
 }
 
 static void plot_linear_set_property(GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec)
@@ -4013,45 +4013,45 @@ static void plot_linear_init(PlotLinear *plot)
 	{pango_font_description_set_family((plot->afont), "sans"); pango_font_description_set_family((plot->lfont), "sans");}
 	{pango_font_description_set_style((plot->afont), PANGO_STYLE_NORMAL); pango_font_description_set_style((plot->lfont), PANGO_STYLE_NORMAL);}
 	{pango_font_description_set_size((plot->afont), 12*PANGO_SCALE); pango_font_description_set_size((plot->lfont), 12*PANGO_SCALE);}
-	(priv->rd)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 10);
-	(priv->gr)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 10);
-	(priv->bl)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 10);
-	(priv->al)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 10);
+	(plot->rd)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 7);
+	(plot->gr)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 7);
+	(plot->bl)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 7);
+	(plot->al)=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 7);
 	val=0;
-	g_array_append_val((priv->rd), val);
-	g_array_append_val((priv->gr), val);
-	g_array_append_val((priv->bl), val);
-	g_array_append_val((priv->gr), val);
-	g_array_append_val((priv->bl), val);
-	g_array_append_val((priv->bl), val);
+	g_array_append_val((plot->rd), val);
+	g_array_append_val((plot->gr), val);
+	g_array_append_val((plot->bl), val);
+	g_array_append_val((plot->gr), val);
+	g_array_append_val((plot->bl), val);
+	g_array_append_val((plot->bl), val);
 	val=1;
-	g_array_append_val((priv->rd), val);
-	g_array_append_val((priv->gr), val);
-	g_array_append_val((priv->bl), val);
+	g_array_append_val((plot->rd), val);
+	g_array_append_val((plot->gr), val);
+	g_array_append_val((plot->bl), val);
 	val=0;
-	g_array_append_val((priv->rd), val);
-	g_array_append_val((priv->gr), val);
-	g_array_append_val((priv->bl), val);
-	g_array_append_val((priv->rd), val);
+	g_array_append_val((plot->rd), val);
+	g_array_append_val((plot->gr), val);
+	g_array_append_val((plot->bl), val);
+	g_array_append_val((plot->rd), val);
 	val=1.0;
-	g_array_append_val((priv->gr), val);
-	g_array_append_val((priv->bl), val);
-	g_array_append_val((priv->rd), val);
-	g_array_append_val((priv->gr), val);
-	g_array_append_val((priv->bl), val);
+	g_array_append_val((plot->gr), val);
+	g_array_append_val((plot->bl), val);
+	g_array_append_val((plot->rd), val);
+	g_array_append_val((plot->gr), val);
+	g_array_append_val((plot->bl), val);
 	val=0;
-	g_array_append_val((priv->rd), val);
-	g_array_append_val((priv->gr), val);
+	g_array_append_val((plot->rd), val);
+	g_array_append_val((plot->gr), val);
 	val=1;
-	g_array_append_val((priv->rd), val);
+	g_array_append_val((plot->rd), val);
 	val=0.8;
-	g_array_append_val((priv->al), val);
-	g_array_append_val((priv->al), val);
-	g_array_append_val((priv->al), val);
-	g_array_append_val((priv->al), val);
-	g_array_append_val((priv->al), val);
-	g_array_append_val((priv->al), val);
-	g_array_append_val((priv->al), val);
+	g_array_append_val((plot->al), val);
+	g_array_append_val((plot->al), val);
+	g_array_append_val((plot->al), val);
+	g_array_append_val((plot->al), val);
+	g_array_append_val((plot->al), val);
+	g_array_append_val((plot->al), val);
+	g_array_append_val((plot->al), val);
 }
 
 GtkWidget *plot_linear_new(void) {return g_object_new(PLOT_TYPE_LINEAR, NULL);}
