@@ -28,7 +28,7 @@
 	extern GtkWidget *window, *statusbar, *plot1, *plot2, *plot3, *visl, *dsl, *chil;
 	extern GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; 
 	extern GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *vis, *doms, *chp, *byr;
-	extern GArray *x, *yb, *xsb, *ysb, *sz, *nx, *delf, *stars, *specs;
+	extern GArray *x, *yb, *xsb, *ysb, *nx2, *delf, *stars, *specs;
 	extern GSList *group2;
 	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, satl, trc, flags, flagd;
 	extern gint lc, mx;

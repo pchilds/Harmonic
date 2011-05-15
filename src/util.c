@@ -60,7 +60,7 @@ void upg(GtkWidget *widget, gpointer data)
 {
 	PlotLinear *plt;
 	gdouble dt, xi, xf, mny, mxy;
-	gint j, sz;
+	gint j, sz4;
 	GSList *list;
 
 	trc=satl;
@@ -72,14 +72,14 @@ void upg(GtkWidget *widget, gpointer data)
 		trc--;
 	}
 	plt=PLOT_LINEAR(plot1);
-	sz=g_array_index((plt->sizes), gint, 0);/* adjust accordingly with multitrace considerations*/
+	sz4=g_array_index((plt->sizes), gint, 0);/* adjust accordingly with multitrace considerations*/
 	g_array_free(yb, TRUE);
 	yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	dt=g_array_index(specs, gdouble, trc-1);
 	mny=dt;
 	mxy=dt;
 	g_array_append_val(yb, dt);
-	for (j=1; j<sz; j++)
+	for (j=1; j<sz4; j++)
 	{
 		dt=g_array_index(specs, gdouble, trc-1+(j*satl));
 		g_array_append_val(yb, dt);
@@ -120,7 +120,7 @@ void upj(GtkWidget *widget, gpointer data)
 	 */
 	PlotLinear *plt2, *plt3;
 	PlotPolar *plt4;
-	guint j, k, sz2;
+	guint j, k, sz4;
 	gdouble num, num2, num3, num4, num5, num6, num7, xi, xf, mny, mxy;
 	gdouble *ptr;
 	gchar s[10];
@@ -184,19 +184,19 @@ void upj(GtkWidget *widget, gpointer data)
 		if (((flags&2)!=0)&&((flagd&1)==0))
 		{
 			plt2=PLOT_LINEAR(plot2);
-			sz2=g_array_index((plt2->sizes), gint, 0);
-			num=g_array_index(xsb, gdouble, sz2-1);
-			g_array_free(nx, TRUE);
-			nx=g_array_new(FALSE, FALSE, sizeof(gint));
-			k=jdim*sz2;
-			g_array_append_val(nx, k);
+			sz4=g_array_index((plt2->sizes), gint, 0);
+			num=g_array_index(xsb, gdouble, sz4-1);
+			g_array_free(nx2, TRUE);
+			nx2=g_array_new(FALSE, FALSE, sizeof(gint));
+			k=jdim*sz4;
+			g_array_append_val(nx2, k);
 			num2=g_array_index(ysb, gdouble, k);
-			for (j=k+1; j<k+sz2; j++)
+			for (j=k+1; j<k+sz4; j++)
 			{
 				num3=g_array_index(ysb, gdouble, j);
 				if (num3>num2) num2=num3;
 			}
-			(plt2->ind)=nx;
+			(plt2->ind)=nx2;
 			plot_linear_update_scale_pretty(plot2, 0, num, 0, num2);
 		}
 		if ((flags&4)!=0)
