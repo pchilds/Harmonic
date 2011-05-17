@@ -32,6 +32,10 @@
 	extern gint mx;
 	extern void upj(GtkWidget*, gpointer);
 	extern void upk(GtkWidget*, gpointer);
-	void dpp(GtkWidget*, gpointer);
+	void dpa(GtkWidget*, gpointer);
+	void dpo(GtkWidget*, gpointer);
+	void upc2(GtkWidget*, gpointer);
+	void upc3(GtkWidget*, gpointer);
+	void upc4(GtkWidget*, gpointer);
 	void dpr(GtkWidget*, gpointer);
 #endif

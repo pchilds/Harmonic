@@ -23964,14 +23964,14 @@ void opd(GtkWidget *widget, gpointer data)
 						if (((flags&8)==0)||((flags&32)!=0))
 						{
 							gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
-							table=gtk_table_new(1, 1, FALSE);
-							gtk_widget_show(table);
+							rest=gtk_table_new(1, 1, FALSE);
+							gtk_widget_show(rest);
 							plot3=plot_linear_new();
 							g_signal_connect(plot3, "moved", G_CALLBACK(pltmv), NULL);
 							gtk_widget_show(plot3);
-							gtk_table_attach(GTK_TABLE(table), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+							gtk_table_attach(GTK_TABLE(rest), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 							label=gtk_label_new(_("Analysis Results"));
-							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
+							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
 							{flags|=15; flags&=31;}
 						}
 						plt=PLOT_LINEAR(plot3);
@@ -23990,14 +23990,14 @@ void opd(GtkWidget *widget, gpointer data)
 						if (((flags&8)==0)||((flags&32)==0))
 						{
 							gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
-							table=gtk_table_new(1, 1, FALSE);
-							gtk_widget_show(table);
+							rest=gtk_table_new(1, 1, FALSE);
+							gtk_widget_show(rest);
 							plot3=plot_polar_new();
 							g_signal_connect(plot3, "moved", G_CALLBACK(pltmvp), NULL);
 							gtk_widget_show(plot3);
-							gtk_table_attach(GTK_TABLE(table), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+							gtk_table_attach(GTK_TABLE(rest), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 							label=gtk_label_new(_("Analysis Results"));
-							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
+							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
 							flags|=47;
 						}
 						plt2=PLOT_POLAR(plot3);
@@ -24017,14 +24017,14 @@ void opd(GtkWidget *widget, gpointer data)
 						if (((flags&8)==0)||((flags&32)==0))
 						{
 							gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
-							table=gtk_table_new(1, 1, FALSE);
-							gtk_widget_show(table);
+							rest=gtk_table_new(1, 1, FALSE);
+							gtk_widget_show(rest);
 							plot3=plot_polar_new();
 							g_signal_connect(plot3, "moved", G_CALLBACK(pltmvp), NULL);
 							gtk_widget_show(plot3);
-							gtk_table_attach(GTK_TABLE(table), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+							gtk_table_attach(GTK_TABLE(rest), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 							label=gtk_label_new(_("Analysis Results"));
-							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
+							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
 							flags|=47;
 						}
 						plt2=PLOT_POLAR(plot3);
@@ -24068,9 +24068,7 @@ void opd(GtkWidget *widget, gpointer data)
 			{
 				strary=g_strsplit_set(contents, "\r\n", 0);
 				sal=g_strv_length(strary);
-				g_array_free(x, TRUE);
-				g_array_free(yb, TRUE);
-				g_array_free(specs, TRUE);
+				{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(sz, TRUE); g_array_free(nx, TRUE); g_array_free(specs, TRUE);}
 				if ((flags&8)!=0)
 				{
 					gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
@@ -24164,6 +24162,8 @@ void opd(GtkWidget *widget, gpointer data)
 				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 				g_free(str);
 				plt=PLOT_LINEAR(plot1);
+				xi=g_array_index(x, gdouble, 0);
+				xf=g_array_index(x, gdouble, (lc-1));
 				sz=g_array_new(FALSE, FALSE, sizeof(gint));
 				nx=g_array_new(FALSE, FALSE, sizeof(gint));
 				g_array_append_val(sz, lc);/* adjust if multiple traces desired */
@@ -24173,8 +24173,6 @@ void opd(GtkWidget *widget, gpointer data)
 				(plt->ind)=nx;
 				(plt->xdata)=x;
 				(plt->ydata)=yb;
-				xi=g_array_index(x, gdouble, 0);
-				xf=g_array_index(x, gdouble, (lc-1));
 				plot_linear_update_scale_pretty(plot1, xi, xf, mny, mxy);
 			}
 			else

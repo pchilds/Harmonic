@@ -37,12 +37,9 @@
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
  * OPD: improve config writing utility to reorder post entry
- * OPD: crash batch->nonbatch open
  * OPD: extra zero on the end (varies due to situation)
  * SAV: session save/restore routine
- * DPR: change to be nonmodal
- * DPR: plot colour editor
- * PLOT: disappearance of plot1
+ * OPD/DPR: change way in which plot3 is stored
  * TRS: wavelets
  */
 
