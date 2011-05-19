@@ -28,7 +28,7 @@
 #	include "main.h"
 	extern GtkWidget *window, *statusbar, *plot2, *plot3, *fst, *zpd, *pr, *jind, *jind2, *kind, *notebook, *notebook2;
 	extern GtkWidget *chi, *wll, *oft, *opttri, *twopionx, *lcmp, *dBs, *trans, *neg, *rest, *visl, *dsl, *chil;
-	extern GArray *x, *xsb, *ysb, *specs, *stars, *delf, *sz, *nx, *vis, *doms, *chp;
+	extern GArray *x, *xsb, *ysb, *specs, *stars, *delf, *sz2, *nx2, *vis, *doms, *chp;
 	extern GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa;
 	extern GSList *group2;
 	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, trc, satl, flags, flagd;

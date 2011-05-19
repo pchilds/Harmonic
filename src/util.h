@@ -25,10 +25,10 @@
 #ifndef __UTIL_H__
 #	define __UTIL_H__
 #	include "main.h"
-	extern GtkWidget *statusbar, *plot1, *plot2, *plot3, *visl, *dsl, *chil;
+	extern GtkWidget *window, *statusbar, *plot1, *plot2, *plot3, *visl, *dsl, *chil;
 	extern GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; 
 	extern GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *vis, *doms, *chp, *byr;
-	extern GArray *x, *yb, *xsb, *ysb, *delf, *stars, *specs;
+	extern GArray *x, *yb, *xsb, *ysb, *nx2, *bxr, *byr, *bsz, *bnx, *delf, *stars, *specs;
 	extern GSList *group2;
 	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, satl, trc, flags, flagd;
 	extern gint lc, mx;
@@ -41,6 +41,8 @@
 	void upk(GtkWidget*, gpointer);
 	void upa1(GtkWidget*, gpointer);
 	void upa2(GtkWidget*, gpointer);
+	void sessres(GtkWidget*, gpointer);
+	void sesssav(GtkWidget*, gpointer);
 	void reset(GtkWidget*, gpointer);
 	void reset2(GtkWidget*, gpointer);
 #endif

@@ -46,6 +46,7 @@ struct _PlotLinear
 	GtkDrawingArea parent;
 	GArray *xdata, *ydata; /* x and y data sets */
 	GArray *ind, *sizes; /* indices of first element and number of elements for each trace */
+	GArray *rd, *gr, *bl, *al; /* colour and alpha of the plots */
 	gchar *xlab, *ylab; /* labels for the x and y axes */
 	PangoFontDescription *afont, *lfont; /* font descriptions for the tick mark and axis labels */
 	guint ptsize, linew; /* radii of the points and line width of the plot line */

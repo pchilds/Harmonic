@@ -37,9 +37,9 @@
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
  * OPD: improve config writing utility to reorder post entry
- * DPR: change to be nonmodal
- * DPR: plot colour editor
- * DPR: fix problems with editing plot3
+ * OPD: extra zero on the end (varies due to situation)
+ * DISP/UPJ/UPK debug changing index/multiplot
+ * SAV: session save/restore routine
  * TRS: wavelets
  */
 
@@ -55,7 +55,8 @@
 GtkWidget *window, *tr, *zpd, *pr, *tracmenu, *trac, *fst, *notebook, *notebook2, *plot1, *plot2, *plot3, *statusbar, *rest, *visl, *dsl, *chil;
 GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *ncmp, *lcmp, *frr, *db4, *db8, *myr, *mrl, *bat, *chi, *twopionx, *opttri, *trans, *dBs, *neg, *wll, *oft;
 GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; /* widgets for windowing */
-GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *sz, *nx, *delf, *vis, *doms, *chp, *msr, *bxr, *byr, *bsz, *bnx; /* arrays for windowing and data */
+GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *delf, *vis, *doms, *chp, *msr, *bxr, *byr; /* arrays for windowing and data */
+GArray *sz, *nx, *sz2, *nx2, *bsz, *bnx, *rd1, *gr1, *bl1, *al1, *rd2, *gr2, *bl2, *al2, *rd3, *gr3, *bl3, *al3;
 GSList *group2=NULL; /* list for various traces available and Basis functions for Transformation*/
 gint lc, mx; /* number of data points and number of files in batch routine */
 guint jdim=0, kdim=0, jdimx=1, kdimx=1, jdimxf=1, kdimxf=1, satl=0, trc=1, flags=0, flagd=0; /* array indices, #of traces, trace number, and current processing state and display flags */
@@ -68,6 +69,7 @@ int main( int argc, char *argv[])
 	GtkWidget *vbox, *mnb, *mnu, *smnu, *mni, *hpane, *table, *label, *butt;
 	GtkAccelGroup *accel_group=NULL;
 	GSList *group=NULL, *group3=NULL, *group4=NULL;
+	PlotLinear *plt, *plt2;
 	gdouble fll=0;
 
 	bindtextdomain(PACKAGE, LOCALEDIR);
@@ -102,6 +104,17 @@ int main( int argc, char *argv[])
 	mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT, NULL);
 	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_p, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(prt), NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
+	gtk_widget_show(mni);
+	mni=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
+	gtk_widget_show(mni);
+	mni=gtk_menu_item_new_with_label(_("Restore Session"));
+	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(sessres), NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
+	gtk_widget_show(mni);
+	mni=gtk_menu_item_new_with_label(_("Save Session"));
+	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(sesssav), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
 	mni=gtk_separator_menu_item_new();
@@ -290,7 +303,7 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("Spectrum Start:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment*) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 	bsr=gtk_spin_button_new(adj, 0.5, 3);
 	g_signal_connect(G_OBJECT(bsr), "value-changed", G_CALLBACK(upa1), (gpointer) bsra);
 	gtk_table_attach(GTK_TABLE(table), bsr, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -298,7 +311,7 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("Spectrum Stop:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(1, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment*) gtk_adjustment_new(1, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 	bsp=gtk_spin_button_new(adj, 0.5, 3);
 	g_signal_connect(G_OBJECT(bsp), "value-changed", G_CALLBACK(upa2), (gpointer) bspa);
 	gtk_table_attach(GTK_TABLE(table), bsp, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -306,14 +319,14 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("Offset:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(1, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment*) gtk_adjustment_new(1, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 	fst=gtk_spin_button_new(adj, 0.5, 2);
 	gtk_table_attach(GTK_TABLE(table), fst, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(fst);
 	label=gtk_label_new(_("j index:"));
 	gtk_table_attach(GTK_TABLE(table), label, 2, 3, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, G_MAXINT8, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment*) gtk_adjustment_new(0, 0, G_MAXINT8, 1.0, 5.0, 0.0);
 	jind=gtk_spin_button_new(adj, 0, 0);
 	g_signal_connect(G_OBJECT(jind), "value-changed", G_CALLBACK(upj), NULL);
 	gtk_table_attach(GTK_TABLE(table), jind, 2, 3, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -321,7 +334,7 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("Zero Padding 2^:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(12, 4, 31, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment*) gtk_adjustment_new(12, 4, 31, 1.0, 5.0, 0.0);
 	zpd=gtk_spin_button_new(adj, 0, 0);
 	gtk_table_attach(GTK_TABLE(table), zpd, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(zpd);
@@ -408,6 +421,21 @@ int main( int argc, char *argv[])
 	table=gtk_table_new(1, 1, FALSE);
 	gtk_widget_show(table);
 	plot1=plot_linear_new();
+	rd1=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	gr1=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	bl1=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	al1=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	fll=0;
+	g_array_append_val(rd1, fll);
+	g_array_append_val(gr1, fll);
+	g_array_append_val(bl1, fll);
+	fll=1;
+	g_array_append_val(al1, fll);
+	plt=PLOT_LINEAR(plot1);
+	(plt->rd)=rd1;
+	(plt->gr)=gr1;
+	(plt->bl)=bl1;
+	(plt->al)=al1;
 	g_signal_connect(plot1, "moved", G_CALLBACK(pltmv), NULL);
 	gtk_widget_show(plot1);
 	gtk_table_attach(GTK_TABLE(table), plot1, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK |GTK_EXPAND, 2, 2);
@@ -416,7 +444,36 @@ int main( int argc, char *argv[])
 	table=gtk_table_new(1, 1, FALSE);
 	gtk_widget_show(table);
 	plot2=plot_linear_new();
-	((PLOT_LINEAR(plot2))->xlab)=g_strdup(_("Inverse Domain"));
+	plt2=PLOT_LINEAR(plot2);
+	(plt2->xlab)=g_strdup(_("Inverse Domain"));
+	rd2=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	gr2=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	bl2=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	al2=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	fll=0;
+	g_array_append_val(rd2, fll);
+	g_array_append_val(gr2, fll);
+	g_array_append_val(bl2, fll);
+	g_array_append_val(gr2, fll);
+	g_array_append_val(bl2, fll);
+	g_array_append_val(bl2, fll);
+	fll=1;
+	g_array_append_val(rd2, fll);
+	g_array_append_val(gr2, fll);
+	g_array_append_val(bl2, fll);
+	fll=0;
+	g_array_append_val(rd2, fll);
+	g_array_append_val(gr2, fll);
+	g_array_append_val(rd2, fll);
+	fll=0.8;
+	g_array_append_val(al2, fll);
+	g_array_append_val(al2, fll);
+	g_array_append_val(al2, fll);
+	g_array_append_val(al2, fll);
+	(plt2->rd)=rd2;
+	(plt2->gr)=gr2;
+	(plt2->bl)=bl2;
+	(plt2->al)=al2;
 	g_signal_connect(plot2, "moved", G_CALLBACK(pltmv), NULL);
 	gtk_widget_show(plot2);
 	gtk_table_attach(GTK_TABLE(table), plot2, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -456,8 +513,16 @@ int main( int argc, char *argv[])
 	msr=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	bxr=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	byr=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	sz=g_array_new(FALSE, FALSE, sizeof(gint));
+	nx=g_array_new(FALSE, FALSE, sizeof(gint));
+	sz2=g_array_new(FALSE, FALSE, sizeof(gint));
+	nx2=g_array_new(FALSE, FALSE, sizeof(gint));
 	bsz=g_array_new(FALSE, FALSE, sizeof(gint));
 	bnx=g_array_new(FALSE, FALSE, sizeof(gint));
+	rd3=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	gr3=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	bl3=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	al3=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	gtk_widget_show(window);
 	gtk_main();
 	gdk_threads_leave();

@@ -170,7 +170,7 @@ void sav(GtkWidget *widget, gpointer data)
 	PlotLinear *plt;
 	gchar *contents, *str, *str2, *fout=NULL;
 	gchar s1[10], s2[10], s3[10], s4[10];
-	gint j, k, sz2;
+	gint j, k, sz4;
 	gdouble num, num2;
 	GError *Err=NULL;
 
@@ -1907,12 +1907,12 @@ void sav(GtkWidget *widget, gpointer data)
 					}
 					g_free(str2);
 					plt=PLOT_LINEAR(plot2);
-					sz2=g_array_index((plt->sizes), gint, 0);
+					sz4=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
 					for (k=1; k<jdimxf; k++)
 					{
-						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
+						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz4));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
 						g_free(str2);
 						str2=g_strdup(str);
@@ -1923,18 +1923,18 @@ void sav(GtkWidget *widget, gpointer data)
 					contents=g_strjoin(DLMT, str, str2, NULL);
 					g_free(str);
 					g_free(str2);
-					for (j=1; j<sz2; j++)
+					for (j=1; j<sz4; j++)
 					{
 						g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 						g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, j));
-						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz2)-j));
+						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz4)-j));
 						str2=g_strjoin("\t", s1, s2, s3, NULL);
 						k=1;
 						while (k<jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
-							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz2)+j));
-							g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(++k)*sz2)-j));
+							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz4)+j));
+							g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(++k)*sz4)-j));
 							str=g_strjoin("\t", str2, s1, s2, s3, NULL);
 							g_free(str2);
 							str2=g_strdup(str);
@@ -1969,12 +1969,12 @@ void sav(GtkWidget *widget, gpointer data)
 					}
 					g_free(str2);
 					plt=PLOT_LINEAR(plot2);
-					sz2=g_array_index((plt->sizes), gint, 0);
+					sz4=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
 					for (k=1; k<jdimxf; k++)
 					{
-						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
+						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz4));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
 						g_free(str2);
 						str2=g_strdup(str);
@@ -1985,11 +1985,11 @@ void sav(GtkWidget *widget, gpointer data)
 					contents=g_strjoin(DLMT, str, str2, NULL);
 					g_free(str);
 					g_free(str2);
-					for (j=1; j<sz2; j++)
+					for (j=1; j<sz4; j++)
 					{
 						g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 						num=g_array_index(stars, gdouble, j);
-						num2=g_array_index(stars, gdouble, (2*sz2)-j);
+						num2=g_array_index(stars, gdouble, (2*sz4)-j);
 						g_snprintf(s3, 10, "%f", atan2(num2, num));
 						num*=num;
 						num2*=num2;
@@ -2001,8 +2001,8 @@ void sav(GtkWidget *widget, gpointer data)
 						while (k<jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
-							num=g_array_index(stars, gdouble, (2*k*sz2)+j);
-							num2=g_array_index(stars, gdouble, (2*(++k)*sz2)-j);
+							num=g_array_index(stars, gdouble, (2*k*sz4)+j);
+							num2=g_array_index(stars, gdouble, (2*(++k)*sz4)-j);
 							g_snprintf(s3, 10, "%f", atan2(num2, num));
 							num*=num;
 							num2*=num2;
@@ -2072,12 +2072,12 @@ void sav(GtkWidget *widget, gpointer data)
 					}
 					g_free(str2);
 					plt=PLOT_LINEAR(plot2);
-					sz2=g_array_index((plt->sizes), gint, 0);
+					sz4=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
 					for (k=1; k<jdimxf; k++)
 					{
-						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
+						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz4));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
 						g_free(str2);
 						str2=g_strdup(str);
@@ -2088,18 +2088,18 @@ void sav(GtkWidget *widget, gpointer data)
 					contents=g_strjoin(DLMT, str, str2, NULL);
 					g_free(str);
 					g_free(str2);
-					for (j=1; j<sz2; j++)
+					for (j=1; j<sz4; j++)
 					{
 						g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 						g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, j));
-						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz2)-j));
+						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz4)-j));
 						str2=g_strjoin("\t", s1, s2, s3, NULL);
 						k=1;
 						while (k<jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
-							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz2)+j));
-							g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(++k)*sz2)-j));
+							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz4)+j));
+							g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(++k)*sz4)-j));
 							str=g_strjoin("\t", str2, s1, s2, s3, NULL);
 							g_free(str2);
 							str2=g_strdup(str);
@@ -2134,12 +2134,12 @@ void sav(GtkWidget *widget, gpointer data)
 					}
 					g_free(str2);
 					plt=PLOT_LINEAR(plot2);
-					sz2=g_array_index((plt->sizes), gint, 0);
+					sz4=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
 					for (k=1; k<jdimxf; k++)
 					{
-						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
+						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz4));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
 						g_free(str2);
 						str2=g_strdup(str);
@@ -2150,11 +2150,11 @@ void sav(GtkWidget *widget, gpointer data)
 					contents=g_strjoin(DLMT, str, str2, NULL);
 					g_free(str);
 					g_free(str2);
-					for (j=1; j<sz2; j++)
+					for (j=1; j<sz4; j++)
 					{
 						g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 						num=g_array_index(stars, gdouble, j);
-						num2=g_array_index(stars, gdouble, (2*sz2)-j);
+						num2=g_array_index(stars, gdouble, (2*sz4)-j);
 						g_snprintf(s3, 10, "%f", atan2(num2, num));
 						num*=num;
 						num2*=num2;
@@ -2166,8 +2166,8 @@ void sav(GtkWidget *widget, gpointer data)
 						while (k<jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
-							num=g_array_index(stars, gdouble, (2*k*sz2)+j);
-							num2=g_array_index(stars, gdouble, (2*(++k)*sz2)-j);
+							num=g_array_index(stars, gdouble, (2*k*sz4)+j);
+							num2=g_array_index(stars, gdouble, (2*(++k)*sz4)-j);
 							g_snprintf(s3, 10, "%f", atan2(num2, num));
 							num*=num;
 							num2*=num2;
@@ -2238,12 +2238,12 @@ void sav(GtkWidget *widget, gpointer data)
 					}
 					g_free(str2);
 					plt=PLOT_LINEAR(plot2);
-					sz2=g_array_index((plt->sizes), gint, 0);
+					sz4=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
 					for (k=1; k<jdimxf; k++)
 					{
-						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
+						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz4));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
 						g_free(str2);
 						str2=g_strdup(str);
@@ -2254,18 +2254,18 @@ void sav(GtkWidget *widget, gpointer data)
 					contents=g_strjoin(DLMT, str, str2, NULL);
 					g_free(str);
 					g_free(str2);
-					for (j=1; j<sz2; j++)
+					for (j=1; j<sz4; j++)
 					{
 						g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 						g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, j));
-						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz2)-j));
+						g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*sz4)-j));
 						str2=g_strjoin("\t", s1, s2, s3, NULL);
 						k=1;
 						while (k<jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
-							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz2)+j));
-							g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(++k)*sz2)-j));
+							g_snprintf(s2, 10, "%f", g_array_index(stars, gdouble, (2*k*sz4)+j));
+							g_snprintf(s3, 10, "%f", g_array_index(stars, gdouble, (2*(++k)*sz4)-j));
 							str=g_strjoin("\t", str2, s1, s2, s3, NULL);
 							g_free(str2);
 							str2=g_strdup(str);
@@ -2300,12 +2300,12 @@ void sav(GtkWidget *widget, gpointer data)
 					}
 					g_free(str2);
 					plt=PLOT_LINEAR(plot2);
-					sz2=g_array_index((plt->sizes), gint, 0);
+					sz4=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
 					for (k=1; k<jdimxf; k++)
 					{
-						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz2));
+						g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 2*k*sz4));
 						str=g_strjoin("\t", str2, "0.0000000", s1, "0.0000000", NULL);
 						g_free(str2);
 						str2=g_strdup(str);
@@ -2316,11 +2316,11 @@ void sav(GtkWidget *widget, gpointer data)
 					contents=g_strjoin(DLMT, str, str2, NULL);
 					g_free(str);
 					g_free(str2);
-					for (j=1; j<sz2; j++)
+					for (j=1; j<sz4; j++)
 					{
 						g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
 						num=g_array_index(stars, gdouble, j);
-						num2=g_array_index(stars, gdouble, (2*sz2)-j);
+						num2=g_array_index(stars, gdouble, (2*sz4)-j);
 						g_snprintf(s3, 10, "%f", atan2(num2, num));
 						num*=num;
 						num2*=num2;
@@ -2332,8 +2332,8 @@ void sav(GtkWidget *widget, gpointer data)
 						while (k<jdimxf)
 						{
 							g_snprintf(s1, 10, "%f", j*g_array_index(delf, gdouble, 0));
-							num=g_array_index(stars, gdouble, (2*k*sz2)+j);
-							num2=g_array_index(stars, gdouble, (2*(++k)*sz2)-j);
+							num=g_array_index(stars, gdouble, (2*k*sz4)+j);
+							num2=g_array_index(stars, gdouble, (2*(++k)*sz4)-j);
 							g_snprintf(s3, 10, "%f", atan2(num2, num));
 							num*=num;
 							num2*=num2;
