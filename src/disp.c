@@ -83,7 +83,6 @@ void dpa(GtkWidget *widget, gpointer data)
 			pry=0;
 			if ((bt3*8)!=(flagd&24))
 			{
-				/*
 				g_array_free(byr, TRUE);
 				j=(vis->len);
 				byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), j);
@@ -92,7 +91,7 @@ void dpa(GtkWidget *widget, gpointer data)
 					for (k=0; k<j; k++)
 					{
 						iv=g_array_index(vis, gdouble, k);
-						g_array_append(byr, iv);
+						g_array_append_val(byr, iv);
 					}
 					flagd&=7;
 				}
@@ -101,7 +100,7 @@ void dpa(GtkWidget *widget, gpointer data)
 					for (k=0; k<j; k++)
 					{
 						iv=g_array_index(doms, gdouble, k);
-						g_array_append(byr, iv);
+						g_array_append_val(byr, iv);
 					}
 					{flagd&=15; flagd|=8;}
 				}
@@ -110,19 +109,18 @@ void dpa(GtkWidget *widget, gpointer data)
 					for (k=0; k<j; k++)
 					{
 						iv=g_array_index(chp, gdouble, k);
-						g_array_append(byr, iv);
+						g_array_append_val(byr, iv);
 					}
 					{flagd&=23; flagd|=16;}
 				}
-				(plt2->ydata)=byr;
-				 */
+				(plt2->rdata)=byr;
 				pry=1;
 			}
 			bt1=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2));
 			bt2=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3));
 			if (bt1)
 			{
-				if (bt2)
+				if (bt2)/* multi over both */
 				{
 					j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind4));
 					k=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind2));
@@ -141,19 +139,46 @@ void dpa(GtkWidget *widget, gpointer data)
 					alp=gtk_color_selection_get_current_alpha(GTK_COLOR_SELECTION(colour3));
 					iv=((gdouble) alp)/65535;
 					*ptr=iv;
-					if (((flagd&4)==0)||((flagd&2)==0))
+					if (((flagd&4)==0)||((flagd&2)==0)||(pry!=0))
 					{
-						/*
 						dx=g_array_index(bsz, gint, 0);
 						g_array_free(bsz, TRUE);
 						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf*kdimxf);
+						g_array_append_val(bsz, dx);
 						g_array_free(bnx, TRUE);
 						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf*kdimxf);
-						 */
-						pry=1;
+						dx2=0;
+						g_array_append_val(bnx, dx2);
+						xi=g_array_index(bxr, gdouble, 0);
+						mny=g_array_index(byr, gdouble, 0);
+						{xf=xi; mxy=mny;}
+						for (k=1; k<dx; k++)
+						{
+							iv=g_array_index(bxr, gdouble, k);
+							if (iv>xf) xf=iv;
+							else if (iv<xi) xi=iv;
+							iv=g_array_index(byr, gdouble, k);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						j=1;
+						while (j<jdimxf*kdimxf)
+						{
+							for (k=0; k<dx; k++)
+							{
+								iv=g_array_index(byr, gdouble, k+j);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, dx);
+							dx2+=dx;
+							g_array_append_val(bnx, dx2);
+							j++;
+						}
+						{pry=1; flagd|=6;}
 					}
 				}
-				else
+				else /* multi over j */
 				{
 					j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind4));
 					ptr=&g_array_index(car, gdouble, j);
@@ -169,20 +194,45 @@ void dpa(GtkWidget *widget, gpointer data)
 					alp=gtk_color_selection_get_current_alpha(GTK_COLOR_SELECTION(colour3));
 					iv=((gdouble) alp)/65535;
 					*ptr=iv;
-					if (((flagd&4)!=0)||((flagd&2)==0))
+					if (((flagd&4)!=0)||((flagd&2)==0)||(pry!=0))
 					{
-						/*
 						dx=g_array_index(bsz, gint, 0);
 						g_array_free(bsz, TRUE);
 						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
 						g_array_free(bnx, TRUE);
 						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
-						 */
-						pry=1;
+						dx2=dx*kdim;
+						g_array_append_val(bnx, dx2);
+						xi=g_array_index(bxr, gdouble, 0);
+						mny=g_array_index(byr, gdouble, dx2);
+						{xf=xi; mxy=mny;}
+						for (k=1; k<dx; k++)
+						{
+							iv=g_array_index(bxr, gdouble, k);
+							if (iv>xf) xf=iv;
+							else if (iv<xi) xi=iv;
+							iv=g_array_index(byr, gdouble, k+dx2);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						j=1;
+						while (j<jdimxf)
+						{
+							{dx2+=dx*kdimxf; j++;}
+							g_array_append_val(bnx, dx2);
+							g_array_append_val(bsz, dx);
+							for (k=0; k<dx; k++)
+							{
+								iv=g_array_index(byr, gdouble, k+dx2);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+						}
+						{pry=1; flagd&=27; flagd|=2;}
 					}
 				}
 			}
-			else if (bt2)
+			else if (bt2)/* multi over k */
 			{
 				j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind2));
 				ptr=&g_array_index(car, gdouble, j);
@@ -198,19 +248,44 @@ void dpa(GtkWidget *widget, gpointer data)
 				alp=gtk_color_selection_get_current_alpha(GTK_COLOR_SELECTION(colour3));
 				iv=((gdouble) alp)/65535;
 				*ptr=iv;
-				if (((flagd&4)==0)||((flagd&2)!=0))
+				if (((flagd&4)==0)||((flagd&2)!=0)||(pry!=0))
 				{
-					/*
 					dx=g_array_index(bsz, gint, 0);
 					g_array_free(bsz, TRUE);
-					bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
+					bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
 					g_array_free(bnx, TRUE);
-					bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
-					 */
-					pry=1;
+					bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+					dx2=dx*jdim*kdimxf;
+					g_array_append_val(bnx, dx2);
+					xi=g_array_index(bxr, gdouble, 0);
+					mny=g_array_index(byr, gdouble, dx2);
+					{xf=xi; mxy=mny;}
+					for (j=1; j<dx; j++)
+					{
+						iv=g_array_index(bxr, gdouble, j);
+						if (iv>xf) xf=iv;
+						else if (iv<xi) xi=iv;
+						iv=g_array_index(byr, gdouble, j+dx2);
+						if (iv>mxy) mxy=iv;
+						else if (iv<mny) mny=iv;
+					}
+					k=1;
+					while (k<kdimxf)
+					{
+						{dx2+=dx; k++;}
+						g_array_append_val(bnx, dx2);
+						g_array_append_val(bsz, dx);
+						for (j=0; j<dx; j++)
+						{
+							iv=g_array_index(byr, gdouble, j+dx2);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+					}
+					{pry=1; flagd&=29; flagd|=4;}
 				}
 			}
-			else
+			else/* single */
 			{
 				ptr=&g_array_index(car, gdouble, 0);
 				iv=((gdouble) (clr.red))/65535;
@@ -223,9 +298,8 @@ void dpa(GtkWidget *widget, gpointer data)
 				*ptr=iv;
 				ptr=&g_array_index(caa, gdouble, 0);
 				*ptr=1;
-				if ((flagd&6)!=0)
+				if (((flagd&6)!=0)||(pry!=0))
 				{
-					/*
 					dx=g_array_index(bsz, gint, 0);
 					g_array_free(bsz, TRUE);
 					bsz=g_array_new(FALSE, FALSE, sizeof(gint));
@@ -236,21 +310,21 @@ void dpa(GtkWidget *widget, gpointer data)
 					bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 					g_array_append_val(bnx, j);
 					(plt2->ind)=bnx;
-					xi=g_array_index(bxr, gdouble, j);
+					xi=g_array_index(bxr, gdouble, 0);
 					mny=g_array_index(byr, gdouble, j);
-					mxy=mny;
-					k=j+1;
+					{xf=xi; mxy=mny; k=j+1;}
 					j+=dx;
 					while (k<j)
 					{
 						iv=g_array_index(byr, gdouble, k);
 						if (mxy<iv) mxy=iv;
 						else if (mny>iv) mny=iv;
+						iv=g_array_index(bxr, gdouble, k);
+						if (xf<iv) xf=iv;
+						else if (xi>iv) xi=iv;						
 						k++;
 					}
-					xf=g_array_index(bxr, gdouble, j-1);
-					 */
-					pry=1;
+					{pry=1; flagd&=25;}
 				}
 			}
 			rd3=g_array_new(FALSE, FALSE, sizeof(gdouble));
@@ -316,7 +390,6 @@ void dpa(GtkWidget *widget, gpointer data)
 			pry=0;
 			if ((bt3*8)!=(flagd&24))
 			{
-				/*
 				g_array_free(byr, TRUE);
 				j=(vis->len);
 				byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), j);
@@ -325,7 +398,7 @@ void dpa(GtkWidget *widget, gpointer data)
 					for (k=0; k<j; k++)
 					{
 						iv=g_array_index(vis, gdouble, k);
-						g_array_append(byr, iv);
+						g_array_append_val(byr, iv);
 					}
 					flagd&=7;
 				}
@@ -334,7 +407,7 @@ void dpa(GtkWidget *widget, gpointer data)
 					for (k=0; k<j; k++)
 					{
 						iv=g_array_index(doms, gdouble, k);
-						g_array_append(byr, iv);
+						g_array_append_val(byr, iv);
 					}
 					{flagd&=15; flagd|=8;}
 				}
@@ -343,30 +416,56 @@ void dpa(GtkWidget *widget, gpointer data)
 					for (k=0; k<j; k++)
 					{
 						iv=g_array_index(chp, gdouble, k);
-						g_array_append(byr, iv);
+						g_array_append_val(byr, iv);
 					}
 					{flagd&=23; flagd|=16;}
 				}
 				(plt->ydata)=byr;
-				 */
 				pry=1;
 			}
 			bt1=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2));
 			bt2=gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3));
 			if (bt1)
 			{
-				if (bt2)
+				if (bt2)/* multi over both */
 				{
-					if (((flagd&4)==0)||((flagd&2)==0))
+					if (((flagd&4)==0)||((flagd&2)==0)||(pry!=0))
 					{
-						/*
 						dx=g_array_index(bsz, gint, 0);
 						g_array_free(bsz, TRUE);
 						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf*kdimxf);
+						g_array_append_val(bsz, dx);
 						g_array_free(bnx, TRUE);
 						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf*kdimxf);
-						 */
-						pry=1;
+						dx2=0;
+						g_array_append_val(bnx, dx2);
+						xi=g_array_index(bxr, gdouble, 0);
+						mny=g_array_index(byr, gdouble, 0);
+						{xf=xi; mxy=mny;}
+						for (k=1; k<dx; k++)
+						{
+							iv=g_array_index(bxr, gdouble, k);
+							if (iv>xf) xf=iv;
+							else if (iv<xi) xi=iv;
+							iv=g_array_index(byr, gdouble, k);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						j=1;
+						while (j<jdimxf*kdimxf)
+						{
+							for (k=0; k<dx; k++)
+							{
+								iv=g_array_index(byr, gdouble, k+j);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+							g_array_append_val(bsz, dx);
+							dx2+=dx;
+							g_array_append_val(bnx, dx2);
+							j++;
+						}
+						{pry=1; flagd|=6;}
 					}
 					j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind4));
 					k=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind2));
@@ -386,18 +485,43 @@ void dpa(GtkWidget *widget, gpointer data)
 					iv=((gdouble) alp)/65535;
 					*ptr=iv;
 				}
-				else
+				else/* multi over j */
 				{
-					if (((flagd&4)!=0)||((flagd&2)==0))
+					if (((flagd&4)!=0)||((flagd&2)==0)||(pry!=0))
 					{
-						/*
 						dx=g_array_index(bsz, gint, 0);
 						g_array_free(bsz, TRUE);
 						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
 						g_array_free(bnx, TRUE);
 						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
-						 */
-						pry=1;
+						dx2=dx*kdim;
+						g_array_append_val(bnx, dx2);
+						xi=g_array_index(bxr, gdouble, 0);
+						mny=g_array_index(byr, gdouble, dx2);
+						{xf=xi; mxy=mny;}
+						for (k=1; k<dx; k++)
+						{
+							iv=g_array_index(bxr, gdouble, k);
+							if (iv>xf) xf=iv;
+							else if (iv<xi) xi=iv;
+							iv=g_array_index(byr, gdouble, k+dx2);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+						j=1;
+						while (j<jdimxf)
+						{
+							{dx2+=dx*kdimxf; j++;}
+							g_array_append_val(bnx, dx2);
+							g_array_append_val(bsz, dx);
+							for (k=0; k<dx; k++)
+							{
+								iv=g_array_index(byr, gdouble, k+dx2);
+								if (iv>mxy) mxy=iv;
+								else if (iv<mny) mny=iv;
+							}
+						}
+						{pry=1; flagd&=27; flagd|=2;}
 					}
 					j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind4));
 					ptr=&g_array_index(car, gdouble, j);
@@ -415,18 +539,43 @@ void dpa(GtkWidget *widget, gpointer data)
 					*ptr=iv;
 				}
 			}
-			else if (bt2)
+			else if (bt2)/* multi over k */
 			{
-				if (((flagd&4)==0)||((flagd&2)!=0))
+				if (((flagd&4)==0)||((flagd&2)!=0)||(pry!=0))
 				{
-					/*
 					dx=g_array_index(bsz, gint, 0);
 					g_array_free(bsz, TRUE);
-					bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
+					bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
 					g_array_free(bnx, TRUE);
-					bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
-					 */
-					pry=1;
+					bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
+					dx2=dx*jdim*kdimxf;
+					g_array_append_val(bnx, dx2);
+					xi=g_array_index(bxr, gdouble, 0);
+					mny=g_array_index(byr, gdouble, dx2);
+					{xf=xi; mxy=mny;}
+					for (j=1; j<dx; j++)
+					{
+						iv=g_array_index(bxr, gdouble, j);
+						if (iv>xf) xf=iv;
+						else if (iv<xi) xi=iv;
+						iv=g_array_index(byr, gdouble, j+dx2);
+						if (iv>mxy) mxy=iv;
+						else if (iv<mny) mny=iv;
+					}
+					k=1;
+					while (k<kdimxf)
+					{
+						{dx2+=dx; k++;}
+						g_array_append_val(bnx, dx2);
+						g_array_append_val(bsz, dx);
+						for (j=0; j<dx; j++)
+						{
+							iv=g_array_index(byr, gdouble, j+dx2);
+							if (iv>mxy) mxy=iv;
+							else if (iv<mny) mny=iv;
+						}
+					}
+					{pry=1; flagd&=29; flagd|=4;}
 				}
 				j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind2));
 				ptr=&g_array_index(car, gdouble, j);
@@ -443,11 +592,10 @@ void dpa(GtkWidget *widget, gpointer data)
 				iv=((gdouble) alp)/65535;
 				*ptr=iv;
 			}
-			else
+			else/* single */
 			{
-				if ((flagd&6)!=0)
+				if (((flagd&6)!=0)||(pry!=0))
 				{
-					/*
 					dx=g_array_index(bsz, gint, 0);
 					g_array_free(bsz, TRUE);
 					bsz=g_array_new(FALSE, FALSE, sizeof(gint));
@@ -458,21 +606,21 @@ void dpa(GtkWidget *widget, gpointer data)
 					bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 					g_array_append_val(bnx, j);
 					(plt->ind)=bnx;
-					xi=g_array_index(bxr, gdouble, j);
+					xi=g_array_index(bxr, gdouble, 0);
 					mny=g_array_index(byr, gdouble, j);
-					mxy=mny;
-					k=j+1;
+					{mxy=mny; xf=xi; k=j+1;}
 					j+=dx;
 					while (k<j)
 					{
 						iv=g_array_index(byr, gdouble, k);
 						if (mxy<iv) mxy=iv;
 						else if (mny>iv) mny=iv;
+						iv=g_array_index(bxr, gdouble, k);
+						if (xf<iv) xf=iv;
+						else if (xi>iv) xi=iv;						
 						k++;
 					}
-					xf=g_array_index(bxr, gdouble, j-1);
-					 */
-					pry=1;
+					{pry=1; flagd&=25;}
 				}
 				ptr=&g_array_index(car, gdouble, 0);
 				iv=((gdouble) (clr.red))/65535;

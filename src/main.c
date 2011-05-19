@@ -38,8 +38,8 @@
  * PRC: triangle optimisation
  * OPD: improve config writing utility to reorder post entry
  * OPD: extra zero on the end (varies due to situation)
+ * DISP/UPJ/UPK debug changing index/multiplot
  * SAV: session save/restore routine
- * OPD/DPR: change way in which plot3 is stored
  * TRS: wavelets
  */
 
