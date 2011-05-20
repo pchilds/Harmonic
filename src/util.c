@@ -211,6 +211,7 @@ void upj(GtkWidget *widget, gpointer data)
 					{
 						l=sz4*(kdim+(jdim*kdimxf));
 						bnx=g_array_new(FALSE, FALSE, sizeof(gint));
+						g_array_append_val(bnx, l);
 						num=g_array_index(bxr, gdouble, 0);
 						num3=g_array_index(byr, gdouble, l);
 						{num2=num; num4=num3;}
@@ -361,6 +362,7 @@ void upk(GtkWidget *widget, gpointer data)
 					{
 						l=sz4*(kdim+(jdim*kdimxf));
 						bnx=g_array_new(FALSE, FALSE, sizeof(gint));
+						g_array_append_val(bnx, l);
 						num=g_array_index(bxr, gdouble, 0);
 						num3=g_array_index(byr, gdouble, l);
 						{num2=num; num4=num3;}
@@ -377,9 +379,9 @@ void upk(GtkWidget *widget, gpointer data)
 					else/* multiplot over j */
 					{
 						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
-						num=g_array_index(bxr, gdouble, 0);
 						l=sz4*kdim;
 						g_array_append_val(bnx, l);
+						num=g_array_index(bxr, gdouble, 0);
 						num3=g_array_index(byr, gdouble, l);
 						{num2=num; num4=num3;}
 						for (k=1; k<sz4; k++)

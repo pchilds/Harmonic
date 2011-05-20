@@ -2816,7 +2816,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 							}
 							else if (xs==2)
 							{
-								tx=((xvn-xv)*(yl-yvn))/(yvn-yv);
+								tx=((xvn-xv)*(yl-yvn))/(yvn-yv);/* SIGFPE here. change? */
 								tx+=xvn;
 								if (tx>xu)
 								{
