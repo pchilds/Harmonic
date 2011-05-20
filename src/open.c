@@ -23509,171 +23509,171 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								if ((flagd&8)==0)
 								{
-									while (l<jdim)
+									while (j<jdim)
 									{
 										for (k=0; k<kdimx; k++)
 										{
-											for (j=0; j<mx; j++)
+											for (l=0; l<mx; l++)
 											{
-												xx=g_array_index(msr, gdouble, j);
+												xx=g_array_index(msr, gdouble, l);
 												g_array_append_val(bxr, xx);
-												xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+												xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 												g_array_append_val(byr, xx);
 											}
 										}
-										l++;
+										j++;
 									}
 									k=0;
 									while (k<kdim)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 										}
 										k++;
 									}
 									xx=g_array_index(msr, gdouble, 0);
 									g_array_append_val(bxr, xx);
-									mny=g_array_index(vis, gdouble, k+(l*kdimx));
+									mny=g_array_index(vis, gdouble, k+(j*kdimx));
 									g_array_append_val(byr, xx);
-									{mxy=mny; j=1;}
-									while (j<mx)
+									{mxy=mny; l=1;}
+									while (l<mx)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+										xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
-										j++;
+										l++;
 									}
 									k++;
 									while (k<kdimx)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 										}
 										k++;
 									}
-									l++;
-									while (l<jdimx)
+									j++;
+									while (j<jdimx)
 									{
 										for (k=0; k<kdimx; k++)
 										{
-											for (j=0; j<mx; j++)
+											for (l=0; l<mx; l++)
 											{
-												xx=g_array_index(msr, gdouble, j);
+												xx=g_array_index(msr, gdouble, l);
 												g_array_append_val(bxr, xx);
-												xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+												xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 												g_array_append_val(byr, xx);
 											}
 										}
-										l++;
+										j++;
 									}
 								}
 								else
 								{
-									while (l<jdim)
+									while (j<jdim)
 									{
 										for (k=0; k<kdimx; k++)
 										{
-											for (j=0; j<mx; j++)
+											for (l=0; l<mx; l++)
 											{
-												xx=g_array_index(msr, gdouble, j);
+												xx=g_array_index(msr, gdouble, l);
 												g_array_append_val(bxr, xx);
-												xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+												xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
 												g_array_append_val(byr, xx);
 											}
 										}
-										l++;
+										j++;
 									}
 									k=0;
 									while (k<kdim)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 										}
 										k++;
 									}
 									xx=g_array_index(msr, gdouble, 0);
 									g_array_append_val(bxr, xx);
-									mny=g_array_index(doms, gdouble, k+(l*kdimx));
+									mny=g_array_index(doms, gdouble, k+(j*kdimx));
 									g_array_append_val(byr, xx);
-									{mxy=mny; j=1;}
-									while (j<mx)
+									{mxy=mny; l=1;}
+									while (l<mx)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+										xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
-										j++;
+										l++;
 									}
 									k++;
 									while (k<kdimx)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 										}
 										k++;
 									}
-									l++;
-									while (l<jdimx)
+									j++;
+									while (j<jdimx)
 									{
 										for (k=0; k<kdimx; k++)
 										{
-											for (j=0; j<mx; j++)
+											for (l=0; l<mx; l++)
 											{
-												xx=g_array_index(msr, gdouble, j);
+												xx=g_array_index(msr, gdouble, l);
 												g_array_append_val(bxr, xx);
-												xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+												xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
 												g_array_append_val(byr, xx);
 											}
 										}
-										l++;
+										j++;
 									}
 								}
 							}
 							else
 							{
-								while (l<jdim)
+								while (j<jdim)
 								{
 									for (k=0; k<kdimx; k++)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(chp, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 										}
 									}
-									l++;
+									j++;
 								}
 								k=0;
 								while (k<kdim)
 								{
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(chp, gdouble, k+((l+(j*jdimx))*kdimx));
+										xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 									}
 									k++;
@@ -23682,43 +23682,43 @@ void opd(GtkWidget *widget, gpointer data)
 								g_array_append_val(bxr, xx);
 								mny=g_array_index(chp, gdouble, k+(l*kdimx));
 								g_array_append_val(byr, xx);
-								{mxy=mny; j=1;}
-								while (j<mx)
+								{mxy=mny; l=1;}
+								while (l<mx)
 								{
-									xx=g_array_index(msr, gdouble, j);
+									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(chp, gdouble, k+((l+(j*jdimx))*kdimx));
+									xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
-									j++;
+									l++;
 								}
 								k++;
 								while (k<kdimx)
 								{
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(chp, gdouble, k+((l+(j*jdimx))*kdimx));
+										xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 									}
 									k++;
 								}
-								l++;
-								while (l<jdimx)
+								j++;
+								while (j<jdimx)
 								{
 									for (k=0; k<kdimx; k++)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(chp, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 										}
 									}
-									l++;
+									j++;
 								}
 							}
 						}
@@ -23731,45 +23731,45 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								if ((flagd&8)==0)
 								{
-									while (l<jdim)
+									while (j<jdim)
 									{
 										for (k=0; k<kdimx; k++)
 										{
-											for (j=0; j<mx; j++)
+											for (l=0; l<mx; l++)
 											{
-												xx=g_array_index(msr, gdouble, j);
+												xx=g_array_index(msr, gdouble, l);
 												g_array_append_val(bxr, xx);
-												xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+												xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 												g_array_append_val(byr, xx);
 											}
 										}
-										l++;
+										j++;
 									}
 									xx=g_array_index(msr, gdouble, 0);
 									g_array_append_val(bxr, xx);
 									mny=g_array_index(vis, gdouble, l*kdimx);
 									g_array_append_val(byr, xx);
-									{mxy=mny; j=1;}
-									while (j<mx)
+									{mxy=mny; l=1;}
+									while (l<mx)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(vis, gdouble, (l+(j*jdimx))*kdimx);
+										xx=g_array_index(vis, gdouble, (j+(l*jdimx))*kdimx);
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
-										j++;
+										l++;
 									}
 									g_array_append_val(bsz, mx);
 									g_array_append_val(bnx, dx2);
 									{dx2+=mx; k=1;}
 									while (k<kdimx)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 											if (xx>mxy) mxy=xx;
 											else if (xx<mny) mny=xx;
@@ -23778,63 +23778,63 @@ void opd(GtkWidget *widget, gpointer data)
 										g_array_append_val(bnx, dx2);
 										{dx2+=mx; k++;}
 									}
-									l++;
-									while (l<jdimx)
+									j++;
+									while (j<jdimx)
 									{
 										for (k=0; k<kdimx; k++)
 										{
-											for (j=0; j<mx; j++)
+											for (l=0; l<mx; l++)
 											{
-												xx=g_array_index(msr, gdouble, j);
+												xx=g_array_index(msr, gdouble, l);
 												g_array_append_val(bxr, xx);
-												xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+												xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 												g_array_append_val(byr, xx);
 											}
 										}
-										l++;
+										j++;
 									}
 								}
 								else
 								{
-									while (l<jdim)
+									while (j<jdim)
 									{
 										for (k=0; k<kdimx; k++)
 										{
-											for (j=0; j<mx; j++)
+											for (l=0; l<mx; l++)
 											{
-												xx=g_array_index(msr, gdouble, j);
+												xx=g_array_index(msr, gdouble, l);
 												g_array_append_val(bxr, xx);
-												xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+												xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
 												g_array_append_val(byr, xx);
 											}
 										}
-										l++;
+										j++;
 									}
 									xx=g_array_index(msr, gdouble, 0);
 									g_array_append_val(bxr, xx);
-									mny=g_array_index(doms, gdouble, l*kdimx);
+									mny=g_array_index(doms, gdouble, j*kdimx);
 									g_array_append_val(byr, xx);
-									{mxy=mny; j=1;}
-									while (j<mx)
+									{mxy=mny; l=1;}
+									while (l<mx)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(doms, gdouble, (l+(j*jdimx))*kdimx);
+										xx=g_array_index(doms, gdouble, (j+(l*jdimx))*kdimx);
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
-										j++;
+										l++;
 									}
 									g_array_append_val(bsz, mx);
 									g_array_append_val(bnx, dx2);
 									{dx2+=mx; k=1;}
 									while (k<kdimx)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 											if (xx>mxy) mxy=xx;
 											else if (xx<mny) mny=xx;
@@ -23843,64 +23843,64 @@ void opd(GtkWidget *widget, gpointer data)
 										g_array_append_val(bnx, dx2);
 										{dx2+=mx; k++;}
 									}
-									l++;
-									while (l<jdimx)
+									j++;
+									while (j<jdimx)
 									{
 										for (k=0; k<kdimx; k++)
 										{
-											for (j=0; j<mx; j++)
+											for (l=0; l<mx; l++)
 											{
-												xx=g_array_index(msr, gdouble, j);
+												xx=g_array_index(msr, gdouble, l);
 												g_array_append_val(bxr, xx);
-												xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+												xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
 												g_array_append_val(byr, xx);
 											}
 										}
-										l++;
+										j++;
 									}
 								}
 							}
 							else
 							{
-								while (l<jdim)
+								while (j<jdim)
 								{
 									for (k=0; k<kdimx; k++)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 										}
 									}
-									l++;
+									j++;
 								}
 								xx=g_array_index(msr, gdouble, 0);
 								g_array_append_val(bxr, xx);
-								mny=g_array_index(chp, gdouble, l*kdimx);
+								mny=g_array_index(chp, gdouble, j*kdimx);
 								g_array_append_val(byr, xx);
-								{mxy=mny; j=1;}
-								while (j<mx)
+								{mxy=mny; l=1;}
+								while (l<mx)
 								{
-									xx=g_array_index(msr, gdouble, j);
+									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(chp, gdouble, (l+(j*jdimx))*kdimx);
+									xx=g_array_index(chp, gdouble, (j+(l*jdimx))*kdimx);
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
-									j++;
+									l++;
 								}
 								g_array_append_val(bsz, mx);
 								g_array_append_val(bnx, dx2);
 								{dx2+=mx; k=1;}
 								while (k<kdimx)
 								{
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(chp, gdouble, k+((l+(j*jdimx))*kdimx));
+										xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -23909,20 +23909,20 @@ void opd(GtkWidget *widget, gpointer data)
 									g_array_append_val(bnx, dx2);
 									{dx2+=mx; k++;}
 								}
-								l++;
-								while (l<jdimx)
+								j++;
+								while (j<jdimx)
 								{
 									for (k=0; k<kdimx; k++)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(chp, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 										}
 									}
-									l++;
+									j++;
 								}
 							}
 						}
@@ -23938,11 +23938,11 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								while (k<kdim)
 								{
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(vis, gdouble, k+((j*jdimx)*kdimx));
+										xx=g_array_index(vis, gdouble, k+(l*jdimx*kdimx));
 										g_array_append_val(byr, xx);
 									}
 									k++;
@@ -23951,51 +23951,51 @@ void opd(GtkWidget *widget, gpointer data)
 								g_array_append_val(bxr, xx);
 								mny=g_array_index(vis, gdouble, k);
 								g_array_append_val(byr, xx);
-								{mxy=mny; j=1;}
-								while (j<mx)
+								{mxy=mny; l=1;}
+								while (l<mx)
 								{
-									xx=g_array_index(msr, gdouble, j);
+									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(vis, gdouble, k+((j*jdimx)*kdimx));
+									xx=g_array_index(vis, gdouble, k+(l*jdimx*kdimx));
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
-									j++;
+									l++;
 								}
 								g_array_append_val(bsz, mx);
 								g_array_append_val(bnx, dx2);
 								{dx2+=mx; k++;}
 								while (k<kdimx)
 								{
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(vis, gdouble, k+((j*jdimx)*kdimx));
+										xx=g_array_index(vis, gdouble, k+(l*jdimx*kdimx));
 										g_array_append_val(byr, xx);
 									}
 									{dx2+=mx; k++;}
 								}
-								l=1;
-								while (l<jdimx)
+								j=1;
+								while (j<jdimx)
 								{
 									k=0;
 									while (k<kdim)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 										}
 										{dx2+=mx; k++;}
 									}
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+										xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -24005,27 +24005,27 @@ void opd(GtkWidget *widget, gpointer data)
 									{dx2+=mx; k++;}
 									while (k<kdimx)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 										}
 										{dx2+=mx; k++;}
 									}
-									l++;
+									j++;
 								}
 							}
 							else
 							{
 								while (k<kdim)
 								{
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(doms, gdouble, k+((j*jdimx)*kdimx));
+										xx=g_array_index(doms, gdouble, k+(l*jdimx*kdimx));
 										g_array_append_val(byr, xx);
 									}
 									k++;
@@ -24034,51 +24034,51 @@ void opd(GtkWidget *widget, gpointer data)
 								g_array_append_val(bxr, xx);
 								mny=g_array_index(doms, gdouble, k);
 								g_array_append_val(byr, xx);
-								{mxy=mny; j=1;}
-								while (j<mx)
+								{mxy=mny; l=1;}
+								while (l<mx)
 								{
-									xx=g_array_index(msr, gdouble, j);
+									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(doms, gdouble, k+((j*jdimx)*kdimx));
+									xx=g_array_index(doms, gdouble, k+(l*jdimx*kdimx));
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
-									j++;
+									l++;
 								}
 								g_array_append_val(bsz, mx);
 								g_array_append_val(bnx, dx2);
 								{dx2+=mx; k++;}
 								while (k<kdimx)
 								{
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(doms, gdouble, k+((j*jdimx)*kdimx));
+										xx=g_array_index(doms, gdouble, k+((l*jdimx)*kdimx));
 										g_array_append_val(byr, xx);
 									}
 									{dx2+=mx; k++;}
 								}
-								l=1;
-								while (l<jdimx)
+								j=1;
+								while (j<jdimx)
 								{
 									k=0;
 									while (k<kdim)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 										}
 										{dx2+=mx; k++;}
 									}
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+										xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -24088,16 +24088,16 @@ void opd(GtkWidget *widget, gpointer data)
 									{dx2+=mx; k++;}
 									while (k<kdimx)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 										}
 										{dx2+=mx; k++;}
 									}
-									l++;
+									j++;
 								}
 							}
 						}
@@ -24105,11 +24105,11 @@ void opd(GtkWidget *widget, gpointer data)
 						{
 							while (k<kdim)
 							{
-								for (j=0; j<mx; j++)
+								for (l=0; l<mx; l++)
 								{
-									xx=g_array_index(msr, gdouble, j);
+									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(chp, gdouble, k+((j*jdimx)*kdimx));
+									xx=g_array_index(chp, gdouble, k+((l*jdimx)*kdimx));
 									g_array_append_val(byr, xx);
 								}
 								k++;
@@ -24118,51 +24118,51 @@ void opd(GtkWidget *widget, gpointer data)
 							g_array_append_val(bxr, xx);
 							mny=g_array_index(chp, gdouble, k);
 							g_array_append_val(byr, xx);
-							{mxy=mny; j=1;}
-							while (j<mx)
+							{mxy=mny; l=1;}
+							while (l<mx)
 							{
-								xx=g_array_index(msr, gdouble, j);
+								xx=g_array_index(msr, gdouble, l);
 								g_array_append_val(bxr, xx);
-								xx=g_array_index(chp, gdouble, k+((j*jdimx)*kdimx));
+								xx=g_array_index(chp, gdouble, k+((l*jdimx)*kdimx));
 								g_array_append_val(byr, xx);
 								if (xx>mxy) mxy=xx;
 								else if (xx<mny) mny=xx;
-								j++;
+								l++;
 							}
 							g_array_append_val(bsz, mx);
 							g_array_append_val(bnx, dx2);
 							{dx2+=mx; k++;}
 							while (k<kdimx)
 							{
-								for (j=0; j<mx; j++)
+								for (l=0; l<mx; l++)
 								{
-									xx=g_array_index(msr, gdouble, j);
+									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(chp, gdouble, k+((j*jdimx)*kdimx));
+									xx=g_array_index(chp, gdouble, k+((l*jdimx)*kdimx));
 									g_array_append_val(byr, xx);
 								}
 								{dx2+=mx; k++;}
 							}
-							l=1;
-							while (l<jdimx)
+							j=1;
+							while (j<jdimx)
 							{
 								k=0;
 								while (k<kdim)
 								{
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(chp, gdouble, k+((l+(j*jdimx))*kdimx));
+										xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 									}
 									{dx2+=mx; k++;}
 								}
-								for (j=0; j<mx; j++)
+								for (l=0; l<mx; l++)
 								{
-									xx=g_array_index(msr, gdouble, j);
+									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(chp, gdouble, k+((l+(j*jdimx))*kdimx));
+									xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
@@ -24172,17 +24172,17 @@ void opd(GtkWidget *widget, gpointer data)
 								{dx2+=mx; k++;}
 								while (k<kdimx)
 								{
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(chp, gdouble, k+((l+(j*jdimx))*kdimx));
+										xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 									}
 									dx2+=mx;
 									k++;
 								}
-								l++;
+								j++;
 							}
 						}
 					}
@@ -24200,11 +24200,11 @@ void opd(GtkWidget *widget, gpointer data)
 								mny=g_array_index(vis, gdouble, 0);
 								g_array_append_val(byr, mny);
 								mxy=mny;
-								for (j=1; j<mx; j++)
+								for (l=1; l<mx; l++)
 								{
-									xx=g_array_index(msr, gdouble, j);
+									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(vis, gdouble, (j*jdimx*kdimx));
+									xx=g_array_index(vis, gdouble, l*jdimx*kdimx);
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
@@ -24214,11 +24214,11 @@ void opd(GtkWidget *widget, gpointer data)
 								{dx2+=mx; k=1;}
 								while (k<kdimx)
 								{
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(vis, gdouble, k+(j*jdimx*kdimx));
+										xx=g_array_index(vis, gdouble, k+(l*jdimx*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -24227,16 +24227,16 @@ void opd(GtkWidget *widget, gpointer data)
 									g_array_append_val(bnx, dx2);
 									{dx2+=mx; k++;}
 								}
-								l=1;
-								while (l<jdimx)
+								j=1;
+								while (j<jdimx)
 								{
 									for (k=0; k<kdimx; k++)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(vis, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 											if (xx>mxy) mxy=xx;
 											else if (xx<mny) mny=xx;
@@ -24245,7 +24245,7 @@ void opd(GtkWidget *widget, gpointer data)
 										g_array_append_val(bnx, dx2);
 										dx2+=mx;
 									}
-									l++;
+									j++;
 								}
 							}
 							else
@@ -24255,11 +24255,11 @@ void opd(GtkWidget *widget, gpointer data)
 								mny=g_array_index(doms, gdouble, 0);
 								g_array_append_val(byr, mny);
 								mxy=mny;
-								for (j=1; j<mx; j++)
+								for (l=1; l<mx; l++)
 								{
-									xx=g_array_index(msr, gdouble, j);
+									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(doms, gdouble, (j*jdimx*kdimx));
+									xx=g_array_index(doms, gdouble, l*jdimx*kdimx);
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
@@ -24269,11 +24269,11 @@ void opd(GtkWidget *widget, gpointer data)
 								{dx2+=mx; k=1;}
 								while (k<kdimx)
 								{
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(doms, gdouble, k+(j*jdimx*kdimx));
+										xx=g_array_index(doms, gdouble, k+(l*jdimx*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -24282,16 +24282,16 @@ void opd(GtkWidget *widget, gpointer data)
 									g_array_append_val(bnx, dx2);
 									{dx2+=mx; k++;}
 								}
-								l=1;
-								while (l<jdimx)
+								j=1;
+								while (j<jdimx)
 								{
 									for (k=0; k<kdimx; k++)
 									{
-										for (j=0; j<mx; j++)
+										for (l=0; l<mx; l++)
 										{
-											xx=g_array_index(msr, gdouble, j);
+											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(doms, gdouble, k+((l+(j*jdimx))*kdimx));
+											xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 											if (xx>mxy) mxy=xx;
 											else if (xx<mny) mny=xx;
@@ -24300,7 +24300,7 @@ void opd(GtkWidget *widget, gpointer data)
 										g_array_append_val(bnx, dx2);
 										dx2+=mx;
 									}
-									l++;
+									j++;
 								}
 							}
 						}
@@ -24311,11 +24311,11 @@ void opd(GtkWidget *widget, gpointer data)
 							mny=g_array_index(chp, gdouble, 0);
 							g_array_append_val(byr, mny);
 							mxy=mny;
-							for (j=1; j<mx; j++)
+							for (l=1; l<mx; l++)
 							{
-								xx=g_array_index(msr, gdouble, j);
+								xx=g_array_index(msr, gdouble, l);
 								g_array_append_val(bxr, xx);
-								xx=g_array_index(chp, gdouble, (j*jdimx*kdimx));
+								xx=g_array_index(chp, gdouble, l*jdimx*kdimx);
 								g_array_append_val(byr, xx);
 								if (xx>mxy) mxy=xx;
 								else if (xx<mny) mny=xx;
@@ -24325,11 +24325,11 @@ void opd(GtkWidget *widget, gpointer data)
 							{dx2+=mx; k=1;}
 							while (k<kdimx)
 							{
-								for (j=0; j<mx; j++)
+								for (l=0; l<mx; l++)
 								{
-									xx=g_array_index(msr, gdouble, j);
+									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(chp, gdouble, k+(j*jdimx*kdimx));
+									xx=g_array_index(chp, gdouble, k+(l*jdimx*kdimx));
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
@@ -24338,16 +24338,16 @@ void opd(GtkWidget *widget, gpointer data)
 								g_array_append_val(bnx, dx2);
 								{dx2+=mx; k++;}
 							}
-							l=1;
-							while (l<jdimx)
+							j=1;
+							while (j<jdimx)
 							{
 								for (k=0; k<kdimx; k++)
 								{
-									for (j=0; j<mx; j++)
+									for (l=0; l<mx; l++)
 									{
-										xx=g_array_index(msr, gdouble, j);
+										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(chp, gdouble, k+((l+(j*jdimx))*kdimx));
+										xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -24356,7 +24356,7 @@ void opd(GtkWidget *widget, gpointer data)
 									g_array_append_val(bnx, dx2);
 									dx2+=mx;
 								}
-								l++;
+								j++;
 							}
 						}
 					}
