@@ -36,6 +36,7 @@
 	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, flags, flagd, satl, trc;
 	extern gulong pr_id;
 	extern gdouble oe;
+	extern gchar *fold, *folr;
 	extern void trs(GtkWidget*, gpointer);
 	extern void pltmv(PlotLinear*, gpointer);
 	extern void pltmvp(PlotPolar*, gpointer);

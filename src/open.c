@@ -37,6 +37,8 @@ void upt(GtkWidget *widget, gpointer dta)
 	gchar *fin=NULL;
 
 	wwfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(dialog), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(wfile), FALSE);
+	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(wfile), FALSE);
 	g_signal_connect(G_OBJECT(wwfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wwfile));
 	if (gtk_dialog_run(GTK_DIALOG(wwfile))==GTK_RESPONSE_ACCEPT)
 	{
@@ -99,10 +101,13 @@ void opd(GtkWidget *widget, gpointer data)
 		else /* batch job processing mode */
 		{
 			wfile=gtk_file_chooser_dialog_new(_("Select Config File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_NEW, GTK_RESPONSE_APPLY, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(wfile), folr);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			dr=gtk_dialog_run(GTK_DIALOG(wfile));
 			if (dr==GTK_RESPONSE_APPLY)
 			{
+				g_free(folr);
+				folr=gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(wfile));
 				fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
 				if (fin)/* also overwrite confirmation? */
 				{
@@ -24466,9 +24471,12 @@ void opd(GtkWidget *widget, gpointer data)
 	else /* single file mode */
 	{
 		wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(wfile), fold);
 		g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 		if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 		{
+			g_free(fold);
+			fold=gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(wfile));
 			fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
 			if (g_file_get_contents(fin, &contents, NULL, &Err))
 			{

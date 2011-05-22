@@ -41,8 +41,6 @@
 	void upk(GtkWidget*, gpointer);
 	void upa1(GtkWidget*, gpointer);
 	void upa2(GtkWidget*, gpointer);
-	void sessres(GtkWidget*, gpointer);
-	void sesssav(GtkWidget*, gpointer);
 	void reset(GtkWidget*, gpointer);
 	void reset2(GtkWidget*, gpointer);
 #endif

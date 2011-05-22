@@ -29,6 +29,9 @@
 	extern GArray *stars, *delf, *vis, *doms, *chp, *msr;
 	extern guint jdim, kdim, jdimxf, kdimxf, flags;
 	extern gint mx;
+	extern gchar *fold, *folr;
 	void prt(GtkWidget*, gpointer);
 	void sav(GtkWidget*, gpointer);
+	void sessres(GtkWidget*, gpointer);
+	void sesssav(GtkWidget*, gpointer);
 #endif

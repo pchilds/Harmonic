@@ -62,6 +62,7 @@ gint lc, mx; /* number of data points and number of files in batch routine */
 guint jdim=0, kdim=0, jdimx=1, kdimx=1, jdimxf=1, kdimxf=1, satl=0, trc=1, flags=0, flagd=0; /* array indices, #of traces, trace number, and current processing state and display flags */
 gulong pr_id; /* id for disabling/enabling post-transform processing */
 gdouble oe; /* value to hold prior reference level for offset tracking */
+gchar *fold=NULL, *folr=NULL;
 
 int main( int argc, char *argv[])
 {
@@ -523,6 +524,8 @@ int main( int argc, char *argv[])
 	gr3=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	bl3=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	al3=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	fold=g_strdup("/home");
+	folr=g_strdup("/home");
 	gtk_widget_show(window);
 	gtk_main();
 	gdk_threads_leave();
