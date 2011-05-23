@@ -38,6 +38,7 @@
 	void pltmv(PlotLinear*, gpointer);
 	void pltmvp(PlotPolar*, gpointer);
 	void upj(GtkWidget*, gpointer);
+	void upj2(GtkWidget*, gpointer);
 	void upk(GtkWidget*, gpointer);
 	void upa1(GtkWidget*, gpointer);
 	void upa2(GtkWidget*, gpointer);

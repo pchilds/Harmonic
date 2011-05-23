@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 #define PLOT_IS_LINEAR(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), PLOT_TYPE_LINEAR))
 #define PLOT_LINEAR_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST((klass), PLOT_LINEAR, PlotLinearClass))
 #define PLOT_IS_LINEAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), PLOT_TYPE_LINEAR))
-#define PLOT_GET_LINEAR_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj), PLOT_TYPE_LINEAR, PlotLinearClass))
+#define PLOT_LINEAR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj), PLOT_TYPE_LINEAR, PlotLinearClass))
 
 typedef struct _PlotLinear PlotLinear;
 typedef struct _PlotLinearClass PlotLinearClass;
@@ -61,7 +61,6 @@ struct _PlotLinearClass
 	void (*moved) (PlotLinear *plot);
 };
 
-GType plot_linear_get_type(void);
 gboolean plot_linear_update_scale(GtkWidget *widget, gdouble xn, gdouble xx, gdouble yn, gdouble yx);
 gboolean plot_linear_update_scale_pretty(GtkWidget *widget, gdouble xl, gdouble xu, gdouble yl, gdouble yu);
 gboolean plot_linear_print_eps(GtkWidget *widget, gchar *fout);

@@ -3913,18 +3913,66 @@ static void plot_linear_set_property(GObject *object, guint prop_id, const GValu
 	priv=PLOT_LINEAR_GET_PRIVATE(object);
 	switch (prop_id)
 	{
-		case PROP_BXN: {priv->bounds.xmin=g_value_get_double(value); break;}
-		case PROP_BXX: {priv->bounds.xmax=g_value_get_double(value); break;}
-		case PROP_BYN: {priv->bounds.ymin=g_value_get_double(value); break;}
-		case PROP_BYX: {priv->bounds.ymax=g_value_get_double(value); break;}
-		case PROP_XTJ: {priv->ticks.xj=g_value_get_uint(value); break;}
-		case PROP_YTJ: {priv->ticks.yj=g_value_get_uint(value); break;}
-		case PROP_XTN: {priv->ticks.xn=g_value_get_uint(value); break;}
-		case PROP_YTN: {priv->ticks.yn=g_value_get_uint(value); break;}
-		case PROP_XC: {priv->xcs=g_value_get_uint(value); break;}
-		case PROP_YC: {priv->ycs=g_value_get_uint(value); break;}
-		case PROP_FA: {priv->flaga=g_value_get_uint(value); break;}
-		default: {G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec); break;}
+		case PROP_BXN:
+		{
+			priv->bounds.xmin=g_value_get_double(value);
+			break;
+		}
+		case PROP_BXX:
+		{
+			priv->bounds.xmax=g_value_get_double(value);
+			break;
+		}
+		case PROP_BYN:
+		{
+			priv->bounds.ymin=g_value_get_double(value);
+			break;
+		}
+		case PROP_BYX:
+		{
+			priv->bounds.ymax=g_value_get_double(value);
+			break;
+		}
+		case PROP_XTJ:
+		{
+			priv->ticks.xj=g_value_get_uint(value);
+			break;
+		}
+		case PROP_YTJ:
+		{
+			priv->ticks.yj=g_value_get_uint(value);
+			break;
+		}
+		case PROP_XTN:
+		{
+			priv->ticks.xn=g_value_get_uint(value);
+			break;
+		}
+		case PROP_YTN:
+		{
+			priv->ticks.yn=g_value_get_uint(value);
+			break;
+		}
+		case PROP_XC:
+		{
+			priv->xcs=g_value_get_uint(value);
+			break;
+		}
+		case PROP_YC:
+		{
+			priv->ycs=g_value_get_uint(value);
+			break;
+		}
+		case PROP_FA:
+		{
+			priv->flaga=g_value_get_uint(value);
+			break;
+		}
+		default:
+		{
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+			break;
+		}
 	}
 }
 
@@ -3935,18 +3983,66 @@ static void plot_linear_get_property(GObject *object, guint prop_id, GValue *val
 	priv=PLOT_LINEAR_GET_PRIVATE(object);
 	switch (prop_id)
 	{
-		case PROP_BXN: {g_value_set_double(value, priv->bounds.xmin); break;}
-		case PROP_BXX: {g_value_set_double(value, priv->bounds.xmax); break;}
-		case PROP_BYN: {g_value_set_double(value, priv->bounds.ymin); break;}
-		case PROP_BYX: {g_value_set_double(value, priv->bounds.ymax); break;}
-		case PROP_XTJ: {g_value_set_uint(value, priv->ticks.xj); break;}
-		case PROP_YTJ: {g_value_set_uint(value, priv->ticks.yj); break;}
-		case PROP_XTN: {g_value_set_uint(value, priv->ticks.xn); break;}
-		case PROP_YTN: {g_value_set_uint(value, priv->ticks.yn); break;}
-		case PROP_XC: {g_value_set_uint(value, priv->xcs); break;}
-		case PROP_YC: {g_value_set_uint(value, priv->ycs); break;}
-		case PROP_FA: {g_value_set_uint(value, priv->flaga); break;}
-		default: {G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec); break;}
+		case PROP_BXN:
+		{
+			g_value_set_double(value, priv->bounds.xmin);
+			break;
+		}
+		case PROP_BXX:
+		{
+			g_value_set_double(value, priv->bounds.xmax);
+			break;
+		}
+		case PROP_BYN:
+		{
+			g_value_set_double(value, priv->bounds.ymin);
+			break;
+		}
+		case PROP_BYX:
+		{
+			g_value_set_double(value, priv->bounds.ymax);
+			break;
+		}
+		case PROP_XTJ:
+		{
+			g_value_set_uint(value, priv->ticks.xj);
+			break;
+		}
+		case PROP_YTJ:
+		{
+			g_value_set_uint(value, priv->ticks.yj);
+			break;
+		}
+		case PROP_XTN:
+		{
+			g_value_set_uint(value, priv->ticks.xn);
+			break;
+		}
+		case PROP_YTN:
+		{
+			g_value_set_uint(value, priv->ticks.yn);
+			break;
+		}
+		case PROP_XC:
+		{
+			g_value_set_uint(value, priv->xcs);
+			break;
+		}
+		case PROP_YC:
+		{
+			g_value_set_uint(value, priv->ycs);
+			break;
+		}
+		case PROP_FA:
+		{
+			g_value_set_uint(value, priv->flaga);
+			break;
+		}
+		default:
+		{
+			G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+			break;
+		}
 	}
 }
 

@@ -120,15 +120,13 @@ void upj(GtkWidget *widget, gpointer data)
 	 */
 	PlotLinear *plt2, *plt3;
 	PlotPolar *plt4;
-	guint j, k, l, sz4;
+	gint j, k, l, sz4;
 	gdouble num, num2, num3, num4, num5, num6, num7, xi, xf, mny, mxy;
 	gdouble *ptr;
 	gchar s[10];
 	gchar *str;
 
 	jdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), jdim);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), jdim);
 	if (jdim>=jdimx)
 	{
 		num=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isr));
@@ -304,6 +302,15 @@ void upj(GtkWidget *widget, gpointer data)
 		if ((flags&16)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
 		g_free(str);
 	}
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), jdim);
+}
+
+void upj2(GtkWidget *widget, gpointer data)
+{
+	gint j;
+
+	j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+	if (j!=jdim) gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), j);
 }
 
 void upk(GtkWidget *widget, gpointer data)
@@ -321,7 +328,6 @@ void upk(GtkWidget *widget, gpointer data)
 	gchar *str;
 
 	kdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-	if (widget!=kind) gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), kdim);
 	if (kdim>=kdimx)
 	{
 		num=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isr));

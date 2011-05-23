@@ -69,13 +69,13 @@ void prs(GtkWidget *widget, gpointer data)
 					else vzt=l/vzt;
 					for (k=0; k<kdimx; k++)
 					{
-						st=ceil(g_array_index(isra, gdouble, j+(k*jdimxf))*idelf);
-						sp=floor(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
+						st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+						sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 						/*
 						 fit values to twa and tca
 						 */
-						tcn=g_array_index(tca, gdouble, j+(k*jdimxf))*idelf;
-						twd=g_array_index(twa, gdouble, j+(k*jdimxf))*idelf/2;
+						tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+						twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 						if ((st<(sz4-2))&&(sp<sz4)&&((sp-st)>1))
 						{
 							vt=g_array_index(stars, gdouble, st+(2*j*sz4));
@@ -224,13 +224,13 @@ void prs(GtkWidget *widget, gpointer data)
 					else vzt=l/vzt;
 					for (k=0; k<kdimx; k++)
 					{
-						st=ceil(g_array_index(isra, gdouble, j+(k*jdimxf))*idelf);
-						sp=floor(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
+						st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+						sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 						/*
 						 fit values to twa and tca
 						 */
-						tcn=g_array_index(tca, gdouble, j+(k*jdimxf))*idelf;
-						twd=g_array_index(twa, gdouble, j+(k*jdimxf))*idelf/2;
+						tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+						twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 						if ((st<(sz4-1))&&(sp<sz4)&&((sp-st)>0))
 						{
 							vt=g_array_index(stars, gdouble, st+(2*j*sz4));
@@ -326,10 +326,10 @@ void prs(GtkWidget *widget, gpointer data)
 				else vzt=l/vzt;
 				for (k=0; k<kdimx; k++)
 				{
-					st=ceil(g_array_index(isra, gdouble, j+(k*jdimxf))*idelf);
-					sp=floor(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
-					tcn=g_array_index(tca, gdouble, j+(k*jdimxf))*idelf;
-					twd=g_array_index(twa, gdouble, j+(k*jdimxf))*idelf/2;
+					st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+					sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+					tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+					twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 					if ((st<(sz4-2))&&(sp<sz4)&&((sp-st)>1))
 					{
 						vt=g_array_index(stars, gdouble, st+(2*j*sz4));
@@ -473,10 +473,10 @@ void prs(GtkWidget *widget, gpointer data)
 				else vzt=l/vzt;
 				for (k=0; k<kdimx; k++)
 				{
-					st=ceil(g_array_index(isra, gdouble, j+(k*jdimxf))*idelf);
-					sp=floor(g_array_index(ispa, gdouble, j+(k*jdimxf))*idelf);
-					tcn=g_array_index(tca, gdouble, j+(k*jdimxf))*idelf;
-					twd=g_array_index(twa, gdouble, j+(k*jdimxf))*idelf/2;
+					st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+					sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+					tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+					twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 					if ((st<(sz4-1))&&(sp<sz4)&&((sp-st)>0))
 					{
 						vt=g_array_index(stars, gdouble, st+(2*j*sz4));
@@ -561,7 +561,6 @@ void prs(GtkWidget *widget, gpointer data)
 
 void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inversion to 2pi/x */
 {
-	GtkAdjustment *adj;
 	PlotLinear *plt;
 	guint j, k, st, sp;
 	gint n, zp, dx, dx2;
@@ -2740,10 +2739,6 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		plot_linear_update_scale_pretty(plot2, 0, xx, 0, yx);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
-		adj=(GtkAdjustment*) gtk_adjustment_new(jdim, 0, (jdimx-1), 1.0, 5.0, 0.0);
-		gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(jind2), adj);
-		adj=(GtkAdjustment*) gtk_adjustment_new(0, 0, G_MAXINT8, 1.0, 5.0, 0.0);
-		gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(kind), adj);
 		jdimxf=jdimx;
 		flags|=2;
 		pr_id=g_signal_connect(G_OBJECT(pr), "clicked", G_CALLBACK(prs), NULL);

@@ -76,9 +76,6 @@ int main( int argc, char *argv[])
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset(PACKAGE, "UTF-8");
 	textdomain(PACKAGE);
-	if (!g_thread_supported()) g_thread_init(NULL);
-	gdk_threads_init();
-	gdk_threads_enter();
 	gtk_init(&argc, &argv);
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), _("Harmonic Spectrum Analyser"));
@@ -324,6 +321,13 @@ int main( int argc, char *argv[])
 	fst=gtk_spin_button_new(adj, 0.5, 2);
 	gtk_table_attach(GTK_TABLE(table), fst, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(fst);
+	label=gtk_label_new(_("Zero Padding 2^:"));
+	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+	gtk_widget_show(label);
+	adj=(GtkAdjustment*) gtk_adjustment_new(12, 4, 31, 1.0, 5.0, 0.0);
+	zpd=gtk_spin_button_new(adj, 0, 0);
+	gtk_table_attach(GTK_TABLE(table), zpd, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+	gtk_widget_show(zpd);
 	label=gtk_label_new(_("j index:"));
 	gtk_table_attach(GTK_TABLE(table), label, 2, 3, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
@@ -332,13 +336,6 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(jind), "value-changed", G_CALLBACK(upj), NULL);
 	gtk_table_attach(GTK_TABLE(table), jind, 2, 3, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(jind);
-	label=gtk_label_new(_("Zero Padding 2^:"));
-	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-	gtk_widget_show(label);
-	adj=(GtkAdjustment*) gtk_adjustment_new(12, 4, 31, 1.0, 5.0, 0.0);
-	zpd=gtk_spin_button_new(adj, 0, 0);
-	gtk_table_attach(GTK_TABLE(table), zpd, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-	gtk_widget_show(zpd);
 	butt=gtk_button_new_with_label(_("Reset\nArrays"));
 	g_signal_connect(G_OBJECT(butt), "clicked", G_CALLBACK(reset), NULL);
 	gtk_table_attach(GTK_TABLE(table), butt, 2, 3, 2, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -353,7 +350,7 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("Inverse Spectrum Start:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(1, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment*) gtk_adjustment_new(1, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 	isr=gtk_spin_button_new(adj, 0.5, 3);
 	g_signal_connect(G_OBJECT(isr), "value-changed", G_CALLBACK(upa2), (gpointer) isra);
 	gtk_table_attach(GTK_TABLE(table), isr, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -361,7 +358,7 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("Inverse Spectrum Stop:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(3, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment*) gtk_adjustment_new(3, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 	isp=gtk_spin_button_new(adj, 0.5, 3);
 	g_signal_connect(G_OBJECT(isp), "value-changed", G_CALLBACK(upa2), (gpointer) ispa);
 	gtk_table_attach(GTK_TABLE(table), isp, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -369,7 +366,7 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("Triangle Centre:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(2, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment*) gtk_adjustment_new(2, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 	tc=gtk_spin_button_new(adj, 0.5, 3);
 	g_signal_connect(G_OBJECT(tc), "value-changed", G_CALLBACK(upa2), (gpointer) tca);
 	gtk_table_attach(GTK_TABLE(table), tc, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -377,7 +374,7 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("Triangle Full Width:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(2, DZE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment*) gtk_adjustment_new(2, DZE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 	tw=gtk_spin_button_new(adj, 0.5, 3);
 	g_signal_connect(G_OBJECT(tw), "value-changed", G_CALLBACK(upa2), (gpointer) twa);
 	gtk_table_attach(GTK_TABLE(table), tw, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -385,7 +382,7 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("DC Peak Width:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 4, 5, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(2, DZE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment*) gtk_adjustment_new(2, DZE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 	zw=gtk_spin_button_new(adj, 0.5, 3);
 	g_signal_connect(G_OBJECT(zw), "value-changed", G_CALLBACK(upa1), (gpointer) zwa);
 	gtk_table_attach(GTK_TABLE(table), zw, 1, 2, 5, 6, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -393,15 +390,15 @@ int main( int argc, char *argv[])
 	label=gtk_label_new(_("j index:"));
 	gtk_table_attach(GTK_TABLE(table), label, 2, 3, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, 0, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment*) gtk_adjustment_new(0, 0, G_MAXINT8, 1.0, 5.0, 0.0);
 	jind2=gtk_spin_button_new(adj, 0, 0);
-	g_signal_connect(G_OBJECT(jind2), "value-changed", G_CALLBACK(upj), NULL);
+	g_signal_connect(G_OBJECT(jind2), "value-changed", G_CALLBACK(upj2), NULL);
 	gtk_table_attach(GTK_TABLE(table), jind2, 2, 3, 1, 2, GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 2, 2);
 	gtk_widget_show(jind2);
 	label=gtk_label_new(_("k index:"));
 	gtk_table_attach(GTK_TABLE(table), label, 2, 3, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
-	adj=(GtkAdjustment *) gtk_adjustment_new(0, 0, 0, 1.0, 5.0, 0.0);
+	adj=(GtkAdjustment*) gtk_adjustment_new(0, 0, G_MAXINT8, 1.0, 5.0, 0.0);
 	kind=gtk_spin_button_new(adj, 0, 0);
 	g_signal_connect(G_OBJECT(kind), "value-changed", G_CALLBACK(upk), NULL);
 	gtk_table_attach(GTK_TABLE(table), kind, 2, 3, 3, 4, GTK_FILL|GTK_SHRINK, GTK_FILL|GTK_SHRINK, 2, 2);
@@ -528,6 +525,5 @@ int main( int argc, char *argv[])
 	folr=g_strdup("/home");
 	gtk_widget_show(window);
 	gtk_main();
-	gdk_threads_leave();
 	return 0;
 }
