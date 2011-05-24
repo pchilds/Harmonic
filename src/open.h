@@ -29,7 +29,7 @@
 #	include <fftw3.h>
 	extern GtkWidget *window, *statusbar, *notebook, *notebook2, *plot1, *plot3, *zpd, *fst, *tracmenu, *rest, *visl, *dsl, *tr, *pr;
 	extern GtkWidget *bat, *chi, *trans, *anosa, *sws, *wll, *oft, *twopionx, *lcmp, *dBs, *neg, *plot1, *plot3;
-	extern GArray *bxr, *byr, *bsz, *bnx, *msr, *vis, *doms, *chp, *x, *yb, *delf, *stars, *specs, *sz, *nx;
+	extern GArray *bxr, *byr, *bsz, *bnx, *msr, *vis, *doms, *chp, *x, *yb, *specs, *sz, *nx;
 	extern GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa;
 	extern GSList *group2;
 	extern gint lc, mx;

@@ -34,6 +34,7 @@
 /*
  * TO DO:
  *
+ * BAT: allowing to proceed from prior single file opened/transformed data
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
  * OPD: improve config writing utility to reorder post entry
