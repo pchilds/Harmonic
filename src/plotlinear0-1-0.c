@@ -78,7 +78,7 @@ static void drawz(GtkWidget *widget, cairo_t *cr)
 	cairo_line_to(cr, xw-2, 5.5);
 	cairo_move_to(cr, xw-5.5, 2);
 	cairo_line_to(cr, xw-5.5, 9);
-	if (((plot->zmode)&1)==0)
+	if (((plot->zmode)&PLOT_LINEAR_OUT)==0)
 	{
 		cairo_move_to(cr, xw-6.5, 2.5);
 		cairo_line_to(cr, xw-5.5, 2);
@@ -101,7 +101,7 @@ static void drawz(GtkWidget *widget, cairo_t *cr)
 		cairo_line_to(cr, xw-3.5, 3.5);
 	}
 	cairo_stroke(cr);
-	if (((plot->zmode)&8)!=0)
+	if (((plot->zmode)&PLOT_LINEAR_SGL)!=0)
 	{
 		cairo_move_to(cr, xw-20, 2);
 		cairo_line_to(cr, xw-13, 9);
@@ -114,7 +114,7 @@ static void drawz(GtkWidget *widget, cairo_t *cr)
 		cairo_save(cr);
 		dt=1;
 		cairo_set_dash(cr, &dt, 1, 0);
-		if (((plot->zmode)&4)!=0)
+		if (((plot->zmode)&PLOT_LINEAR_VRT)!=0)
 		{
 			cairo_move_to(cr, xw-20, 2.5);
 			cairo_line_to(cr, xw-13, 2.5);
@@ -122,7 +122,7 @@ static void drawz(GtkWidget *widget, cairo_t *cr)
 			cairo_line_to(cr, xw-13, 8.5);
 			cairo_stroke(cr);
 		}
-		if (((plot->zmode)&2)!=0)
+		if (((plot->zmode)&PLOT_LINEAR_HZT)!=0)
 		{
 			cairo_move_to(cr, xw-19.5, 2);
 			cairo_line_to(cr, xw-19.5, 9);
@@ -2602,10 +2602,10 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	cairo_stroke(cr);
 	if ((plot->xdata)&&(plot->ydata)) /* plot data */
 	{
-		if (((plot->flagd)&1)!=0)
+		if (((plot->flagd)&PLOT_LIN)!=0)
 		{
 			cairo_set_line_width(cr, (plot->linew));
-			if (((plot->flagd)&2)!=0) /* lines and points */
+			if (((plot->flagd)&PLOT_PTS)!=0) /* lines and points */
 			{
 				for (k=0; k<(plot->ind->len); k++)
 				{
@@ -2642,8 +2642,8 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					}
 					for (j=1+ft; j<lt; j++)
 					{
-						xvn=xl+((xu-xl)*(g_array_index(plot->xdata, gdouble, j)-(priv->bounds.xmin))/((priv->bounds.xmax)-(priv->bounds.xmin)));
-						yvn=yl+((yu-yl)*(g_array_index(plot->ydata, gdouble, j)-(priv->bounds.ymin))/((priv->bounds.ymax)-(priv->bounds.ymin)));
+						xvn=xl+((xu-xl)*(g_array_index((plot->xdata), gdouble, j)-(priv->bounds.xmin))/((priv->bounds.xmax)-(priv->bounds.xmin)));
+						yvn=yl+((yu-yl)*(g_array_index((plot->ydata), gdouble, j)-(priv->bounds.ymin))/((priv->bounds.ymax)-(priv->bounds.ymin)));
 						if (xvn<xl)
 						{
 							if (yvn>yl)
@@ -3318,7 +3318,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				}
 			}
 		}
-		else if (((plot->flagd)&2)!=0) /* points only */
+		else if (((plot->flagd)&PLOT_PTS)!=0) /* points only */
 		{
 			for (k=0;k<(plot->ind->len);k++)
 			{
@@ -3703,7 +3703,7 @@ static gboolean plot_linear_button_press(GtkWidget *widget, GdkEventButton *even
 	{
 		(priv->rescale.xmin)=(priv->bounds.xmin);
 		(priv->rescale.ymin)=(priv->bounds.ymin);
-		if (((plot->zmode)&10)!=0)
+		if (((plot->zmode)&(PLOT_LINEAR_SGL|PLOT_LINEAR_HZT))!=0)
 		{
 			if ((event->x)>=(priv->range.xn)) (priv->rescale.xmin)=(priv->bounds.xmax);
 			else
@@ -3712,7 +3712,7 @@ static gboolean plot_linear_button_press(GtkWidget *widget, GdkEventButton *even
 				if (d>0) {(priv->rescale.xmin)+=(((priv->bounds.xmax)-(priv->bounds.xmin))*d)/((priv->range.xn)-(priv->range.xj)); (priv->flagr)=1;}
 			}
 		}
-		if (((plot->zmode)&12)!=0)
+		if (((plot->zmode)&(PLOT_LINEAR_SGL|PLOT_LINEAR_VRT))!=0)
 		{
 			if ((event->y)<=(priv->range.yj)) (priv->rescale.ymin)=(priv->bounds.ymax);
 			else
@@ -3755,11 +3755,11 @@ static gboolean plot_linear_button_release(GtkWidget *widget, GdkEventButton *ev
 	plot=PLOT_LINEAR(widget);
 	if ((priv->flagr)==1)
 	{
-		if (((plot->zmode)&8)==0)
+		if (((plot->zmode)&PLOT_LINEAR_SGL)==0)
 		{
 			(priv->rescale.xmax)=(priv->bounds.xmax);
 			(priv->rescale.ymax)=(priv->bounds.ymax);
-			if (((plot->zmode)&2)!=0)
+			if (((plot->zmode)&PLOT_LINEAR_HZT)!=0)
 			{
 				if ((event->x)<=(priv->range.xj)) (priv->rescale.xmax)=(priv->bounds.xmin);
 				else
@@ -3768,7 +3768,7 @@ static gboolean plot_linear_button_release(GtkWidget *widget, GdkEventButton *ev
 					if (d>0) (priv->rescale.xmax)-=(((priv->bounds.xmax)-(priv->bounds.xmin))*d)/((priv->range.xn)-(priv->range.xj));
 				}
 			}
-			if (((plot->zmode)&4)!=0)
+			if (((plot->zmode)&PLOT_LINEAR_VRT)!=0)
 			{
 				if ((event->y)>=(priv->range.yn)) (priv->rescale.ymax)=(priv->bounds.ymin);
 				else
@@ -3781,7 +3781,7 @@ static gboolean plot_linear_button_release(GtkWidget *widget, GdkEventButton *ev
 			yn=(priv->rescale.ymax)-(priv->rescale.ymin);
 			if (((xn>DZE)||(xn<NZE))&&((yn>DZE)||(yn<NZE)))
 			{
-				if (((plot->zmode)&1)==0) plot_linear_update_scale_pretty(widget, (priv->rescale.xmin), (priv->rescale.xmax), (priv->rescale.ymin), (priv->rescale.ymax));
+				if (((plot->zmode)&PLOT_LINEAR_OUT)==0) plot_linear_update_scale_pretty(widget, (priv->rescale.xmin), (priv->rescale.xmax), (priv->rescale.ymin), (priv->rescale.ymax));
 				else
 				{
 					s=((priv->bounds.xmax)-(priv->bounds.xmin))/xn;
@@ -3836,7 +3836,7 @@ static gboolean plot_linear_button_release(GtkWidget *widget, GdkEventButton *ev
 				}
 			}
 		}
-		else if (((plot->zmode)&1)==0)
+		else if (((plot->zmode)&PLOT_LINEAR_OUT)==0)
 		{
 			xn=ZS*(priv->rescale.xmin);
 			xx=xn;
@@ -3869,12 +3869,12 @@ static gboolean plot_linear_button_release(GtkWidget *widget, GdkEventButton *ev
 		{
 			if ((event->x)>=xw-11)
 			{
-				(plot->zmode)^=1;
+				(plot->zmode)^=PLOT_LINEAR_OUT;
 				plot_linear_redraw(widget);
 			}
-			else if (((plot->zmode)&8)!=0)
+			else if (((plot->zmode)&PLOT_LINEAR_SGL)!=0)
 			{
-				(plot->zmode)&=1;
+				(plot->zmode)&=PLOT_LINEAR_OUT;
 				plot_linear_redraw(widget);
 			}
 			else
@@ -4102,8 +4102,8 @@ static void plot_linear_init(PlotLinear *plot)
 	{(priv->flaga)=0; (priv->flagr)=0;}
 	{(plot->xdata)=NULL; (plot->ydata)=NULL; (plot->ind)=NULL; (plot->sizes)=NULL;}
 	{(plot->xlab)=g_strdup("Domain"); (plot->ylab)=g_strdup("Amplitude");}
-	{(plot->flagd)=1; (plot->ptsize)=5; (plot->linew)=2;}
-	(plot->zmode)=6;
+	{(plot->flagd)=PLOT_LIN; (plot->ptsize)=5; (plot->linew)=2;}
+	(plot->zmode)=(PLOT_LINEAR_VRT|PLOT_LINEAR_HZT);
 	{(plot->xps)=0; (plot->yps)=0;}
 	{(plot->afont)=pango_font_description_new(); (plot->lfont)=pango_font_description_new();}
 	{pango_font_description_set_family((plot->afont), "sans"); pango_font_description_set_family((plot->lfont), "sans");}

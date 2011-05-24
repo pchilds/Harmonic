@@ -29,6 +29,7 @@
 #	include <math.h>
 #	include "plotlinear0-1-0.h"
 #	include "plotpolar0-1-0.h"
+	G_BEGIN_DECLS
 #	define DZE 0.00001 /* divide by zero threshold */
 #	define NZE -0.00001 /* negative of this */
 #	define MY_2PI 6.2831853071795864769252867665590057683943387987502
@@ -40,5 +41,23 @@
 #	else
 #		define DLMT "\n"
 #	endif
+	typedef enum
+	{
+		PROC_OPN = 1 << 0,
+		PROC_TRS = 1 << 1,
+		PROC_PRS = 1 << 2,
+		PROC_BAT = 1 << 3,
+		PROC_CHP = 1 << 4,
+		PROC_POL = 1 << 5
+	} ProcState;
+	typedef enum
+	{
+		DISP_MIJ = 1 << 0,
+		DISP_MRJ = 1 << 1,
+		DISP_MRK = 1 << 2,
+		DISP_DMS = 1 << 3,
+		DISP_CHP = 1 << 4
+	} DispState;
+	G_END_DECLS
 #endif
 

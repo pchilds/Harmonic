@@ -33,7 +33,7 @@ void prt(GtkWidget *widget, gpointer data)
 	switch (gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook2)))
 	{
 		case 2:
-		if ((flags&12)==12)
+		if ((flags&(PROC_BAT|PROC_PRS))==(PROC_BAT|PROC_PRS))
 		{
 			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
@@ -48,13 +48,13 @@ void prt(GtkWidget *widget, gpointer data)
 				g_free(folr);
 				folr=gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(wfile));
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				if ((flags&32)!=0) plot_polar_print_eps(plot3, fout);
+				if ((flags&PROC_POL)!=0) plot_polar_print_eps(plot3, fout);
 				else plot_linear_print_eps(plot3, fout);
 				g_free(fout);
 			}
 			gtk_widget_destroy(wfile);
 		}
-		else if ((flags&2)!=0)
+		else if ((flags&PROC_TRS)!=0)
 		{
 			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
@@ -74,7 +74,7 @@ void prt(GtkWidget *widget, gpointer data)
 			}
 			gtk_widget_destroy(wfile);
 		}
-		else if ((flags&1)!=0)
+		else if ((flags&PROC_OPN)!=0)
 		{
 			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
@@ -103,7 +103,7 @@ void prt(GtkWidget *widget, gpointer data)
 		}
 		break;
 		case 1:
-		if ((flags&2)!=0)
+		if ((flags&PROC_TRS)!=0)
 		{
 			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
@@ -123,7 +123,7 @@ void prt(GtkWidget *widget, gpointer data)
 			}
 			gtk_widget_destroy(wfile);
 		}
-		else if ((flags&1)!=0)
+		else if ((flags&PROC_OPN)!=0)
 		{
 			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
@@ -152,7 +152,7 @@ void prt(GtkWidget *widget, gpointer data)
 		}
 		break;
 		default:
-		if ((flags&1)!=0)
+		if ((flags&PROC_OPN)!=0)
 		{
 			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
@@ -195,7 +195,7 @@ void sav(GtkWidget *widget, gpointer data)
 	switch (gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook2)))
 	{
 		case 2:
-		if ((flags&28)==28)
+		if ((flags&(PROC_CHP|PROC_BAT|PROC_PRS))==(PROC_CHP|PROC_BAT|PROC_PRS))
 		{
 			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
@@ -1043,7 +1043,7 @@ void sav(GtkWidget *widget, gpointer data)
 			}
 			gtk_widget_destroy(wfile);
 		}
-		else if ((flags&12)==12)
+		else if ((flags&(PROC_BAT|PROC_PRS))==(PROC_BAT|PROC_PRS))
 		{
 			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
@@ -1692,7 +1692,7 @@ void sav(GtkWidget *widget, gpointer data)
 			}
 			gtk_widget_destroy(wfile);
 		}
-		else if ((flags&20)==20)
+		else if ((flags&(PROC_CHP|PROC_PRS))==(PROC_CHP|PROC_PRS))
 		{
 			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
@@ -1803,7 +1803,7 @@ void sav(GtkWidget *widget, gpointer data)
 			}
 			gtk_widget_destroy(wfile);
 		}
-		else if ((flags&4)!=0)
+		else if ((flags&PROC_PRS)!=0)
 		{
 			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
@@ -1910,7 +1910,7 @@ void sav(GtkWidget *widget, gpointer data)
 			}
 			gtk_widget_destroy(wfile);
 		}
-		else if ((flags&2)!=0)
+		else if ((flags&PROC_TRS)!=0)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
 			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
@@ -2079,7 +2079,7 @@ void sav(GtkWidget *widget, gpointer data)
 		}
 		break;
 		case 1:
-		if ((flags&2)!=0)
+		if ((flags&PROC_TRS)!=0)
 		{
 			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
@@ -2247,7 +2247,7 @@ void sav(GtkWidget *widget, gpointer data)
 		}
 		break;
 		default:
-		if ((flags&2)!=0)
+		if ((flags&PROC_TRS)!=0)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
 			wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);

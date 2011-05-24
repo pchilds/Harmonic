@@ -34,12 +34,14 @@
 /*
  * TO DO:
  *
+ * PLT: enumise flag values plot polar and outside zones for both
  * BAT: allowing to proceed from prior single file opened/transformed data
+ * BAT: skip over errorneous data points
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
  * OPD: improve config writing utility to reorder post entry
- * OPD: extra zero on the end (varies due to situation)
  * DISP/UPJ/UPK debug changing index/multiplot
+ * DISP: colour setting to default rather than selected colour
  * SAV: session save/restore routine
  * TRS: wavelets
  */

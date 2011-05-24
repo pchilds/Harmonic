@@ -72,9 +72,9 @@ void opd(GtkWidget *widget, gpointer data)
 	GtkWidget *wfile, *content, *hbox, *vsc, *table, *scroll, *butt, *label, *cont, *trace;
 	GArray *xp, *yp, *starp, *delp;
 	GtkAdjustment *adj, *adj2;
-	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, ofe, clc, dx2, xx, ce;
+	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, ofe, clc, xx, ce;
 	guint j, k, l, m, sal, st, sp, kib;
-	gint n, zp, lcib, dr;
+	gint n, zp, lcib, dr, dx, dx2;
 	gchar s[5];
 	gchar *contents, *contents2, *str, *s2, *fin=NULL;
 	gchar **strary, **strary2, **strat, **strat2;
@@ -88,7 +88,7 @@ void opd(GtkWidget *widget, gpointer data)
 
 	if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(bat)))
 	{
-		if ((flags&4)==0)
+		if ((flags&PROC_TRS)==0)
 		{
 			str=g_strdup(_("Perform an initial test of the parameters first."));
 			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
@@ -210,7 +210,7 @@ void opd(GtkWidget *widget, gpointer data)
 					{
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
 						{
-							flags|=16;
+							flags|=PROC_CHP;
 							g_array_free(chp, TRUE);
 							chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
@@ -4712,7 +4712,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
 						{
-							flags&=47;
+							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
@@ -6273,7 +6273,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 						{
-							flags&=47;
+							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
@@ -7223,7 +7223,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 						{
-							flags&=47;
+							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0w+ */
@@ -7844,7 +7844,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0w+ +Tl0w+ */
 						{
-							flags&=47;
+							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							for (m=0; m<mx; m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
@@ -8017,7 +8017,7 @@ void opd(GtkWidget *widget, gpointer data)
 						else /* -Rl0w+ +Rl0w+ */
 						{
 							ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-							flags&=47;
+							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							for (m=0; m<mx; m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
@@ -8161,7 +8161,7 @@ void opd(GtkWidget *widget, gpointer data)
 						ofs-=oe;
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
 						{
-							flags|=16;
+							flags|=PROC_CHP;
 							g_array_free(chp, TRUE);
 							chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
@@ -12575,7 +12575,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
 						{
-							flags&=47;
+							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
@@ -14166,7 +14166,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 						{
-							flags&=47;
+							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
@@ -15057,7 +15057,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 						{
-							flags&=47;
+							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0h+ */
@@ -15642,7 +15642,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h+ +Tl0h+ */
 						{
-							flags&=47;
+							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							for (m=0; m<mx; m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
@@ -15789,7 +15789,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else /* -Rl0h+ +Rl0h+ */
 						{
-							flags&=47;
+							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							for (m=0; m<mx; m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
@@ -15937,7 +15937,7 @@ void opd(GtkWidget *widget, gpointer data)
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
 					{
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-						flags|=16;
+						flags|=PROC_CHP;
 						g_array_free(chp, TRUE);
 						chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
@@ -20320,7 +20320,7 @@ void opd(GtkWidget *widget, gpointer data)
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
 					{
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-						flags&=47;
+						flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
@@ -21876,7 +21876,7 @@ void opd(GtkWidget *widget, gpointer data)
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 					{
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-						flags&=47;
+						flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
@@ -22768,7 +22768,7 @@ void opd(GtkWidget *widget, gpointer data)
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 					{
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-						flags&=47;
+						flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o+ */
@@ -23342,7 +23342,7 @@ void opd(GtkWidget *widget, gpointer data)
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0o+ +Tl0o+ */
 					{
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-						flags&=47;
+						flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 						if ((ofs<DZE)&&(ofs>NZE))
 						{
 							str=g_strdup(_("Offset must be nonzero for linear measurements."));
@@ -23496,7 +23496,7 @@ void opd(GtkWidget *widget, gpointer data)
 					else /* -Rl0o+ +Rl0o+ */
 					{
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-						flags&=47;
+						flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 						if ((ofs<DZE)&&(ofs>NZE))
 						{
 							str=g_strdup(_("Offset must be nonzero for linear measurements."));
@@ -23649,18 +23649,17 @@ void opd(GtkWidget *widget, gpointer data)
 					fftw_free(star);
 					bxr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimx*kdimx);
 					byr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx*jdimx*kdimx);
-					if ((flagd&2)==0)
+					if ((flagd&DISP_MRJ)==0)
 					{
-						if ((flagd&4)==0)/* single plot mode */
+						if ((flagd&DISP_MRK)==0)/* single plot mode */
 						{
 							bsz=g_array_new(FALSE, FALSE, sizeof(gint));
-							g_array_append_val(bsz, mx);
+							dx=mx;
 							bnx=g_array_new(FALSE, FALSE, sizeof(gint));
-							{dx2=mx*((jdim*kdimx)+kdim); l=0;}
-							g_array_append_val(bnx, dx2);
-							if ((flagd&16)==0)
+							{dx2=mx*((jdim*kdimx)+kdim); j=0;}
+							if ((flagd&DISP_CHP)==0)
 							{
-								if ((flagd&8)==0)
+								if ((flagd&DISP_DMS)==0)
 								{
 									while (j<jdim)
 									{
@@ -23690,14 +23689,14 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 									xx=g_array_index(msr, gdouble, 0);
 									g_array_append_val(bxr, xx);
-									mny=g_array_index(vis, gdouble, k+(j*kdimx));
-									g_array_append_val(byr, xx);
+									mny=g_array_index(vis, gdouble, kdim+(jdim*kdimx));
+									g_array_append_val(byr, mny);
 									{mxy=mny; l=1;}
 									while (l<mx)
 									{
 										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
+										xx=g_array_index(vis, gdouble, kdim+((jdim+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -23761,14 +23760,14 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 									xx=g_array_index(msr, gdouble, 0);
 									g_array_append_val(bxr, xx);
-									mny=g_array_index(doms, gdouble, k+(j*kdimx));
-									g_array_append_val(byr, xx);
+									mny=g_array_index(doms, gdouble, kdim+(jdim*kdimx));
+									g_array_append_val(byr, mny);
 									{mxy=mny; l=1;}
 									while (l<mx)
 									{
 										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
+										xx=g_array_index(doms, gdouble, kdim+((jdim+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -23833,14 +23832,14 @@ void opd(GtkWidget *widget, gpointer data)
 								}
 								xx=g_array_index(msr, gdouble, 0);
 								g_array_append_val(bxr, xx);
-								mny=g_array_index(chp, gdouble, k+(l*kdimx));
-								g_array_append_val(byr, xx);
+								mny=g_array_index(chp, gdouble, kdim+(jdim*kdimx));
+								g_array_append_val(byr, mny);
 								{mxy=mny; l=1;}
 								while (l<mx)
 								{
 									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
+									xx=g_array_index(chp, gdouble, kdim+((jdim+(l*jdimx))*kdimx));
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
@@ -23874,15 +23873,17 @@ void opd(GtkWidget *widget, gpointer data)
 									j++;
 								}
 							}
+							g_array_append_val(bsz, dx);
+							g_array_append_val(bnx, dx2);
 						}
 						else/* multiplot over k */
 						{
 							bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimx);
 							bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimx);
-							{dx2=mx*kdimx*jdim; l=0;}
-							if ((flagd&16)==0)
+							{dx2=mx*kdimx*jdim; j=0;}
+							if ((flagd&DISP_CHP)==0)
 							{
-								if ((flagd&8)==0)
+								if ((flagd&DISP_DMS)==0)
 								{
 									while (j<jdim)
 									{
@@ -23900,14 +23901,14 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 									xx=g_array_index(msr, gdouble, 0);
 									g_array_append_val(bxr, xx);
-									mny=g_array_index(vis, gdouble, l*kdimx);
-									g_array_append_val(byr, xx);
+									mny=g_array_index(vis, gdouble, jdim*kdimx);
+									g_array_append_val(byr, mny);
 									{mxy=mny; l=1;}
 									while (l<mx)
 									{
 										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(vis, gdouble, (j+(l*jdimx))*kdimx);
+										xx=g_array_index(vis, gdouble, (jdim+(l*jdimx))*kdimx);
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -23922,7 +23923,7 @@ void opd(GtkWidget *widget, gpointer data)
 										{
 											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
+											xx=g_array_index(vis, gdouble, k+((jdim+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 											if (xx>mxy) mxy=xx;
 											else if (xx<mny) mny=xx;
@@ -23965,14 +23966,14 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 									xx=g_array_index(msr, gdouble, 0);
 									g_array_append_val(bxr, xx);
-									mny=g_array_index(doms, gdouble, j*kdimx);
-									g_array_append_val(byr, xx);
+									mny=g_array_index(doms, gdouble, jdim*kdimx);
+									g_array_append_val(byr, mny);
 									{mxy=mny; l=1;}
 									while (l<mx)
 									{
 										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(doms, gdouble, (j+(l*jdimx))*kdimx);
+										xx=g_array_index(doms, gdouble, (jdim+(l*jdimx))*kdimx);
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -23987,7 +23988,7 @@ void opd(GtkWidget *widget, gpointer data)
 										{
 											xx=g_array_index(msr, gdouble, l);
 											g_array_append_val(bxr, xx);
-											xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
+											xx=g_array_index(doms, gdouble, k+((jdim+(l*jdimx))*kdimx));
 											g_array_append_val(byr, xx);
 											if (xx>mxy) mxy=xx;
 											else if (xx<mny) mny=xx;
@@ -24031,14 +24032,14 @@ void opd(GtkWidget *widget, gpointer data)
 								}
 								xx=g_array_index(msr, gdouble, 0);
 								g_array_append_val(bxr, xx);
-								mny=g_array_index(chp, gdouble, j*kdimx);
-								g_array_append_val(byr, xx);
+								mny=g_array_index(chp, gdouble, jdim*kdimx);
+								g_array_append_val(byr, mny);
 								{mxy=mny; l=1;}
 								while (l<mx)
 								{
 									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(chp, gdouble, (j+(l*jdimx))*kdimx);
+									xx=g_array_index(chp, gdouble, (jdim+(l*jdimx))*kdimx);
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
@@ -24053,7 +24054,7 @@ void opd(GtkWidget *widget, gpointer data)
 									{
 										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
+										xx=g_array_index(chp, gdouble, k+((jdim+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -24080,14 +24081,14 @@ void opd(GtkWidget *widget, gpointer data)
 							}
 						}
 					}
-					else if ((flagd&4)==0)/* multiplot over j */
+					else if ((flagd&DISP_MRK)==0)/* multiplot over j */
 					{
 						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx);
 						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx);
 						{dx2=mx*kdim; k=0;}
-						if ((flagd&16)==0)
+						if ((flagd&DISP_CHP)==0)
 						{
-							if ((flagd&8)==0)
+							if ((flagd&DISP_DMS)==0)
 							{
 								while (k<kdim)
 								{
@@ -24102,14 +24103,14 @@ void opd(GtkWidget *widget, gpointer data)
 								}
 								xx=g_array_index(msr, gdouble, 0);
 								g_array_append_val(bxr, xx);
-								mny=g_array_index(vis, gdouble, k);
-								g_array_append_val(byr, xx);
+								mny=g_array_index(vis, gdouble, kdim);
+								g_array_append_val(byr, mny);
 								{mxy=mny; l=1;}
 								while (l<mx)
 								{
 									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(vis, gdouble, k+(l*jdimx*kdimx));
+									xx=g_array_index(vis, gdouble, kdim+(l*jdimx*kdimx));
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
@@ -24148,7 +24149,7 @@ void opd(GtkWidget *widget, gpointer data)
 									{
 										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(vis, gdouble, k+((j+(l*jdimx))*kdimx));
+										xx=g_array_index(vis, gdouble, kdim+((j+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -24185,14 +24186,14 @@ void opd(GtkWidget *widget, gpointer data)
 								}
 								xx=g_array_index(msr, gdouble, 0);
 								g_array_append_val(bxr, xx);
-								mny=g_array_index(doms, gdouble, k);
-								g_array_append_val(byr, xx);
+								mny=g_array_index(doms, gdouble, kdim);
+								g_array_append_val(byr, mny);
 								{mxy=mny; l=1;}
 								while (l<mx)
 								{
 									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(doms, gdouble, k+(l*jdimx*kdimx));
+									xx=g_array_index(doms, gdouble, kdim+(l*jdimx*kdimx));
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
@@ -24231,7 +24232,7 @@ void opd(GtkWidget *widget, gpointer data)
 									{
 										xx=g_array_index(msr, gdouble, l);
 										g_array_append_val(bxr, xx);
-										xx=g_array_index(doms, gdouble, k+((j+(l*jdimx))*kdimx));
+										xx=g_array_index(doms, gdouble, kdim+((j+(l*jdimx))*kdimx));
 										g_array_append_val(byr, xx);
 										if (xx>mxy) mxy=xx;
 										else if (xx<mny) mny=xx;
@@ -24269,14 +24270,14 @@ void opd(GtkWidget *widget, gpointer data)
 							}
 							xx=g_array_index(msr, gdouble, 0);
 							g_array_append_val(bxr, xx);
-							mny=g_array_index(chp, gdouble, k);
-							g_array_append_val(byr, xx);
+							mny=g_array_index(chp, gdouble, kdim);
+							g_array_append_val(byr, mny);
 							{mxy=mny; l=1;}
 							while (l<mx)
 							{
 								xx=g_array_index(msr, gdouble, l);
 								g_array_append_val(bxr, xx);
-								xx=g_array_index(chp, gdouble, k+((l*jdimx)*kdimx));
+								xx=g_array_index(chp, gdouble, kdim+((l*jdimx)*kdimx));
 								g_array_append_val(byr, xx);
 								if (xx>mxy) mxy=xx;
 								else if (xx<mny) mny=xx;
@@ -24315,7 +24316,7 @@ void opd(GtkWidget *widget, gpointer data)
 								{
 									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
-									xx=g_array_index(chp, gdouble, k+((j+(l*jdimx))*kdimx));
+									xx=g_array_index(chp, gdouble, kdim+((j+(l*jdimx))*kdimx));
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
@@ -24344,16 +24345,16 @@ void opd(GtkWidget *widget, gpointer data)
 						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx*kdimx);
 						bsz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx*kdimx);
 						dx2=0;
-						if ((flagd&16)==0)
+						if ((flagd&DISP_CHP)==0)
 						{
-							if ((flagd&8)==0)
+							if ((flagd&DISP_DMS)==0)
 							{
 								xx=g_array_index(msr, gdouble, 0);
 								g_array_append_val(bxr, xx);
 								mny=g_array_index(vis, gdouble, 0);
 								g_array_append_val(byr, mny);
-								mxy=mny;
-								for (l=1; l<mx; l++)
+								{mxy=mny; l=1;}
+								while (l<mx)
 								{
 									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
@@ -24361,6 +24362,7 @@ void opd(GtkWidget *widget, gpointer data)
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
+									l++;
 								}
 								g_array_append_val(bsz, mx);
 								g_array_append_val(bnx, dx2);
@@ -24407,8 +24409,8 @@ void opd(GtkWidget *widget, gpointer data)
 								g_array_append_val(bxr, xx);
 								mny=g_array_index(doms, gdouble, 0);
 								g_array_append_val(byr, mny);
-								mxy=mny;
-								for (l=1; l<mx; l++)
+								{mxy=mny; l=1;}
+								while (l<mx)
 								{
 									xx=g_array_index(msr, gdouble, l);
 									g_array_append_val(bxr, xx);
@@ -24416,6 +24418,7 @@ void opd(GtkWidget *widget, gpointer data)
 									g_array_append_val(byr, xx);
 									if (xx>mxy) mxy=xx;
 									else if (xx<mny) mny=xx;
+									l++;
 								}
 								g_array_append_val(bsz, mx);
 								g_array_append_val(bnx, dx2);
@@ -24463,8 +24466,8 @@ void opd(GtkWidget *widget, gpointer data)
 							g_array_append_val(bxr, xx);
 							mny=g_array_index(chp, gdouble, 0);
 							g_array_append_val(byr, mny);
-							mxy=mny;
-							for (l=1; l<mx; l++)
+							{mxy=mny; l=1;}
+							while (l<mx)
 							{
 								xx=g_array_index(msr, gdouble, l);
 								g_array_append_val(bxr, xx);
@@ -24472,6 +24475,7 @@ void opd(GtkWidget *widget, gpointer data)
 								g_array_append_val(byr, xx);
 								if (xx>mxy) mxy=xx;
 								else if (xx<mny) mny=xx;
+								l++;
 							}
 							g_array_append_val(bsz, mx);
 							g_array_append_val(bnx, dx2);
@@ -24520,7 +24524,7 @@ void opd(GtkWidget *widget, gpointer data)
 					switch (gtk_dialog_run(GTK_DIALOG(dialog)))
 					{
 						case 1:
-						if (((flags&8)==0)||((flags&32)!=0))
+						if (((flags&PROC_BAT)==0)||((flags&PROC_POL)!=0))
 						{
 							gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
 							rest=gtk_table_new(1, 1, FALSE);
@@ -24531,7 +24535,7 @@ void opd(GtkWidget *widget, gpointer data)
 							gtk_table_attach(GTK_TABLE(rest), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 							label=gtk_label_new(_("Analysis Results"));
 							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
-							{flags|=15; flags&=31;}
+							{flags|=(PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN); flags&=(PROC_CHP|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);}
 						}
 						plt=PLOT_LINEAR(plot3);
 						if (mx<8) {(plt->flagd)=3; (plt->ptsize)=4;}
@@ -24546,7 +24550,7 @@ void opd(GtkWidget *widget, gpointer data)
 						gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 2);
 						break;
 						case 2:
-						if (((flags&8)==0)||((flags&32)==0))
+						if (((flags&PROC_BAT)==0)||((flags&PROC_POL)==0))
 						{
 							gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
 							rest=gtk_table_new(1, 1, FALSE);
@@ -24557,7 +24561,7 @@ void opd(GtkWidget *widget, gpointer data)
 							gtk_table_attach(GTK_TABLE(rest), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 							label=gtk_label_new(_("Analysis Results"));
 							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
-							flags|=47;
+							flags|=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 						}
 						plt2=PLOT_POLAR(plot3);
 						if (mx<8) (plt2->ptsize)=4;
@@ -24573,7 +24577,7 @@ void opd(GtkWidget *widget, gpointer data)
 						gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 2);
 						break;
 						case 3:
-						if (((flags&8)==0)||((flags&32)==0))
+						if (((flags&PROC_BAT)==0)||((flags&PROC_POL)==0))
 						{
 							gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
 							rest=gtk_table_new(1, 1, FALSE);
@@ -24584,7 +24588,7 @@ void opd(GtkWidget *widget, gpointer data)
 							gtk_table_attach(GTK_TABLE(rest), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 							label=gtk_label_new(_("Analysis Results"));
 							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
-							flags|=47;
+							flags|=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 						}
 						plt2=PLOT_POLAR(plot3);
 						if (mx<8) {(plt2->flagd)=7; (plt2->ptsize)=4;}
@@ -24635,7 +24639,7 @@ void opd(GtkWidget *widget, gpointer data)
 				strary=g_strsplit_set(contents, "\r\n", 0);
 				sal=g_strv_length(strary);
 				{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(sz, TRUE); g_array_free(nx, TRUE); g_array_free(specs, TRUE);}
-				if ((flags&8)!=0)
+				if ((flags&PROC_BAT)!=0)
 				{
 					gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
 					rest=gtk_table_new(4, 2, FALSE);
@@ -24654,9 +24658,9 @@ void opd(GtkWidget *widget, gpointer data)
 					gtk_widget_show(dsl);
 					label=gtk_label_new(_("Analysis Results"));
 					gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
-					flags^=8;
+					flags^=PROC_BAT;
 				}
-				flags|=1;
+				flags|=PROC_OPN;
 				x=g_array_new(FALSE, FALSE, sizeof(gdouble));
 				yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
 				specs=g_array_new(FALSE, FALSE, sizeof(gdouble));

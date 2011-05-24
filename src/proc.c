@@ -33,7 +33,7 @@ void prs(GtkWidget *widget, gpointer data)
 	gchar *str;
 	gchar s[10];
 
-	if ((flags&2)!=0)
+	if ((flags&PROC_TRS)!=0)
 	{
 		plt=PLOT_LINEAR(plot2);
 		sz4=g_array_index((plt->sizes), gint, 0);/* check placing of this with what is desired for multiplots (within for loop?) */
@@ -198,7 +198,7 @@ void prs(GtkWidget *widget, gpointer data)
 				}
 				gtk_table_attach(GTK_TABLE(rest), chil, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				gtk_widget_show(chil);
-				flags|=20;
+				flags|=(PROC_CHP|PROC_PRS);
 			}
 			else
 			{
@@ -300,7 +300,7 @@ void prs(GtkWidget *widget, gpointer data)
 					gtk_label_set_text(GTK_LABEL(dsl), str);
 					g_free(str);
 				}
-				flags|=4;
+				flags|=PROC_PRS;
 			}
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
@@ -450,7 +450,7 @@ void prs(GtkWidget *widget, gpointer data)
 				chil=gtk_label_new(str);
 				g_free(str);
 			}
-			flags|=20;
+			flags|=(PROC_CHP|PROC_PRS);
 		}
 		else
 		{
@@ -546,7 +546,7 @@ void prs(GtkWidget *widget, gpointer data)
 				gtk_label_set_text(GTK_LABEL(dsl), str);
 				g_free(str);
 			}
-			flags|=4;
+			flags|=PROC_PRS;
 		}
 		kdimxf=kdimx;
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 2);
@@ -570,7 +570,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 	fftw_plan p;
 	fftw_r2r_kind type=FFTW_R2HC;
 
-	if ((flags&1)!=0)
+	if ((flags&PROC_OPN)!=0)
 	{
 		{g_array_free(stars, TRUE); g_array_free(xsb, TRUE); g_array_free(ysb, TRUE); g_array_free(nx2, TRUE); g_array_free(sz2, TRUE); g_array_free(delf, TRUE);}
 		delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
@@ -856,7 +856,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(oft)))/* history based offset */
 			{
-				if ((flags&2)==0) ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));/* check if this is right */
+				if ((flags&PROC_TRS)==0) ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));/* check if this is right */
 				else
 				{
 					ofs+=ce-oe;
@@ -1883,7 +1883,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(oft)))/* history based offset */
 		{
-			if ((flags&2)==0) ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
+			if ((flags&PROC_TRS)==0) ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 			else
 			{
 				ofs+=ce-oe;
@@ -2613,7 +2613,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		xsb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n/2);
 		ysb=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n/2);
 		dx=zp/2;
-		if ((flagd&1)==0)
+		if ((flagd&DISP_MIJ)==0)
 		{
 			sz2=g_array_new(FALSE, FALSE, sizeof(gint));
 			nx2=g_array_new(FALSE, FALSE, sizeof(gint));
@@ -2740,7 +2740,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
 		jdimxf=jdimx;
-		flags|=2;
+		flags|=PROC_TRS;
 		pr_id=g_signal_connect(G_OBJECT(pr), "clicked", G_CALLBACK(prs), NULL);
 	}
 	else

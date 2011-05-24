@@ -179,7 +179,7 @@ void upj(GtkWidget *widget, gpointer data)
 	}
 	if (jdim<jdimxf)
 	{
-		if (((flags&2)!=0)&&((flagd&1)==0))
+		if (((flags&PROC_TRS)!=0)&&((flagd&DISP_MIJ)==0))
 		{
 			g_object_get(G_OBJECT(plot2), "xmin", &num, "xmax", &num2, NULL);
 			plt2=PLOT_LINEAR(plot2);
@@ -197,15 +197,15 @@ void upj(GtkWidget *widget, gpointer data)
 			(plt2->ind)=nx2;
 			plot_linear_update_scale_pretty(plot2, num, num2, 0, num3);
 		}
-		if ((flags&4)!=0)
+		if ((flags&PROC_PRS)!=0)
 		{
-			if ((flags&8)!=0)
+			if ((flags&PROC_BAT)!=0)
 			{
-				if ((flagd&2)==0)
+				if ((flagd&DISP_MRJ)==0)
 				{
 					sz4=g_array_index(bsz, gint, 0);
 					g_array_free(bnx, TRUE);
-					if ((flagd&4)==0)/* single plot */
+					if ((flagd&DISP_MRK)==0)/* single plot */
 					{
 						l=sz4*(kdim+(jdim*kdimxf));
 						bnx=g_array_new(FALSE, FALSE, sizeof(gint));
@@ -253,7 +253,7 @@ void upj(GtkWidget *widget, gpointer data)
 							}
 						}
 					}
-					if ((flags&32)==0)
+					if ((flags&PROC_POL)==0)
 					{
 						plt3=PLOT_LINEAR(plot3);
 						(plt3->sizes)=bsz;
@@ -277,7 +277,7 @@ void upj(GtkWidget *widget, gpointer data)
 				num=g_array_index(doms, gdouble, (jdim+(kdim*jdimxf)));
 				g_snprintf(s, 9, "%f", num);
 				gtk_label_set_text(GTK_LABEL(dsl), s);
-				if ((flags&16)!=0)
+				if ((flags&PROC_CHP)!=0)
 				{
 					num=g_array_index(chp, gdouble, (jdim+(kdim*jdimxf)));
 					g_snprintf(s, 8, "%f", num);
@@ -289,17 +289,17 @@ void upj(GtkWidget *widget, gpointer data)
 				str=g_strdup("");
 				gtk_label_set_text(GTK_LABEL(visl), str);
 				gtk_label_set_text(GTK_LABEL(dsl), str);
-				if ((flags&16)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
+				if ((flags&PROC_CHP)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
 				g_free(str);
 			}
 		}
 	}
-	else if (((flags&4)!=0)&&((flags&8)==0))
+	else if (((flags&PROC_PRS)!=0)&&((flags&PROC_BAT)==0))
 	{
 		str=g_strdup("");
 		gtk_label_set_text(GTK_LABEL(visl), str);
 		gtk_label_set_text(GTK_LABEL(dsl), str);
-		if ((flags&16)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
+		if ((flags&PROC_CHP)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
 		g_free(str);
 	}
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), jdim);
@@ -354,17 +354,17 @@ void upk(GtkWidget *widget, gpointer data)
 		num=g_array_index(twa, gdouble, (jdim+(kdim*jdimx)));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tw), num);
 	}
-	if ((flags&4)!=0)
+	if ((flags&PROC_PRS)!=0)
 	{
 		if (kdim<kdimxf)
 		{
-			if ((flags&8)!=0)
+			if ((flags&PROC_BAT)!=0)
 			{
-				if ((flagd&4)==0)
+				if ((flagd&DISP_MRK)==0)
 				{
 					sz4=g_array_index(bsz, gint, 0);
 					g_array_free(bnx, TRUE);
-					if ((flagd&2)==0)/* single plot*/
+					if ((flagd&DISP_MRJ)==0)/* single plot*/
 					{
 						l=sz4*(kdim+(jdim*kdimxf));
 						bnx=g_array_new(FALSE, FALSE, sizeof(gint));
@@ -412,7 +412,7 @@ void upk(GtkWidget *widget, gpointer data)
 							}
 						}
 					}
-					if ((flags&32)==0)
+					if ((flags&PROC_POL)==0)
 					{
 						plt3=PLOT_LINEAR(plot3);
 						(plt3->sizes)=bsz;
@@ -436,7 +436,7 @@ void upk(GtkWidget *widget, gpointer data)
 				num=g_array_index(doms, gdouble, (jdim+(kdim*jdimxf)));
 				g_snprintf(s, 9, "%f", num);
 				gtk_label_set_text(GTK_LABEL(dsl), s);
-				if ((flags&16)!=0)
+				if ((flags&PROC_CHP)!=0)
 				{
 					num=g_array_index(chp, gdouble, (jdim+(kdim*jdimxf)));
 					g_snprintf(s, 8, "%f", num);
@@ -448,16 +448,16 @@ void upk(GtkWidget *widget, gpointer data)
 				str=g_strdup("");
 				gtk_label_set_text(GTK_LABEL(visl), str);
 				gtk_label_set_text(GTK_LABEL(dsl), str);
-				if ((flags&16)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
+				if ((flags&PROC_CHP)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
 				g_free(str);
 			}
 		}
-		else if ((flags&8)==0)
+		else if ((flags&PROC_BAT)==0)
 		{
 			str=g_strdup("");
 			gtk_label_set_text(GTK_LABEL(visl), str);
 			gtk_label_set_text(GTK_LABEL(dsl), str);
-			if ((flags&16)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
+			if ((flags&PROC_CHP)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
 			g_free(str);
 		}
 	}
