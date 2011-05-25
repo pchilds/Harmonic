@@ -73,8 +73,7 @@ void opd(GtkWidget *widget, gpointer data)
 	GArray *xp, *yp, *starp, *delp;
 	GtkAdjustment *adj, *adj2;
 	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, ofe, clc, xx, ce;
-	guint j, k, l, m, sal, st, sp, kib;
-	gint n, zp, lcib, dr, dx, dx2;
+	gint j, k, l, m, sal, st, sp, kib, n, zp, lcib, dr, dx, dx2;
 	gchar s[5];
 	gchar *contents, *contents2, *str, *s2, *fin=NULL;
 	gchar **strary, **strary2, **strat, **strat2;
@@ -285,8 +284,8 @@ void opd(GtkWidget *widget, gpointer data)
 															else vzt=l/vzt;
 															for (k=0; k<kdimx; k++)
 															{
-																st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-																sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+																st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+																sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 																tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 																twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 																if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -457,8 +456,8 @@ void opd(GtkWidget *widget, gpointer data)
 															else vzt=l/vzt;
 															for (k=0; k<kdimx; k++)
 															{
-																st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-																sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+																st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+																sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 																tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 																twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 																if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -631,8 +630,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -804,8 +803,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -977,8 +976,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -1150,8 +1149,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -1327,8 +1326,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -1499,8 +1498,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -1673,8 +1672,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -1846,8 +1845,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -2019,8 +2018,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -2192,8 +2191,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -2414,8 +2413,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -2629,8 +2628,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -2814,8 +2813,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -2998,8 +2997,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -3216,8 +3215,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -3405,8 +3404,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -3621,8 +3620,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -3832,8 +3831,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -4017,8 +4016,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -4201,8 +4200,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -4417,8 +4416,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -4601,8 +4600,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -4783,8 +4782,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -4911,8 +4910,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -5041,8 +5040,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -5170,8 +5169,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -5299,8 +5298,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -5428,8 +5427,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -5561,8 +5560,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -5689,8 +5688,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -5819,8 +5818,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -5948,8 +5947,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -6077,8 +6076,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -6206,8 +6205,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -6385,8 +6384,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -6556,8 +6555,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -6697,8 +6696,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -6837,8 +6836,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -7011,8 +7010,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -7156,8 +7155,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -7329,8 +7328,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -7496,8 +7495,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -7637,8 +7636,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -7777,8 +7776,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -7950,8 +7949,8 @@ void opd(GtkWidget *widget, gpointer data)
 										else vzt=l/vzt;
 										for (k=0; k<kdimx; k++)
 										{
-											st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -8091,8 +8090,8 @@ void opd(GtkWidget *widget, gpointer data)
 										else vzt=l/vzt;
 										for (k=0; k<kdimx; k++)
 										{
-											st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -8239,8 +8238,8 @@ void opd(GtkWidget *widget, gpointer data)
 															else vzt=l/vzt;
 															for (k=0; k<kdimx; k++)
 															{
-																st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-																sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+																st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+																sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 																tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 																twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 																if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -8414,8 +8413,8 @@ void opd(GtkWidget *widget, gpointer data)
 															else vzt=l/vzt;
 															for (k=0; k<kdimx; k++)
 															{
-																st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-																sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+																st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+																sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 																tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 																twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 																if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -8590,8 +8589,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -8765,8 +8764,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -8941,8 +8940,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -9116,8 +9115,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -9296,8 +9295,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -9471,8 +9470,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -9647,8 +9646,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -9822,8 +9821,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -9998,8 +9997,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -10173,8 +10172,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -10375,8 +10374,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -10570,8 +10569,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -10757,8 +10756,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -10943,8 +10942,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -11136,8 +11135,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -11327,8 +11326,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -11523,8 +11522,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -11714,8 +11713,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -11901,8 +11900,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -12087,8 +12086,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -12278,8 +12277,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -12464,8 +12463,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -12649,8 +12648,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -12780,8 +12779,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -12912,8 +12911,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -13043,8 +13042,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -13175,8 +13174,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -13306,8 +13305,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -13442,8 +13441,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -13573,8 +13572,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -13705,8 +13704,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -13836,8 +13835,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -13968,8 +13967,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -14099,8 +14098,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -14258,8 +14257,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -14409,8 +14408,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -14552,8 +14551,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -14694,8 +14693,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -14843,8 +14842,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -14990,8 +14989,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -15143,8 +15142,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -15290,8 +15289,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -15433,8 +15432,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -15575,8 +15574,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -15723,8 +15722,8 @@ void opd(GtkWidget *widget, gpointer data)
 										else vzt=l/vzt;
 										for (k=0; k<kdimx; k++)
 										{
-											st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -15866,8 +15865,8 @@ void opd(GtkWidget *widget, gpointer data)
 										else vzt=l/vzt;
 										for (k=0; k<kdimx; k++)
 										{
-											st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -16012,8 +16011,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -16186,8 +16185,8 @@ void opd(GtkWidget *widget, gpointer data)
 														else vzt=l/vzt;
 														for (k=0; k<kdimx; k++)
 														{
-															st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -16359,8 +16358,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -16531,8 +16530,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -16704,8 +16703,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -16876,8 +16875,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -17053,8 +17052,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -17225,12 +17224,12 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-															{
+														{
 															vt=g_array_index(starp, gdouble, st+(j*zp));
 															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
 															phia=atan2(ivdt, vt);
@@ -17398,8 +17397,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -17570,8 +17569,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -17743,8 +17742,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -17915,8 +17914,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -18114,8 +18113,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -18306,8 +18305,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -18490,8 +18489,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -18673,8 +18672,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -18871,8 +18870,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -19068,8 +19067,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -19262,8 +19261,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -19452,8 +19451,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -19636,8 +19635,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -19819,8 +19818,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -20015,8 +20014,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -20207,8 +20206,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
@@ -20391,8 +20390,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -20519,8 +20518,8 @@ void opd(GtkWidget *widget, gpointer data)
 													else vzt=l/vzt;
 													for (k=0; k<kdimx; k++)
 													{
-														st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 														if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -20648,8 +20647,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -20776,8 +20775,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -20905,8 +20904,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -21033,8 +21032,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -21166,8 +21165,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -21294,8 +21293,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -21423,8 +21422,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -21551,8 +21550,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -21680,8 +21679,8 @@ void opd(GtkWidget *widget, gpointer data)
 										else vzt=l/vzt;
 										for (k=0; k<kdimx; k++)
 										{
-											st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -21808,8 +21807,8 @@ void opd(GtkWidget *widget, gpointer data)
 										else vzt=l/vzt;
 										for (k=0; k<kdimx; k++)
 										{
-											st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -21965,8 +21964,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -22113,8 +22112,8 @@ void opd(GtkWidget *widget, gpointer data)
 												else vzt=l/vzt;
 												for (k=0; k<kdimx; k++)
 												{
-													st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 													if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -22253,8 +22252,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -22392,8 +22391,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -22546,8 +22545,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -22699,8 +22698,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -22851,8 +22850,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -22995,8 +22994,8 @@ void opd(GtkWidget *widget, gpointer data)
 											else vzt=l/vzt;
 											for (k=0; k<kdimx; k++)
 											{
-												st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -23135,8 +23134,8 @@ void opd(GtkWidget *widget, gpointer data)
 										else vzt=l/vzt;
 										for (k=0; k<kdimx; k++)
 										{
-											st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -23274,8 +23273,8 @@ void opd(GtkWidget *widget, gpointer data)
 										else vzt=l/vzt;
 										for (k=0; k<kdimx; k++)
 										{
-											st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -23428,8 +23427,8 @@ void opd(GtkWidget *widget, gpointer data)
 										else vzt=l/vzt;
 										for (k=0; k<kdimx; k++)
 										{
-											st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
@@ -23578,8 +23577,8 @@ void opd(GtkWidget *widget, gpointer data)
 										else vzt=l/vzt;
 										for (k=0; k<kdimx; k++)
 										{
-											st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))

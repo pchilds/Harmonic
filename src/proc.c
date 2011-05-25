@@ -69,8 +69,8 @@ void prs(GtkWidget *widget, gpointer data)
 					else vzt=l/vzt;
 					for (k=0; k<kdimx; k++)
 					{
-						st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-						sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+						st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+						sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 						/*
 						 fit values to twa and tca
 						 */
@@ -224,8 +224,8 @@ void prs(GtkWidget *widget, gpointer data)
 					else vzt=l/vzt;
 					for (k=0; k<kdimx; k++)
 					{
-						st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-						sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+						st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+						sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 						/*
 						 fit values to twa and tca
 						 */
@@ -326,8 +326,8 @@ void prs(GtkWidget *widget, gpointer data)
 				else vzt=l/vzt;
 				for (k=0; k<kdimx; k++)
 				{
-					st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-					sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+					st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+					sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 					tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 					twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 					if ((st<(sz4-2))&&(sp<sz4)&&((sp-st)>1))
@@ -473,8 +473,8 @@ void prs(GtkWidget *widget, gpointer data)
 				else vzt=l/vzt;
 				for (k=0; k<kdimx; k++)
 				{
-					st=ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-					sp=floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+					st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+					sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
 					tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
 					twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
 					if ((st<(sz4-1))&&(sp<sz4)&&((sp-st)>0))
@@ -562,8 +562,7 @@ void prs(GtkWidget *widget, gpointer data)
 void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inversion to 2pi/x */
 {
 	PlotLinear *plt;
-	guint j, k, st, sp;
-	gint n, zp, dx, dx2;
+	gint j, k, st, sp, n, zp, dx, dx2;
 	gdouble iv, clc, ofs, ofe, xx, yx, ce;
 	gchar *str;
 	double *y, *star;

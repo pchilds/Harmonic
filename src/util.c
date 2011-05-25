@@ -322,7 +322,7 @@ void upk(GtkWidget *widget, gpointer data)
 	 */
 	PlotLinear *plt3;
 	PlotPolar *plt4;
-	guint j, k, l, sz4;
+	gint j, k, l, sz4;
 	gdouble num, num2, num3, num4, num5;
 	gchar s[10];
 	gchar *str;
@@ -481,18 +481,44 @@ void upa1(GtkWidget *widget, gpointer data)
 
 void reset(GtkWidget *widget, gpointer data)
 {
+	gdouble *ptr;
+	
 	{jdim=0; jdimx=1; kdim=0; kdimx=1;}
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), 0);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), 0);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
 	{(bsra->len)=1; (bspa->len)=1;}
 	{(isra->len)=1; (ispa->len)=1; (tca->len)=1; (twa->len)=1; (zwa->len)=1;}
+	ptr=&g_array_index(bsra, gdouble, 0);
+	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(bsr));
+	ptr=&g_array_index(bspa, gdouble, 0);
+	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(bsp));
+	ptr=&g_array_index(isra, gdouble, 0);
+	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isr));
+	ptr=&g_array_index(ispa, gdouble, 0);
+	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isp));
+	ptr=&g_array_index(tca, gdouble, 0);
+	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tc));
+	ptr=&g_array_index(twa, gdouble, 0);
+	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tw));
+	ptr=&g_array_index(zwa, gdouble, 0);
+	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(zw));
 }
 
 void reset2(GtkWidget *widget, gpointer data)
-{
-	{jdim=0; kdim=0; kdimx=1;}
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), 0);
+{/*update arrays to current values*/
+	gdouble *ptr;
+	gdouble num;
+	
+	{kdim=0; kdimx=1;}
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
 	{(isra->len)=jdimx; (ispa->len)=jdimx; (tca->len)=jdimx; (twa->len)=jdimx;}
+	num=g_array_index(isra, gdouble, jdim);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(isr), num);
+	num=g_array_index(ispa, gdouble, jdim);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(isp), num);
+	num=g_array_index(tca, gdouble, jdim);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(tc), num);
+	num=g_array_index(twa, gdouble, jdim);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(tw), num);
 }
 

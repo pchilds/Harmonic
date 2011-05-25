@@ -451,26 +451,23 @@ int main( int argc, char *argv[])
 	gr2=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	bl2=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	al2=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	rd3=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	gr3=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	bl3=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	al3=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	fll=0;
-	g_array_append_val(rd2, fll);
-	g_array_append_val(gr2, fll);
-	g_array_append_val(bl2, fll);
-	g_array_append_val(gr2, fll);
-	g_array_append_val(bl2, fll);
-	g_array_append_val(bl2, fll);
+	{g_array_append_val(rd2, fll); g_array_append_val(gr2, fll); g_array_append_val(bl2, fll); g_array_append_val(rd3, fll); g_array_append_val(gr3, fll); g_array_append_val(bl3, fll);}
+	{g_array_append_val(gr2, fll); g_array_append_val(bl2, fll); g_array_append_val(gr3, fll); g_array_append_val(bl3, fll);}
+	{g_array_append_val(bl2, fll); g_array_append_val(bl3, fll);}
 	fll=1;
-	g_array_append_val(rd2, fll);
-	g_array_append_val(gr2, fll);
-	g_array_append_val(bl2, fll);
+	{g_array_append_val(rd2, fll); g_array_append_val(rd3, fll);}
+	{g_array_append_val(gr2, fll); g_array_append_val(gr3, fll);}
+	{g_array_append_val(bl2, fll); g_array_append_val(bl3, fll);}
 	fll=0;
-	g_array_append_val(rd2, fll);
-	g_array_append_val(gr2, fll);
-	g_array_append_val(rd2, fll);
+	{g_array_append_val(rd2, fll); g_array_append_val(gr2, fll); g_array_append_val(rd3, fll); g_array_append_val(gr3, fll);}
+	{g_array_append_val(rd2, fll); g_array_append_val(rd3, fll);}
 	fll=0.8;
-	g_array_append_val(al2, fll);
-	g_array_append_val(al2, fll);
-	g_array_append_val(al2, fll);
-	g_array_append_val(al2, fll);
+	{g_array_append_val(al2, fll); g_array_append_val(al2, fll); g_array_append_val(al2, fll); g_array_append_val(al2, fll); g_array_append_val(al3, fll); g_array_append_val(al3, fll); g_array_append_val(al3, fll); g_array_append_val(al3, fll);}
 	(plt2->rd)=rd2;
 	(plt2->gr)=gr2;
 	(plt2->bl)=bl2;
@@ -520,10 +517,6 @@ int main( int argc, char *argv[])
 	nx2=g_array_new(FALSE, FALSE, sizeof(gint));
 	bsz=g_array_new(FALSE, FALSE, sizeof(gint));
 	bnx=g_array_new(FALSE, FALSE, sizeof(gint));
-	rd3=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	gr3=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	bl3=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	al3=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	fold=g_strdup("/home");
 	folr=g_strdup("/home");
 	gtk_widget_show(window);

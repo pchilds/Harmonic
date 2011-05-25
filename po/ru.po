@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-05-13 16:07+0300\n"
+"POT-Creation-Date: 2011-05-25 14:38+0300\n"
 "PO-Revision-Date: 2011-05-07 07:52+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Russian <>\n"
@@ -19,59 +19,67 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/main.c:81
+#. Name of the program
+#: src/main.c:84
 msgid "Harmonic Spectrum Analyser"
 msgstr "Гармонического анализатора спектра"
 
-#: src/main.c:110
+#. Menu option to load a previous state of the program.
+#: src/main.c:113
 msgid "Restore Session"
 msgstr ""
 
-#: src/main.c:114
+#. Menu option to save the current state of the program.
+#: src/main.c:117
 msgid "Save Session"
 msgstr ""
 
-#: src/main.c:126
+#. The "_" here precedes whichever letter the user is to press with alt as
+#. a shortcut. Menu heading for various file related menu options.
+#: src/main.c:129
 msgid "_File"
 msgstr "_Файл"
 
-#: src/main.c:149
+#: src/main.c:152
 msgid "Raw Delimited Data"
 msgstr "сырья данных с разделителями"
 
-#: src/main.c:153
+#: src/main.c:156
 msgid "Data Format:"
 msgstr "Формат данных:"
 
-#: src/main.c:158
+#: src/main.c:161
 msgid "Trace:"
 msgstr "След:"
 
-#: src/main.c:165
+#: src/main.c:168
 msgid "Transmission Measurement?"
 msgstr "Передачи измерения"
 
-#: src/main.c:169
+#: src/main.c:172
 msgid "Data in dBs?"
 msgstr "Данных в децибелах"
 
-#: src/main.c:173
+#: src/main.c:176
 msgid "Negate?"
 msgstr "Отрицайте"
 
-#: src/main.c:180
+#: src/main.c:183
 msgid "Display Properties:"
 msgstr "Визуального свойство:"
 
-#: src/main.c:185
+#. The "_" here precedes whichever letter the user is to press with alt as
+#. a shortcut. Menu heading for various options governing how the data is
+#. to be handled and displayed.
+#: src/main.c:188
 msgid "_Properties"
 msgstr "_Свойство"
 
-#: src/main.c:191
+#: src/main.c:194
 msgid "None"
 msgstr "Ничего"
 
-#: src/main.c:195
+#: src/main.c:198
 msgid ""
 "1st order\n"
 "spectral shadowing"
@@ -79,7 +87,7 @@ msgstr ""
 "Первого порядка\n"
 "спектральной слеъжка"
 
-#: src/main.c:199
+#: src/main.c:202
 msgid ""
 "Nonlinear\n"
 "Compensation:"
@@ -87,35 +95,41 @@ msgstr ""
 "Нелинейной\n"
 "компенсации:"
 
-#: src/main.c:204
+#. The fourier basis (e^-ixs) used for Fourier transformation.
+#: src/main.c:207
 msgid "Fourier"
 msgstr ""
 
-#: src/main.c:208
+#. The Daubechies 4 wavelet basis (standard wavelet used for DWT).
+#: src/main.c:211
 msgid "Daubechies 4"
 msgstr ""
 
-#: src/main.c:212
+#. The Daubechies 8 wavelet basis.
+#: src/main.c:215
 msgid "Daubechies 8"
 msgstr ""
 
-#: src/main.c:216
+#. The Meyer wavelet basis.
+#: src/main.c:219
 msgid "Meyer"
 msgstr ""
 
-#: src/main.c:220
+#. The Morlet wavelet basis.
+#: src/main.c:223
 msgid "Morlet"
 msgstr ""
 
-#: src/main.c:224
+#. Menu option for selecting (wavelet) basis function.
+#: src/main.c:227
 msgid "Basis Function:"
 msgstr ""
 
-#: src/main.c:228
+#: src/main.c:231
 msgid "Invert domain?"
 msgstr "Обратите области"
 
-#: src/main.c:232
+#: src/main.c:235
 msgid ""
 "Apply correction\n"
 "to Window edges?"
@@ -123,55 +137,59 @@ msgstr ""
 "Применить поправка\n"
 "к окно края"
 
-#: src/main.c:239
+#: src/main.c:242
 msgid "Optimise Triangle fit?"
 msgstr "Оптимизировайте припадке треугольников"
 
-#: src/main.c:243
+#: src/main.c:246
 msgid "Calculate Chirp?"
 msgstr "Измерите ЛЧМ"
 
-#: src/main.c:250
+#: src/main.c:253
 msgid "Batch Process Data?"
 msgstr "пакетной обработки данных"
 
-#: src/main.c:254
+#: src/main.c:257
 msgid "Autotrack Offset?"
 msgstr "Автоматизировать смещение"
 
-#: src/main.c:258
+#. The "_" here precedes whichever letter the user is to press with alt as
+#. a shortcut. Menu heading for various lesser used menu options.
+#: src/main.c:261
 msgid "_Advanced"
 msgstr "_Дополнительные"
 
-#: src/main.c:263
+#: src/main.c:266
 msgid "Instructions"
 msgstr "Инструкции"
 
-#: src/main.c:272
+#. The "_" here precedes whichever letter the user is to press with alt as
+#. a shortcut. Menu heading for help and documentation related menu options.
+#: src/main.c:275
 msgid "_Help"
 msgstr "_Помощь"
 
-#: src/main.c:301
+#: src/main.c:304
 msgid "Spectrum Start:"
 msgstr "Начала спектра:"
 
-#: src/main.c:309
+#: src/main.c:312
 msgid "Spectrum Stop:"
 msgstr "Конце спектра:"
 
-#: src/main.c:317
+#: src/main.c:320
 msgid "Offset:"
 msgstr "Смещение:"
 
-#: src/main.c:324 src/main.c:390
-msgid "j index:"
-msgstr "З Индекс:"
-
-#: src/main.c:332
+#: src/main.c:327
 msgid "Zero Padding 2^:"
 msgstr "Заполнение нулями 2^:"
 
-#: src/main.c:339 src/main.c:406
+#: src/main.c:334 src/main.c:393
+msgid "j index:"
+msgstr "З Индекс:"
+
+#: src/main.c:342 src/main.c:409
 msgid ""
 "Reset\n"
 "Arrays"
@@ -179,39 +197,42 @@ msgstr ""
 "Сбросите\n"
 "массивов"
 
-#: src/main.c:343
+#: src/main.c:346
 msgid "Transform Spectrum"
 msgstr "Преобразите Спектра."
 
-#: src/main.c:346 src/main.c:425
+#: src/main.c:349 src/main.c:443 src/disp.c:1144
 msgid "Spectrum"
 msgstr "Спектра"
 
-#: src/main.c:350
+#: src/main.c:353
 msgid "Inverse Spectrum Start:"
 msgstr "Начала обратный спектр:"
 
-#: src/main.c:358
+#: src/main.c:361
 msgid "Inverse Spectrum Stop:"
 msgstr "Конце обратный спектр:"
 
-#: src/main.c:366
+#: src/main.c:369
 msgid "Triangle Centre:"
 msgstr "Центре Треугольника:"
 
-#: src/main.c:374
+#: src/main.c:377
 msgid "Triangle Full Width:"
 msgstr "Полная ширина треугольника:"
 
-#: src/main.c:382
+#: src/main.c:385
 msgid "DC Peak Width:"
 msgstr "Ширина пика DC:"
 
-#: src/main.c:398
+#: src/main.c:401
 msgid "k index:"
 msgstr "К Индекс:"
 
-#: src/main.c:410
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed. Button to press to analyse the
+#. transformed results for visibility/domain-shift/chirp
+#: src/main.c:413
 msgid ""
 "Process\n"
 "Spectrum"
@@ -219,35 +240,45 @@ msgstr ""
 "Обработайте\n"
 "Спектра"
 
-#: src/main.c:413 src/main.c:434
+#. Title for tab showing a plot of the transformed spectrum over the inverse
+#. domain.
+#: src/main.c:416 src/main.c:478 src/disp.c:1240
 msgid "Inverse Spectrum"
 msgstr "Обратный спектр"
 
-#: src/main.c:430
+#. The horizontal domain after transformation (e.g. if the base domain is
+#. time, then it will be frequency).
+#: src/main.c:449
 msgid "Inverse Domain"
 msgstr "Обратная области"
 
-#: src/main.c:438 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
-#: src/data.c:1119 src/data.c:1260 src/disp.c:102 src/disp.c:741
-#: src/disp.c:1334 src/open.c:24079
+#. Visibility of fringes (defined for a sinusoid as (maximum-minimum) divided
+#. by (maximum+minimum))
+#: src/main.c:482 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
+#: src/data.c:1143 src/data.c:1284 src/disp.c:1324 src/open.c:24646
 msgid "Visibility"
 msgstr "Видимость"
 
-#: src/main.c:444 src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:1037
-#: src/data.c:1119 src/data.c:1260 src/disp.c:103 src/disp.c:742
-#: src/disp.c:1335 src/open.c:24085
+#. How much the interference fringes are moving in the base domain (the base
+#. domain is the horizontal domain of the original data loaded from the file).
+#: src/main.c:488 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
+#: src/data.c:1143 src/data.c:1284 src/disp.c:1325 src/open.c:24652
 msgid "Domain Shift"
 msgstr "Сдвига области"
 
-#: src/main.c:450 src/open.c:23973 src/open.c:23999 src/open.c:24026
-#: src/open.c:24091
+#. Title for the notebook tab displaying the results
+#: src/main.c:494 src/disp.c:1412 src/open.c:24535 src/open.c:24561
+#: src/open.c:24588 src/open.c:24658
 msgid "Analysis Results"
 msgstr "Результаты анализа"
 
+#. the program is unable to load the help documentation
 #: src/util.c:38
 msgid "Could not load help files."
 msgstr "Не удалось загрузить файлы справки."
 
+#. short blurb about the program (displayed when the user hovers over the
+#. icon)
 #: src/util.c:53
 msgid ""
 "Harmonic is a program for performing harmonic analysis (e.g. Fourier "
@@ -257,134 +288,129 @@ msgstr ""
 "Гармоника программы для выполнения гармонического анализа (например, анализ "
 "Фурье) и получения видимость полос, сдвига области и измерение ЛЧМ."
 
+#. put your name here and be famous.
 #: src/util.c:54
 msgid "translator-credits"
 msgstr "Paul Childs"
 
+#. "x" and "y" are the standard variables representing the horizontal and
+#. vertical axes. %f refers to their values for the current point on the
+#. plot. Please leave as "%f", but move around as needed (though the "x"
+#. %f must be first).
 #: src/util.c:99 src/util.c:108
 #, c-format
 msgid "x: %f, y: %f"
 msgstr "x: %f, y: %f"
 
-#: src/util.c:612 src/util.c:639
-#, fuzzy
-msgid "Select Session File"
-msgstr "Выберите файл конфигурации"
+#. Asks the user to name a file to save an image of the plot.
+#: src/data.c:38 src/data.c:59 src/data.c:79 src/data.c:108 src/data.c:128
+#: src/data.c:157
+msgid "Select Image File"
+msgstr "Выберите файл данных"
 
-#: src/util.c:622 src/data.c:217 src/data.c:240 src/data.c:263 src/data.c:285
-#: src/data.c:343 src/data.c:385 src/data.c:427 src/data.c:469 src/data.c:528
-#: src/data.c:570 src/data.c:612 src/data.c:654 src/data.c:712 src/data.c:754
-#: src/data.c:796 src/data.c:838 src/data.c:884 src/data.c:926 src/data.c:968
-#: src/data.c:1010 src/data.c:1061 src/data.c:1084 src/data.c:1107
-#: src/data.c:1163 src/data.c:1205 src/data.c:1247 src/data.c:1304
-#: src/data.c:1346 src/data.c:1388 src/data.c:1444 src/data.c:1486
-#: src/data.c:1528 src/data.c:1572 src/data.c:1614 src/data.c:1656
-#: src/data.c:1695 src/data.c:1721 src/data.c:1769 src/data.c:1802
-#: src/data.c:1827 src/data.c:1873 src/data.c:1953 src/data.c:2027
-#: src/data.c:2118 src/data.c:2192 src/data.c:2284 src/data.c:2358
-#: src/open.c:163
+#. No plots exist to save.
+#: src/data.c:100 src/data.c:149 src/data.c:177
+msgid "No available image."
+msgstr "Нет доступных изображений."
+
+#. Asks the user to name a data file to save results to.
+#: src/data.c:200 src/data.c:1048 src/data.c:1697 src/data.c:1808
+#: src/data.c:1916 src/data.c:2084 src/data.c:2253 src/open.c:39
+#: src/open.c:24624
+msgid "Select Data File"
+msgstr "Выберите файл изображения"
+
+#. title for window requesting what of the results to save.
+#: src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:687 src/data.c:1061
+#: src/data.c:1143 src/data.c:1284 src/data.c:1424 src/data.c:1925
+#: src/data.c:2093 src/data.c:2262
+msgid "Parameter selection"
+msgstr "Выбор параметр"
+
+#. Button to select just saving chirp
+#: src/data.c:213 src/data.c:318 src/data.c:503 src/proc.c:176 src/proc.c:430
+#: src/disp.c:1328
+msgid "Chirp"
+msgstr "ЛЧМ"
+
+#. Button to select saving results (visibility, domain shift and chirp)
+#: src/data.c:213 src/data.c:318 src/data.c:503
+msgid "All"
+msgstr "Все из них"
+
+#. asks the user what of the results they want to save (see below).
+#: src/data.c:215 src/data.c:320 src/data.c:505 src/data.c:689 src/data.c:1063
+#: src/data.c:1145 src/data.c:1286 src/data.c:1426 src/data.c:1927
+#: src/data.c:2095 src/data.c:2264
+msgid "Select Parameter to save:"
+msgstr "Выберите параметр сохранить:"
+
+#. Column headings in the save file. The format must be four sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Measurand\tVisibility\tDomain Shift\tChirp
+#: src/data.c:220 src/data.c:325 src/data.c:510 src/data.c:694 src/data.c:866
+msgid "MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
+msgstr "ИЗМЕРЕНИЯ\tВИДИМОСТЬ\tСДВЫГ_ОБЛ\tЛЧМ      "
+
+#. %s refers to the filename. Please leave as "%s", but move within the
+#. sentence as needed
+#: src/data.c:238 src/data.c:261 src/data.c:284 src/data.c:306 src/data.c:364
+#: src/data.c:406 src/data.c:448 src/data.c:490 src/data.c:549 src/data.c:591
+#: src/data.c:633 src/data.c:675 src/data.c:733 src/data.c:775 src/data.c:817
+#: src/data.c:859 src/data.c:905 src/data.c:947 src/data.c:989 src/data.c:1031
+#: src/data.c:1085 src/data.c:1108 src/data.c:1131 src/data.c:1187
+#: src/data.c:1229 src/data.c:1271 src/data.c:1328 src/data.c:1370
+#: src/data.c:1412 src/data.c:1468 src/data.c:1510 src/data.c:1552
+#: src/data.c:1596 src/data.c:1638 src/data.c:1680 src/data.c:1722
+#: src/data.c:1748 src/data.c:1796 src/data.c:1832 src/data.c:1857
+#: src/data.c:1903 src/data.c:1986 src/data.c:2060 src/data.c:2154
+#: src/data.c:2228 src/data.c:2323 src/data.c:2397 src/data.c:2439
+#: src/open.c:169
 #, c-format
 msgid "Error Saving file: %s."
 msgstr "Ошибка при сохранении файла: %s."
 
-#: src/util.c:649 src/open.c:377 src/open.c:548 src/open.c:721 src/open.c:893
-#: src/open.c:1065 src/open.c:1237 src/open.c:1413 src/open.c:1584
-#: src/open.c:1757 src/open.c:1929 src/open.c:2101 src/open.c:2273
-#: src/open.c:2494 src/open.c:2708 src/open.c:2892 src/open.c:3075
-#: src/open.c:3292 src/open.c:3480 src/open.c:3695 src/open.c:3905
-#: src/open.c:4089 src/open.c:4272 src/open.c:4487 src/open.c:4670
-#: src/open.c:4807 src/open.c:4934 src/open.c:5063 src/open.c:5191
-#: src/open.c:5319 src/open.c:5447 src/open.c:5579 src/open.c:5706
-#: src/open.c:5835 src/open.c:5963 src/open.c:6091 src/open.c:6219
-#: src/open.c:6397 src/open.c:6567 src/open.c:6707 src/open.c:6846
-#: src/open.c:7019 src/open.c:7163 src/open.c:7335 src/open.c:7501
-#: src/open.c:7641 src/open.c:7780 src/open.c:7952 src/open.c:8092
-#: src/open.c:8283 src/open.c:8457 src/open.c:8632 src/open.c:8806
-#: src/open.c:8981 src/open.c:9155 src/open.c:9334 src/open.c:9508
-#: src/open.c:9683 src/open.c:9857 src/open.c:10032 src/open.c:10206
-#: src/open.c:10407 src/open.c:10601 src/open.c:10787 src/open.c:10972
-#: src/open.c:11164 src/open.c:11354 src/open.c:11549 src/open.c:11739
-#: src/open.c:11925 src/open.c:12110 src/open.c:12300 src/open.c:12485
-#: src/open.c:12625 src/open.c:12755 src/open.c:12886 src/open.c:13016
-#: src/open.c:13147 src/open.c:13277 src/open.c:13412 src/open.c:13542
-#: src/open.c:13673 src/open.c:13803 src/open.c:13934 src/open.c:14064
-#: src/open.c:14222 src/open.c:14372 src/open.c:14514 src/open.c:14655
-#: src/open.c:14803 src/open.c:14949 src/open.c:15101 src/open.c:15247
-#: src/open.c:15389 src/open.c:15530 src/open.c:15677 src/open.c:15819
-#: src/open.c:16008 src/open.c:16181 src/open.c:16353 src/open.c:16524
-#: src/open.c:16696 src/open.c:16867 src/open.c:17043 src/open.c:17214
-#: src/open.c:17386 src/open.c:17557 src/open.c:17729 src/open.c:17900
-#: src/open.c:18098 src/open.c:18289 src/open.c:18472 src/open.c:18654
-#: src/open.c:18851 src/open.c:19047 src/open.c:19242 src/open.c:19429
-#: src/open.c:19612 src/open.c:19794 src/open.c:19989 src/open.c:20180
-#: src/open.c:20319 src/open.c:20446 src/open.c:20574 src/open.c:20701
-#: src/open.c:20829 src/open.c:20956 src/open.c:21088 src/open.c:21215
-#: src/open.c:21343 src/open.c:21470 src/open.c:21598 src/open.c:21725
-#: src/open.c:21881 src/open.c:22028 src/open.c:22167 src/open.c:22305
-#: src/open.c:22458 src/open.c:22610 src/open.c:22761 src/open.c:22904
-#: src/open.c:23043 src/open.c:23181 src/open.c:23334 src/open.c:23483
-#: src/open.c:24050 src/open.c:24182
-#, c-format
-msgid "Loading failed for file: %s, Error: %s."
-msgstr "Загрузка не удалась по файл: %s, ошибка: %s."
-
-#: src/data.c:38 src/data.c:56 src/data.c:73 src/data.c:99 src/data.c:116
-#: src/data.c:142
-msgid "Select Image File"
-msgstr "Выберите файл данных"
-
-#: src/data.c:91 src/data.c:134 src/data.c:159
-msgid "No available image."
-msgstr "Нет доступных изображений."
-
-#: src/data.c:182 src/data.c:1027 src/data.c:1673 src/data.c:1781
-#: src/data.c:1886 src/data.c:2051 src/data.c:2217 src/open.c:39
-#: src/open.c:24062
-msgid "Select Data File"
-msgstr "Выберите файл изображения"
-
-#: src/data.c:192 src/data.c:297 src/data.c:482 src/data.c:666 src/data.c:1037
-#: src/data.c:1119 src/data.c:1260 src/data.c:1400 src/data.c:1892
-#: src/data.c:2057 src/data.c:2223
-msgid "Parameter selection"
-msgstr "Выбор параметр"
-
-#: src/data.c:192 src/data.c:297 src/data.c:482 src/proc.c:176 src/proc.c:430
-#: src/disp.c:106 src/disp.c:745 src/disp.c:1337
-msgid "Chirp"
-msgstr "ЛЧМ"
-
-#: src/data.c:192 src/data.c:297 src/data.c:482
-msgid "All"
-msgstr "Все из них"
-
-#: src/data.c:194 src/data.c:299 src/data.c:484 src/data.c:668 src/data.c:1039
-#: src/data.c:1121 src/data.c:1262 src/data.c:1402 src/data.c:1894
-#: src/data.c:2059 src/data.c:2225
-msgid "Select Parameter to save:"
-msgstr "Выберите параметр сохранить:"
-
-#: src/data.c:199 src/data.c:304 src/data.c:489 src/data.c:673 src/data.c:845
-msgid "MEAS     \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
-msgstr "ИЗМЕРЕНИЯ\tВИДИМОСТЬ\tСДВЫГ_ОБЛ\tЛЧМ      "
-
-#: src/data.c:224 src/data.c:350 src/data.c:535 src/data.c:719 src/data.c:891
+#. Column headings in the save file. The format must be two sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Measurand\tChirp
+#: src/data.c:245 src/data.c:371 src/data.c:556 src/data.c:740 src/data.c:912
 msgid "MEAS     \tCHIRP    "
 msgstr "ИЗМЕРЕНИЯ\tЛЧМ      "
 
-#: src/data.c:247 src/data.c:392 src/data.c:577 src/data.c:761 src/data.c:933
-#: src/data.c:1068 src/data.c:1170 src/data.c:1311 src/data.c:1451
-#: src/data.c:1579
+#. Column headings in the save file. The format must be two sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Measurand\tDomain Shift
+#: src/data.c:268 src/data.c:413 src/data.c:598 src/data.c:782 src/data.c:954
+#: src/data.c:1092 src/data.c:1194 src/data.c:1335 src/data.c:1475
+#: src/data.c:1603
 msgid "MEAS     \tDOMN_SHFT"
 msgstr "ИЗМЕРЕНИЯ\tСДВЫГ_ОБЛ"
 
-#: src/data.c:270 src/data.c:434 src/data.c:619 src/data.c:803 src/data.c:975
-#: src/data.c:1091 src/data.c:1212 src/data.c:1353 src/data.c:1493
-#: src/data.c:1621
+#. Column headings in the save file. The format must be two sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Measurand\tVisibility
+#: src/data.c:291 src/data.c:455 src/data.c:640 src/data.c:824 src/data.c:996
+#: src/data.c:1115 src/data.c:1236 src/data.c:1377 src/data.c:1517
+#: src/data.c:1645
 msgid "MEAS     \tVISIBILTY"
 msgstr "ИЗМЕРЕНИЯ\tВИДИМОСТЬ"
 
-#: src/data.c:666 src/data.c:1400
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed. Button to select saving results for
+#. all windows of any j index but only the current k index.
+#: src/data.c:687 src/data.c:1424
 msgid ""
 "Visibility\n"
 "over J"
@@ -392,7 +418,10 @@ msgstr ""
 "Видимость\n"
 "за индексом З"
 
-#: src/data.c:666 src/data.c:1400
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed. Button to select saving results for
+#. all windows of any j index but only the current k index.
+#: src/data.c:687 src/data.c:1424
 msgid ""
 "Domain Shift\n"
 "over J"
@@ -400,7 +429,10 @@ msgstr ""
 "Сдвига области\n"
 "за индексом З"
 
-#: src/data.c:666
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed. Button to select saving results for
+#. all windows of any j index but only the current k index.
+#: src/data.c:687
 msgid ""
 "Chirp\n"
 "over J"
@@ -408,7 +440,11 @@ msgstr ""
 "ЛЧМ за\n"
 "индексом З"
 
-#: src/data.c:666
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed. Button to select saving results
+#. (visibility, domain shift and chirp) for all windows of any j index but
+#. only the current k index.
+#: src/data.c:687
 msgid ""
 "All\n"
 "over J"
@@ -416,7 +452,10 @@ msgstr ""
 "Все из них\n"
 "за индексом З"
 
-#: src/data.c:666 src/data.c:1400
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed. Button to select saving results for
+#. all windows of any k index but only the current j index.
+#: src/data.c:687 src/data.c:1424
 msgid ""
 "Visibility\n"
 "over K"
@@ -424,7 +463,10 @@ msgstr ""
 "Видимость\n"
 "за индексом K"
 
-#: src/data.c:666 src/data.c:1400
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed. Button to select saving results for
+#. all windows of any k index but only the current j index.
+#: src/data.c:687 src/data.c:1424
 msgid ""
 "Domain Shift\n"
 "over K"
@@ -432,7 +474,10 @@ msgstr ""
 "Сдвига области\n"
 "за индексом K"
 
-#: src/data.c:666
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed. Button to select saving results for
+#. all windows of any k index but only the current j index.
+#: src/data.c:687
 msgid ""
 "Chirp\n"
 "over K"
@@ -440,7 +485,11 @@ msgstr ""
 "ЛЧМ за\n"
 "индексом K"
 
-#: src/data.c:666
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed. Button to select saving results
+#. (visibility, domain shift and chirp) for all windows of any k index but
+#. only the current j index.
+#: src/data.c:1424 src/data.c:687
 msgid ""
 "All\n"
 "over K"
@@ -448,16 +497,27 @@ msgstr ""
 "Все из них\n"
 "за индексом K"
 
-#: src/data.c:1037 src/data.c:1119 src/data.c:1260
+#. Button to select saving results (both visibility and domain shift).
+#: src/data.c:1061 src/data.c:1143 src/data.c:1284
 msgid "Both"
 msgstr "Обо из них"
 
-#: src/data.c:1044 src/data.c:1126 src/data.c:1267 src/data.c:1407
-#: src/data.c:1535
+#. Column headings in the save file. The format must be three sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Measurand\tVisibility\tDomain Shift
+#: src/data.c:1710 src/data.c:1068 src/data.c:1150 src/data.c:1291
+#: src/data.c:1431 src/data.c:1559
 msgid "MEAS     \tVISIBILTY\tDOMN_SHFT"
 msgstr "ИЗМЕРЕНИЯ\tВИДИМОСТЬ\tСДВЫГ_ОБЛ"
 
-#: src/data.c:1400
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed. Button to select saving results
+#. (both visibility and domain shift) for all windows of any j index but
+#. only the current k index.
+#: src/data.c:1424
 msgid ""
 "Both\n"
 "over J"
@@ -465,7 +525,11 @@ msgstr ""
 "Обо из них\n"
 "за индексом З"
 
-#: src/data.c:1400
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed. Button to select saving results
+#. (both visibility and domain shift) for all windows of any k index but
+#. only the current j index.
+#: src/data.c:1424
 msgid ""
 "Both\n"
 "over K"
@@ -473,148 +537,289 @@ msgstr ""
 "Обо из них\n"
 "за индексом K"
 
-#: src/data.c:1683
+#. Column headings in the save file. The format must be three sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Visibility\tDomain Shift\tChirp
+#: src/data.c:1710
 msgid "VISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr "ВИДИМОСТЬ\tСДВЫГ_ОБЛ\tЛЧМ      "
 
-#: src/data.c:1703
+#. Column headings in the save file. The format must be four sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Index K\tVisibility\tDomain Shift\tChirp
+#: src/data.c:1730
 msgid "K        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr "K        \tВИДИМОСТЬ\tСДВЫГ_ОБЛ\tЛЧМ      "
 
-#: src/data.c:1730
+#. Column headings in the save file. The format must be four sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Index J\tVisibility\tDomain Shift\tChirp
+#: src/data.c:1757
 msgid "J        \tVISIBILTY\tDOMN_SHFT\tCHIRP    "
 msgstr "З        \tВИДИМОСТЬ\tСДВЫГ_ОБЛ\tЛЧМ      "
 
-#: src/data.c:1791
+#. Column headings in the save file. The format must be two sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Visibility\tDomain Shift
+#: src/data.c:1821
 msgid "VISIBILTY\tDOMN_SHFT"
 msgstr "ВИДИМОСТЬ\tСДВЫГ_ОБЛ"
 
-#: src/data.c:1810
+#. Column headings in the save file. The format must be three sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Index K\tVisibility\tDomain Shift
+#: src/data.c:1840
 msgid "K        \tVISIBILTY\tDOMN_SHFT"
 msgstr "K        \tВИДИМОСТЬ\tСДВЫГ_ОБЛ"
 
-#: src/data.c:1836
+#. Column headings in the save file. The format must be three sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Index J\tVisibility\tDomain Shift
+#: src/data.c:1866
 msgid "J        \tVISIBILTY\tDOMN_SHFT"
 msgstr "З        \tВИДИМОСТЬ\tСДВЫГ_ОБЛ"
 
-#: src/data.c:1892 src/data.c:2057 src/data.c:2223
+#. Button to select saving the data in real and imaginary values format.
+#. Add a "\n" to give a new line if space is cramped.
+#: src/data.c:1925 src/data.c:2093 src/data.c:2262
 msgid "Real/Imaginary"
 msgstr "Реальные/Мнимые"
 
-#: src/data.c:1892 src/data.c:2057 src/data.c:2223
+#. Button to select saving the data in magnitude and phase format.
+#. Add a "\n" to give a new line if space is cramped.
+#: src/data.c:1925 src/data.c:2093 src/data.c:2262
 msgid "Magnitude/Phase"
 msgstr "Амплитуды/Фазы"
 
-#: src/data.c:1899 src/data.c:2064 src/data.c:2230
+#. Column headings in the save file. The format must be three sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Inverse Domain\tReal Value\tImaginary Value
+#: src/data.c:1932 src/data.c:2100 src/data.c:2269
 msgid "INVERSE_D\tREAL_VAL \tIMAG_VAL "
 msgstr "ОБРАТ_ОБЛ\tРЕАЛ_ЗНАЧ\tМНИМ_ЗНАЧ"
 
-#: src/data.c:1961 src/data.c:2126 src/data.c:2292
+#. Column headings in the save file. The format must be three sets of
+#. exactly nine (2 byte) characters seperated by "\t"'s (take care as
+#. some languages, e.g. Chinese, will have "characters" that are
+#. represented by more than 2 bytes). Give an understandable shorthand
+#. and use space to pad out to the required 9.
+#. The longhand is: Inverse Domain\tMagnitude\tPhase
+#: src/data.c:1994 src/data.c:2162 src/data.c:2331
 msgid "INVERSE_D\tMAGNITUDE\tPHASE    "
 msgstr "ОБРАТ_ОБЛ\tАМПЛИТУДЫ\tФАЗЫ     "
 
-#: src/data.c:2043 src/data.c:2208 src/data.c:2373
+#. The user is trying to save when on the results page and hasn't actually
+#. processed any results yet.
+#: src/data.c:2076 src/data.c:2244 src/data.c:2412
 msgid "No available processed data."
 msgstr "Нет доступных обрабатываемых данных."
 
+#. Asks the user to select a file storing the information of a previous
+#. state of the program.
+#: src/data.c:2426 src/data.c:2456
+#, fuzzy
+msgid "Select Session File"
+msgstr "Выберите файл конфигурации"
+
+#. %s refers to the filename and the error. Please leave as "%s", but move
+#. within the sentence as needed (as long as the file is given first)
+#: src/data.c:2469 src/open.c:386 src/open.c:558 src/open.c:732 src/open.c:905
+#: src/open.c:1078 src/open.c:1251 src/open.c:1428 src/open.c:1600
+#: src/open.c:1774 src/open.c:1947 src/open.c:2120 src/open.c:2293
+#: src/open.c:2515 src/open.c:2730 src/open.c:2915 src/open.c:3099
+#: src/open.c:3317 src/open.c:3506 src/open.c:3722 src/open.c:3933
+#: src/open.c:4118 src/open.c:4302 src/open.c:4518 src/open.c:4702
+#: src/open.c:4840 src/open.c:4968 src/open.c:5098 src/open.c:5227
+#: src/open.c:5356 src/open.c:5485 src/open.c:5618 src/open.c:5746
+#: src/open.c:5876 src/open.c:6005 src/open.c:6134 src/open.c:6263
+#: src/open.c:6442 src/open.c:6613 src/open.c:6754 src/open.c:6894
+#: src/open.c:7068 src/open.c:7213 src/open.c:7386 src/open.c:7553
+#: src/open.c:7694 src/open.c:7834 src/open.c:8007 src/open.c:8148
+#: src/open.c:8340 src/open.c:8515 src/open.c:8691 src/open.c:8866
+#: src/open.c:9042 src/open.c:9217 src/open.c:9397 src/open.c:9572
+#: src/open.c:9748 src/open.c:9923 src/open.c:10099 src/open.c:10274
+#: src/open.c:10476 src/open.c:10671 src/open.c:10858 src/open.c:11044
+#: src/open.c:11237 src/open.c:11428 src/open.c:11624 src/open.c:11815
+#: src/open.c:12002 src/open.c:12188 src/open.c:12379 src/open.c:12565
+#: src/open.c:12706 src/open.c:12837 src/open.c:12969 src/open.c:13100
+#: src/open.c:13232 src/open.c:13363 src/open.c:13499 src/open.c:13630
+#: src/open.c:13762 src/open.c:13893 src/open.c:14025 src/open.c:14156
+#: src/open.c:14315 src/open.c:14466 src/open.c:14609 src/open.c:14751
+#: src/open.c:14900 src/open.c:15047 src/open.c:15200 src/open.c:15347
+#: src/open.c:15490 src/open.c:15632 src/open.c:15780 src/open.c:15923
+#: src/open.c:16113 src/open.c:16287 src/open.c:16460 src/open.c:16632
+#: src/open.c:16805 src/open.c:16977 src/open.c:17154 src/open.c:17326
+#: src/open.c:17499 src/open.c:17671 src/open.c:17844 src/open.c:18016
+#: src/open.c:18215 src/open.c:18407 src/open.c:18591 src/open.c:18774
+#: src/open.c:18972 src/open.c:19169 src/open.c:19365 src/open.c:19553
+#: src/open.c:19737 src/open.c:19920 src/open.c:20116 src/open.c:20308
+#: src/open.c:20448 src/open.c:20576 src/open.c:20705 src/open.c:20833
+#: src/open.c:20962 src/open.c:21090 src/open.c:21223 src/open.c:21351
+#: src/open.c:21480 src/open.c:21608 src/open.c:21737 src/open.c:21865
+#: src/open.c:22022 src/open.c:22170 src/open.c:22310 src/open.c:22449
+#: src/open.c:22603 src/open.c:22756 src/open.c:22908 src/open.c:23052
+#: src/open.c:23192 src/open.c:23331 src/open.c:23485 src/open.c:23635
+#: src/open.c:24612 src/open.c:24749
+#, c-format
+msgid "Loading failed for file: %s, Error: %s."
+msgstr "Загрузка не удалась по файл: %s, ошибка: %s."
+
+#. %d are the j,k indices for the window that is having problems. Please
+#. leave as "%d" but move around as needed. This message lets the user know
+#. that the range of inverse start and stop values is too small or that they
+#. are beyond the limit of data points available.
 #: src/proc.c:166 src/proc.c:278 src/proc.c:420 src/proc.c:524
 #, c-format
 msgid "Insufficient windowing range in channel %d, %d."
 msgstr "Недостаточное оконной диапазон в канале %d, %d."
 
+#. The user hasn't transformed the data yet, so processing it is impossible.
 #: src/proc.c:556
 msgid "No transform for analysis exists yet."
 msgstr "Нет преобразования для анализа еще не существует."
 
-#: src/proc.c:609 src/proc.c:630 src/proc.c:652 src/proc.c:673 src/proc.c:695
-#: src/proc.c:716 src/proc.c:742 src/proc.c:763 src/proc.c:785 src/proc.c:806
-#: src/proc.c:828 src/proc.c:849 src/proc.c:885 src/proc.c:906 src/proc.c:928
-#: src/proc.c:949 src/proc.c:971 src/proc.c:992 src/proc.c:1018
-#: src/proc.c:1039 src/proc.c:1061 src/proc.c:1082 src/proc.c:1104
-#: src/proc.c:1125 src/proc.c:1154 src/proc.c:1175 src/proc.c:1197
-#: src/proc.c:1218 src/proc.c:1240 src/proc.c:1261 src/proc.c:1288
-#: src/proc.c:1309 src/proc.c:1331 src/proc.c:1352 src/proc.c:1375
-#: src/proc.c:1397 src/proc.c:1427 src/proc.c:1480 src/proc.c:1535
-#: src/proc.c:1559 src/proc.c:1583 src/proc.c:1639 src/proc.c:1672
-#: src/proc.c:1721 src/proc.c:1772 src/proc.c:1796 src/proc.c:1820
-#: src/proc.c:1874 src/proc.c:1912 src/proc.c:1944 src/proc.c:1977
-#: src/proc.c:2000 src/proc.c:2024 src/proc.c:2053 src/proc.c:2086
-#: src/proc.c:2114 src/proc.c:2143 src/proc.c:2166 src/proc.c:2190
-#: src/proc.c:2217 src/proc.c:2248 src/proc.c:2280 src/proc.c:2313
-#: src/proc.c:2336 src/proc.c:2368 src/proc.c:2406 src/proc.c:2441
-#: src/proc.c:2470 src/proc.c:2499 src/proc.c:2522 src/proc.c:2555
-#: src/proc.c:2592
+#. %d is the j index of the window being processed. Please leave as "%d" but
+#. move around as needed. In this case there are less data points in the
+#. window than the zero padding will pad out to, so some points are going to
+#. be lost (clipped).
+#: src/proc.c:607 src/proc.c:628 src/proc.c:650 src/proc.c:671 src/proc.c:693
+#: src/proc.c:714 src/proc.c:740 src/proc.c:761 src/proc.c:783 src/proc.c:804
+#: src/proc.c:826 src/proc.c:847 src/proc.c:883 src/proc.c:904 src/proc.c:926
+#: src/proc.c:947 src/proc.c:969 src/proc.c:990 src/proc.c:1016
+#: src/proc.c:1037 src/proc.c:1059 src/proc.c:1080 src/proc.c:1102
+#: src/proc.c:1123 src/proc.c:1152 src/proc.c:1173 src/proc.c:1195
+#: src/proc.c:1216 src/proc.c:1238 src/proc.c:1259 src/proc.c:1286
+#: src/proc.c:1307 src/proc.c:1329 src/proc.c:1350 src/proc.c:1373
+#: src/proc.c:1395 src/proc.c:1425 src/proc.c:1478 src/proc.c:1533
+#: src/proc.c:1557 src/proc.c:1581 src/proc.c:1637 src/proc.c:1670
+#: src/proc.c:1719 src/proc.c:1770 src/proc.c:1794 src/proc.c:1818
+#: src/proc.c:1872 src/proc.c:1910 src/proc.c:1942 src/proc.c:1975
+#: src/proc.c:1998 src/proc.c:2022 src/proc.c:2051 src/proc.c:2084
+#: src/proc.c:2112 src/proc.c:2141 src/proc.c:2164 src/proc.c:2188
+#: src/proc.c:2215 src/proc.c:2246 src/proc.c:2278 src/proc.c:2311
+#: src/proc.c:2334 src/proc.c:2366 src/proc.c:2404 src/proc.c:2439
+#: src/proc.c:2468 src/proc.c:2497 src/proc.c:2520 src/proc.c:2553
+#: src/proc.c:2590
 #, c-format
 msgid "Some clipping occured in channel %d. Increase zero padding."
 msgstr ""
 "Некоторые отсечения произошло в канале %d. Увеличите заполнение нулями."
 
-#: src/proc.c:2351 src/proc.c:2389 src/proc.c:2538 src/proc.c:2575
-#: src/open.c:18668 src/open.c:18865 src/open.c:19808 src/open.c:20003
-#: src/open.c:22319 src/open.c:22472 src/open.c:23197 src/open.c:23350
+#. The user has given an offset of zero which gives divide by
+#. zero errors when the data is in a linear scale (e.g. not in dBs)
+#: src/proc.c:2349 src/proc.c:2387 src/proc.c:2536 src/proc.c:2573
+#: src/open.c:18788 src/open.c:18986 src/open.c:19934 src/open.c:20130
+#: src/open.c:22463 src/open.c:22617 src/open.c:23347 src/open.c:23501
 msgid "Offset must be nonzero for linear measurements."
 msgstr "Смещение должно быть отлично от нуля для линейных измерений."
 
-#: src/proc.c:2753
+#. The user is trying to perform a transformation without having
+#. opened a data file.
+#: src/proc.c:2747
 msgid "Open a file for analysis first."
 msgstr "Откройте файл для анализа в первую очередь."
 
-#: src/disp.c:40
+#. Title for a window that allows the user to change the way the
+#. plots are displayed
+#: src/disp.c:1064
 msgid "Display Properties"
 msgstr "Визуального свойство"
 
-#: src/disp.c:52 src/disp.c:691 src/disp.c:1363 src/disp.c:1632
+#. label for a button that allows the user to change the font/size/
+#. style of the labels for the axes.
+#: src/disp.c:1082 src/disp.c:1148 src/disp.c:1248
 msgid "Axis label font:"
 msgstr ""
 
-#: src/disp.c:55 src/disp.c:694 src/disp.c:1366 src/disp.c:1635
+#. label for a button that allows the user to change the font/size/
+#. style of the numbers along the axes.
+#: src/disp.c:1085 src/disp.c:1151 src/disp.c:1251
 #, fuzzy
 msgid "Tick label font:"
 msgstr "Размер галочкой этикетки:"
 
-#: src/disp.c:62
-msgid "Radial axis text:"
-msgstr "Текст радиальном оси:"
-
-#: src/disp.c:65
-msgid "Azimuthal axis text:"
-msgstr "Текст азимутальной оси:"
-
-#: src/disp.c:82 src/disp.c:721 src/disp.c:1393 src/disp.c:1662
-msgid "Font Selection for Axis Labels"
-msgstr ""
-
-#: src/disp.c:90 src/disp.c:729 src/disp.c:1401 src/disp.c:1670
-msgid "Font Selection for Tick Mark Labels"
-msgstr ""
-
-#: src/disp.c:114 src/disp.c:753 src/disp.c:1340 src/disp.c:1426
-#: src/disp.c:1687
-msgid "Multiple plots for Results over index j"
-msgstr "Несколько участков результаты за индексом J"
-
-#: src/disp.c:123 src/disp.c:762 src/disp.c:1344 src/disp.c:1430
-#: src/disp.c:1691
-msgid "Multiple plots for Results over index k"
-msgstr "Несколько участков результаты за индексом K"
-
-#: src/disp.c:701 src/disp.c:1373 src/disp.c:1642
+#. Label that will be displayed along the horizontal axis.
+#: src/disp.c:1088 src/disp.c:1154 src/disp.c:1281
 msgid "X axis text:"
 msgstr "Текст оси x:"
 
-#: src/disp.c:704 src/disp.c:1376 src/disp.c:1645
+#. Label that will be displayed along the vertical axis.
+#: src/disp.c:1091 src/disp.c:1157 src/disp.c:1284
 msgid "Y axis text:"
 msgstr "Текст оси y:"
 
-#: src/disp.c:1414 src/disp.c:1681
+#. Title for window that pops up when changing the font/size/style
+#. of the labels for the axes.
+#: src/disp.c:1110 src/disp.c:1176 src/disp.c:1304
+msgid "Font Selection for Axis Labels"
+msgstr ""
+
+#. Title for window that pops up when changing the font/size/style
+#. of the numbers along the axes.
+#: src/disp.c:1118 src/disp.c:1184 src/disp.c:1309
+msgid "Font Selection for Tick Mark Labels"
+msgstr ""
+
+#. Whether the graph for the inverse domain will have multiple plots
+#. displayed, each corresponding to a different value for the j index.
+#: src/disp.c:1199
 msgid "Multiple plots for Inverse Domain"
 msgstr "Несколько участков для обратной области"
 
-#: src/open.c:89
+#. The text that will appear as a label on one of the radii of the plot
+#. segment
+#: src/disp.c:1259
+msgid "Radial axis text:"
+msgstr "Текст радиальном оси:"
+
+#. The text that will appear as a label on the outer arc of the plot segment
+#. (normally will have the value of "Degrees", "Radians", etc.)
+#: src/disp.c:1262
+msgid "Azimuthal axis text:"
+msgstr "Текст азимутальной оси:"
+
+#. Whether the graph for the batch results will have multiple plots
+#. displayed, each corresponding to a different value for the j index.
+#: src/disp.c:1336
+msgid "Multiple plots for Results over index j"
+msgstr "Несколько участков результаты за индексом J"
+
+#. Whether the graph for the batch results will have multiple plots
+#. displayed, each corresponding to a different value for the k index.
+#: src/disp.c:1344
+msgid "Multiple plots for Results over index k"
+msgstr "Несколько участков результаты за индексом K"
+
+#. The user is trying to run a batch process without performing a single
+#. file test. Asks them to do this.
+#: src/open.c:92
 msgid "Perform an initial test of the parameters first."
 msgstr "Выполните первоначальное испытание параметров первого."
 
-#: src/open.c:95
+#. The user has changed the start/stop etc values since the last single file
+#. test. Asks them to repeat a single file test with the new values.
+#: src/open.c:98
 msgid ""
 "Parameters have changed since the last test. Retest with the current values "
 "first."
@@ -622,54 +827,73 @@ msgstr ""
 "Параметры были изменены с момента последнего испытания. Повторное "
 "тестирование с текущего значения в первую очередь."
 
-#: src/open.c:101
+#. Asks the user to select or create a file that will govern the batch
+#. process.
+#: src/open.c:104
 msgid "Select Config File"
 msgstr "Выберите файл конфигурации"
 
-#: src/open.c:109
+#. Title for a window that builds a list of files to batch process and their
+#. associated parameter values.
+#: src/open.c:115
 msgid "Configuration file generation"
 msgstr "Файл конфигурации поколения"
 
-#: src/open.c:117
+#. Title for the column containing a list of filenames.
+#: src/open.c:123
 msgid "File:"
 msgstr "Файл"
 
-#: src/open.c:120
+#. Title for the column containing the values of the particular parameter
+#. that will vary from file to file.
+#: src/open.c:126
 msgid ""
 "Measurand\n"
 "Value:"
 msgstr "Измеряемой значение"
 
-#: src/open.c:123
+#. Button to add another file and value to the list on the table.
+#: src/open.c:129
 msgid "Add another file"
 msgstr ""
 
-#: src/open.c:23957
+#. Title for window to select between cartesian and polar coordinates
+#. for plotting.
+#: src/open.c:24519
 msgid "Measurand Variable Type"
 msgstr "Параметр интерес"
 
-#: src/open.c:23957
+#. Button to select using cartesian axes.
+#: src/open.c:24519
 msgid "Linear"
 msgstr "Линейные"
 
-#: src/open.c:23957
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed.
+#: src/open.c:24519
 msgid ""
 "Polar\n"
 "(Degrees)"
 msgstr ""
 
-#: src/open.c:23957
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed.
+#: src/open.c:24519
 msgid ""
 "Polar\n"
 "(Radians)"
 msgstr ""
 
-#: src/open.c:23959
+#. Asks the user to select whether the scale will be on a cartesian or
+#. polar graph.
+#: src/open.c:24521
 #, fuzzy
 msgid "Select Measurand Type:"
 msgstr "Параметр интерес"
 
-#: src/open.c:24163
+#. %s refers to the filename. Please leave as "%s", but move within the
+#. sentence as needed
+#: src/open.c:24730
 #, c-format
 msgid "File: %s successfully loaded."
 msgstr "Файл: %s успешно загружены."

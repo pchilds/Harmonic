@@ -27,7 +27,9 @@
 GtkWidget *helpwin, *notebook3, *entry1, *entry2, *butt1, *butt2, *colour1;
 GtkWidget *entry3, *entry4, *butt3, *butt4, *ck1, *jind3, *colour2;
 GtkWidget *entry5, *entry6, *butt5, *butt6, *ck2, *ck3, *ck4, *jind4, *kind2, *colour3;
+GdkColormap *cmp;
 GdkColor clr1, clr2, clr3;
+gint jdim2, kdim2;
 
 void dpa(GtkWidget *widget, gpointer data)
 {
@@ -123,10 +125,8 @@ void dpa(GtkWidget *widget, gpointer data)
 			{
 				if (bt2)/* multi over both */
 				{
-					j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind4));
-					k=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind2));
-					j*=kdimxf;
-					j+=k;
+					j=jdim2*kdimxf;
+					j+=kdim2;
 					ptr=&g_array_index(car, gdouble, j);
 					iv=((gdouble) (clr.red))/65535;
 					*ptr=iv;
@@ -183,17 +183,16 @@ void dpa(GtkWidget *widget, gpointer data)
 				}
 				else /* multi over j */
 				{
-					j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind4));
-					ptr=&g_array_index(car, gdouble, j);
+					ptr=&g_array_index(car, gdouble, jdim2);
 					iv=((gdouble) (clr.red))/65535;
 					*ptr=iv;
-					ptr=&g_array_index(cag, gdouble, j);
+					ptr=&g_array_index(cag, gdouble, jdim2);
 					iv=((gdouble) (clr.green))/65535;
 					*ptr=iv;
-					ptr=&g_array_index(cab, gdouble, j);
+					ptr=&g_array_index(cab, gdouble, jdim2);
 					iv=((gdouble) (clr.blue))/65535;
 					*ptr=iv;
-					ptr=&g_array_index(caa, gdouble, j);
+					ptr=&g_array_index(caa, gdouble, jdim2);
 					alp=gtk_color_selection_get_current_alpha(GTK_COLOR_SELECTION(colour3));
 					iv=((gdouble) alp)/65535;
 					*ptr=iv;
@@ -205,7 +204,7 @@ void dpa(GtkWidget *widget, gpointer data)
 						g_array_append_val(bsz, dx);
 						g_array_free(bnx, TRUE);
 						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
-						dx2=dx*kdim;
+						dx2=dx*kdim2;
 						g_array_append_val(bnx, dx2);
 						xi=g_array_index(bxr, gdouble, 0);
 						mny=g_array_index(byr, gdouble, dx2);
@@ -240,17 +239,16 @@ void dpa(GtkWidget *widget, gpointer data)
 			}
 			else if (bt2)/* multi over k */
 			{
-				j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind2));
-				ptr=&g_array_index(car, gdouble, j);
+				ptr=&g_array_index(car, gdouble, kdim2);
 				iv=((gdouble) (clr.red))/65535;
 				*ptr=iv;
-				ptr=&g_array_index(cag, gdouble, j);
+				ptr=&g_array_index(cag, gdouble, kdim2);
 				iv=((gdouble) (clr.green))/65535;
 				*ptr=iv;
-				ptr=&g_array_index(cab, gdouble, j);
+				ptr=&g_array_index(cab, gdouble, kdim2);
 				iv=((gdouble) (clr.blue))/65535;
 				*ptr=iv;
-				ptr=&g_array_index(caa, gdouble, j);
+				ptr=&g_array_index(caa, gdouble, kdim2);
 				alp=gtk_color_selection_get_current_alpha(GTK_COLOR_SELECTION(colour3));
 				iv=((gdouble) alp)/65535;
 				*ptr=iv;
@@ -262,7 +260,7 @@ void dpa(GtkWidget *widget, gpointer data)
 					g_array_append_val(bsz, dx);
 					g_array_free(bnx, TRUE);
 					bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
-					dx2=dx*jdim*kdimxf;
+					dx2=dx*jdim2*kdimxf;
 					g_array_append_val(bnx, dx2);
 					xi=g_array_index(bxr, gdouble, 0);
 					mny=g_array_index(byr, gdouble, dx2);
@@ -314,7 +312,7 @@ void dpa(GtkWidget *widget, gpointer data)
 					bsz=g_array_new(FALSE, FALSE, sizeof(gint));
 					g_array_append_val(bsz, dx);
 					(plt2->sizes)=bsz;
-					j=dx*(kdim+(jdim*kdimxf));
+					j=dx*(kdim2+(jdim2*kdimxf));
 					g_array_free(bnx, TRUE);
 					bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 					g_array_append_val(bnx, j);
@@ -352,10 +350,10 @@ void dpa(GtkWidget *widget, gpointer data)
 				g_array_append_val(al3, iv);
 			}
 			{g_array_free(car, TRUE); g_array_free(cag, TRUE); g_array_free(cab, TRUE); g_array_free(caa, TRUE);}
-			(plt2->rd)=rd2;
-			(plt2->gr)=gr2;
-			(plt2->bl)=bl2;
-			(plt2->al)=al2;
+			(plt2->rd)=rd3;
+			(plt2->gr)=gr3;
+			(plt2->bl)=bl3;
+			(plt2->al)=al3;
 			if (pry) plot_polar_update_scale_pretty(plot3, xi, xf, mny, mxy);
 			else plot_polar_update_scale(plot3, xi, xf, mny, mxy, rcn, thc);
 		}
@@ -478,10 +476,8 @@ void dpa(GtkWidget *widget, gpointer data)
 						(plt->ind)=bnx;
 						{pry=1; flagd|=(DISP_MRK|DISP_MRJ);}
 					}
-					j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind4));
-					k=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind2));
-					j*=kdimxf;
-					j+=k;
+					j=jdim2*kdimxf;
+					j+=kdim2;
 					ptr=&g_array_index(car, gdouble, j);
 					iv=((gdouble) (clr.red))/65535;
 					*ptr=iv;
@@ -506,7 +502,7 @@ void dpa(GtkWidget *widget, gpointer data)
 						g_array_append_val(bsz, dx);
 						g_array_free(bnx, TRUE);
 						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
-						dx2=dx*kdim;
+						dx2=dx*kdim2;
 						g_array_append_val(bnx, dx2);
 						xi=g_array_index(bxr, gdouble, 0);
 						mny=g_array_index(byr, gdouble, dx2);
@@ -537,17 +533,16 @@ void dpa(GtkWidget *widget, gpointer data)
 						(plt->ind)=bnx;
 						{pry=1; flagd&=(DISP_CHP|DISP_DMS|DISP_MRJ|DISP_MIJ); flagd|=DISP_MRJ;}
 					}
-					j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind4));
-					ptr=&g_array_index(car, gdouble, j);
+					ptr=&g_array_index(car, gdouble, jdim2);
 					iv=((gdouble) (clr.red))/65535;
 					*ptr=iv;
-					ptr=&g_array_index(cag, gdouble, j);
+					ptr=&g_array_index(cag, gdouble, jdim2);
 					iv=((gdouble) (clr.green))/65535;
 					*ptr=iv;
-					ptr=&g_array_index(cab, gdouble, j);
+					ptr=&g_array_index(cab, gdouble, jdim2);
 					iv=((gdouble) (clr.blue))/65535;
 					*ptr=iv;
-					ptr=&g_array_index(caa, gdouble, j);
+					ptr=&g_array_index(caa, gdouble, jdim2);
 					alp=gtk_color_selection_get_current_alpha(GTK_COLOR_SELECTION(colour3));
 					iv=((gdouble) alp)/65535;
 					*ptr=iv;
@@ -563,7 +558,7 @@ void dpa(GtkWidget *widget, gpointer data)
 					g_array_append_val(bsz, dx);
 					g_array_free(bnx, TRUE);
 					bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
-					dx2=dx*jdim*kdimxf;
+					dx2=dx*jdim2*kdimxf;
 					g_array_append_val(bnx, dx2);
 					xi=g_array_index(bxr, gdouble, 0);
 					mny=g_array_index(byr, gdouble, dx2);
@@ -594,17 +589,16 @@ void dpa(GtkWidget *widget, gpointer data)
 					(plt->ind)=bnx;
 					{pry=1; flagd&=(DISP_CHP|DISP_DMS|DISP_MRK|DISP_MIJ); flagd|=DISP_MRK;}
 				}
-				j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind2));
-				ptr=&g_array_index(car, gdouble, j);
+				ptr=&g_array_index(car, gdouble, kdim2);
 				iv=((gdouble) (clr.red))/65535;
 				*ptr=iv;
-				ptr=&g_array_index(cag, gdouble, j);
+				ptr=&g_array_index(cag, gdouble, kdim2);
 				iv=((gdouble) (clr.green))/65535;
 				*ptr=iv;
-				ptr=&g_array_index(cab, gdouble, j);
+				ptr=&g_array_index(cab, gdouble, kdim2);
 				iv=((gdouble) (clr.blue))/65535;
 				*ptr=iv;
-				ptr=&g_array_index(caa, gdouble, j);
+				ptr=&g_array_index(caa, gdouble, kdim2);
 				alp=gtk_color_selection_get_current_alpha(GTK_COLOR_SELECTION(colour3));
 				iv=((gdouble) alp)/65535;
 				*ptr=iv;
@@ -618,7 +612,7 @@ void dpa(GtkWidget *widget, gpointer data)
 					bsz=g_array_new(FALSE, FALSE, sizeof(gint));
 					g_array_append_val(bsz, dx);
 					(plt->sizes)=bsz;
-					j=dx*(kdim+(jdim*kdimxf));
+					j=dx*(kdim2+(jdim2*kdimxf));
 					g_array_free(bnx, TRUE);
 					bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 					g_array_append_val(bnx, j);
@@ -667,10 +661,10 @@ void dpa(GtkWidget *widget, gpointer data)
 				g_array_append_val(al3, iv);
 			}
 			{g_array_free(car, TRUE); g_array_free(cag, TRUE); g_array_free(cab, TRUE); g_array_free(caa, TRUE);}
-			(plt->rd)=rd2;
-			(plt->gr)=gr2;
-			(plt->bl)=bl2;
-			(plt->al)=al2;
+			(plt->rd)=rd3;
+			(plt->gr)=gr3;
+			(plt->bl)=bl3;
+			(plt->al)=al3;
 			if (pry) plot_linear_update_scale_pretty(plot3, xi, xf, mny, mxy);
 			else plot_linear_update_scale(plot3, xi, xf, mny, mxy);
 		}
@@ -682,6 +676,8 @@ void dpa(GtkWidget *widget, gpointer data)
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2))) flagd|=DISP_MRJ;
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3))) flagd|=DISP_MRK;
 		}
+		if (jdim2!=jdim) gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), jdim2);
+		if (kdim2!=kdim) gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), kdim2);
 		break;
 		case 1:
 		plt=PLOT_LINEAR(plot2);
@@ -799,7 +795,7 @@ void dpa(GtkWidget *widget, gpointer data)
 					sz2=g_array_new(FALSE, FALSE, sizeof(gint));
 					g_array_append_val(sz2, dx);
 					(plt->sizes)=sz2;
-					j=dx*jdim;
+					j=dx*jdim2;
 					g_array_free(nx2, TRUE);
 					nx2=g_array_new(FALSE, FALSE, sizeof(gint));
 					g_array_append_val(nx2, j);
@@ -840,6 +836,7 @@ void dpa(GtkWidget *widget, gpointer data)
 		(plt->al)=al2;
 		if (pry) plot_linear_update_scale_pretty(plot2, xi, xf, mny, mxy);
 		else plot_linear_update_scale(plot2, xi, xf, mny, mxy);
+		if (jdim2!=jdim) gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), jdim2);
 		break;
 		default:
 		plt=PLOT_LINEAR(plot1);
@@ -893,69 +890,163 @@ void dpo(GtkWidget *widget, gpointer data)
 void upc2(GtkWidget *widget, gpointer data)
 {
 	guint alp2=65535;
+	gint dx, val;
 
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck1)))
 	{
+		val=(rd2->len);
+		dx=fmod(jdim2, val);
+		(clr2.red)=(guint16) (65535*g_array_index(rd2, gdouble, dx));
+		(clr2.green)=(guint16) (65535*g_array_index(gr2, gdouble, dx));
+		(clr2.blue)=(guint16) (65535*g_array_index(bl2, gdouble, dx));
 		gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour2), TRUE);
 		gtk_color_selection_set_current_alpha(GTK_COLOR_SELECTION(colour2), alp2);
 		gtk_widget_show(jind3);
 	}
 	else
 	{
+		(clr2.red)=(guint16) (65535*g_array_index(rd2, gdouble, 0));
+		(clr2.green)=(guint16) (65535*g_array_index(gr2, gdouble, 0));
+		(clr2.blue)=(guint16) (65535*g_array_index(bl2, gdouble, 0));
 		gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour2), FALSE);
 		gtk_widget_hide(jind3);
 	}
-	
+	gdk_colormap_alloc_color(cmp, &clr2, FALSE, TRUE);
+	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour2), &clr2);
 }
 
 void upc3(GtkWidget *widget, gpointer data)
 {
 	guint alp3=65535;
+	gint dx, val;
 
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2)))
 	{
+		val=(rd3->len);
 		if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3)))
 		{
+			dx=fmod(jdim2, val);
 			gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour3), TRUE);
 			gtk_color_selection_set_current_alpha(GTK_COLOR_SELECTION(colour3), alp3);
 		}
+		else dx=fmod((jdim2*kdimxf)+kdim2, val);
+		(clr3.red)=(guint16) (65535*g_array_index(rd3, gdouble, dx));
+		(clr3.green)=(guint16) (65535*g_array_index(gr3, gdouble, dx));
+		(clr3.blue)=(guint16) (65535*g_array_index(bl3, gdouble, dx));
 		gtk_widget_show(jind4);
 	}
 	else
 	{
 		if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3)))
 		{
+			(clr3.red)=(guint16) (65535*g_array_index(rd3, gdouble, 0));
+			(clr3.green)=(guint16) (65535*g_array_index(gr3, gdouble, 0));
+			(clr3.blue)=(guint16) (65535*g_array_index(bl3, gdouble, 0));
 			gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour3), FALSE);
 			gtk_color_selection_set_current_alpha(GTK_COLOR_SELECTION(colour3), alp3);
 		}
+		else
+		{
+			val=(rd3->len);
+			dx=fmod(kdim2, val);
+			(clr3.red)=(guint16) (65535*g_array_index(rd3, gdouble, dx));
+			(clr3.green)=(guint16) (65535*g_array_index(gr3, gdouble, dx));
+			(clr3.blue)=(guint16) (65535*g_array_index(bl3, gdouble, dx));
+		}
 		gtk_widget_hide(jind4);
 	}
-	
+	gdk_colormap_alloc_color(cmp, &clr3, FALSE, TRUE);
+	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour3), &clr3);
 }
 
 void upc4(GtkWidget *widget, gpointer data)
 {
 	guint alp3=65535;
+	gint dx, val;
 
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3)))
 	{
+		val=(rd3->len);
 		if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2)))
 		{
+			dx=fmod(kdim2, val);
 			gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour3), TRUE);
 			gtk_color_selection_set_current_alpha(GTK_COLOR_SELECTION(colour3), alp3);
 		}
+		else dx=fmod((jdim2*kdimxf)+kdim2, val);
+		(clr3.red)=(guint16) (65535*g_array_index(rd3, gdouble, dx));
+		(clr3.green)=(guint16) (65535*g_array_index(gr3, gdouble, dx));
+		(clr3.blue)=(guint16) (65535*g_array_index(bl3, gdouble, dx));
 		gtk_widget_show(kind2);
 	}
 	else
 	{
 		if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2)))
 		{
+			(clr3.red)=(guint16) (65535*g_array_index(rd3, gdouble, 0));
+			(clr3.green)=(guint16) (65535*g_array_index(gr3, gdouble, 0));
+			(clr3.blue)=(guint16) (65535*g_array_index(bl3, gdouble, 0));
 			gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour3), FALSE);
 			gtk_color_selection_set_current_alpha(GTK_COLOR_SELECTION(colour3), alp3);
 		}
+		else
+		{
+			val=(rd3->len);
+			dx=fmod(jdim2, val);
+			(clr3.red)=(guint16) (65535*g_array_index(rd3, gdouble, dx));
+			(clr3.green)=(guint16) (65535*g_array_index(gr3, gdouble, dx));
+			(clr3.blue)=(guint16) (65535*g_array_index(bl3, gdouble, dx));
+		}
 		gtk_widget_hide(kind2);
 	}
-	
+	gdk_colormap_alloc_color(cmp, &clr3, FALSE, TRUE);
+	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour3), &clr3);
+}
+
+void upj3(GtkWidget *widget, gpointer data)
+{
+	gint dx, val;
+
+	jdim2=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+	val=(rd2->len);
+	dx=fmod(jdim2, val);
+	(clr2.red)=(guint16) (65535*g_array_index(rd2, gdouble, dx));
+	(clr2.green)=(guint16) (65535*g_array_index(gr2, gdouble, dx));
+	(clr2.blue)=(guint16) (65535*g_array_index(bl2, gdouble, dx));
+	gdk_colormap_alloc_color(cmp, &clr2, FALSE, TRUE);
+	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour2), &clr2);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind4), jdim2);
+}
+
+void upj4(GtkWidget *widget, gpointer data)
+{
+	gint j, dx, val;
+
+	j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+	val=(rd2->len);
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3))) dx=fmod((jdim2*kdimxf)+kdim2, val);
+	else dx=fmod(jdim2, val);
+	(clr3.red)=(guint16) (65535*g_array_index(rd3, gdouble, dx));
+	(clr3.green)=(guint16) (65535*g_array_index(gr3, gdouble, dx));
+	(clr3.blue)=(guint16) (65535*g_array_index(bl3, gdouble, dx));
+	gdk_colormap_alloc_color(cmp, &clr3, FALSE, TRUE);
+	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour3), &clr3);
+	if (j!=jdim2) gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind3), j);
+}
+
+void upk2(GtkWidget *widget, gpointer data)
+{
+	gint dx, val;
+
+	kdim2=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+	val=(rd2->len);
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2))) dx=fmod((jdim2*kdimxf)+kdim2, val);
+	else dx=fmod(kdim2, val);
+	(clr3.red)=(guint16) (65535*g_array_index(rd3, gdouble, dx));
+	(clr3.green)=(guint16) (65535*g_array_index(gr3, gdouble, dx));
+	(clr3.blue)=(guint16) (65535*g_array_index(bl3, gdouble, dx));
+	gdk_colormap_alloc_color(cmp, &clr3, FALSE, TRUE);
+	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour3), &clr3);
 }
 
 void dpr(GtkWidget *widget, gpointer data)
@@ -966,9 +1057,10 @@ void dpr(GtkWidget *widget, gpointer data)
 	PlotPolar *plt4;
 	gchar *str;
 	gdouble iv;
-	gint val;
+	gint val, dx;
 	guint alp2=65535, alp3=65535;
 
+	{jdim2=jdim; kdim2=kdim;}
 	helpwin=gtk_dialog_new_with_buttons(_("Display Properties"), GTK_WINDOW(window), GTK_DIALOG_DESTROY_WITH_PARENT, NULL);
 	g_signal_connect_swapped(G_OBJECT(helpwin), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(helpwin));
 	butt=gtk_button_new_from_stock(GTK_STOCK_CLOSE);
@@ -1038,6 +1130,11 @@ void dpr(GtkWidget *widget, gpointer data)
 	spr=gtk_vseparator_new();
 	gtk_widget_show(spr);
 	gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
+	cmp=gdk_colormap_get_system();
+	(clr1.red)=(guint16) (65535*g_array_index(rd1, gdouble, 0));
+	(clr1.green)=(guint16) (65535*g_array_index(gr1, gdouble, 0));
+	(clr1.blue)=(guint16) (65535*g_array_index(bl1, gdouble, 0));
+	gdk_colormap_alloc_color(cmp, &clr1, FALSE, TRUE);
 	colour1=gtk_color_selection_new();
 	gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour1), FALSE);
 	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour1), &clr1);
@@ -1106,6 +1203,7 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_box_pack_start(GTK_BOX(hbox), ck1, FALSE, FALSE, 2);
 	adj=(GtkAdjustment*) gtk_adjustment_new(jdim, 0, jdimx-1, 1.0, 5.0, 0.0);
 	jind3=gtk_spin_button_new(adj, 0, 0);
+	g_signal_connect(G_OBJECT(jind3), "value-changed", G_CALLBACK(upj3), NULL);
 	gtk_box_pack_start(GTK_BOX(hbox), jind3, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 2);
 	hbox=gtk_hbox_new(FALSE, 2);
@@ -1115,16 +1213,28 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_widget_show(spr);
 	gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
 	colour2=gtk_color_selection_new();
-	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour2), &clr2);
-	gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(colour2), TRUE);
 	if ((flagd&DISP_MIJ)!=0)
 	{
+		val=(rd2->len);
+		dx=fmod(jdim, val);
+		(clr2.red)=(guint16) (65535*g_array_index(rd2, gdouble, dx));
+		(clr2.green)=(guint16) (65535*g_array_index(gr2, gdouble, dx));
+		(clr2.blue)=(guint16) (65535*g_array_index(bl2, gdouble, dx));
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck1), TRUE);
 		gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour2), TRUE);
 		gtk_color_selection_set_current_alpha(GTK_COLOR_SELECTION(colour2), alp2);
 		gtk_widget_show(jind3);
 	}
+	else
+	{
+		(clr2.red)=(guint16) (65535*g_array_index(rd2, gdouble, 0));
+		(clr2.green)=(guint16) (65535*g_array_index(gr2, gdouble, 0));
+		(clr2.blue)=(guint16) (65535*g_array_index(bl2, gdouble, 0));
+	}
 	g_signal_connect(G_OBJECT(ck1), "toggled", G_CALLBACK(upc2), NULL);
+	gdk_colormap_alloc_color(cmp, &clr2, FALSE, TRUE);
+	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour2), &clr2);
+	gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(colour2), TRUE);
 	gtk_widget_show(colour2);
 	gtk_box_pack_start(GTK_BOX(hbox), colour2, FALSE, FALSE, 2);
 	label=gtk_label_new(_("Inverse Spectrum"));
@@ -1229,6 +1339,7 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_table_attach(GTK_TABLE(table), ck2, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	adj=(GtkAdjustment*) gtk_adjustment_new(jdim, 0, jdimx-1, 1.0, 5.0, 0.0);
 	jind4=gtk_spin_button_new(adj, 0, 0);
+	g_signal_connect(G_OBJECT(jind4), "value-changed", G_CALLBACK(upj4), NULL);
 	gtk_table_attach(GTK_TABLE(table), jind4, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	ck3=gtk_check_button_new_with_label(_("Multiple plots for Results over index k"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), (flagd&DISP_MRK));
@@ -1236,6 +1347,7 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_table_attach(GTK_TABLE(table), ck3, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	adj=(GtkAdjustment*) gtk_adjustment_new(kdim, 0, kdimx-1, 1.0, 5.0, 0.0);
 	kind2=gtk_spin_button_new(adj, 0, 0);
+	g_signal_connect(G_OBJECT(kind2), "value-changed", G_CALLBACK(upk2), NULL);
 	gtk_table_attach(GTK_TABLE(table), kind2, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 	hbox=gtk_hbox_new(FALSE, 2);
@@ -1245,24 +1357,56 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_widget_show(spr);
 	gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
 	colour3=gtk_color_selection_new();
-	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour3), &clr3);
-	gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(colour3), TRUE);
 	if ((flagd&DISP_MRJ)!=0)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck2), TRUE);
 		gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour3), TRUE);
 		gtk_color_selection_set_current_alpha(GTK_COLOR_SELECTION(colour3), alp3);
 		gtk_widget_show(jind4);
+		if ((flagd&DISP_MRK)!=0)
+		{
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), TRUE);
+			gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour3), TRUE);
+			gtk_color_selection_set_current_alpha(GTK_COLOR_SELECTION(colour3), alp3);
+			gtk_widget_show(kind2);
+			val=(rd3->len);
+			dx=fmod((jdim*kdimxf)+kdim, val);
+			(clr3.red)=(guint16) (65535*g_array_index(rd3, gdouble, dx));
+			(clr3.green)=(guint16) (65535*g_array_index(gr3, gdouble, dx));
+			(clr3.blue)=(guint16) (65535*g_array_index(bl3, gdouble, dx));
+		}
+		else
+		{
+			val=(rd3->len);
+			dx=fmod(jdim, val);
+			(clr3.red)=(guint16) (65535*g_array_index(rd3, gdouble, dx));
+			(clr3.green)=(guint16) (65535*g_array_index(gr3, gdouble, dx));
+			(clr3.blue)=(guint16) (65535*g_array_index(bl3, gdouble, dx));
+		}
 	}
-	g_signal_connect(G_OBJECT(ck2), "toggled", G_CALLBACK(upc3), NULL);
-	if ((flagd&DISP_MRK)!=0)
+	else if ((flagd&DISP_MRK)!=0)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ck3), TRUE);
 		gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour3), TRUE);
 		gtk_color_selection_set_current_alpha(GTK_COLOR_SELECTION(colour3), alp3);
 		gtk_widget_show(kind2);
+		val=(rd3->len);
+		dx=fmod(kdim, val);
+		(clr3.red)=(guint16) (65535*g_array_index(rd3, gdouble, dx));
+		(clr3.green)=(guint16) (65535*g_array_index(gr3, gdouble, dx));
+		(clr3.blue)=(guint16) (65535*g_array_index(bl3, gdouble, dx));
 	}
+	else
+	{
+		(clr3.red)=(guint16) (65535*g_array_index(rd3, gdouble, 0));
+		(clr3.green)=(guint16) (65535*g_array_index(gr3, gdouble, 0));
+		(clr3.blue)=(guint16) (65535*g_array_index(bl3, gdouble, 0));
+	}
+	g_signal_connect(G_OBJECT(ck2), "toggled", G_CALLBACK(upc3), NULL);
 	g_signal_connect(G_OBJECT(ck3), "toggled", G_CALLBACK(upc4), NULL);
+	gdk_colormap_alloc_color(cmp, &clr3, FALSE, TRUE);
+	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour3), &clr3);
+	gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(colour3), TRUE);
 	gtk_widget_show(colour3);
 	gtk_box_pack_start(GTK_BOX(hbox), colour3, FALSE, FALSE, 2);
 	label=gtk_label_new(_("Analysis Results"));
