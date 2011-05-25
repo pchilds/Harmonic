@@ -11,10 +11,10 @@ msgstr ""
 "PO-Revision-Date: 2011-04-16 06:45+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Greek <>\n"
-"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Name of the program
@@ -38,30 +38,41 @@ msgstr ""
 msgid "_File"
 msgstr "_Αρχείο"
 
+#. Select this if the data files have no header and are just pure tab
+#. seperated values.
 #: src/main.c:152
 msgid "Raw Delimited Data"
 msgstr "Πρώτες οριοθετημένη δεδομένα "
 
+#. Menu option to select what format the data files are in.
 #: src/main.c:156
 msgid "Data Format:"
 msgstr "Μορφή δεδομένων"
 
+#. The trace within the file to use as data for the vertical axis (as the
+#. horizontal axis is the first column trace 1 will be column 2 etc.
 #: src/main.c:161
 msgid "Trace:"
 msgstr "Ίχνος:"
 
+#. Select this if the measurement was performed in transmission (as opposed
+#. to reflection)
 #: src/main.c:168
 msgid "Transmission Measurement?"
 msgstr "Μέτρηση της μετάδοσης;"
 
+#. Select this if the measurements are in dBs (or dBs with respect to some
+#. unit, e.g. dBm).
 #: src/main.c:172
 msgid "Data in dBs?"
 msgstr "Δεδομένα σε dBs;"
 
+#. Select this if you want to multiply the data by -1 before transforming.
 #: src/main.c:176
 msgid "Negate?"
 msgstr "Ανατρέπει;"
 
+#. Menu option to bring up a window to change the way the plots are displayed.
 #: src/main.c:183
 msgid "Display Properties:"
 msgstr "Ιδιότητες εμφάνισης:"
@@ -73,10 +84,15 @@ msgstr "Ιδιότητες εμφάνισης:"
 msgid "_Properties"
 msgstr "_Ιδιοτητες"
 
+#. No nonlinear compensation needed.
 #: src/main.c:194
 msgid "None"
 msgstr "Τίποτα"
 
+#. \n refers to a newline to help the text fit better. Feel free to
+#. delete or move as needed. Select to correct for spectral shadowing (of
+#. downstream devices by upstream devices due to their removal of the
+#. source spectrum) to first order terms.
 #: src/main.c:198
 msgid ""
 "1st order\n"
@@ -85,6 +101,9 @@ msgstr ""
 "Πρώτα αποζημίωση\n"
 "προκειμένου φασματική σκίαση"
 
+#. \n refers to a newline to help the text fit better. Feel free to
+#. delete or move as needed. Menu option to select how nonlinearity is
+#. handled in the system.
 #: src/main.c:202
 msgid ""
 "Nonlinear\n"
@@ -123,10 +142,15 @@ msgstr ""
 msgid "Basis Function:"
 msgstr ""
 
+#. option to convert the base domain by inverting with respect to
+#. two pi, e.g. wavelength=two*pi/wavenumber
 #: src/main.c:231
 msgid "Invert domain?"
 msgstr "Αναστρέψει την περιοχή;"
 
+#. \n refers to a newline to help the text fit better. Feel free
+#. to delete or move as needed. Menu option to provide a linear
+#. correction to the spectrum within each window.
 #: src/main.c:235
 msgid ""
 "Apply correction\n"
@@ -135,20 +159,28 @@ msgstr ""
 "Εφαρμόστε τις διορθώσεις\n"
 "στο παράθυρο άκρα;"
 
+#. Select this if you want the program to automatically adjust the triangle
+#. centre and width parameters.
 #: src/main.c:242
 msgid "Optimise Triangle fit?"
 msgstr ""
 "βελτιστοποίηση Ταιριάζουν\n"
 "των τριγώνων;"
 
+#. Select this if you want to determine the chirp (as well as visibility and
+#. domain shift).
 #: src/main.c:246
 msgid "Calculate Chirp?"
 msgstr "Υπολογίσει το chirp;"
 
+#. Select this in order to process several files and compare their results
+#. (Batch processing initiates at the next File->Open menu selection).
 #: src/main.c:253
 msgid "Batch Process Data?"
 msgstr "Μαζική επεξεργασία τα στοιχεία;"
 
+#. Select this to automatically change the offset value based on how much
+#. the rightmost edge of the spectrum is changing.
 #: src/main.c:257
 msgid "Autotrack Offset?"
 msgstr "Aυτοματοποίηση Όφσετ;"
@@ -159,6 +191,7 @@ msgstr "Aυτοματοποίηση Όφσετ;"
 msgid "_Advanced"
 msgstr "Προηγμένη"
 
+#. Menu option to bring up documentation.
 #: src/main.c:266
 msgid "Instructions"
 msgstr "Οδηγίες"
@@ -169,26 +202,39 @@ msgstr "Οδηγίες"
 msgid "_Help"
 msgstr "_Βοήθεια"
 
+#. Initial value of the base domain to select a windowed region of the data
+#. from.
 #: src/main.c:304
 msgid "Spectrum Start:"
 msgstr "Έναρξη του φάσματος"
 
+#. Final value of the base domain to select a windowed region of the data
+#. from.
 #: src/main.c:312
 msgid "Spectrum Stop:"
 msgstr "Τέλος του φάσματος"
 
+#. Reference level to take for the spectrum (typically its maximum value
+#. in the windowed ranges)
 #: src/main.c:320
 msgid "Offset:"
 msgstr "Όφσετ:"
 
+#. The windows are put into an array of length 2 to the power of this value.
+#. The extra data points needed to fill it out are zero valued, hence zero
+#. padding.
 #: src/main.c:327
 msgid "Zero Padding 2^:"
 msgstr "Μηδέν υλικό παραγεμίσματος 2^:"
 
+#. Index of values to take potentially multiple windows over the base domain.
 #: src/main.c:334 src/main.c:393
 msgid "j index:"
 msgstr "η δείκτη"
 
+#. \n refers to a newline to help the text fit on the button nicer. Feel
+#. free to delete or move as needed. Reset the values on this page so
+#. that there is only one j index / k index
 #: src/main.c:342 src/main.c:409
 msgid ""
 "Reset\n"
@@ -197,34 +243,45 @@ msgstr ""
 "Επαναφέρετε\n"
 "το συστοιχίες"
 
+#. Perform a harmonic transformation of the data (if the Fourier basis is
+#. selected, then this corresponds to the Fourier transform).
 #: src/main.c:346
 msgid "Transform Spectrum"
 msgstr "Μεταμορφώστε το φάσμα"
 
+#. Title for the notebook tab of teh plot of the base domain spectrum.
 #: src/main.c:349 src/main.c:443 src/disp.c:1144
 msgid "Spectrum"
 msgstr "Φάσμα"
 
+#. Initial value of the inverse domain to select a windowed region to process.
 #: src/main.c:353
 msgid "Inverse Spectrum Start:"
 msgstr "Έναρξη της αντίστροφης φάσματος"
 
+#. Final value of the inverse domain to select a windowed region to process.
 #: src/main.c:361
 msgid "Inverse Spectrum Stop:"
 msgstr "Τέλος της αντίστροφης φάσματος"
 
+#. Centre value of a triangle to fit to a window in the inverse domain.
 #: src/main.c:369
 msgid "Triangle Centre:"
 msgstr "Κέντρο του τριγώνου:"
 
+#. Full width of the base of this triangle.
 #: src/main.c:377
 msgid "Triangle Full Width:"
 msgstr "Πλάτος του τριγώνου:"
 
+#. Full width of the base of a triangle that fits the peak centred at an
+#. inverse frequency of zero.
 #: src/main.c:385
 msgid "DC Peak Width:"
 msgstr "Πλάτος της κορυφής μηδενική συχνότητα:"
 
+#. Index of values to take potentially multiple windows over the inverse
+#. domain.
 #: src/main.c:401
 msgid "k index:"
 msgstr "ζ δείκτη"
