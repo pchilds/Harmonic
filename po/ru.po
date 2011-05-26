@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
 "POT-Creation-Date: 2011-05-25 14:38+0300\n"
-"PO-Revision-Date: 2011-05-07 07:52+0300\n"
+"PO-Revision-Date: 2011-05-26 13:28+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Russian <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. Name of the program
 #: src/main.c:84
@@ -27,12 +27,12 @@ msgstr "Гармонического анализатора спектра"
 #. Menu option to load a previous state of the program.
 #: src/main.c:113
 msgid "Restore Session"
-msgstr ""
+msgstr "возвратить сеанс"
 
 #. Menu option to save the current state of the program.
 #: src/main.c:117
 msgid "Save Session"
-msgstr ""
+msgstr "Сохранить сеанс"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various file related menu options.
@@ -117,32 +117,32 @@ msgstr ""
 #. The fourier basis (e^-ixs) used for Fourier transformation.
 #: src/main.c:207
 msgid "Fourier"
-msgstr ""
+msgstr "Фурье"
 
 #. The Daubechies 4 wavelet basis (standard wavelet used for DWT).
 #: src/main.c:211
 msgid "Daubechies 4"
-msgstr ""
+msgstr "Добеши 4"
 
 #. The Daubechies 8 wavelet basis.
 #: src/main.c:215
 msgid "Daubechies 8"
-msgstr ""
+msgstr "Добеши 8"
 
 #. The Meyer wavelet basis.
 #: src/main.c:219
 msgid "Meyer"
-msgstr ""
+msgstr "Мейер"
 
 #. The Morlet wavelet basis.
 #: src/main.c:223
 msgid "Morlet"
-msgstr ""
+msgstr "Морле"
 
 #. Menu option for selecting (wavelet) basis function.
 #: src/main.c:227
 msgid "Basis Function:"
-msgstr ""
+msgstr "Основа функции"
 
 #. option to convert the base domain by inverting with respect to
 #. two pi, e.g. wavelength=two*pi/wavenumber
@@ -695,9 +695,8 @@ msgstr "Нет доступных обрабатываемых данных."
 #. Asks the user to select a file storing the information of a previous
 #. state of the program.
 #: src/data.c:2426 src/data.c:2456
-#, fuzzy
 msgid "Select Session File"
-msgstr "Выберите файл конфигурации"
+msgstr "Выберите файл сеанса"
 
 #. %s refers to the filename and the error. Please leave as "%s", but move
 #. within the sentence as needed (as long as the file is given first)
@@ -807,14 +806,13 @@ msgstr "Визуального свойство"
 #. style of the labels for the axes.
 #: src/disp.c:1082 src/disp.c:1148 src/disp.c:1248
 msgid "Axis label font:"
-msgstr ""
+msgstr "Шрифт для подписей оси:"
 
 #. label for a button that allows the user to change the font/size/
 #. style of the numbers along the axes.
 #: src/disp.c:1085 src/disp.c:1151 src/disp.c:1251
-#, fuzzy
 msgid "Tick label font:"
-msgstr "Размер галочкой этикетки:"
+msgstr "Шрифт для оси номера:"
 
 #. Label that will be displayed along the horizontal axis.
 #: src/disp.c:1088 src/disp.c:1154 src/disp.c:1281
@@ -830,13 +828,13 @@ msgstr "Текст оси y:"
 #. of the labels for the axes.
 #: src/disp.c:1110 src/disp.c:1176 src/disp.c:1304
 msgid "Font Selection for Axis Labels"
-msgstr ""
+msgstr "Выбор шрифта для подписей оси"
 
 #. Title for window that pops up when changing the font/size/style
 #. of the numbers along the axes.
 #: src/disp.c:1118 src/disp.c:1184 src/disp.c:1309
 msgid "Font Selection for Tick Mark Labels"
-msgstr ""
+msgstr "Выбор шрифта для оси номера"
 
 #. Whether the graph for the inverse domain will have multiple plots
 #. displayed, each corresponding to a different value for the j index.
@@ -912,13 +910,13 @@ msgstr "Измеряемой значение"
 #. Button to add another file and value to the list on the table.
 #: src/open.c:129
 msgid "Add another file"
-msgstr ""
+msgstr "Добавить еще один файл"
 
 #. Title for window to select between cartesian and polar coordinates
 #. for plotting.
 #: src/open.c:24519
 msgid "Measurand Variable Type"
-msgstr "Параметр интерес"
+msgstr "Измеряемой типа"
 
 #. Button to select using cartesian axes.
 #: src/open.c:24519
@@ -932,6 +930,8 @@ msgid ""
 "Polar\n"
 "(Degrees)"
 msgstr ""
+"Полярный\n"
+"(градусов)"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed.
@@ -940,13 +940,14 @@ msgid ""
 "Polar\n"
 "(Radians)"
 msgstr ""
+"Полярный\n"
+"(радианы)"
 
 #. Asks the user to select whether the scale will be on a cartesian or
 #. polar graph.
 #: src/open.c:24521
-#, fuzzy
 msgid "Select Measurand Type:"
-msgstr "Параметр интерес"
+msgstr "Выберите тип измеряемой:"
 
 #. %s refers to the filename. Please leave as "%s", but move within the
 #. sentence as needed

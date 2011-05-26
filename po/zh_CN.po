@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
 "POT-Creation-Date: 2011-05-25 14:38+0300\n"
-"PO-Revision-Date: 2011-04-19 01:30+0300\n"
+"PO-Revision-Date: 2011-05-26 13:16+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Chinese (simplified) <>\n"
 "MIME-Version: 1.0\n"
@@ -25,12 +25,12 @@ msgstr "谐波光谱分析仪"
 #. Menu option to load a previous state of the program.
 #: src/main.c:113
 msgid "Restore Session"
-msgstr ""
+msgstr "会议恢复"
 
 #. Menu option to save the current state of the program.
 #: src/main.c:117
 msgid "Save Session"
-msgstr ""
+msgstr "节省会议"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various file related menu options.
@@ -111,32 +111,32 @@ msgstr "非线性补偿"
 #. The fourier basis (e^-ixs) used for Fourier transformation.
 #: src/main.c:207
 msgid "Fourier"
-msgstr ""
+msgstr "傅立叶"
 
 #. The Daubechies 4 wavelet basis (standard wavelet used for DWT).
 #: src/main.c:211
 msgid "Daubechies 4"
-msgstr ""
+msgstr "Daubechies小四"
 
 #. The Daubechies 8 wavelet basis.
 #: src/main.c:215
 msgid "Daubechies 8"
-msgstr ""
+msgstr "Daubechies小八"
 
 #. The Meyer wavelet basis.
 #: src/main.c:219
 msgid "Meyer"
-msgstr ""
+msgstr "迈尔"
 
 #. The Morlet wavelet basis.
 #: src/main.c:223
 msgid "Morlet"
-msgstr ""
+msgstr "莫雷"
 
 #. Menu option for selecting (wavelet) basis function.
 #: src/main.c:227
 msgid "Basis Function:"
-msgstr ""
+msgstr "基函数"
 
 #. option to convert the base domain by inverting with respect to
 #. two pi, e.g. wavelength=two*pi/wavenumber
@@ -335,7 +335,7 @@ msgstr ""
 #. put your name here and be famous.
 #: src/util.c:54
 msgid "translator-credits"
-msgstr ""
+msgstr "柴尔兹保罗"
 
 #. "x" and "y" are the standard variables representing the horizontal and
 #. vertical axes. %f refers to their values for the current point on the
@@ -662,9 +662,8 @@ msgstr "没有可用的处理的数据。"
 #. Asks the user to select a file storing the information of a previous
 #. state of the program.
 #: src/data.c:2426 src/data.c:2456
-#, fuzzy
 msgid "Select Session File"
-msgstr "选择配置文件"
+msgstr "选择会话文件"
 
 #. %s refers to the filename and the error. Please leave as "%s", but move
 #. within the sentence as needed (as long as the file is given first)
@@ -773,14 +772,13 @@ msgstr "属性的显示"
 #. style of the labels for the axes.
 #: src/disp.c:1082 src/disp.c:1148 src/disp.c:1248
 msgid "Axis label font:"
-msgstr ""
+msgstr "轴标签的字体："
 
 #. label for a button that allows the user to change the font/size/
 #. style of the numbers along the axes.
 #: src/disp.c:1085 src/disp.c:1151 src/disp.c:1251
-#, fuzzy
 msgid "Tick label font:"
-msgstr "刻度标签大小："
+msgstr "字体轴数："
 
 #. Label that will be displayed along the horizontal axis.
 #: src/disp.c:1088 src/disp.c:1154 src/disp.c:1281
@@ -796,13 +794,13 @@ msgstr "Y轴文本："
 #. of the labels for the axes.
 #: src/disp.c:1110 src/disp.c:1176 src/disp.c:1304
 msgid "Font Selection for Axis Labels"
-msgstr ""
+msgstr "轴标签的字体选择"
 
 #. Title for window that pops up when changing the font/size/style
 #. of the numbers along the axes.
 #: src/disp.c:1118 src/disp.c:1184 src/disp.c:1309
 msgid "Font Selection for Tick Mark Labels"
-msgstr ""
+msgstr "字体选择轴数"
 
 #. Whether the graph for the inverse domain will have multiple plots
 #. displayed, each corresponding to a different value for the j index.
@@ -876,7 +874,7 @@ msgstr "被测值:"
 #. Button to add another file and value to the list on the table.
 #: src/open.c:129
 msgid "Add another file"
-msgstr ""
+msgstr "添加其他文件"
 
 #. Title for window to select between cartesian and polar coordinates
 #. for plotting.
@@ -895,7 +893,7 @@ msgstr "线性"
 msgid ""
 "Polar\n"
 "(Degrees)"
-msgstr ""
+msgstr "极性(度)"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed.
@@ -903,7 +901,7 @@ msgstr ""
 msgid ""
 "Polar\n"
 "(Radians)"
-msgstr ""
+msgstr "极性(弧度)"
 
 #. Asks the user to select whether the scale will be on a cartesian or
 #. polar graph.
