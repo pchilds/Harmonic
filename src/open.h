@@ -34,7 +34,6 @@
 	extern GSList *group2;
 	extern gint lc, mx;
 	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, flags, flagd, satl, trc;
-	extern gulong pr_id;
 	extern gdouble oe;
 	extern gchar *fold, *folr;
 	extern void trs(GtkWidget*, gpointer);

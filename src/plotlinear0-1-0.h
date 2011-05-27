@@ -38,16 +38,16 @@
 	typedef struct _PlotLinearClass PlotLinearClass;
 	typedef enum
 	{
-		PLOT_LINEAR_OUT = 1 << 0,
-		PLOT_LINEAR_HZT = 1 << 1,
-		PLOT_LINEAR_VRT = 1 << 2,
-		PLOT_LINEAR_SGL = 1 << 3
+		PLOT_LINEAR_ZOOM_OUT = 1 << 0,
+		PLOT_LINEAR_ZOOM_HZT = 1 << 1,
+		PLOT_LINEAR_ZOOM_VRT = 1 << 2,
+		PLOT_LINEAR_ZOOM_SGL = 1 << 3
 	} PlotLinearZoom;
 	typedef enum
 	{
-		PLOT_LIN = 1 << 0,
-		PLOT_PTS = 1 << 1
-	} PlotDisp;
+		PLOT_LINEAR_DISP_LIN = 1 << 0,
+		PLOT_LINEAR_DISP_PTS = 1 << 1
+	} PlotLinearDisp;
 	struct _PlotLinear
 	{
 		GtkDrawingArea parent;

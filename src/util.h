@@ -31,6 +31,7 @@
 	extern GArray *x, *yb, *xsb, *ysb, *nx2, *bxr, *byr, *bsz, *bnx, *delf, *stars, *specs;
 	extern GSList *group2;
 	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, satl, trc, flags, flagd;
+	extern gulong j1_id, j2_id, k_id, bsr_id, bsp_id, isr_id, isp_id, tc_id, tw_id, zw_id;
 	extern gint lc, mx;
 	void help(GtkWidget*, gpointer);
 	void about(GtkWidget*, gpointer);
@@ -38,7 +39,6 @@
 	void pltmv(PlotLinear*, gpointer);
 	void pltmvp(PlotPolar*, gpointer);
 	void upj(GtkWidget*, gpointer);
-	void upj2(GtkWidget*, gpointer);
 	void upk(GtkWidget*, gpointer);
 	void upa1(GtkWidget*, gpointer);
 	void upa2(GtkWidget*, gpointer);

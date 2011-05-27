@@ -24725,8 +24725,6 @@ void opd(GtkWidget *widget, gpointer data)
 				}
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
-				g_signal_connect(G_OBJECT(tr), "clicked", G_CALLBACK(trs), NULL);
-				if (g_signal_handler_is_connected(G_OBJECT(pr), pr_id)) g_signal_handler_disconnect(G_OBJECT(pr), pr_id);
 				str=g_strdup_printf(_("File: %s successfully loaded."), fin);
 				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 				g_free(str);

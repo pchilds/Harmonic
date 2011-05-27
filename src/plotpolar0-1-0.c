@@ -79,6 +79,19 @@
 #define I_MY_2_PI 0.1591549430918953357688837633725143620344596457405
 #define L10_2PT5 0.3979400086720376095725222105510139464636202370758
 #define L10_5 0.6989700043360188047862611052755069732318101185379
+typedef enum
+{
+	PLOT_POLAR_BORDERS_IN = 1 << 0,
+	PLOT_POLAR_BORDERS_OUT = 1 << 1,
+	PLOT_POLAR_BORDERS_CW = 1 << 2,
+	PLOT_POLAR_BORDERS_CCW = 1 << 3
+} PlotPolarBorders;
+typedef enum
+{
+	PLOT_POLAR_AXES_CW = 1 << 0,
+	PLOT_POLAR_AXES_DN = 1 << 1,
+	PLOT_POLAR_AXES_NL = 1 << 2
+} PlotPolarAxes;
 G_DEFINE_TYPE (PlotPolar, plot_polar, GTK_TYPE_DRAWING_AREA);
 enum {PROP_0, PROP_BRN, PROP_BRX, PROP_BTN, PROP_BTX, PROP_CR, PROP_CT, PROP_RT, PROP_ZIT, PROP_ZTM, PROP_ZC, PROP_RC, PROP_TC};
 enum {MOVED, LAST_SIGNAL};
@@ -105,7 +118,7 @@ static void drawz(GtkWidget *widget, cairo_t *cr)
 	cairo_line_to(cr, xw-2, 5.5);
 	cairo_move_to(cr, xw-5.5, 2);
 	cairo_line_to(cr, xw-5.5, 9);
-	if (((plot->zmode)&1)==0)
+	if (((plot->zmode)&PLOT_POLAR_ZOOM_OUT)==0)
 	{
 		cairo_move_to(cr, xw-6.5, 2.5);
 		cairo_line_to(cr, xw-5.5, 2);
@@ -128,7 +141,7 @@ static void drawz(GtkWidget *widget, cairo_t *cr)
 		cairo_line_to(cr, xw-3.5, 3.5);
 	}
 	cairo_stroke(cr);
-	if (((plot->zmode)&8)!=0)
+	if (((plot->zmode)&PLOT_POLAR_ZOOM_SGL)!=0)
 	{
 		cairo_move_to(cr, xw-20, 2);
 		cairo_line_to(cr, xw-13, 9);
@@ -141,7 +154,7 @@ static void drawz(GtkWidget *widget, cairo_t *cr)
 		cairo_save(cr);
 		dt=1;
 		cairo_set_dash(cr, &dt, 1, 0);
-		if (((plot->zmode)&4)!=0)
+		if (((plot->zmode)&PLOT_POLAR_ZOOM_AZM)!=0)
 		{
 			cairo_move_to(cr, xw-19.5, 3);
 			cairo_line_to(cr, xw-17.5, 9);
@@ -149,7 +162,7 @@ static void drawz(GtkWidget *widget, cairo_t *cr)
 			cairo_line_to(cr, xw-15.5, 9);
 			cairo_stroke(cr);
 		}
-		if (((plot->zmode)&2)!=0)
+		if (((plot->zmode)&PLOT_POLAR_ZOOM_RDL)!=0)
 		{
 			cairo_move_to(cr, xw-20, 3.5);
 			cairo_curve_to(cr, xw-16.5, 2, xw-16.5, 2, xw-13, 3.5);
@@ -165,7 +178,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 {
 	PlotPolarPrivate *priv;
 	PlotPolar *plot;
-	gint j, k, xw, yw, kx, j0, jl, xs, wd, hg, ft, lt;
+	gint j, k, xw, yw, kx, j0, jl, xt, wd, hg, ft, lt;
 	gdouble dtt, tt, dtr, thx, thn, dt, sx, csx, ssx, dr1, drs, drc, dz, rt, dwr, rl, ctx, ctn, stx, stn, r, th, rn, tn, x, y, vv, wv, xv, yv;
 	gchar lbl[10];
 	gchar *str1=NULL, *str2=NULL, *str3;
@@ -245,7 +258,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			else (priv->s)=((xw/2)-((priv->wr)*(1-cos(priv->centre.th))))/(priv->s); /* check x0 to xw radial to get maximum scale */
 			if ((thx+thn)>=0)
 			{ /* radial label ccw top to axis azimuthal label bottom to axis */
-				(priv->flaga)=2;
+				(priv->flaga)=PLOT_POLAR_AXES_DN;
 				sx=dr1-drs;
 				if (sx>DZE)
 				{ /* check y0 to 0 radial to get maximum scale */
@@ -285,7 +298,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			}
 			else
 			{ /* radial label cw bottom to axis azimuthal label top to axis */
-				(priv->flaga)=1;
+				(priv->flaga)=PLOT_POLAR_AXES_CW;
 				sx=dr1+drs;
 				if (sx>DZE)
 				{ /* check y0 to yw radial to get maximum scale */
@@ -328,7 +341,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		{
 			if ((thx+thn)>=G_PI)
 			{ /* radial label ccw top to axis azimuthal label bottom to axis */
-				(priv->flaga)=2;
+				(priv->flaga)=PLOT_POLAR_AXES_DN;
 				(priv->s)=drs-(dr1*stn); /* check y3'=yw to get maximum scale */
 				if (((priv->s)>DZE)||((priv->s)<NZE)) (priv->s)=((((priv->wr)+dtt)*stx)-((priv->wr)*sin(priv->centre.th))+(yw/2))/(priv->s);
 				else (priv->s)=G_MAXDOUBLE;
@@ -371,7 +384,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			}
 			else if ((thx+thn)>=0)
 			{ /* radial label cw top to axis azimuthal label bottom to axis */
-				(priv->flaga)=3;
+				(priv->flaga)=(PLOT_POLAR_AXES_DN|PLOT_POLAR_AXES_CW);
 				if (thn>=0)
 				{/* check y4'=yw to get maximum scale */
 					if ((drs>DZE)||(drs<NZE)) (priv->s)=(((priv->wr)*(stn-(sin(priv->centre.th))))-(dtt*ctn)+(yw/2))/drs;
@@ -487,7 +500,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			}
 			else
 			{ /* radial label cw bottom to axis azimuthal label top to axis */
-				(priv->flaga)=1;
+				(priv->flaga)=PLOT_POLAR_AXES_CW;
 				if ((drs>DZE)||(drs<NZE)) (priv->s)=(((priv->wr)*(stn-(sin(priv->centre.th))))-(dtt*ctn)-(yw/2))/drs; /* check y4'=0 to get maximum scale */
 				else (priv->s)=G_MAXDOUBLE;
 				sx=(dr1*ctn)-drc;
@@ -537,7 +550,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			{
 				if ((thx+thn)>=G_PI)
 				{ /* radial label cw bottom to axis azimuthal label top to axis */
-					(priv->flaga)=1;
+					(priv->flaga)=PLOT_POLAR_AXES_CW;
 					sx=dr1+drs;
 					if (sx>DZE)
 					{/* check radial y0 to yw */
@@ -655,7 +668,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				}
 				else if ((thx+thn)>=NMY_PI)
 				{ /* radial label cw top to axis azimuthal label bottom to axis */
-					(priv->flaga)=3;
+					(priv->flaga)=(PLOT_POLAR_AXES_DN|PLOT_POLAR_AXES_CW);
 					sx=dr1-drs;
 					if (sx>DZE)
 					{/* check radial y0 to 0 */
@@ -730,7 +743,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				}
 				else
 				{ /* radial label ccw top to axis azimuthal label bottom to axis */
-					(priv->flaga)=2;
+					(priv->flaga)=PLOT_POLAR_AXES_DN;
 					sx=dr1-drs;
 					if (sx>DZE)
 					{/* check radial y0 to 0 */
@@ -774,7 +787,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			}
 			else if ((thx+thn)>=0)
 			{ /* radial label cw bottom to axis azimuthal label top to axis */
-				(priv->flaga)=1;
+				(priv->flaga)=PLOT_POLAR_AXES_CW;
 				if (thx<=NMY_PI_2)
 				{
 					sx=drs-(dr1*stx);
@@ -837,7 +850,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			}
 			else
 			{ /* radial label ccw top to axis azimuthal label bottom to axis */
-				(priv->flaga)=2;
+				(priv->flaga)=PLOT_POLAR_AXES_DN;
 				if (thn>=G_PI_2)
 				{
 					sx=drs-(dr1*stn);
@@ -907,7 +920,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		else dz=dt/(kx*(priv->ticks.zin));
 		cairo_move_to(cr, (priv->x0)+((priv->wr)*ctn), (priv->y0)-((priv->wr)*stn));
 		cairo_line_to(cr, (priv->x0)+(((priv->wr)+((priv->s)*dr1))*ctn), (priv->y0)-(((priv->wr)+((priv->s)*dr1))*stn));
-		if (((plot->flagd)&1)==0)
+		if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0)
 		{
 			for (j=1; j<(priv->ticks.zin); j++)
 			{
@@ -1034,7 +1047,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		kx=1;
 		if ((priv->flaga)==0)
 		{
-			{mtr.xx=ctx; mtr.xy=stx; mtr.yx=-stx; mtr.yy=ctx;}
+			{mtr.xx=ctx; mtr.xy=stx; mtr.yx=-stx; mtr.yy=ctx; mtr.x0=0; mtr.y0=0;}
 			for (j=1; j<(priv->ticks.r); j++)
 			{
 				rt+=dwr;
@@ -1092,7 +1105,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			pango_layout_set_font_description(lyt, (plot->lfont));
 			g_object_unref(lyt);
 		}
-		else if ((priv->flaga)==2)
+		else if ((priv->flaga)==PLOT_POLAR_AXES_DN)
 		{
 			{mtr.xx=-ctx; mtr.xy=-stx; mtr.yx=stx; mtr.yy=-ctx;}
 			for (j=1; j<(priv->ticks.r); j++)
@@ -1152,7 +1165,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			pango_layout_set_font_description(lyt, (plot->lfont));
 			g_object_unref(lyt);
 		}
-		else if ((priv->flaga)==3)
+		else if ((priv->flaga)==(PLOT_POLAR_AXES_DN|PLOT_POLAR_AXES_CW))
 		{
 			{mtr.xx=ctn; mtr.xy=stn; mtr.yx=-stn; mtr.yy=ctn;}
 			for (j=1; j<(priv->ticks.r); j++)
@@ -1296,7 +1309,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			sx=((yw/2)-dtt)/sx;
 			if (sx<(priv->s)) (priv->s)=sx;
 		}
-		(priv->flaga)=4;
+		(priv->flaga)=PLOT_POLAR_AXES_NL;
 		(priv->x0)=(xw/2)-(drc*(priv->s));
 		(priv->y0)=(yw/2)+(drs*(priv->s));
 		sx=(priv->bounds.thmin);
@@ -1306,7 +1319,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		ssx=sin(sx);
 		cairo_move_to(cr, (priv->x0), (priv->y0));
 		cairo_line_to(cr, (priv->x0)+((JT+((priv->s)*dr1))*csx), (priv->y0)-((JT+((priv->s)*dr1))*ssx));
-		if (((plot->flagd)&1)==0)
+		if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0)
 		{
 			for (j=1; j<(priv->ticks.zin); j++)
 			{
@@ -1506,7 +1519,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 			sx=((yw/2)-dtt-((priv->wr)*(1+sin(priv->centre.th))))/sx;
 			if (sx<(priv->s)) (priv->s)=sx;
 		}
-		(priv->flaga)=4;
+		(priv->flaga)=PLOT_POLAR_AXES_NL;
 		(priv->x0)=(xw/2)-(drc*(priv->s))-((priv->wr)*cos(priv->centre.th));
 		(priv->y0)=(yw/2)+(drs*(priv->s))+((priv->wr)*sin(priv->centre.th));
 		sx=0;
@@ -1520,7 +1533,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 		cairo_stroke(cr);
 		cairo_restore(cr);
 		cairo_line_to(cr, (priv->x0)+(priv->wr)+((priv->s)*dr1), (priv->y0));
-		if (((plot->flagd)&1)==0)
+		if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0)
 		{
 			for (j=1; j<(priv->ticks.zin); j++)
 			{
@@ -1721,12 +1734,12 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	}
 	if (plot->rdata && plot->thdata) /* plot data */
 	{
-		if (((plot->flagd)&2)!=0)
+		if (((plot->flagd)&PLOT_POLAR_DISP_LIN)!=0)
 		{
 			cairo_set_line_width(cr, (plot->linew));
-			if (((plot->flagd)&4)!=0) /* lines and points */
+			if (((plot->flagd)&PLOT_POLAR_DISP_PTS)!=0) /* lines and points */
 			{
-				if (((plot->flagd)&8)==0) /* straight lines */
+				if (((plot->flagd)&PLOT_POLAR_DISP_PNT)==0) /* straight lines */
 				{
 					for (k=0; k<(plot->ind->len); k++)
 					{
@@ -1744,21 +1757,21 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 							th=ssx+g_array_index((plot->thdata), gdouble, ft);
 							if (r<(priv->bounds.rmin))
 							{
-								if (th<(priv->bounds.thmin)) xs=5;
-								else if (th>(priv->bounds.thmax)) xs=9;
-								else xs=1;
+								if (th<(priv->bounds.thmin)) xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CW);
+								else if (th>(priv->bounds.thmax)) xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CCW);
+								else xt=PLOT_POLAR_BORDERS_IN;
 							}
 							else if (r>(priv->bounds.rmax))
 							{
-								if (th<(priv->bounds.thmin)) xs=6;
-								else if (th>(priv->bounds.thmax)) xs=10;
-								else xs=2;
+								if (th<(priv->bounds.thmin)) xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CW);
+								else if (th>(priv->bounds.thmax)) xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CCW);
+								else xt=PLOT_POLAR_BORDERS_OUT;
 							}
-							else if (th<(priv->bounds.thmin)) xs=4;
-							else if (th>(priv->bounds.thmax)) xs=8;
+							else if (th<(priv->bounds.thmin)) xt=PLOT_POLAR_BORDERS_CW;
+							else if (th>(priv->bounds.thmax)) xt=PLOT_POLAR_BORDERS_CCW;
 							else
 							{
-								xs=0;
+								xt=0;
 								drs=(priv->wr)+((r-(priv->bounds.rmin))*(priv->s));
 								x=(priv->x0)+(drs*cos(th));
 								y=(priv->y0)-(drs*sin(th));
@@ -1774,7 +1787,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 								{
 									if (tn<(priv->bounds.thmin))
 									{
-										if (xs==0)
+										if (xt==0)
 										{
 											drs=r-rn;
 											if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmin)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmin));}
@@ -1794,7 +1807,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==2)
+										else if (xt==PLOT_POLAR_BORDERS_OUT)
 										{
 											drs=th-tn;
 											if (drs>DZE)
@@ -1827,11 +1840,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										xs=5;
+										xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CW);
 									}
 									else if (tn>(priv->bounds.thmax))
 									{
-										if (xs==0)
+										if (xt==0)
 										{
 											drs=r-rn;
 											if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmax)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmax));}
@@ -1851,7 +1864,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==2)
+										else if (xt==PLOT_POLAR_BORDERS_OUT)
 										{
 											drs=tn-th;
 											if (drs>DZE)
@@ -1884,11 +1897,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										xs=9;
+										xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CCW);
 									}
 									else
 									{
-										if (xs==0)
+										if (xt==0)
 										{
 											drs=r-rn;
 											drs=((tn-th)*(r-(priv->bounds.rmin)))/drs;
@@ -1898,7 +1911,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==2)
+										else if (xt==PLOT_POLAR_BORDERS_OUT)
 										{
 											csx=(th-tn)/(r-rn);
 											drs=csx*((priv->bounds.rmax)-r);
@@ -1914,7 +1927,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==4)
+										else if (xt==PLOT_POLAR_BORDERS_CW)
 										{
 											drs=((priv->bounds.thmin)-th)*(rn-r)/(tn-th);
 											drs+=r-(priv->bounds.rmin);
@@ -1932,7 +1945,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												cairo_stroke(cr);
 											}
 										}
-										else if (xs==6)
+										else if (xt==(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CW))
 										{
 											drs=tn-th;
 											if (drs>DZE)
@@ -1965,7 +1978,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										else if (xs==8)
+										else if (xt==PLOT_POLAR_BORDERS_CCW)
 										{
 											drs=((priv->bounds.thmax)-th)*(rn-r)/(tn-th);
 											drs+=r-(priv->bounds.rmin);
@@ -1983,7 +1996,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												cairo_stroke(cr);
 											}
 										}
-										else if (xs==10)
+										else if (xt==(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CCW))
 										{
 											drs=th-tn;
 											if (drs>DZE)
@@ -2016,14 +2029,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										xs=1;
+										xt=PLOT_POLAR_BORDERS_IN;
 									}
 								}
 								else if (rn>(priv->bounds.rmax))
 								{
 									if (tn<(priv->bounds.thmin))
 									{
-										if (xs==0)
+										if (xt==0)
 										{
 											drs=rn-r;
 											if ((drs<DZE)&&(drs>NZE))
@@ -2053,7 +2066,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==1)
+										else if (xt==PLOT_POLAR_BORDERS_IN)
 										{
 											drs=th-tn;
 											if (drs>DZE)
@@ -2086,11 +2099,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										xs=6;
+										xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CW);
 									}
 									else if (tn>(priv->bounds.thmax))
 									{
-										if (xs==0)
+										if (xt==0)
 										{
 											drs=rn-r;
 											if ((drs<DZE)&&(drs>NZE))
@@ -2120,7 +2133,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==1)
+										else if (xt==PLOT_POLAR_BORDERS_IN)
 										{
 											drs=tn-th;
 											if (drs>DZE)
@@ -2153,11 +2166,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										xs=10;
+										xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CCW);
 									}
 									else
 									{
-										if (xs==0)
+										if (xt==0)
 										{
 											drs=rn-r;
 											drs=((tn-th)*((priv->bounds.rmax)-r))/drs;
@@ -2168,7 +2181,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==1)
+										else if (xt==PLOT_POLAR_BORDERS_IN)
 										{
 											csx=(tn-th)/(rn-r);
 											drs=csx*((priv->bounds.rmax)-rn);
@@ -2184,7 +2197,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==4)
+										else if (xt==PLOT_POLAR_BORDERS_CW)
 										{
 											drs=((priv->bounds.thmin)-th)*(rn-r)/(tn-th);
 											drs+=r-(priv->bounds.rmin);
@@ -2203,7 +2216,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												cairo_stroke(cr);
 											}
 										}
-										else if (xs==5)
+										else if (xt==(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CW))
 										{
 											drs=tn-th;
 											if (drs>DZE)
@@ -2236,7 +2249,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										else if (xs==8)
+										else if (xt==PLOT_POLAR_BORDERS_CCW)
 										{
 											drs=((priv->bounds.thmax)-th)*(rn-r)/(tn-th);
 											drs+=r-(priv->bounds.rmin);
@@ -2255,7 +2268,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												cairo_stroke(cr);
 											}
 										}
-										else if (xs==9)
+										else if (xt==(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CCW))
 										{
 											drs=th-tn;
 											if (drs>DZE)
@@ -2288,12 +2301,12 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										xs=2;
+										xt=PLOT_POLAR_BORDERS_OUT;
 									}
 								}
 								else if (tn<(priv->bounds.thmin))
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=((rn-r)*(th-(priv->bounds.thmin)))/(th-tn);
 										drs=(priv->wr)+((drs+r-(priv->bounds.rmin))*(priv->s));
@@ -2302,7 +2315,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==1)
+									else if (xt==PLOT_POLAR_BORDERS_IN)
 									{
 										drs=((priv->bounds.rmin)-rn)*(tn-th)/(rn-r);
 										drs+=tn;
@@ -2319,7 +2332,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									else if (xs==2)
+									else if (xt==PLOT_POLAR_BORDERS_OUT)
 									{
 										drs=((priv->bounds.rmax)-rn)*(tn-th)/(rn-r);
 										drs+=tn;
@@ -2337,11 +2350,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									xs=4;
+									xt=PLOT_POLAR_BORDERS_CW;
 								}
 								else if (tn>(priv->bounds.thmax))
 								{
-									if (xs==0)
+									if (xt==0)
 										{
 										drs=((rn-r)*((priv->bounds.thmax)-th))/(tn-th);
 										drs=(priv->wr)+((drs+r-(priv->bounds.rmin))*(priv->s));
@@ -2350,7 +2363,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==1)
+									else if (xt==PLOT_POLAR_BORDERS_IN)
 									{
 										drs=((priv->bounds.rmin)-rn)*(tn-th)/(rn-r);
 										drs+=tn;
@@ -2367,7 +2380,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									else if (xs==2)
+									else if (xt==PLOT_POLAR_BORDERS_OUT)
 									{
 										drs=((priv->bounds.rmax)-rn)*(tn-th)/(rn-r);
 										drs+=tn;
@@ -2385,14 +2398,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									xs=8;
+									xt=PLOT_POLAR_BORDERS_CCW;
 								}
 								else /* within range */
 								{
-									if ((xs&1)!=0)
+									if ((xt&PLOT_POLAR_BORDERS_IN)!=0)
 									{
 										drs=rn-r;
-										if ((xs&4)!=0)
+										if ((xt&PLOT_POLAR_BORDERS_CW)!=0)
 										{
 											if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmin)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmin));}
 											else
@@ -2409,7 +2422,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										else if ((xs&8)!=0)
+										else if ((xt&PLOT_POLAR_BORDERS_CCW)!=0)
 										{
 											if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmax)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmax));}
 											else
@@ -2435,10 +2448,10 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										}
 										cairo_move_to(cr, x, y);
 									}
-									else if ((xs&2)!=0)
+									else if ((xt&PLOT_POLAR_BORDERS_OUT)!=0)
 									{
 										drs=r-rn;
-										if ((xs&4)!=0)
+										if ((xt&PLOT_POLAR_BORDERS_CW)!=0)
 										{
 											if ((drs<DZE)&&(drs>NZE))
 											{
@@ -2465,7 +2478,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										else if ((xs&8)!=0)
+										else if ((xt&PLOT_POLAR_BORDERS_CCW)!=0)
 										{
 											if ((drs<DZE)&&(drs>NZE))
 											{
@@ -2502,7 +2515,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										}
 										cairo_move_to(cr, x, y);
 									}
-									else if ((xs&4)!=0)
+									else if ((xt&PLOT_POLAR_BORDERS_CW)!=0)
 									{
 										drs=((r-rn)*(tn-(priv->bounds.thmin)))/(tn-th);
 										drs=(priv->wr)+((drs+rn-(priv->bounds.rmin))*(priv->s));
@@ -2510,7 +2523,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										y=(priv->y0)-(drs*sin(priv->bounds.thmin));
 										cairo_move_to(cr, x, y);
 									}
-									else if ((xs&8)!=0)
+									else if ((xt&PLOT_POLAR_BORDERS_CCW)!=0)
 									{
 										drs=((r-rn)*((priv->bounds.thmax)-tn))/(th-tn);
 										drs=(priv->wr)+((drs+rn-(priv->bounds.rmin))*(priv->s));
@@ -2526,7 +2539,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 									cairo_arc(cr, x, y, (plot->ptsize), 0, MY_2PI);
 									cairo_fill(cr);
 									cairo_move_to(cr, x, y);
-									xs=0;
+									xt=0;
 								}
 								r=rn;
 								th=tn;
@@ -2552,21 +2565,21 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 							th=ssx+g_array_index((plot->thdata), gdouble, ft);
 							if (r<(priv->bounds.rmin))
 							{
-								if (th<(priv->bounds.thmin)) xs=5;
-								else if (th>(priv->bounds.thmax)) xs=9;
-								else xs=1;
+								if (th<(priv->bounds.thmin)) xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CW);
+								else if (th>(priv->bounds.thmax)) xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CCW);
+								else xt=PLOT_POLAR_BORDERS_IN;
 							}
 							else if (r>(priv->bounds.rmax))
 							{
-								if (th<(priv->bounds.thmin)) xs=6;
-								else if (th>(priv->bounds.thmax)) xs=10;
-								else xs=2;
+								if (th<(priv->bounds.thmin)) xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CW);
+								else if (th>(priv->bounds.thmax)) xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CCW);
+								else xt=PLOT_POLAR_BORDERS_OUT;
 							}
-							else if (th<(priv->bounds.thmin)) xs=4;
-							else if (th>(priv->bounds.thmax)) xs=8;
+							else if (th<(priv->bounds.thmin)) xt=PLOT_POLAR_BORDERS_CW;
+							else if (th>(priv->bounds.thmax)) xt=PLOT_POLAR_BORDERS_CCW;
 							else
 							{
-								xs=0;
+								xt=0;
 								drs=(priv->wr)+((r-(priv->bounds.rmin))*(priv->s));
 								x=(priv->x0)+(drs*cos(th));
 								y=(priv->y0)-(drs*sin(th));
@@ -2582,7 +2595,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 								{
 									if (tn<(priv->bounds.thmin))
 									{
-										if (xs==0)
+										if (xt==0)
 										{
 											drs=r-rn;
 											if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmin)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmin));}
@@ -2602,7 +2615,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==2)
+										else if (xt==PLOT_POLAR_BORDERS_OUT)
 										{
 											drs=th-tn;
 											if (drs>DZE)
@@ -2635,11 +2648,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										xs=5;
+										xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CW);
 									}
 									else if (tn>(priv->bounds.thmax))
 									{
-										if (xs==0)
+										if (xt==0)
 										{
 											drs=r-rn;
 											if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmax)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmax));}
@@ -2659,7 +2672,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==2)
+										else if (xt==PLOT_POLAR_BORDERS_OUT)
 										{
 											drs=tn-th;
 											if (drs>DZE)
@@ -2692,11 +2705,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										xs=9;
+										xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CCW);
 									}
 									else
 									{
-										if (xs==0)
+										if (xt==0)
 										{
 											drs=r-rn;
 											drs=((tn-th)*(r-(priv->bounds.rmin)))/drs;
@@ -2706,7 +2719,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==2)
+										else if (xt==PLOT_POLAR_BORDERS_OUT)
 										{
 											csx=(th-tn)/(r-rn);
 											drs=csx*((priv->bounds.rmax)-r);
@@ -2722,7 +2735,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==4)
+										else if (xt==PLOT_POLAR_BORDERS_CW)
 										{
 											drs=((priv->bounds.thmin)-th)*(rn-r)/(tn-th);
 											drs+=r-(priv->bounds.rmin);
@@ -2740,7 +2753,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												cairo_stroke(cr);
 											}
 										}
-										else if (xs==6)
+										else if (xt==(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CW))
 										{
 											drs=tn-th;
 											if (drs>DZE)
@@ -2773,7 +2786,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										else if (xs==8)
+										else if (xt==PLOT_POLAR_BORDERS_CCW)
 										{
 											drs=((priv->bounds.thmax)-th)*(rn-r)/(tn-th);
 											drs+=r-(priv->bounds.rmin);
@@ -2791,7 +2804,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												cairo_stroke(cr);
 											}
 										}
-										else if (xs==10)
+										else if (xt==(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CCW))
 										{
 											drs=th-tn;
 											if (drs>DZE)
@@ -2824,14 +2837,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										xs=1;
+										xt=PLOT_POLAR_BORDERS_IN;
 									}
 								}
 								else if (rn>(priv->bounds.rmax))
 								{
 									if (tn<(priv->bounds.thmin))
 									{
-										if (xs==0)
+										if (xt==0)
 										{
 											drs=rn-r;
 											if ((drs<DZE)&&(drs>NZE))
@@ -2861,7 +2874,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==1)
+										else if (xt==PLOT_POLAR_BORDERS_IN)
 										{
 											drs=th-tn;
 											if (drs>DZE)
@@ -2894,11 +2907,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										xs=6;
+										xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CW);
 									}
 									else if (tn>(priv->bounds.thmax))
 									{
-										if (xs==0)
+										if (xt==0)
 										{
 											drs=rn-r;
 											if ((drs<DZE)&&(drs>NZE))
@@ -2928,7 +2941,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==1)
+										else if (xt==PLOT_POLAR_BORDERS_IN)
 										{
 											drs=tn-th;
 											if (drs>DZE)
@@ -2961,11 +2974,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										xs=10;
+										xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CCW);
 									}
 									else
 									{
-										if (xs==0)
+										if (xt==0)
 										{
 											drs=rn-r;
 											drs=((tn-th)*((priv->bounds.rmax)-r))/drs;
@@ -2976,7 +2989,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==1)
+										else if (xt==PLOT_POLAR_BORDERS_IN)
 										{
 											csx=(tn-th)/(rn-r);
 											drs=csx*((priv->bounds.rmax)-rn);
@@ -2992,7 +3005,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_line_to(cr, x, y);
 											cairo_stroke(cr);
 										}
-										else if (xs==4)
+										else if (xt==PLOT_POLAR_BORDERS_CW)
 										{
 											drs=((priv->bounds.thmin)-th)*(rn-r)/(tn-th);
 											drs+=r-(priv->bounds.rmin);
@@ -3011,7 +3024,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												cairo_stroke(cr);
 											}
 										}
-										else if (xs==5)
+										else if (xt==(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CW))
 										{
 											drs=tn-th;
 											if (drs>DZE)
@@ -3044,7 +3057,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										else if (xs==8)
+										else if (xt==PLOT_POLAR_BORDERS_CCW)
 										{
 											drs=((priv->bounds.thmax)-th)*(rn-r)/(tn-th);
 											drs+=r-(priv->bounds.rmin);
@@ -3063,7 +3076,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												cairo_stroke(cr);
 											}
 										}
-										else if (xs==9)
+										else if (xt==(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CCW))
 										{
 											drs=th-tn;
 											if (drs>DZE)
@@ -3096,12 +3109,12 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										xs=2;
+										xt=PLOT_POLAR_BORDERS_OUT;
 									}
 								}
 								else if (tn<(priv->bounds.thmin))
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=((rn-r)*(th-(priv->bounds.thmin)))/(th-tn);
 										drs=(priv->wr)+((drs+r-(priv->bounds.rmin))*(priv->s));
@@ -3110,7 +3123,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==1)
+									else if (xt==PLOT_POLAR_BORDERS_IN)
 									{
 										drs=((priv->bounds.rmin)-rn)*(tn-th)/(rn-r);
 										drs+=tn;
@@ -3127,7 +3140,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									else if (xs==2)
+									else if (xt==PLOT_POLAR_BORDERS_OUT)
 									{
 										drs=((priv->bounds.rmax)-rn)*(tn-th)/(rn-r);
 										drs+=tn;
@@ -3145,11 +3158,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									xs=4;
+									xt=PLOT_POLAR_BORDERS_CW;
 								}
 								else if (tn>(priv->bounds.thmax))
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=((rn-r)*((priv->bounds.thmax)-th))/(tn-th);
 										drs=(priv->wr)+((drs+r-(priv->bounds.rmin))*(priv->s));
@@ -3158,7 +3171,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==1)
+									else if (xt==PLOT_POLAR_BORDERS_IN)
 									{
 										drs=((priv->bounds.rmin)-rn)*(tn-th)/(rn-r);
 										drs+=tn;
@@ -3175,7 +3188,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									else if (xs==2)
+									else if (xt==PLOT_POLAR_BORDERS_OUT)
 									{
 										drs=((priv->bounds.rmax)-rn)*(tn-th)/(rn-r);
 										drs+=tn;
@@ -3193,14 +3206,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									xs=8;
+									xt=PLOT_POLAR_BORDERS_CCW;
 								}
 								else /* within range */
 								{
-									if ((xs&1)!=0)
+									if ((xt&PLOT_POLAR_BORDERS_IN)!=0)
 									{
 										drs=rn-r;
-										if ((xs&4)!=0)
+										if ((xt&PLOT_POLAR_BORDERS_CW)!=0)
 										{
 											if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmin)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmin));}
 											else
@@ -3217,7 +3230,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										else if ((xs&8)!=0)
+										else if ((xt&PLOT_POLAR_BORDERS_CCW)!=0)
 										{
 											if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmax)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmax));}
 											else
@@ -3243,10 +3256,10 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										}
 										cairo_move_to(cr, x, y);
 									}
-									else if ((xs&2)!=0)
+									else if ((xt&PLOT_POLAR_BORDERS_OUT)!=0)
 									{
 										drs=r-rn;
-										if ((xs&4)!=0)
+										if ((xt&PLOT_POLAR_BORDERS_CW)!=0)
 										{
 											if ((drs<DZE)&&(drs>NZE))
 											{
@@ -3273,7 +3286,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 												}
 											}
 										}
-										else if ((xs&8)!=0)
+										else if ((xt&PLOT_POLAR_BORDERS_CCW)!=0)
 										{
 											if ((drs<DZE)&&(drs>NZE))
 											{
@@ -3310,7 +3323,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										}
 										cairo_move_to(cr, x, y);
 									}
-									else if ((xs&4)!=0)
+									else if ((xt&PLOT_POLAR_BORDERS_CW)!=0)
 									{
 										drs=((r-rn)*(tn-(priv->bounds.thmin)))/(tn-th);
 										drs=(priv->wr)+((drs+rn-(priv->bounds.rmin))*(priv->s));
@@ -3318,7 +3331,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										y=(priv->y0)-(drs*sin(priv->bounds.thmin));
 										cairo_move_to(cr, x, y);
 									}
-									else if ((xs&8)!=0)
+									else if ((xt&PLOT_POLAR_BORDERS_CCW)!=0)
 									{
 										drs=((r-rn)*((priv->bounds.thmax)-tn))/(th-tn);
 										drs=(priv->wr)+((drs+rn-(priv->bounds.rmin))*(priv->s));
@@ -3334,7 +3347,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 									cairo_arc(cr, x, y, (plot->ptsize), 0, MY_2PI);
 									cairo_fill(cr);
 									cairo_move_to(cr, x, y);
-									xs=0;
+									xt=0;
 								}
 								r=rn;
 								th=tn;
@@ -3343,7 +3356,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 					}
 				}	
 			}
-			else if (((plot->flagd)&8)==0) /* straight lines only */
+			else if (((plot->flagd)&PLOT_POLAR_DISP_PNT)==0) /* straight lines only */
 			{
 				for (k=0; k<(plot->ind->len); k++)
 				{
@@ -3361,21 +3374,21 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 						th=ssx+g_array_index((plot->thdata), gdouble, ft);
 						if (r<(priv->bounds.rmin))
 						{
-							if (th<(priv->bounds.thmin)) xs=5;
-							else if (th>(priv->bounds.thmax)) xs=9;
-							else xs=1;
+							if (th<(priv->bounds.thmin)) xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CW);
+							else if (th>(priv->bounds.thmax)) xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CCW);
+							else xt=PLOT_POLAR_BORDERS_IN;
 						}
 						else if (r>(priv->bounds.rmax))
 						{
-							if (th<(priv->bounds.thmin)) xs=6;
-							else if (th>(priv->bounds.thmax)) xs=10;
-							else xs=2;
+							if (th<(priv->bounds.thmin)) xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CW);
+							else if (th>(priv->bounds.thmax)) xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CCW);
+							else xt=PLOT_POLAR_BORDERS_OUT;
 						}
-						else if (th<(priv->bounds.thmin)) xs=4;
-						else if (th>(priv->bounds.thmax)) xs=8;
+						else if (th<(priv->bounds.thmin)) xt=PLOT_POLAR_BORDERS_CW;
+						else if (th>(priv->bounds.thmax)) xt=PLOT_POLAR_BORDERS_CCW;
 						else
 						{
-							xs=0;
+							xt=0;
 							drs=(priv->wr)+((r-(priv->bounds.rmin))*(priv->s));
 							x=(priv->x0)+(drs*cos(th));
 							y=(priv->y0)-(drs*sin(th));
@@ -3389,7 +3402,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 							{
 								if (tn<(priv->bounds.thmin))
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=r-rn;
 										if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmin)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmin));}
@@ -3409,7 +3422,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==2)
+									else if (xt==PLOT_POLAR_BORDERS_OUT)
 									{
 										drs=th-tn;
 										if (drs>DZE)
@@ -3442,11 +3455,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									xs=5;
+									xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CW);
 								}
 								else if (tn>(priv->bounds.thmax))
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=r-rn;
 										if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmax)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmax));}
@@ -3466,7 +3479,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==2)
+									else if (xt==PLOT_POLAR_BORDERS_OUT)
 									{
 										drs=tn-th;
 										if (drs>DZE)
@@ -3499,11 +3512,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									xs=9;
+									xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CCW);
 								}
 								else
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=r-rn;
 										drs=((tn-th)*(r-(priv->bounds.rmin)))/drs;
@@ -3513,7 +3526,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==2)
+									else if (xt==PLOT_POLAR_BORDERS_OUT)
 									{
 										csx=(th-tn)/(r-rn);
 										drs=csx*((priv->bounds.rmax)-r);
@@ -3529,7 +3542,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==4)
+									else if (xt==PLOT_POLAR_BORDERS_CW)
 									{
 										drs=((priv->bounds.thmin)-th)*(rn-r)/(tn-th);
 										drs+=r-(priv->bounds.rmin);
@@ -3547,7 +3560,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									else if (xs==6)
+									else if (xt==(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CW))
 									{
 										drs=tn-th;
 										if (drs>DZE)
@@ -3580,7 +3593,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									else if (xs==8)
+									else if (xt==PLOT_POLAR_BORDERS_CCW)
 									{
 										drs=((priv->bounds.thmax)-th)*(rn-r)/(tn-th);
 										drs+=r-(priv->bounds.rmin);
@@ -3598,7 +3611,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									else if (xs==10)
+									else if (xt==(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CCW))
 									{
 										drs=th-tn;
 										if (drs>DZE)
@@ -3631,14 +3644,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									xs=1;
+									xt=PLOT_POLAR_BORDERS_IN;
 								}
 							}
 							else if (rn>(priv->bounds.rmax))
 							{
 								if (tn<(priv->bounds.thmin))
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=rn-r;
 										if ((drs<DZE)&&(drs>NZE))
@@ -3668,7 +3681,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==1)
+									else if (xt==PLOT_POLAR_BORDERS_IN)
 									{
 										drs=th-tn;
 										if (drs>DZE)
@@ -3701,11 +3714,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									xs=6;
+									xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CW);
 								}
 								else if (tn>(priv->bounds.thmax))
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=rn-r;
 										if ((drs<DZE)&&(drs>NZE))
@@ -3735,7 +3748,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==1)
+									else if (xt==PLOT_POLAR_BORDERS_IN)
 									{
 										drs=tn-th;
 										if (drs>DZE)
@@ -3768,11 +3781,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									xs=10;
+									xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CCW);
 								}
 								else
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=rn-r;
 										drs=((tn-th)*((priv->bounds.rmax)-r))/drs;
@@ -3783,7 +3796,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==1)
+									else if (xt==PLOT_POLAR_BORDERS_IN)
 									{
 										csx=(tn-th)/(rn-r);
 										drs=csx*((priv->bounds.rmax)-rn);
@@ -3799,7 +3812,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==4)
+									else if (xt==PLOT_POLAR_BORDERS_CW)
 									{
 										drs=((priv->bounds.thmin)-th)*(rn-r)/(tn-th);
 										drs+=r-(priv->bounds.rmin);
@@ -3818,7 +3831,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									else if (xs==5)
+									else if (xt==(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CW))
 									{
 										drs=tn-th;
 										if (drs>DZE)
@@ -3851,7 +3864,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									else if (xs==8)
+									else if (xt==PLOT_POLAR_BORDERS_CCW)
 									{
 										drs=((priv->bounds.thmax)-th)*(rn-r)/(tn-th);
 										drs+=r-(priv->bounds.rmin);
@@ -3870,7 +3883,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									else if (xs==9)
+									else if (xt==(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CCW))
 									{
 										drs=th-tn;
 										if (drs>DZE)
@@ -3903,12 +3916,12 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									xs=2;
+									xt=PLOT_POLAR_BORDERS_OUT;
 								}
 							}
 							else if (tn<(priv->bounds.thmin))
 							{
-								if (xs==0)
+								if (xt==0)
 								{
 									drs=((rn-r)*(th-(priv->bounds.thmin)))/(th-tn);
 									drs=(priv->wr)+((drs+r-(priv->bounds.rmin))*(priv->s));
@@ -3917,7 +3930,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 									cairo_line_to(cr, x, y);
 									cairo_stroke(cr);
 								}
-								else if (xs==1)
+								else if (xt==PLOT_POLAR_BORDERS_IN)
 								{
 									drs=((priv->bounds.rmin)-rn)*(tn-th)/(rn-r);
 									drs+=tn;
@@ -3934,7 +3947,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_stroke(cr);
 									}
 								}
-								else if (xs==2)
+								else if (xt==PLOT_POLAR_BORDERS_OUT)
 								{
 									drs=((priv->bounds.rmax)-rn)*(tn-th)/(rn-r);
 									drs+=tn;
@@ -3952,11 +3965,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_stroke(cr);
 									}
 								}
-								xs=4;
+								xt=PLOT_POLAR_BORDERS_CW;
 							}
 							else if (tn>(priv->bounds.thmax))
 							{
-								if (xs==0)
+								if (xt==0)
 								{
 									drs=((rn-r)*((priv->bounds.thmax)-th))/(tn-th);
 									drs=(priv->wr)+((drs+r-(priv->bounds.rmin))*(priv->s));
@@ -3965,7 +3978,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 									cairo_line_to(cr, x, y);
 									cairo_stroke(cr);
 								}
-								else if (xs==1)
+								else if (xt==PLOT_POLAR_BORDERS_IN)
 								{
 									drs=((priv->bounds.rmin)-rn)*(tn-th)/(rn-r);
 									drs+=tn;
@@ -3982,7 +3995,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_stroke(cr);
 									}
 								}
-								else if (xs==2)
+								else if (xt==PLOT_POLAR_BORDERS_OUT)
 								{
 									drs=((priv->bounds.rmax)-rn)*(tn-th)/(rn-r);
 									drs+=tn;
@@ -4000,14 +4013,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_stroke(cr);
 									}
 								}
-								xs=8;
+								xt=PLOT_POLAR_BORDERS_CCW;
 							}
 							else /* within range */
 							{
-								if ((xs&1)!=0)
+								if ((xt&PLOT_POLAR_BORDERS_IN)!=0)
 								{
 									drs=rn-r;
-									if ((xs&4)!=0)
+									if ((xt&PLOT_POLAR_BORDERS_CW)!=0)
 									{
 										if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmin)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmin));}
 										else
@@ -4024,7 +4037,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									else if ((xs&8)!=0)
+									else if ((xt&PLOT_POLAR_BORDERS_CCW)!=0)
 									{
 										if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmax)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmax));}
 										else
@@ -4050,10 +4063,10 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 									}
 									cairo_move_to(cr, x, y);
 								}
-								else if ((xs&2)!=0)
+								else if ((xt&PLOT_POLAR_BORDERS_OUT)!=0)
 								{
 									drs=r-rn;
-									if ((xs&4)!=0)
+									if ((xt&PLOT_POLAR_BORDERS_CW)!=0)
 									{
 										if ((drs<DZE)&&(drs>NZE))
 										{
@@ -4080,7 +4093,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									else if ((xs&8)!=0)
+									else if ((xt&PLOT_POLAR_BORDERS_CCW)!=0)
 									{
 										if ((drs<DZE)&&(drs>NZE))
 										{
@@ -4117,7 +4130,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 									}
 									cairo_move_to(cr, x, y);
 								}
-								else if ((xs&4)!=0)
+								else if ((xt&PLOT_POLAR_BORDERS_CW)!=0)
 								{
 									drs=((r-rn)*(tn-(priv->bounds.thmin)))/(tn-th);
 									drs=(priv->wr)+((drs+rn-(priv->bounds.rmin))*(priv->s));
@@ -4125,7 +4138,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 									y=(priv->y0)-(drs*sin(priv->bounds.thmin));
 									cairo_move_to(cr, x, y);
 								}
-								else if ((xs&8)!=0)
+								else if ((xt&PLOT_POLAR_BORDERS_CCW)!=0)
 								{
 									drs=((r-rn)*((priv->bounds.thmax)-tn))/(th-tn);
 									drs=(priv->wr)+((drs+rn-(priv->bounds.rmin))*(priv->s));
@@ -4137,7 +4150,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 								x=(priv->x0)+(drs*cos(tn));
 								y=(priv->y0)-(drs*sin(tn));
 								cairo_line_to(cr, x, y);
-								xs=0;
+								xt=0;
 							}
 							r=rn;
 							th=tn;
@@ -4164,21 +4177,21 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 						th=ssx+g_array_index((plot->thdata), gdouble, ft);
 						if (r<(priv->bounds.rmin))
 						{
-							if (th<(priv->bounds.thmin)) xs=5;
-							else if (th>(priv->bounds.thmax)) xs=9;
-							else xs=1;
+							if (th<(priv->bounds.thmin)) xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CW);
+							else if (th>(priv->bounds.thmax)) xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CCW);
+							else xt=PLOT_POLAR_BORDERS_IN;
 						}
 						else if (r>(priv->bounds.rmax))
 						{
-							if (th<(priv->bounds.thmin)) xs=6;
-							else if (th>(priv->bounds.thmax)) xs=10;
-							else xs=2;
+							if (th<(priv->bounds.thmin)) xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CW);
+							else if (th>(priv->bounds.thmax)) xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CCW);
+							else xt=PLOT_POLAR_BORDERS_OUT;
 						}
-						else if (th<(priv->bounds.thmin)) xs=4;
-						else if (th>(priv->bounds.thmax)) xs=8;
+						else if (th<(priv->bounds.thmin)) xt=PLOT_POLAR_BORDERS_CW;
+						else if (th>(priv->bounds.thmax)) xt=PLOT_POLAR_BORDERS_CCW;
 						else
 						{
-							xs=0;
+							xt=0;
 							drs=(priv->wr)+((r-(priv->bounds.rmin))*(priv->s));
 							x=(priv->x0)+(drs*cos(th));
 							y=(priv->y0)-(drs*sin(th));
@@ -4192,7 +4205,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 							{
 								if (tn<(priv->bounds.thmin))
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=r-rn;
 										if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmin)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmin));}
@@ -4212,7 +4225,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==2)
+									else if (xt==PLOT_POLAR_BORDERS_OUT)
 									{
 										drs=th-tn;
 										if (drs>DZE)
@@ -4245,11 +4258,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									xs=5;
+									xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CW);
 								}
 								else if (tn>(priv->bounds.thmax))
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=r-rn;
 										if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmax)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmax));}
@@ -4269,7 +4282,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==2)
+									else if (xt==PLOT_POLAR_BORDERS_OUT)
 									{
 										drs=tn-th;
 										if (drs>DZE)
@@ -4302,11 +4315,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									xs=9;
+									xt=(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CCW);
 								}
 								else
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=r-rn;
 										drs=((tn-th)*(r-(priv->bounds.rmin)))/drs;
@@ -4316,7 +4329,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==2)
+									else if (xt==PLOT_POLAR_BORDERS_OUT)
 									{
 										csx=(th-tn)/(r-rn);
 										drs=csx*((priv->bounds.rmax)-r);
@@ -4332,7 +4345,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==4)
+									else if (xt==PLOT_POLAR_BORDERS_CW)
 									{
 										drs=((priv->bounds.thmin)-th)*(rn-r)/(tn-th);
 										drs+=r-(priv->bounds.rmin);
@@ -4350,7 +4363,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									else if (xs==6)
+									else if (xt==(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CW))
 									{
 										drs=tn-th;
 										if (drs>DZE)
@@ -4383,7 +4396,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									else if (xs==8)
+									else if (xt==PLOT_POLAR_BORDERS_CCW)
 									{
 										drs=((priv->bounds.thmax)-th)*(rn-r)/(tn-th);
 										drs+=r-(priv->bounds.rmin);
@@ -4401,7 +4414,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									else if (xs==10)
+									else if (xt==(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CCW))
 									{
 										drs=th-tn;
 										if (drs>DZE)
@@ -4434,14 +4447,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									xs=1;
+									xt=PLOT_POLAR_BORDERS_IN;
 								}
 							}
 							else if (rn>(priv->bounds.rmax))
 							{
 								if (tn<(priv->bounds.thmin))
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=rn-r;
 										if ((drs<DZE)&&(drs>NZE))
@@ -4471,7 +4484,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==1)
+									else if (xt==PLOT_POLAR_BORDERS_IN)
 									{
 										drs=th-tn;
 										if (drs>DZE)
@@ -4504,11 +4517,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									xs=6;
+									xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CW);
 								}
 								else if (tn>(priv->bounds.thmax))
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=rn-r;
 										if ((drs<DZE)&&(drs>NZE))
@@ -4538,7 +4551,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==1)
+									else if (xt==PLOT_POLAR_BORDERS_IN)
 									{
 										drs=tn-th;
 										if (drs>DZE)
@@ -4571,11 +4584,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									xs=10;
+									xt=(PLOT_POLAR_BORDERS_OUT|PLOT_POLAR_BORDERS_CCW);
 								}
 								else
 								{
-									if (xs==0)
+									if (xt==0)
 									{
 										drs=rn-r;
 										drs=((tn-th)*((priv->bounds.rmax)-r))/drs;
@@ -4586,7 +4599,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==1)
+									else if (xt==PLOT_POLAR_BORDERS_IN)
 									{
 										csx=(tn-th)/(rn-r);
 										drs=csx*((priv->bounds.rmax)-rn);
@@ -4602,7 +4615,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_line_to(cr, x, y);
 										cairo_stroke(cr);
 									}
-									else if (xs==4)
+									else if (xt==PLOT_POLAR_BORDERS_CW)
 									{
 										drs=((priv->bounds.thmin)-th)*(rn-r)/(tn-th);
 										drs+=r-(priv->bounds.rmin);
@@ -4621,7 +4634,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									else if (xs==5)
+									else if (xt==(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CW))
 									{
 										drs=tn-th;
 										if (drs>DZE)
@@ -4654,7 +4667,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									else if (xs==8)
+									else if (xt==PLOT_POLAR_BORDERS_CCW)
 									{
 										drs=((priv->bounds.thmax)-th)*(rn-r)/(tn-th);
 										drs+=r-(priv->bounds.rmin);
@@ -4673,7 +4686,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											cairo_stroke(cr);
 										}
 									}
-									else if (xs==9)
+									else if (xt==(PLOT_POLAR_BORDERS_IN|PLOT_POLAR_BORDERS_CCW))
 									{
 										drs=th-tn;
 										if (drs>DZE)
@@ -4706,12 +4719,12 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									xs=2;
+									xt=PLOT_POLAR_BORDERS_OUT;
 								}
 							}
 							else if (tn<(priv->bounds.thmin))
 							{
-								if (xs==0)
+								if (xt==0)
 								{
 									drs=((rn-r)*(th-(priv->bounds.thmin)))/(th-tn);
 									drs=(priv->wr)+((drs+r-(priv->bounds.rmin))*(priv->s));
@@ -4720,7 +4733,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 									cairo_line_to(cr, x, y);
 									cairo_stroke(cr);
 								}
-								else if (xs==1)
+								else if (xt==PLOT_POLAR_BORDERS_IN)
 								{
 									drs=((priv->bounds.rmin)-rn)*(tn-th)/(rn-r);
 									drs+=tn;
@@ -4737,7 +4750,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_stroke(cr);
 									}
 								}
-								else if (xs==2)
+								else if (xt==PLOT_POLAR_BORDERS_OUT)
 								{
 									drs=((priv->bounds.rmax)-rn)*(tn-th)/(rn-r);
 									drs+=tn;
@@ -4755,11 +4768,11 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_stroke(cr);
 									}
 								}
-								xs=4;
+								xt=PLOT_POLAR_BORDERS_CW;
 							}
 							else if (tn>(priv->bounds.thmax))
 							{
-								if (xs==0)
+								if (xt==0)
 								{
 									drs=((rn-r)*((priv->bounds.thmax)-th))/(tn-th);
 									drs=(priv->wr)+((drs+r-(priv->bounds.rmin))*(priv->s));
@@ -4768,7 +4781,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 									cairo_line_to(cr, x, y);
 									cairo_stroke(cr);
 								}
-								else if (xs==1)
+								else if (xt==PLOT_POLAR_BORDERS_IN)
 								{
 									drs=((priv->bounds.rmin)-rn)*(tn-th)/(rn-r);
 									drs+=tn;
@@ -4785,7 +4798,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_stroke(cr);
 									}
 								}
-								else if (xs==2)
+								else if (xt==PLOT_POLAR_BORDERS_OUT)
 								{
 									drs=((priv->bounds.rmax)-rn)*(tn-th)/(rn-r);
 									drs+=tn;
@@ -4803,14 +4816,14 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 										cairo_stroke(cr);
 									}
 								}
-								xs=8;
+								xt=PLOT_POLAR_BORDERS_CCW;
 							}
 							else /* within range */
 							{
-								if ((xs&1)!=0)
+								if ((xt&PLOT_POLAR_BORDERS_IN)!=0)
 								{
 								drs=rn-r;
-									if ((xs&4)!=0)
+									if ((xt&PLOT_POLAR_BORDERS_CW)!=0)
 									{
 										if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmin)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmin));}
 										else
@@ -4827,7 +4840,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									else if ((xs&8)!=0)
+									else if ((xt&PLOT_POLAR_BORDERS_CCW)!=0)
 									{
 										if ((drs<DZE)&&(drs>NZE)) {x=(priv->x0)+((priv->wr)*cos(priv->bounds.thmax)); y=(priv->y0)-((priv->wr)*sin(priv->bounds.thmax));}
 										else
@@ -4853,10 +4866,10 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 									}
 									cairo_move_to(cr, x, y);
 								}
-								else if ((xs&2)!=0)
+								else if ((xt&PLOT_POLAR_BORDERS_OUT)!=0)
 								{
 									drs=r-rn;
-									if ((xs&4)!=0)
+									if ((xt&PLOT_POLAR_BORDERS_CW)!=0)
 									{
 										if ((drs<DZE)&&(drs>NZE))
 										{
@@ -4883,7 +4896,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 											}
 										}
 									}
-									else if ((xs&8)!=0)
+									else if ((xt&PLOT_POLAR_BORDERS_CCW)!=0)
 									{
 										if ((drs<DZE)&&(drs>NZE))
 										{
@@ -4920,7 +4933,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 									}
 									cairo_move_to(cr, x, y);
 								}
-								else if ((xs&4)!=0)
+								else if ((xt&PLOT_POLAR_BORDERS_CW)!=0)
 								{
 									drs=((r-rn)*(tn-(priv->bounds.thmin)))/(tn-th);
 									drs=(priv->wr)+((drs+rn-(priv->bounds.rmin))*(priv->s));
@@ -4928,7 +4941,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 									y=(priv->y0)-(drs*sin(priv->bounds.thmin));
 									cairo_move_to(cr, x, y);
 								}
-								else if ((xs&8)!=0)
+								else if ((xt&PLOT_POLAR_BORDERS_CCW)!=0)
 								{
 									drs=((r-rn)*((priv->bounds.thmax)-tn))/(th-tn);
 									drs=(priv->wr)+((drs+rn-(priv->bounds.rmin))*(priv->s));
@@ -4941,7 +4954,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 								y=(priv->y0)-(drs*sin(tn));
 								cairo_line_to(cr, x, y);
 								cairo_stroke(cr);
-								xs=0;
+								xt=0;
 							}
 							r=rn;
 							th=tn;
@@ -4950,7 +4963,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				}
 			}
 		}
-		else if (((plot->flagd)&4)!=0) /* points only */
+		else if (((plot->flagd)&PLOT_POLAR_DISP_PTS)!=0) /* points only */
 		{
 			for (k=0; k<(plot->ind->len); k++)
 			{
@@ -5031,7 +5044,7 @@ gboolean plot_polar_update_scale(GtkWidget *widget, gdouble rn, gdouble rx, gdou
 	(priv->bounds.rmin)=rn;
 	(priv->bounds.rmax)=rx;
 	(priv->centre.r)=rcn;
-	if (((plot->flagd)&1)==0) {(priv->bounds.thmin)=thn*MY_PI_180; (priv->centre.th)=thc*MY_PI_180; (priv->bounds.thmax)=thx*MY_PI_180;}
+	if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0) {(priv->bounds.thmin)=thn*MY_PI_180; (priv->centre.th)=thc*MY_PI_180; (priv->bounds.thmax)=thx*MY_PI_180;}
 	else {(priv->bounds.thmin)=thn; (priv->centre.th)=thc; (priv->bounds.thmax)=thx;}
 	plot_polar_redraw(widget);
 	return FALSE;
@@ -5197,7 +5210,7 @@ gboolean plot_polar_update_scale_pretty(GtkWidget *widget, gdouble xn, gdouble x
 		if (num3<1) (priv->rcs)+=1-floor(log10(num3));
 	}
 	if ((priv->rcs)>8) (priv->rcs)=8;
-	if (((plot->flagd)&1)==0)
+	if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0)
 	{
 		num=(yx-yn);
 		if (num<0)
@@ -5428,14 +5441,14 @@ static gboolean plot_polar_button_press(GtkWidget *widget, GdkEventButton *event
 		(priv->rescale.thmax)=(priv->bounds.thmax);
 		dy=(priv->y0)-(event->y);
 		dx=(event->x)-(priv->x0);
-		if (((plot->zmode)&12)!=0)
+		if (((plot->zmode)&(PLOT_POLAR_ZOOM_SGL|PLOT_POLAR_ZOOM_AZM))!=0)
 		{
 			dt=atan2(dy, dx); /* divide by zero handling */
 			if ((dt<=(priv->bounds.thmax))&&(dt>=(priv->bounds.thmin))) {(priv->rescale.thmax)=dt; (priv->flagr)=1;}
 			else if (((dt+MY_2PI)<=(priv->bounds.thmax))&&((dt+MY_2PI)<=(priv->bounds.thmin))) {(priv->rescale.thmax)=dt+MY_2PI; (priv->flagr)=1;}
 			else if (((dt-MY_2PI)<=(priv->bounds.thmax))&&((dt-MY_2PI)<=(priv->bounds.thmin))) {(priv->rescale.thmax)=dt-MY_2PI; (priv->flagr)=1;}
 		}
-		if (((plot->zmode)&10)!=0)
+		if (((plot->zmode)&(PLOT_POLAR_ZOOM_SGL|PLOT_POLAR_ZOOM_RDL))!=0)
 		{
 			dx*=dx;
 			dy*=dy;
@@ -5469,7 +5482,7 @@ static gboolean plot_polar_motion_notify(GtkWidget *widget, GdkEventMotion *even
 		if ((dy>=(priv->bounds.rmin))&&(dy<=(priv->bounds.rmax)))
 		{
 			(plot->rps)=dy;
-			if (((plot->flagd)&1)==0) (plot->thps)=dt*I180_MY_PI;
+			if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0) (plot->thps)=dt*I180_MY_PI;
 			else (plot->thps)=dt;
 			g_signal_emit(plot, plot_polar_signals[MOVED], 0);
 		}
@@ -5484,7 +5497,7 @@ static gboolean plot_polar_motion_notify(GtkWidget *widget, GdkEventMotion *even
 		if ((dy>=(priv->bounds.rmin))&&(dy<=(priv->bounds.rmax)))
 		{
 			(plot->rps)=dy;
-			if (((plot->flagd)&1)==0) (plot->thps)=(dt*I180_MY_PI)+360;
+			if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0) (plot->thps)=(dt*I180_MY_PI)+360;
 			else (plot->thps)=dt+MY_2PI;
 			g_signal_emit(plot, plot_polar_signals[MOVED], 0);
 		}
@@ -5499,7 +5512,7 @@ static gboolean plot_polar_motion_notify(GtkWidget *widget, GdkEventMotion *even
 		if ((dy>=(priv->bounds.rmin))&&(dy<=(priv->bounds.rmax)))
 		{
 			(plot->rps)=dy;
-			if (((plot->flagd)&1)==0) (plot->thps)=(dt*I180_MY_PI)-360;
+			if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0) (plot->thps)=(dt*I180_MY_PI)-360;
 			else (plot->thps)=dt-MY_2PI;
 			g_signal_emit(plot, plot_polar_signals[MOVED], 0);
 		}
@@ -5518,20 +5531,20 @@ static gboolean plot_polar_button_release(GtkWidget *widget, GdkEventButton *eve
 	plot=PLOT_POLAR(widget);
 	if ((priv->flagr)==1)
 	{
-		if (((plot->zmode)&8)==0)
+		if (((plot->zmode)&PLOT_POLAR_ZOOM_SGL)==0)
 		{
 			(priv->rescale.rmin)=(priv->bounds.rmin);
 			(priv->rescale.thmin)=(priv->bounds.thmin);
 			dy=(priv->y0)-(event->y);
 			dx=(event->x)-(priv->x0);
-			if (((plot->zmode)&4)!=0)
+			if (((plot->zmode)&PLOT_POLAR_ZOOM_AZM)!=0)
 			{
 				dt=atan2(dy, dx); /* divide by zero handling */
 				if ((dt<=(priv->bounds.thmax))&&(dt>=(priv->bounds.thmin))) (priv->rescale.thmin)=dt;
 				else if (((dt+MY_2PI)<=(priv->bounds.thmax))&&((dt+MY_2PI)<=(priv->bounds.thmin))) (priv->rescale.thmin)=dt+MY_2PI;
 				else if (((dt-MY_2PI)<=(priv->bounds.thmax))&&((dt-MY_2PI)<=(priv->bounds.thmin))) (priv->rescale.thmin)=dt-MY_2PI;
 			}
-			if (((plot->zmode)&2)!=0)
+			if (((plot->zmode)&PLOT_POLAR_ZOOM_RDL)!=0)
 			{
 				dx*=dx;
 				dy*=dy;
@@ -5540,7 +5553,7 @@ static gboolean plot_polar_button_release(GtkWidget *widget, GdkEventButton *eve
 				dy+=(priv->bounds.rmin);
 				if ((dy<=(priv->bounds.rmax))&&(dy>=(priv->bounds.rmin))) (priv->rescale.rmin)=dy;
 			}
-			if (((plot->zmode)&1)==0)
+			if (((plot->zmode)&PLOT_POLAR_ZOOM_OUT)==0)
 			{
 				if ((priv->rescale.thmax)!=(priv->rescale.thmin))
 				{
@@ -5550,7 +5563,7 @@ static gboolean plot_polar_button_release(GtkWidget *widget, GdkEventButton *eve
 						xx=(priv->rescale.rmax);
 						yn=(priv->rescale.thmin);
 						yx=(priv->rescale.thmax);
-						if (((plot->flagd)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
+						if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
 						plot_polar_update_scale_pretty(widget, xn, xx, yn, yx);
 					}
 					else if ((priv->rescale.rmax)<(priv->rescale.rmin))
@@ -5559,7 +5572,7 @@ static gboolean plot_polar_button_release(GtkWidget *widget, GdkEventButton *eve
 						xx=(priv->rescale.rmin);
 						yn=(priv->rescale.thmin);
 						yx=(priv->rescale.thmax);
-						if (((plot->flagd)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
+						if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
 						plot_polar_update_scale_pretty(widget, xn, xx, yn, yx);
 					}
 				}
@@ -5576,17 +5589,17 @@ static gboolean plot_polar_button_release(GtkWidget *widget, GdkEventButton *eve
 				else if (s<0) {yn=((priv->rescale.thmax)-(priv->bounds.thmin))*s; yx=((priv->rescale.thmin)-(priv->bounds.thmax))*s;}
 				yn+=(priv->bounds.thmin);
 				yx+=(priv->bounds.thmax);
-				if (((plot->flagd)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
+				if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
 				plot_polar_update_scale_pretty(widget, xn, xx, yn, yx);
 			}
 		}
-		else if (((plot->zmode)&1)==0)
+		else if (((plot->zmode)&PLOT_POLAR_ZOOM_OUT)==0)
 		{
 			xn=((priv->rescale.rmax)*ZS)+(ZSC*(priv->bounds.rmin));
 			xx=((priv->rescale.rmax)*ZS)+(ZSC*(priv->bounds.rmax));
 			yn=((priv->rescale.thmax)*ZS)+(ZSC*(priv->bounds.thmin));
 			yx=((priv->rescale.thmax)*ZS)+(ZSC*(priv->bounds.thmax));
-			if (((plot->flagd)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
+			if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
 			plot_polar_update_scale_pretty(widget, xn, xx, yn, yx);
 		}
 		else
@@ -5595,7 +5608,7 @@ static gboolean plot_polar_button_release(GtkWidget *widget, GdkEventButton *eve
 			xx=((priv->bounds.rmax)*UZ)-(UZC*(priv->rescale.rmax));
 			yn=((priv->bounds.thmin)*UZ)-(UZC*(priv->rescale.thmax));
 			yx=((priv->bounds.thmax)*UZ)-(UZC*(priv->rescale.thmax));
-			if (((plot->flagd)&1)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
+			if (((plot->flagd)&PLOT_POLAR_DISP_RDN)==0) {yn*=I180_MY_PI; yx*=I180_MY_PI;}
 			plot_polar_update_scale_pretty(widget, xn, xx, yn, yx);
 		}
 		(priv->flagr)=0;
@@ -5607,12 +5620,12 @@ static gboolean plot_polar_button_release(GtkWidget *widget, GdkEventButton *eve
 		{
 			if ((event->x)>=xw-11)
 			{
-				(plot->zmode)^=1;
+				(plot->zmode)^=PLOT_POLAR_ZOOM_OUT;
 				plot_polar_redraw(widget);
 			}
-			else if (((plot->zmode)&8)!=0)
+			else if (((plot->zmode)&PLOT_POLAR_ZOOM_SGL)!=0)
 			{
-				(plot->zmode)&=1;
+				(plot->zmode)&=PLOT_POLAR_ZOOM_OUT;
 				plot_polar_redraw(widget);
 			}
 			else
@@ -5747,8 +5760,8 @@ static void plot_polar_init(PlotPolar *plot)
 	{(priv->flagr)=0; (priv->flaga)=0;}
 	{(plot->rdata)=NULL; (plot->thdata)=NULL; (plot->ind)=NULL; (plot->sizes)=NULL;}
 	{(plot->rlab)=g_strdup("Amplitude"); (plot->thlab)=g_strdup("Azimuth");}
-	{(plot->flagd)=6; (plot->ptsize)=5; (plot->linew)=2;}
-	(plot->zmode)=6;
+	{(plot->flagd)=(PLOT_POLAR_DISP_PTS|PLOT_POLAR_DISP_LIN); (plot->ptsize)=5; (plot->linew)=2;}
+	(plot->zmode)=(PLOT_POLAR_ZOOM_RDL|PLOT_POLAR_ZOOM_AZM);
 	{(plot->rps)=0; (plot->thps)=0;}
 	{(plot->afont)=pango_font_description_new(); (plot->lfont)=pango_font_description_new();}
 	{pango_font_description_set_family((plot->afont), "sans"); pango_font_description_set_family((plot->lfont), "sans");}

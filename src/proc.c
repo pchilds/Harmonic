@@ -2740,7 +2740,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
 		jdimxf=jdimx;
 		flags|=PROC_TRS;
-		pr_id=g_signal_connect(G_OBJECT(pr), "clicked", G_CALLBACK(prs), NULL);
+		g_signal_connect(G_OBJECT(pr), "clicked", G_CALLBACK(prs), NULL);
 	}
 	else
 	{

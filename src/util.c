@@ -162,6 +162,13 @@ void upj(GtkWidget *widget, gpointer data)
 	}
 	else
 	{
+		g_signal_handler_block(G_OBJECT(isr), isr_id);
+		g_signal_handler_block(G_OBJECT(isp), isp_id);
+		g_signal_handler_block(G_OBJECT(tc), tc_id);
+		g_signal_handler_block(G_OBJECT(tw), tw_id);
+		g_signal_handler_block(G_OBJECT(zw), zw_id);
+		g_signal_handler_block(G_OBJECT(bsr), bsr_id);
+		g_signal_handler_block(G_OBJECT(bsp), bsp_id);
 		num=g_array_index(isra, gdouble, (jdim+(kdim*jdimx)));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(isr), num);
 		num=g_array_index(ispa, gdouble, (jdim+(kdim*jdimx)));
@@ -176,6 +183,13 @@ void upj(GtkWidget *widget, gpointer data)
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(bsr), num6);
 		num6=g_array_index(bspa, gdouble, jdim);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(bsp), num6);
+		g_signal_handler_unblock(G_OBJECT(isr), isr_id);
+		g_signal_handler_unblock(G_OBJECT(isp), isp_id);
+		g_signal_handler_unblock(G_OBJECT(tc), tc_id);
+		g_signal_handler_unblock(G_OBJECT(tw), tw_id);
+		g_signal_handler_unblock(G_OBJECT(zw), zw_id);
+		g_signal_handler_unblock(G_OBJECT(bsr), bsr_id);
+		g_signal_handler_unblock(G_OBJECT(bsp), bsp_id);
 	}
 	if (jdim<jdimxf)
 	{
@@ -302,15 +316,18 @@ void upj(GtkWidget *widget, gpointer data)
 		if ((flags&PROC_CHP)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
 		g_free(str);
 	}
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), jdim);
-}
-
-void upj2(GtkWidget *widget, gpointer data)
-{
-	gint j;
-
-	j=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-	if (j!=jdim) gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), j);
+	if (widget==jind)
+	{
+		g_signal_handler_block(G_OBJECT(jind2), j2_id);
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), jdim);
+		g_signal_handler_unblock(G_OBJECT(jind2), j2_id);
+	}
+	else if (widget=jind2)
+	{
+		g_signal_handler_block(G_OBJECT(jind), j1_id);
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), jdim);
+		g_signal_handler_unblock(G_OBJECT(jind), j1_id);
+	}
 }
 
 void upk(GtkWidget *widget, gpointer data)
@@ -345,6 +362,10 @@ void upk(GtkWidget *widget, gpointer data)
 	}
 	else
 	{
+		g_signal_handler_block(G_OBJECT(isr), isr_id);
+		g_signal_handler_block(G_OBJECT(isp), isp_id);
+		g_signal_handler_block(G_OBJECT(tc), tc_id);
+		g_signal_handler_block(G_OBJECT(tw), tw_id);
 		num=g_array_index(isra, gdouble, (jdim+(kdim*jdimx)));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(isr), num);
 		num=g_array_index(ispa, gdouble, (jdim+(kdim*jdimx)));
@@ -353,6 +374,10 @@ void upk(GtkWidget *widget, gpointer data)
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tc), num);
 		num=g_array_index(twa, gdouble, (jdim+(kdim*jdimx)));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tw), num);
+		g_signal_handler_unblock(G_OBJECT(isr), isr_id);
+		g_signal_handler_unblock(G_OBJECT(isp), isp_id);
+		g_signal_handler_unblock(G_OBJECT(tc), tc_id);
+		g_signal_handler_unblock(G_OBJECT(tw), tw_id);
 	}
 	if ((flags&PROC_PRS)!=0)
 	{
@@ -483,11 +508,6 @@ void reset(GtkWidget *widget, gpointer data)
 {
 	gdouble *ptr;
 	
-	{jdim=0; jdimx=1; kdim=0; kdimx=1;}
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), 0);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
-	{(bsra->len)=1; (bspa->len)=1;}
-	{(isra->len)=1; (ispa->len)=1; (tca->len)=1; (twa->len)=1; (zwa->len)=1;}
 	ptr=&g_array_index(bsra, gdouble, 0);
 	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(bsr));
 	ptr=&g_array_index(bspa, gdouble, 0);
@@ -502,6 +522,11 @@ void reset(GtkWidget *widget, gpointer data)
 	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tw));
 	ptr=&g_array_index(zwa, gdouble, 0);
 	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(zw));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), 0);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
+	{jdim=0; jdimx=1; kdim=0; kdimx=1;}
+	{(bsra->len)=1; (bspa->len)=1;}
+	{(isra->len)=1; (ispa->len)=1; (tca->len)=1; (twa->len)=1; (zwa->len)=1;}
 }
 
 void reset2(GtkWidget *widget, gpointer data)

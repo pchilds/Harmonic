@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
 "POT-Creation-Date: 2011-05-25 14:38+0300\n"
-"PO-Revision-Date: 2011-05-26 10:25+0300\n"
+"PO-Revision-Date: 2011-05-27 11:51+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Greek <>\n"
 "MIME-Version: 1.0\n"
@@ -347,7 +347,7 @@ msgstr ""
 #. put your name here and be famous.
 #: src/util.c:54
 msgid "translator-credits"
-msgstr ""
+msgstr "Paul Childs"
 
 #. "x" and "y" are the standard variables representing the horizontal and
 #. vertical axes. %f refers to their values for the current point on the
