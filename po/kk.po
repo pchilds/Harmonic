@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-05-25 14:38+0300\n"
+"POT-Creation-Date: 2011-05-29 21:13+0300\n"
 "PO-Revision-Date: 2011-04-27 14:49+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Kazakh <>\n"
@@ -17,74 +17,74 @@ msgstr ""
 "Language: kk\n"
 
 #. Name of the program
-#: src/main.c:84
+#: src/main.c:80
 msgid "Harmonic Spectrum Analyser"
 msgstr ""
 
 #. Menu option to load a previous state of the program.
-#: src/main.c:113
+#: src/main.c:109
 msgid "Restore Session"
 msgstr ""
 
 #. Menu option to save the current state of the program.
-#: src/main.c:117
+#: src/main.c:113
 msgid "Save Session"
 msgstr ""
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various file related menu options.
-#: src/main.c:129
+#: src/main.c:125
 msgid "_File"
 msgstr "_Файлы"
 
 #. Select this if the data files have no header and are just pure tab
 #. seperated values.
-#: src/main.c:152
+#: src/main.c:148
 msgid "Raw Delimited Data"
 msgstr ""
 
 #. Menu option to select what format the data files are in.
-#: src/main.c:156
+#: src/main.c:152
 msgid "Data Format:"
 msgstr ""
 
 #. The trace within the file to use as data for the vertical axis (as the
 #. horizontal axis is the first column trace 1 will be column 2 etc.
-#: src/main.c:161
+#: src/main.c:157
 msgid "Trace:"
 msgstr ""
 
 #. Select this if the measurement was performed in transmission (as opposed
 #. to reflection)
-#: src/main.c:168
+#: src/main.c:164
 msgid "Transmission Measurement?"
 msgstr ""
 
 #. Select this if the measurements are in dBs (or dBs with respect to some
 #. unit, e.g. dBm).
-#: src/main.c:172
+#: src/main.c:168
 msgid "Data in dBs?"
 msgstr ""
 
 #. Select this if you want to multiply the data by -1 before transforming.
-#: src/main.c:176
+#: src/main.c:172
 msgid "Negate?"
 msgstr "Терістеу"
 
 #. Menu option to bring up a window to change the way the plots are displayed.
-#: src/main.c:183
+#: src/main.c:179
 msgid "Display Properties:"
 msgstr "Визуальді қасиет"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various options governing how the data is
 #. to be handled and displayed.
-#: src/main.c:188
+#: src/main.c:184
 msgid "_Properties"
 msgstr "_Қасиет"
 
 #. No nonlinear compensation needed.
-#: src/main.c:194
+#: src/main.c:190
 msgid "None"
 msgstr "түк емес"
 
@@ -92,7 +92,7 @@ msgstr "түк емес"
 #. delete or move as needed. Select to correct for spectral shadowing (of
 #. downstream devices by upstream devices due to their removal of the
 #. source spectrum) to first order terms.
-#: src/main.c:198
+#: src/main.c:194
 msgid ""
 "1st order\n"
 "spectral shadowing"
@@ -101,52 +101,52 @@ msgstr ""
 #. \n refers to a newline to help the text fit better. Feel free to
 #. delete or move as needed. Menu option to select how nonlinearity is
 #. handled in the system.
-#: src/main.c:202
+#: src/main.c:198
 msgid ""
 "Nonlinear\n"
 "Compensation:"
 msgstr ""
 
 #. The fourier basis (e^-ixs) used for Fourier transformation.
-#: src/main.c:207
+#: src/main.c:203
 msgid "Fourier"
 msgstr ""
 
 #. The Daubechies 4 wavelet basis (standard wavelet used for DWT).
-#: src/main.c:211
+#: src/main.c:207
 msgid "Daubechies 4"
 msgstr ""
 
 #. The Daubechies 8 wavelet basis.
-#: src/main.c:215
+#: src/main.c:211
 msgid "Daubechies 8"
 msgstr ""
 
 #. The Meyer wavelet basis.
-#: src/main.c:219
+#: src/main.c:215
 msgid "Meyer"
 msgstr ""
 
 #. The Morlet wavelet basis.
-#: src/main.c:223
+#: src/main.c:219
 msgid "Morlet"
 msgstr ""
 
 #. Menu option for selecting (wavelet) basis function.
-#: src/main.c:227
+#: src/main.c:223
 msgid "Basis Function:"
 msgstr ""
 
 #. option to convert the base domain by inverting with respect to
 #. two pi, e.g. wavelength=two*pi/wavenumber
-#: src/main.c:231
+#: src/main.c:227
 msgid "Invert domain?"
 msgstr ""
 
 #. \n refers to a newline to help the text fit better. Feel free
 #. to delete or move as needed. Menu option to provide a linear
 #. correction to the spectrum within each window.
-#: src/main.c:235
+#: src/main.c:231
 msgid ""
 "Apply correction\n"
 "to Window edges?"
@@ -154,79 +154,79 @@ msgstr ""
 
 #. Select this if you want the program to automatically adjust the triangle
 #. centre and width parameters.
-#: src/main.c:242
+#: src/main.c:238
 msgid "Optimise Triangle fit?"
 msgstr ""
 
 #. Select this if you want to determine the chirp (as well as visibility and
 #. domain shift).
-#: src/main.c:246
+#: src/main.c:242
 msgid "Calculate Chirp?"
 msgstr ""
 
 #. Select this in order to process several files and compare their results
 #. (Batch processing initiates at the next File->Open menu selection).
-#: src/main.c:253
+#: src/main.c:249
 msgid "Batch Process Data?"
 msgstr ""
 
 #. Select this to automatically change the offset value based on how much
 #. the rightmost edge of the spectrum is changing.
-#: src/main.c:257
+#: src/main.c:253
 msgid "Autotrack Offset?"
 msgstr ""
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various lesser used menu options.
-#: src/main.c:261
+#: src/main.c:257
 msgid "_Advanced"
 msgstr ""
 
 #. Menu option to bring up documentation.
-#: src/main.c:266
+#: src/main.c:262
 msgid "Instructions"
 msgstr ""
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for help and documentation related menu options.
-#: src/main.c:275
+#: src/main.c:271
 msgid "_Help"
 msgstr ""
 
 #. Initial value of the base domain to select a windowed region of the data
 #. from.
-#: src/main.c:304
+#: src/main.c:300
 msgid "Spectrum Start:"
 msgstr ""
 
 #. Final value of the base domain to select a windowed region of the data
 #. from.
-#: src/main.c:312
+#: src/main.c:308
 msgid "Spectrum Stop:"
 msgstr ""
 
 #. Reference level to take for the spectrum (typically its maximum value
 #. in the windowed ranges)
-#: src/main.c:320
+#: src/main.c:316
 msgid "Offset:"
 msgstr ""
 
 #. The windows are put into an array of length 2 to the power of this value.
 #. The extra data points needed to fill it out are zero valued, hence zero
 #. padding.
-#: src/main.c:327
+#: src/main.c:323
 msgid "Zero Padding 2^:"
 msgstr ""
 
 #. Index of values to take potentially multiple windows over the base domain.
-#: src/main.c:334 src/main.c:393
+#: src/main.c:330 src/main.c:390
 msgid "j index:"
 msgstr ""
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed. Reset the values on this page so
 #. that there is only one j index / k index
-#: src/main.c:342 src/main.c:409
+#: src/main.c:338 src/main.c:406
 msgid ""
 "Reset\n"
 "Arrays"
@@ -234,51 +234,51 @@ msgstr ""
 
 #. Perform a harmonic transformation of the data (if the Fourier basis is
 #. selected, then this corresponds to the Fourier transform).
-#: src/main.c:346
+#: src/main.c:342
 msgid "Transform Spectrum"
 msgstr ""
 
 #. Title for the notebook tab of teh plot of the base domain spectrum.
-#: src/main.c:349 src/main.c:443 src/disp.c:1144
+#: src/main.c:346 src/main.c:440 src/disp.c:1154
 msgid "Spectrum"
 msgstr ""
 
 #. Initial value of the inverse domain to select a windowed region to process.
-#: src/main.c:353
+#: src/main.c:350
 msgid "Inverse Spectrum Start:"
 msgstr ""
 
 #. Final value of the inverse domain to select a windowed region to process.
-#: src/main.c:361
+#: src/main.c:358
 msgid "Inverse Spectrum Stop:"
 msgstr ""
 
 #. Centre value of a triangle to fit to a window in the inverse domain.
-#: src/main.c:369
+#: src/main.c:366
 msgid "Triangle Centre:"
 msgstr ""
 
 #. Full width of the base of this triangle.
-#: src/main.c:377
+#: src/main.c:374
 msgid "Triangle Full Width:"
 msgstr ""
 
 #. Full width of the base of a triangle that fits the peak centred at an
 #. inverse frequency of zero.
-#: src/main.c:385
+#: src/main.c:382
 msgid "DC Peak Width:"
 msgstr ""
 
 #. Index of values to take potentially multiple windows over the inverse
 #. domain.
-#: src/main.c:401
+#: src/main.c:398
 msgid "k index:"
 msgstr ""
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed. Button to press to analyse the
 #. transformed results for visibility/domain-shift/chirp
-#: src/main.c:413
+#: src/main.c:410
 msgid ""
 "Process\n"
 "Spectrum"
@@ -286,33 +286,33 @@ msgstr ""
 
 #. Title for tab showing a plot of the transformed spectrum over the inverse
 #. domain.
-#: src/main.c:416 src/main.c:478 src/disp.c:1240
+#: src/main.c:413 src/main.c:475 src/disp.c:1250
 msgid "Inverse Spectrum"
 msgstr ""
 
 #. The horizontal domain after transformation (e.g. if the base domain is
 #. time, then it will be frequency).
-#: src/main.c:449
+#: src/main.c:446
 msgid "Inverse Domain"
 msgstr ""
 
 #. Visibility of fringes (defined for a sinusoid as (maximum-minimum) divided
 #. by (maximum+minimum))
-#: src/main.c:482 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
-#: src/data.c:1143 src/data.c:1284 src/disp.c:1324 src/open.c:24646
+#: src/main.c:479 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
+#: src/data.c:1143 src/data.c:1284 src/disp.c:1334 src/open.c:24784
 msgid "Visibility"
 msgstr ""
 
 #. How much the interference fringes are moving in the base domain (the base
 #. domain is the horizontal domain of the original data loaded from the file).
-#: src/main.c:488 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
-#: src/data.c:1143 src/data.c:1284 src/disp.c:1325 src/open.c:24652
+#: src/main.c:485 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
+#: src/data.c:1143 src/data.c:1284 src/disp.c:1335 src/open.c:24790
 msgid "Domain Shift"
 msgstr ""
 
 #. Title for the notebook tab displaying the results
-#: src/main.c:494 src/disp.c:1412 src/open.c:24535 src/open.c:24561
-#: src/open.c:24588 src/open.c:24658
+#: src/main.c:491 src/disp.c:1422 src/open.c:24673 src/open.c:24699
+#: src/open.c:24726 src/open.c:24796
 msgid "Analysis Results"
 msgstr ""
 
@@ -357,8 +357,8 @@ msgstr ""
 
 #. Asks the user to name a data file to save results to.
 #: src/data.c:200 src/data.c:1048 src/data.c:1697 src/data.c:1808
-#: src/data.c:1916 src/data.c:2084 src/data.c:2253 src/open.c:39
-#: src/open.c:24624
+#: src/data.c:1916 src/data.c:2084 src/data.c:2253 src/open.c:139
+#: src/open.c:24762
 msgid "Select Data File"
 msgstr ""
 
@@ -371,7 +371,7 @@ msgstr ""
 
 #. Button to select just saving chirp
 #: src/data.c:213 src/data.c:318 src/data.c:503 src/proc.c:176 src/proc.c:430
-#: src/disp.c:1328
+#: src/disp.c:1338
 msgid "Chirp"
 msgstr ""
 
@@ -410,7 +410,7 @@ msgstr ""
 #: src/data.c:1748 src/data.c:1796 src/data.c:1832 src/data.c:1857
 #: src/data.c:1903 src/data.c:1986 src/data.c:2060 src/data.c:2154
 #: src/data.c:2228 src/data.c:2323 src/data.c:2397 src/data.c:2439
-#: src/open.c:169
+#: src/open.c:299
 #, c-format
 msgid "Error Saving file: %s."
 msgstr ""
@@ -664,44 +664,44 @@ msgid "Select Session File"
 msgstr ""
 
 #. %s refers to the filename and the error. Please leave as "%s", but move
-#. within the sentence as needed (as long as the file is given first)
-#: src/data.c:2469 src/open.c:386 src/open.c:558 src/open.c:732 src/open.c:905
-#: src/open.c:1078 src/open.c:1251 src/open.c:1428 src/open.c:1600
-#: src/open.c:1774 src/open.c:1947 src/open.c:2120 src/open.c:2293
-#: src/open.c:2515 src/open.c:2730 src/open.c:2915 src/open.c:3099
-#: src/open.c:3317 src/open.c:3506 src/open.c:3722 src/open.c:3933
-#: src/open.c:4118 src/open.c:4302 src/open.c:4518 src/open.c:4702
-#: src/open.c:4840 src/open.c:4968 src/open.c:5098 src/open.c:5227
-#: src/open.c:5356 src/open.c:5485 src/open.c:5618 src/open.c:5746
-#: src/open.c:5876 src/open.c:6005 src/open.c:6134 src/open.c:6263
-#: src/open.c:6442 src/open.c:6613 src/open.c:6754 src/open.c:6894
-#: src/open.c:7068 src/open.c:7213 src/open.c:7386 src/open.c:7553
-#: src/open.c:7694 src/open.c:7834 src/open.c:8007 src/open.c:8148
-#: src/open.c:8340 src/open.c:8515 src/open.c:8691 src/open.c:8866
-#: src/open.c:9042 src/open.c:9217 src/open.c:9397 src/open.c:9572
-#: src/open.c:9748 src/open.c:9923 src/open.c:10099 src/open.c:10274
-#: src/open.c:10476 src/open.c:10671 src/open.c:10858 src/open.c:11044
-#: src/open.c:11237 src/open.c:11428 src/open.c:11624 src/open.c:11815
-#: src/open.c:12002 src/open.c:12188 src/open.c:12379 src/open.c:12565
-#: src/open.c:12706 src/open.c:12837 src/open.c:12969 src/open.c:13100
-#: src/open.c:13232 src/open.c:13363 src/open.c:13499 src/open.c:13630
-#: src/open.c:13762 src/open.c:13893 src/open.c:14025 src/open.c:14156
-#: src/open.c:14315 src/open.c:14466 src/open.c:14609 src/open.c:14751
-#: src/open.c:14900 src/open.c:15047 src/open.c:15200 src/open.c:15347
-#: src/open.c:15490 src/open.c:15632 src/open.c:15780 src/open.c:15923
-#: src/open.c:16113 src/open.c:16287 src/open.c:16460 src/open.c:16632
-#: src/open.c:16805 src/open.c:16977 src/open.c:17154 src/open.c:17326
-#: src/open.c:17499 src/open.c:17671 src/open.c:17844 src/open.c:18016
-#: src/open.c:18215 src/open.c:18407 src/open.c:18591 src/open.c:18774
-#: src/open.c:18972 src/open.c:19169 src/open.c:19365 src/open.c:19553
-#: src/open.c:19737 src/open.c:19920 src/open.c:20116 src/open.c:20308
-#: src/open.c:20448 src/open.c:20576 src/open.c:20705 src/open.c:20833
-#: src/open.c:20962 src/open.c:21090 src/open.c:21223 src/open.c:21351
-#: src/open.c:21480 src/open.c:21608 src/open.c:21737 src/open.c:21865
-#: src/open.c:22022 src/open.c:22170 src/open.c:22310 src/open.c:22449
-#: src/open.c:22603 src/open.c:22756 src/open.c:22908 src/open.c:23052
-#: src/open.c:23192 src/open.c:23331 src/open.c:23485 src/open.c:23635
-#: src/open.c:24612 src/open.c:24749
+#. within the sentence as needed (as long as the file is given first).
+#: src/data.c:2469 src/open.c:524 src/open.c:696 src/open.c:870
+#: src/open.c:1043 src/open.c:1216 src/open.c:1389 src/open.c:1566
+#: src/open.c:1738 src/open.c:1912 src/open.c:2085 src/open.c:2258
+#: src/open.c:2431 src/open.c:2653 src/open.c:2868 src/open.c:3053
+#: src/open.c:3237 src/open.c:3455 src/open.c:3644 src/open.c:3860
+#: src/open.c:4071 src/open.c:4256 src/open.c:4440 src/open.c:4656
+#: src/open.c:4840 src/open.c:4978 src/open.c:5106 src/open.c:5236
+#: src/open.c:5365 src/open.c:5494 src/open.c:5623 src/open.c:5756
+#: src/open.c:5884 src/open.c:6014 src/open.c:6143 src/open.c:6272
+#: src/open.c:6401 src/open.c:6580 src/open.c:6751 src/open.c:6892
+#: src/open.c:7032 src/open.c:7206 src/open.c:7351 src/open.c:7524
+#: src/open.c:7691 src/open.c:7832 src/open.c:7972 src/open.c:8145
+#: src/open.c:8286 src/open.c:8478 src/open.c:8653 src/open.c:8829
+#: src/open.c:9004 src/open.c:9180 src/open.c:9355 src/open.c:9535
+#: src/open.c:9710 src/open.c:9886 src/open.c:10061 src/open.c:10237
+#: src/open.c:10412 src/open.c:10614 src/open.c:10809 src/open.c:10996
+#: src/open.c:11182 src/open.c:11375 src/open.c:11566 src/open.c:11762
+#: src/open.c:11953 src/open.c:12140 src/open.c:12326 src/open.c:12517
+#: src/open.c:12703 src/open.c:12844 src/open.c:12975 src/open.c:13107
+#: src/open.c:13238 src/open.c:13370 src/open.c:13501 src/open.c:13637
+#: src/open.c:13768 src/open.c:13900 src/open.c:14031 src/open.c:14163
+#: src/open.c:14294 src/open.c:14453 src/open.c:14604 src/open.c:14747
+#: src/open.c:14889 src/open.c:15038 src/open.c:15185 src/open.c:15338
+#: src/open.c:15485 src/open.c:15628 src/open.c:15770 src/open.c:15918
+#: src/open.c:16061 src/open.c:16251 src/open.c:16425 src/open.c:16598
+#: src/open.c:16770 src/open.c:16943 src/open.c:17115 src/open.c:17292
+#: src/open.c:17464 src/open.c:17637 src/open.c:17809 src/open.c:17982
+#: src/open.c:18154 src/open.c:18353 src/open.c:18545 src/open.c:18729
+#: src/open.c:18912 src/open.c:19110 src/open.c:19307 src/open.c:19503
+#: src/open.c:19691 src/open.c:19875 src/open.c:20058 src/open.c:20254
+#: src/open.c:20446 src/open.c:20586 src/open.c:20714 src/open.c:20843
+#: src/open.c:20971 src/open.c:21100 src/open.c:21228 src/open.c:21361
+#: src/open.c:21489 src/open.c:21618 src/open.c:21746 src/open.c:21875
+#: src/open.c:22003 src/open.c:22160 src/open.c:22308 src/open.c:22448
+#: src/open.c:22587 src/open.c:22741 src/open.c:22894 src/open.c:23046
+#: src/open.c:23190 src/open.c:23330 src/open.c:23469 src/open.c:23623
+#: src/open.c:23773 src/open.c:24750 src/open.c:24885
 #, c-format
 msgid "Loading failed for file: %s, Error: %s."
 msgstr ""
@@ -749,8 +749,8 @@ msgstr ""
 #. The user has given an offset of zero which gives divide by
 #. zero errors when the data is in a linear scale (e.g. not in dBs)
 #: src/proc.c:2349 src/proc.c:2387 src/proc.c:2536 src/proc.c:2573
-#: src/open.c:18788 src/open.c:18986 src/open.c:19934 src/open.c:20130
-#: src/open.c:22463 src/open.c:22617 src/open.c:23347 src/open.c:23501
+#: src/open.c:18926 src/open.c:19124 src/open.c:20072 src/open.c:20268
+#: src/open.c:22601 src/open.c:22755 src/open.c:23485 src/open.c:23639
 msgid "Offset must be nonzero for linear measurements."
 msgstr ""
 
@@ -762,83 +762,83 @@ msgstr ""
 
 #. Title for a window that allows the user to change the way the
 #. plots are displayed
-#: src/disp.c:1064
+#: src/disp.c:1074
 msgid "Display Properties"
 msgstr ""
 
 #. label for a button that allows the user to change the font/size/
 #. style of the labels for the axes.
-#: src/disp.c:1082 src/disp.c:1148 src/disp.c:1248
+#: src/disp.c:1092 src/disp.c:1158 src/disp.c:1258
 msgid "Axis label font:"
 msgstr ""
 
 #. label for a button that allows the user to change the font/size/
 #. style of the numbers along the axes.
-#: src/disp.c:1085 src/disp.c:1151 src/disp.c:1251
+#: src/disp.c:1095 src/disp.c:1161 src/disp.c:1261
 msgid "Tick label font:"
 msgstr ""
 
 #. Label that will be displayed along the horizontal axis.
-#: src/disp.c:1088 src/disp.c:1154 src/disp.c:1281
+#: src/disp.c:1098 src/disp.c:1164 src/disp.c:1291
 msgid "X axis text:"
 msgstr ""
 
 #. Label that will be displayed along the vertical axis.
-#: src/disp.c:1091 src/disp.c:1157 src/disp.c:1284
+#: src/disp.c:1101 src/disp.c:1167 src/disp.c:1294
 msgid "Y axis text:"
 msgstr ""
 
 #. Title for window that pops up when changing the font/size/style
 #. of the labels for the axes.
-#: src/disp.c:1110 src/disp.c:1176 src/disp.c:1304
+#: src/disp.c:1120 src/disp.c:1186 src/disp.c:1314
 msgid "Font Selection for Axis Labels"
 msgstr ""
 
 #. Title for window that pops up when changing the font/size/style
 #. of the numbers along the axes.
-#: src/disp.c:1118 src/disp.c:1184 src/disp.c:1309
+#: src/disp.c:1128 src/disp.c:1194 src/disp.c:1319
 msgid "Font Selection for Tick Mark Labels"
 msgstr ""
 
 #. Whether the graph for the inverse domain will have multiple plots
 #. displayed, each corresponding to a different value for the j index.
-#: src/disp.c:1199
+#: src/disp.c:1209
 msgid "Multiple plots for Inverse Domain"
 msgstr ""
 
 #. The text that will appear as a label on one of the radii of the plot
 #. segment
-#: src/disp.c:1259
+#: src/disp.c:1269
 msgid "Radial axis text:"
 msgstr ""
 
 #. The text that will appear as a label on the outer arc of the plot segment
 #. (normally will have the value of "Degrees", "Radians", etc.)
-#: src/disp.c:1262
+#: src/disp.c:1272
 msgid "Azimuthal axis text:"
 msgstr ""
 
 #. Whether the graph for the batch results will have multiple plots
 #. displayed, each corresponding to a different value for the j index.
-#: src/disp.c:1336
+#: src/disp.c:1346
 msgid "Multiple plots for Results over index j"
 msgstr ""
 
 #. Whether the graph for the batch results will have multiple plots
 #. displayed, each corresponding to a different value for the k index.
-#: src/disp.c:1344
+#: src/disp.c:1354
 msgid "Multiple plots for Results over index k"
 msgstr ""
 
 #. The user is trying to run a batch process without performing a single
 #. file test. Asks them to do this.
-#: src/open.c:92
+#: src/open.c:214
 msgid "Perform an initial test of the parameters first."
 msgstr ""
 
 #. The user has changed the start/stop etc values since the last single file
 #. test. Asks them to repeat a single file test with the new values.
-#: src/open.c:98
+#: src/open.c:220
 msgid ""
 "Parameters have changed since the last test. Retest with the current values "
 "first."
@@ -846,48 +846,52 @@ msgstr ""
 
 #. Asks the user to select or create a file that will govern the batch
 #. process.
-#: src/open.c:104
+#: src/open.c:226
 msgid "Select Config File"
 msgstr ""
 
 #. Title for a window that builds a list of files to batch process and their
 #. associated parameter values.
-#: src/open.c:115
+#: src/open.c:237
 msgid "Configuration file generation"
 msgstr ""
 
 #. Title for the column containing a list of filenames.
-#: src/open.c:123
+#: src/open.c:243
 msgid "File:"
 msgstr "Файлы"
 
 #. Title for the column containing the values of the particular parameter
 #. that will vary from file to file.
-#: src/open.c:126
+#: src/open.c:246
 msgid ""
 "Measurand\n"
 "Value:"
 msgstr ""
 
 #. Button to add another file and value to the list on the table.
-#: src/open.c:129
+#: src/open.c:249
 msgid "Add another file"
+msgstr ""
+
+#: src/open.c:308
+msgid "No filenames given."
 msgstr ""
 
 #. Title for window to select between cartesian and polar coordinates
 #. for plotting.
-#: src/open.c:24519
+#: src/open.c:24657
 msgid "Measurand Variable Type"
 msgstr ""
 
 #. Button to select using cartesian axes.
-#: src/open.c:24519
+#: src/open.c:24657
 msgid "Linear"
 msgstr ""
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed.
-#: src/open.c:24519
+#: src/open.c:24657
 msgid ""
 "Polar\n"
 "(Degrees)"
@@ -895,7 +899,7 @@ msgstr ""
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed.
-#: src/open.c:24519
+#: src/open.c:24657
 msgid ""
 "Polar\n"
 "(Radians)"
@@ -903,13 +907,13 @@ msgstr ""
 
 #. Asks the user to select whether the scale will be on a cartesian or
 #. polar graph.
-#: src/open.c:24521
+#: src/open.c:24659
 msgid "Select Measurand Type:"
 msgstr ""
 
 #. %s refers to the filename. Please leave as "%s", but move within the
 #. sentence as needed
-#: src/open.c:24730
+#: src/open.c:24866
 #, c-format
 msgid "File: %s successfully loaded."
 msgstr ""

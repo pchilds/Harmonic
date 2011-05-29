@@ -42,4 +42,6 @@
 	extern void upg(GtkWidget*, gpointer);
 	void opd(GtkWidget*, gpointer);
 	void upt(GtkWidget*, gpointer);
+	void tsw(GtkWidget*, gpointer);
+	void tdl(GtkWidget*, gpointer);
 #endif

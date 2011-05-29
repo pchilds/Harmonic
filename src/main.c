@@ -38,7 +38,6 @@
  * BAT: skip over errorneous data points
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
- * OPD: improve config writing utility to reorder post entry
  * SAV: session save/restore routine
  * TRS: wavelets
  */

@@ -23,16 +23,116 @@
  */
 
 #include "open.h"
+GtkWidget *dialog, *adb, *spin, *cft;
+GList *conff=NULL, *confv=NULL, *confb=NULL;
 
-GtkWidget *dialog, *spin;
-GArray *fls, *vls;
+void tsw(GtkWidget *widget, gpointer dta)
+{
+	GList *iter=NULL;
+	gchar *s2=NULL, *s1=NULL;
+	gdouble val, val2;
+	guint ps;
+
+	ps=GPOINTER_TO_UINT(dta);
+	iter=g_list_nth(conff, ps);
+	s2=g_strdup(gtk_label_get_label(GTK_LABEL(iter->data)));
+	iter=(iter->prev);
+	s1=g_strdup(gtk_label_get_label(GTK_LABEL(iter->data)));
+	gtk_label_set_label(GTK_LABEL(iter->data), s2);
+	iter=(iter->next);
+	gtk_label_set_label(GTK_LABEL(iter->data), s1);
+	g_free(s1);
+	g_free(s2);
+	iter=g_list_nth(confv, ps);
+	val2=gtk_spin_button_get_value(GTK_SPIN_BUTTON(iter->data));
+	iter=(iter->prev);
+	val=gtk_spin_button_get_value(GTK_SPIN_BUTTON(iter->data));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(iter->data), val2);
+	iter=(iter->next);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(iter->data), val);
+}
+
+void tdl(GtkWidget *widget, gpointer dta)
+{
+	GList *iter1=NULL, *iter2=NULL;
+	gchar *s=NULL;
+	gdouble val;
+	guint ps;
+	gint rw;
+
+	ps=GPOINTER_TO_UINT(dta);
+	g_object_get(G_OBJECT(cft), "n-rows", &rw, NULL);
+	rw-=3;
+	if (rw<=4)
+	{
+		gtk_container_remove(GTK_CONTAINER(cft), widget);
+		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(conff->data));
+		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(confv->data));
+		g_list_free(confb);
+		confb=NULL;
+		g_list_free(conff);
+		conff=NULL;
+		g_list_free(confv);
+		confv=NULL;
+	}
+	else
+	{
+		iter1=g_list_last(confb);
+		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(iter1->data));
+		iter1=(iter1->prev);
+		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(iter1->data));
+		iter1=(iter1->prev);
+		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(iter1->data));
+		iter2=(iter1->prev);
+		(iter2->next)=NULL;
+		(iter1->prev)=NULL;
+		g_list_free(iter1);
+		iter1=g_list_nth(conff, ps);
+		iter1=(iter1->next);
+		iter2=g_list_nth(confv, ps);
+		iter2=(iter2->next);
+		while (iter1)
+		{
+			s=g_strdup(gtk_label_get_label(GTK_LABEL(iter1->data)));
+			iter1=(iter1->prev);
+			gtk_label_set_label(GTK_LABEL(iter1->data), s);
+			iter1=(iter1->next);
+			iter1=(iter1->next);
+			val=gtk_spin_button_get_value(GTK_SPIN_BUTTON(iter2->data));
+			iter2=(iter2->prev);
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(iter2->data), val);
+			iter2=(iter2->next);
+			iter2=(iter2->next);
+		}
+		iter1=g_list_last(conff);
+		iter2=(iter1->prev);
+		(iter2->next)=NULL;
+		(iter1->prev)=NULL;
+		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(iter1->data));
+		iter1=g_list_last(confv);
+		iter2=(iter1->prev);
+		(iter2->next)=NULL;
+		(iter1->prev)=NULL;
+		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(iter1->data));
+	}
+	g_object_ref(G_OBJECT(adb));
+	gtk_container_remove(GTK_CONTAINER(cft), adb);
+	gtk_table_attach(GTK_TABLE(cft), adb, 1, 2, rw-3, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+	g_object_unref(G_OBJECT(adb));
+	g_object_ref(G_OBJECT(spin));
+	gtk_container_remove(GTK_CONTAINER(cft), spin);
+	gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, rw-3, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+	g_object_unref(G_OBJECT(spin));
+	gtk_table_resize(GTK_TABLE(cft), rw, 3);
+}
 
 void upt(GtkWidget *widget, gpointer dta)
 {
-	GtkWidget *wwfile, *lbl;
+	GtkWidget *wwfile, *lbl, *btt;
 	GtkAdjustment *adj;
 	GList *chld;
-	guint rw;
+	gint rw;
+	guint ps;
 	gdouble val;
 	gchar *fin=NULL;
 
@@ -43,24 +143,45 @@ void upt(GtkWidget *widget, gpointer dta)
 	g_signal_connect(G_OBJECT(wwfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wwfile));
 	if (gtk_dialog_run(GTK_DIALOG(wwfile))==GTK_RESPONSE_ACCEPT)
 	{
-		g_object_get(G_OBJECT(dta), "n-rows", &rw, NULL);
-		gtk_table_resize(GTK_TABLE(dta), ++rw, 2);
+		g_object_get(G_OBJECT(cft), "n-rows", &rw, NULL);
+		ps=rw-1;
+		ps/=3;
+		ps--;
+		gtk_table_resize(GTK_TABLE(cft), rw+3, 3);
 		g_object_ref(G_OBJECT(widget));
-		gtk_container_remove(GTK_CONTAINER(dta), widget);
+		gtk_container_remove(GTK_CONTAINER(cft), widget);
 		fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wwfile));
 		lbl=gtk_label_new(fin);
-		g_array_append_val(fls, fin);
 		g_free(fin);
 		gtk_widget_show(lbl);
-		gtk_table_attach(GTK_TABLE(dta), lbl, 0, 1, rw-2, rw-1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		gtk_table_attach(GTK_TABLE(dta), widget, 0, 1, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_table_attach(GTK_TABLE(cft), lbl, 1, 2, rw-3, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_table_attach(GTK_TABLE(cft), widget, 1, 2, rw, rw+3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		g_object_unref(G_OBJECT(widget));
 		val=gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin));
-		g_array_append_val(vls, val);
+		btt=gtk_button_new_from_stock(GTK_STOCK_DELETE);
+		g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tdl), GUINT_TO_POINTER(ps));
+		gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, rw-2, rw-1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_widget_show(btt);
+		confb=g_list_append(confb, (gpointer) btt);
+		if (ps>0)
+		{
+			btt=gtk_button_new_from_stock(GTK_STOCK_GO_UP);
+			g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tsw), GUINT_TO_POINTER(ps));
+			gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, rw-3, rw-2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(btt);
+			confb=g_list_append(confb, (gpointer) btt);
+			btt=gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
+			g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tsw), GUINT_TO_POINTER(ps));
+			gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, rw-4, rw-3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(btt);
+			confb=g_list_append(confb, (gpointer) btt);
+		}
+		conff=g_list_append(conff, (gpointer) lbl);
+		confv=g_list_append(confv, (gpointer) spin);
 		adj=(GtkAdjustment*) gtk_adjustment_new(val, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 		spin=gtk_spin_button_new(adj, 0, 0);
 		gtk_widget_show(spin);
-		gtk_table_attach(GTK_TABLE(dta), spin, 1, 2, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, rw, rw+3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	}
 	gtk_widget_destroy(wwfile);
 }
@@ -69,17 +190,18 @@ void opd(GtkWidget *widget, gpointer data)
 {
 	PlotLinear *plt;
 	PlotPolar *plt2;
-	GtkWidget *wfile, *content, *hbox, *vsc, *table, *scroll, *butt, *label, *cont, *trace;
+	GtkWidget *wfile, *content, *hbox, *vsc, *scroll, *label, *cont, *trace;
 	GArray *xp, *yp, *starp, *delp;
 	GtkAdjustment *adj, *adj2;
+	GSList *list;
+	GList *iter1, *iter2;
+	struct confrow *row;
 	gdouble xi, xf, lcl, mny, mxy, idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct, ofs, ofe, clc, xx, ce;
 	gint j, k, l, m, sal, st, sp, kib, n, zp, lcib, dr, dx, dx2;
 	gchar s[5];
 	gchar *contents, *contents2, *str, *s2, *fin=NULL;
 	gchar **strary, **strary2, **strat, **strat2;
 	gchar s1[10];
-	GSList *list;
-	GList *chld;
 	GError *Err=NULL;
 	double *y, *star;
 	fftw_plan p;
@@ -115,69 +237,85 @@ void opd(GtkWidget *widget, gpointer data)
 					dialog=gtk_dialog_new_with_buttons(_("Configuration file generation"), GTK_WINDOW(wfile), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_APPLY, NULL);
 					g_signal_connect_swapped(G_OBJECT(dialog), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(dialog));
 					gtk_widget_show(dialog);
-					fls=g_array_new(FALSE, FALSE, sizeof(gchar*));
-					vls=g_array_new(FALSE, FALSE, sizeof(gdouble));
 					content=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-					table=gtk_table_new(2, 2, FALSE);
-					gtk_widget_show(table);
+					cft=gtk_table_new(4, 3, FALSE);
+					gtk_widget_show(cft);
 					label=gtk_label_new(_("File:"));
 					gtk_widget_show(label);
-					gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+					gtk_table_attach(GTK_TABLE(cft), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 					label=gtk_label_new(_("Measurand\nValue:"));
 					gtk_widget_show(label);
-					gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-					butt=gtk_button_new_with_label(_("Add another file"));
-					gtk_widget_show(butt);
-					gtk_table_attach(GTK_TABLE(table), butt, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-					g_signal_connect(G_OBJECT(butt), "clicked", G_CALLBACK(upt), (gpointer) table);
+					gtk_table_attach(GTK_TABLE(cft), label, 2, 3, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+					adb=gtk_button_new_with_label(_("Add another file"));
+					gtk_widget_show(adb);
+					gtk_table_attach(GTK_TABLE(cft), adb, 1, 2, 1, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+					g_signal_connect(G_OBJECT(adb), "clicked", G_CALLBACK(upt), NULL);
 					adj=(GtkAdjustment*) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 					spin=gtk_spin_button_new(adj, 0, 0);
 					gtk_widget_show(spin);
-					gtk_table_attach(GTK_TABLE(table), spin, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+					gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, 1, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 					adj=(GtkAdjustment*) gtk_adjustment_new(0, 0, 0, 0.0, 0.0, 0.0);
 					adj2=(GtkAdjustment*) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 					scroll=gtk_scrolled_window_new(adj, adj2);
 					gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-					gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scroll), table);
+					gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scroll), cft);
 					gtk_widget_show(scroll);
 					gtk_box_pack_start(GTK_BOX(content), scroll, TRUE, TRUE, 2);
 					if (gtk_dialog_run(GTK_DIALOG(dialog))==GTK_RESPONSE_APPLY)
 					{
-						mx=(fls->len);
-						g_snprintf(s1, 10, "%f", g_array_index(vls, gdouble, 0));
-						s2=g_strdup(g_array_index(fls, gchar*, 0));
-						contents2=g_strjoin("\t", s1, s2, NULL);
-						g_free(s2);
-						j=1;
-						while (j<mx)
+						mx=0;
+						iter1=g_list_first(conff);
+						iter2=g_list_first(confv);
+						if (iter1)
 						{
-							g_snprintf(s1, 10, "%f", g_array_index(vls, gdouble, j));
-							s2=g_strdup(g_array_index(fls, gchar*, j));
-							str=g_strjoin("\t", s1, s2, NULL);
+							s2=g_strdup(gtk_label_get_label(GTK_LABEL(iter1->data)));
+							iter1=(iter1->next);
+							iv=gtk_spin_button_get_value(GTK_SPIN_BUTTON(iter2->data));
+							iter2=(iter2->next);
+							g_snprintf(s1, 10, "%f", iv);
+							contents2=g_strjoin("\t", s1, s2, NULL);
 							g_free(s2);
-							contents=g_strdup(contents2);
+							mx++;
+							while (iter1)
+							{
+								s2=g_strdup(gtk_label_get_label(GTK_LABEL(iter1->data)));
+								iter1=(iter1->next);
+								iv=gtk_spin_button_get_value(GTK_SPIN_BUTTON(iter2->data));
+								iter2=(iter2->next);
+								g_snprintf(s1, 10, "%f", iv);
+								str=g_strjoin("\t", s1, s2, NULL);
+								g_free(s2);
+								contents=g_strdup(contents2);
+								g_free(contents2);
+								contents2=g_strjoin(DLMT, contents, str, NULL);
+								g_free(contents);
+								g_free(str);
+								mx++;
+							}
+							g_file_set_contents(fin, contents2, -1, &Err);
 							g_free(contents2);
-							contents2=g_strjoin(DLMT, contents, str, NULL);
-							g_free(contents);
-							g_free(str);
-							j++;
+							if (Err)
+							{
+								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								g_free(str);
+								g_error_free(Err);
+							}
+							else dr=GTK_RESPONSE_ACCEPT;
 						}
-						g_file_set_contents(fin, contents2, -1, &Err);
-						g_free(contents2);
-						if (Err)
+						else
 						{
-							str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
+							str=g_strdup(_("No filenames given."));
 							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 							g_free(str);
-							g_error_free(Err);
 						}
-						dr=GTK_RESPONSE_ACCEPT;
 					}
-					g_array_free(fls, TRUE);
-					g_array_free(vls, TRUE);
+					g_list_free(conff);
+					g_list_free(confv);
+					g_list_free(confb);
+					gtk_widget_destroy(dialog);
 				}
 				g_free(fin);
-				gtk_widget_destroy(dialog);
 			}
 			if (dr!=GTK_RESPONSE_ACCEPT) gtk_widget_destroy(wfile);
 			else

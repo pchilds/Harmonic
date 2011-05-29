@@ -108,10 +108,8 @@
       <para>If the offset level is not consistent across the different measurement files, it is possible to automatically correct for changes in the overall amplitude by selecting "Autotrack Offset" from the Advanced menu (see what is documented earlier about <link linkend="base_autotrack">autotracking</link> for instructions on its use). Note that if "Apply correction to Window edges" is also selected, autotracking has no effect as the edge correction routine needs no offset value.</para>
     </sect2>
     <sect2 id="batc_conf"><title>The configuration file</title>
-      <para>After pressing "File->open" then "New" a configuration file can be created by adjusting the spin button to the value of the variable corresponding to the first file. Then press "Add another file" to select the file. Repeat this process over all required files that make up your measurement set and then press "Save".</para>
-      <warning><title>warning</title>
-        <para>It is important that the files be ordered properly for display in the plot (lower to higher values). It is also necessary to select the spin value before the filename as the value is fixed once the file is selected (fixing this problem will be addressed in future releases).</para>
-      </warning>
+      <para>After pressing "File->open" then "New" a configuration file can be created by pressing "Add another file" (and selecting the file from the list) and adjusting the spin button to the value of the variable corresponding to the first file. Repeat this process over all required files that make up your measurement set and then press "Save".</para>
+      <para>Files (and thir corresponding values) can be repositioned in the table and removed using he up/down and delete buttons to their left.</para>
       <para>Configuration files can also be written manually. The format for the files is 2 columns of tab delimited data, the first being a numerical value for the variable parameter that differs from file to file, and the second being the file name.</para>
       <tip><title>tip</title>
         <para>Note that when writing your own configuration file the format for the file name must include the full path to locate the file.</para>
@@ -153,12 +151,16 @@
     <sect2><title>Example 5: Processing a set of measurements using batch processing</title>
       <para>Select one of the measurements that gives a good ability to determine the processing parameters (such as Start/Stop and Triangle Centre values) and process it normally as above. If you are happy with the parameters then select "Advanced->Batch Process Data?". If the offset is inconsistent you may want to select "Advanced->Autotrack Offset?" or "Advanced->Apply correction to window edges?". See their use <link linkend="base_edgecorr">above</link>.</para>
       <para>Press "File->Open" and type in a name for a configuration file and then press "New". For future use if you are going to reprocess the same set of data pressing "Open" will load the existing configuration file without the need to repeat the following step.</para>
-      <para>Choosing a variable that differs from file to file (e.g. time, orientation angle or temperature of the device), change the numerical spin button to a value that is the lower bound of this variable over the data set. Then press "Add another file" and select the data file that this value is associated with. Repeat with taking the next larger value each time (always selecting the value before selecting the file as the value cannot be changed afterwards -- yet) until all files are present and then press "Save".</para>
+      <para>Choosing a variable that differs from file to file (e.g. time, orientation angle or temperature of the device), change the numerical spin button to a value that is the lower bound of this variable over the data set. Press "Add another file" and select the data file that this value is associated with. Repeat with taking the next larger value each time until all files are present and then press "Save".</para>
       <para>Choose the form of your plot (generally linear unless unless it is an angular variable that distinguishes each file) and the results will display. From "Properties->Display Properties" select the "results" tab and particular result you are interested in (Visibility/Domain Shift/Chirp). Change the font, size and labels for the axes (and potentially select multiple traces and colours for each) as desired and press "OK". With the resulting graph displayed it can be printed with "File->Print" or its data saved to a spreadsheet format with "File->Save".</para>
     </sect2>
   </sect1>
   <glossary>
     <glossdiv><title>B</title>
+      <glossentry>
+        <glossterm>Basis Function</glossterm>
+        <glossdef><para>A function that is part of a set of functions that when linearly combined can describe any function on a particular space.</para></glossdef>
+      </glossentry>
       <glossentry>
         <glossterm>Batch Processing</glossterm>
         <glossdef><para>Automatically running a process repeatedly on a number of different data sets. A batch (or configuration) file specifying the location of each piece of data and its relevnce to the whole is usually needed.</para></glossdef>
@@ -168,6 +170,12 @@
       <glossentry>
         <glossterm>Chirp</glossterm>
         <glossdef><para>The change in periodicity of a signal over its duration/spectrum. Chirp is seen in nonlinearity in the phase and often described in terms of constituent orders; linear chirp being due to quadratic phase terms, quadratic chirp being due to cubic phase terms, etc.</para></glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv><title>D</title>
+      <glossentry>
+        <glossterm>Daubechies Wavelet</glossterm>
+        <glossdef><para>An orthogonal set of wavelets designed with the regularisation to have the fastest possible decay at infinity. The index given refers to the number of coefficients of the filter that is used for the transform.</para></glossdef>
       </glossentry>
     </glossdiv>
     <glossdiv><title>E</title>
@@ -183,6 +191,14 @@
       </glossentry>
     </glossdiv>
     <glossdiv><title>M</title>
+      <glossentry>
+        <glossterm>Meyer Wavelet</glossterm>
+        <glossdef><para>A symmetric orthogonal wavelet that is compactly supported (i.e. is zero everywhere except for a localised region) in the inverse domain.</para></glossdef>
+      </glossentry>
+      <glossentry>
+        <glossterm>Morlet Wavelet</glossterm>
+        <glossdef><para>A symmetric (non-orthogonal) wavelet that is formed by modulating a sinusoidal signal by a gaussian function (or in its modified form by a hyperbolic secant function).</para></glossdef>
+      </glossentry>
       <glossentry>
         <glossterm>Multiple Scattering</glossterm>
         <glossdef><para>When a signal reflects off more than one element prior to detection.</para></glossdef>
@@ -204,6 +220,12 @@
       <glossentry>
         <glossterm>Visibility of Fringes</glossterm>
         <glossdef><para>For a pure unmodulated sinusodal waveform, the visibility is defined as half of the peak to peak amplitude divided by the average value: <inlineequation><mathphrase>V=(max-min)/(max+min)</mathphrase></inlineequation>.</para></glossdef>
+      </glossentry>
+    </glossdiv>
+    <glossdiv><title>W</title>
+      <glossentry>
+        <glossterm>Wavelet</glossterm>
+        <glossdef><para>A wavelike function that decays to zero at infinity.</para></glossdef>
       </glossentry>
     </glossdiv>
     <glossdiv><title>Z</title>

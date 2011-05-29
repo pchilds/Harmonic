@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-05-25 14:38+0300\n"
-"PO-Revision-Date: 2011-05-26 13:16+0300\n"
+"POT-Creation-Date: 2011-05-29 21:13+0300\n"
+"PO-Revision-Date: 2011-05-29 21:52+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Chinese (simplified) <>\n"
 "MIME-Version: 1.0\n"
@@ -18,74 +18,74 @@ msgstr ""
 "Language: zh_CN\n"
 
 #. Name of the program
-#: src/main.c:84
+#: src/main.c:80
 msgid "Harmonic Spectrum Analyser"
 msgstr "谐波光谱分析仪"
 
 #. Menu option to load a previous state of the program.
-#: src/main.c:113
+#: src/main.c:109
 msgid "Restore Session"
 msgstr "会议恢复"
 
 #. Menu option to save the current state of the program.
-#: src/main.c:117
+#: src/main.c:113
 msgid "Save Session"
 msgstr "节省会议"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various file related menu options.
-#: src/main.c:129
+#: src/main.c:125
 msgid "_File"
 msgstr "文件(_F)"
 
 #. Select this if the data files have no header and are just pure tab
 #. seperated values.
-#: src/main.c:152
+#: src/main.c:148
 msgid "Raw Delimited Data"
 msgstr "原始分隔的数据"
 
 #. Menu option to select what format the data files are in.
-#: src/main.c:156
+#: src/main.c:152
 msgid "Data Format:"
 msgstr "数据格式："
 
 #. The trace within the file to use as data for the vertical axis (as the
 #. horizontal axis is the first column trace 1 will be column 2 etc.
-#: src/main.c:161
+#: src/main.c:157
 msgid "Trace:"
 msgstr "丝："
 
 #. Select this if the measurement was performed in transmission (as opposed
 #. to reflection)
-#: src/main.c:168
+#: src/main.c:164
 msgid "Transmission Measurement?"
 msgstr "传输测量"
 
 #. Select this if the measurements are in dBs (or dBs with respect to some
 #. unit, e.g. dBm).
-#: src/main.c:172
+#: src/main.c:168
 msgid "Data in dBs?"
 msgstr "数据在分贝"
 
 #. Select this if you want to multiply the data by -1 before transforming.
-#: src/main.c:176
+#: src/main.c:172
 msgid "Negate?"
 msgstr "否定数据"
 
 #. Menu option to bring up a window to change the way the plots are displayed.
-#: src/main.c:183
+#: src/main.c:179
 msgid "Display Properties:"
 msgstr "属性的显示："
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various options governing how the data is
 #. to be handled and displayed.
-#: src/main.c:188
+#: src/main.c:184
 msgid "_Properties"
 msgstr "特点(_P)"
 
 #. No nonlinear compensation needed.
-#: src/main.c:194
+#: src/main.c:190
 msgid "None"
 msgstr "无"
 
@@ -93,7 +93,7 @@ msgstr "无"
 #. delete or move as needed. Select to correct for spectral shadowing (of
 #. downstream devices by upstream devices due to their removal of the
 #. source spectrum) to first order terms.
-#: src/main.c:198
+#: src/main.c:194
 msgid ""
 "1st order\n"
 "spectral shadowing"
@@ -102,52 +102,52 @@ msgstr "第一阶光谱阴影"
 #. \n refers to a newline to help the text fit better. Feel free to
 #. delete or move as needed. Menu option to select how nonlinearity is
 #. handled in the system.
-#: src/main.c:202
+#: src/main.c:198
 msgid ""
 "Nonlinear\n"
 "Compensation:"
 msgstr "非线性补偿"
 
 #. The fourier basis (e^-ixs) used for Fourier transformation.
-#: src/main.c:207
+#: src/main.c:203
 msgid "Fourier"
 msgstr "傅立叶"
 
 #. The Daubechies 4 wavelet basis (standard wavelet used for DWT).
-#: src/main.c:211
+#: src/main.c:207
 msgid "Daubechies 4"
 msgstr "Daubechies小四"
 
 #. The Daubechies 8 wavelet basis.
-#: src/main.c:215
+#: src/main.c:211
 msgid "Daubechies 8"
 msgstr "Daubechies小八"
 
 #. The Meyer wavelet basis.
-#: src/main.c:219
+#: src/main.c:215
 msgid "Meyer"
 msgstr "迈尔"
 
 #. The Morlet wavelet basis.
-#: src/main.c:223
+#: src/main.c:219
 msgid "Morlet"
 msgstr "莫雷"
 
 #. Menu option for selecting (wavelet) basis function.
-#: src/main.c:227
+#: src/main.c:223
 msgid "Basis Function:"
 msgstr "基函数"
 
 #. option to convert the base domain by inverting with respect to
 #. two pi, e.g. wavelength=two*pi/wavenumber
-#: src/main.c:231
+#: src/main.c:227
 msgid "Invert domain?"
 msgstr "倒置域"
 
 #. \n refers to a newline to help the text fit better. Feel free
 #. to delete or move as needed. Menu option to provide a linear
 #. correction to the spectrum within each window.
-#: src/main.c:235
+#: src/main.c:231
 msgid ""
 "Apply correction\n"
 "to Window edges?"
@@ -155,79 +155,79 @@ msgstr "申请更正窗口优势"
 
 #. Select this if you want the program to automatically adjust the triangle
 #. centre and width parameters.
-#: src/main.c:242
+#: src/main.c:238
 msgid "Optimise Triangle fit?"
 msgstr "优化合适三角"
 
 #. Select this if you want to determine the chirp (as well as visibility and
 #. domain shift).
-#: src/main.c:246
+#: src/main.c:242
 msgid "Calculate Chirp?"
 msgstr "计算啁啾"
 
 #. Select this in order to process several files and compare their results
 #. (Batch processing initiates at the next File->Open menu selection).
-#: src/main.c:253
+#: src/main.c:249
 msgid "Batch Process Data?"
 msgstr "批量处理数据"
 
 #. Select this to automatically change the offset value based on how much
 #. the rightmost edge of the spectrum is changing.
-#: src/main.c:257
+#: src/main.c:253
 msgid "Autotrack Offset?"
 msgstr "自动偏移"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various lesser used menu options.
-#: src/main.c:261
+#: src/main.c:257
 msgid "_Advanced"
 msgstr "先行(_A)"
 
 #. Menu option to bring up documentation.
-#: src/main.c:266
+#: src/main.c:262
 msgid "Instructions"
 msgstr "用法说明"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for help and documentation related menu options.
-#: src/main.c:275
+#: src/main.c:271
 msgid "_Help"
 msgstr "帮助(_H)"
 
 #. Initial value of the base domain to select a windowed region of the data
 #. from.
-#: src/main.c:304
+#: src/main.c:300
 msgid "Spectrum Start:"
 msgstr "开始的光谱："
 
 #. Final value of the base domain to select a windowed region of the data
 #. from.
-#: src/main.c:312
+#: src/main.c:308
 msgid "Spectrum Stop:"
 msgstr "月底的光谱："
 
 #. Reference level to take for the spectrum (typically its maximum value
 #. in the windowed ranges)
-#: src/main.c:320
+#: src/main.c:316
 msgid "Offset:"
 msgstr "偏移："
 
 #. The windows are put into an array of length 2 to the power of this value.
 #. The extra data points needed to fill it out are zero valued, hence zero
 #. padding.
-#: src/main.c:327
+#: src/main.c:323
 msgid "Zero Padding 2^:"
 msgstr "零填充2^："
 
 #. Index of values to take potentially multiple windows over the base domain.
-#: src/main.c:334 src/main.c:393
+#: src/main.c:330 src/main.c:390
 msgid "j index:"
 msgstr "J多图："
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed. Reset the values on this page so
 #. that there is only one j index / k index
-#: src/main.c:342 src/main.c:409
+#: src/main.c:338 src/main.c:406
 msgid ""
 "Reset\n"
 "Arrays"
@@ -235,51 +235,51 @@ msgstr "重置数组"
 
 #. Perform a harmonic transformation of the data (if the Fourier basis is
 #. selected, then this corresponds to the Fourier transform).
-#: src/main.c:346
+#: src/main.c:342
 msgid "Transform Spectrum"
 msgstr "改变光谱"
 
 #. Title for the notebook tab of teh plot of the base domain spectrum.
-#: src/main.c:349 src/main.c:443 src/disp.c:1144
+#: src/main.c:346 src/main.c:440 src/disp.c:1154
 msgid "Spectrum"
 msgstr "光谱"
 
 #. Initial value of the inverse domain to select a windowed region to process.
-#: src/main.c:353
+#: src/main.c:350
 msgid "Inverse Spectrum Start:"
 msgstr "相反的光谱开始："
 
 #. Final value of the inverse domain to select a windowed region to process.
-#: src/main.c:361
+#: src/main.c:358
 msgid "Inverse Spectrum Stop:"
 msgstr "相反的光谱月底："
 
 #. Centre value of a triangle to fit to a window in the inverse domain.
-#: src/main.c:369
+#: src/main.c:366
 msgid "Triangle Centre:"
 msgstr "中心的三角："
 
 #. Full width of the base of this triangle.
-#: src/main.c:377
+#: src/main.c:374
 msgid "Triangle Full Width:"
 msgstr "全宽的三角："
 
 #. Full width of the base of a triangle that fits the peak centred at an
 #. inverse frequency of zero.
-#: src/main.c:385
+#: src/main.c:382
 msgid "DC Peak Width:"
 msgstr "宽度直流峰值："
 
 #. Index of values to take potentially multiple windows over the inverse
 #. domain.
-#: src/main.c:401
+#: src/main.c:398
 msgid "k index:"
 msgstr "K多图："
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed. Button to press to analyse the
 #. transformed results for visibility/domain-shift/chirp
-#: src/main.c:413
+#: src/main.c:410
 msgid ""
 "Process\n"
 "Spectrum"
@@ -287,33 +287,33 @@ msgstr "审查光谱"
 
 #. Title for tab showing a plot of the transformed spectrum over the inverse
 #. domain.
-#: src/main.c:416 src/main.c:478 src/disp.c:1240
+#: src/main.c:413 src/main.c:475 src/disp.c:1250
 msgid "Inverse Spectrum"
 msgstr "相反的光谱"
 
 #. The horizontal domain after transformation (e.g. if the base domain is
 #. time, then it will be frequency).
-#: src/main.c:449
+#: src/main.c:446
 msgid "Inverse Domain"
 msgstr "相反的域"
 
 #. Visibility of fringes (defined for a sinusoid as (maximum-minimum) divided
 #. by (maximum+minimum))
-#: src/main.c:482 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
-#: src/data.c:1143 src/data.c:1284 src/disp.c:1324 src/open.c:24646
+#: src/main.c:479 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
+#: src/data.c:1143 src/data.c:1284 src/disp.c:1334 src/open.c:24784
 msgid "Visibility"
 msgstr "振幅波"
 
 #. How much the interference fringes are moving in the base domain (the base
 #. domain is the horizontal domain of the original data loaded from the file).
-#: src/main.c:488 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
-#: src/data.c:1143 src/data.c:1284 src/disp.c:1325 src/open.c:24652
+#: src/main.c:485 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
+#: src/data.c:1143 src/data.c:1284 src/disp.c:1335 src/open.c:24790
 msgid "Domain Shift"
 msgstr "转移域"
 
 #. Title for the notebook tab displaying the results
-#: src/main.c:494 src/disp.c:1412 src/open.c:24535 src/open.c:24561
-#: src/open.c:24588 src/open.c:24658
+#: src/main.c:491 src/disp.c:1422 src/open.c:24673 src/open.c:24699
+#: src/open.c:24726 src/open.c:24796
 msgid "Analysis Results"
 msgstr "结果分析"
 
@@ -359,8 +359,8 @@ msgstr "没有可用的图片。"
 
 #. Asks the user to name a data file to save results to.
 #: src/data.c:200 src/data.c:1048 src/data.c:1697 src/data.c:1808
-#: src/data.c:1916 src/data.c:2084 src/data.c:2253 src/open.c:39
-#: src/open.c:24624
+#: src/data.c:1916 src/data.c:2084 src/data.c:2253 src/open.c:139
+#: src/open.c:24762
 msgid "Select Data File"
 msgstr "选择数据文件"
 
@@ -373,7 +373,7 @@ msgstr "参数选择"
 
 #. Button to select just saving chirp
 #: src/data.c:213 src/data.c:318 src/data.c:503 src/proc.c:176 src/proc.c:430
-#: src/disp.c:1328
+#: src/disp.c:1338
 msgid "Chirp"
 msgstr "啁啾"
 
@@ -412,7 +412,7 @@ msgstr "被测       \t振幅波      \t转移域      \t啁啾       "
 #: src/data.c:1748 src/data.c:1796 src/data.c:1832 src/data.c:1857
 #: src/data.c:1903 src/data.c:1986 src/data.c:2060 src/data.c:2154
 #: src/data.c:2228 src/data.c:2323 src/data.c:2397 src/data.c:2439
-#: src/open.c:169
+#: src/open.c:299
 #, c-format
 msgid "Error Saving file: %s."
 msgstr "错误保存文件： %s。"
@@ -666,44 +666,44 @@ msgid "Select Session File"
 msgstr "选择会话文件"
 
 #. %s refers to the filename and the error. Please leave as "%s", but move
-#. within the sentence as needed (as long as the file is given first)
-#: src/data.c:2469 src/open.c:386 src/open.c:558 src/open.c:732 src/open.c:905
-#: src/open.c:1078 src/open.c:1251 src/open.c:1428 src/open.c:1600
-#: src/open.c:1774 src/open.c:1947 src/open.c:2120 src/open.c:2293
-#: src/open.c:2515 src/open.c:2730 src/open.c:2915 src/open.c:3099
-#: src/open.c:3317 src/open.c:3506 src/open.c:3722 src/open.c:3933
-#: src/open.c:4118 src/open.c:4302 src/open.c:4518 src/open.c:4702
-#: src/open.c:4840 src/open.c:4968 src/open.c:5098 src/open.c:5227
-#: src/open.c:5356 src/open.c:5485 src/open.c:5618 src/open.c:5746
-#: src/open.c:5876 src/open.c:6005 src/open.c:6134 src/open.c:6263
-#: src/open.c:6442 src/open.c:6613 src/open.c:6754 src/open.c:6894
-#: src/open.c:7068 src/open.c:7213 src/open.c:7386 src/open.c:7553
-#: src/open.c:7694 src/open.c:7834 src/open.c:8007 src/open.c:8148
-#: src/open.c:8340 src/open.c:8515 src/open.c:8691 src/open.c:8866
-#: src/open.c:9042 src/open.c:9217 src/open.c:9397 src/open.c:9572
-#: src/open.c:9748 src/open.c:9923 src/open.c:10099 src/open.c:10274
-#: src/open.c:10476 src/open.c:10671 src/open.c:10858 src/open.c:11044
-#: src/open.c:11237 src/open.c:11428 src/open.c:11624 src/open.c:11815
-#: src/open.c:12002 src/open.c:12188 src/open.c:12379 src/open.c:12565
-#: src/open.c:12706 src/open.c:12837 src/open.c:12969 src/open.c:13100
-#: src/open.c:13232 src/open.c:13363 src/open.c:13499 src/open.c:13630
-#: src/open.c:13762 src/open.c:13893 src/open.c:14025 src/open.c:14156
-#: src/open.c:14315 src/open.c:14466 src/open.c:14609 src/open.c:14751
-#: src/open.c:14900 src/open.c:15047 src/open.c:15200 src/open.c:15347
-#: src/open.c:15490 src/open.c:15632 src/open.c:15780 src/open.c:15923
-#: src/open.c:16113 src/open.c:16287 src/open.c:16460 src/open.c:16632
-#: src/open.c:16805 src/open.c:16977 src/open.c:17154 src/open.c:17326
-#: src/open.c:17499 src/open.c:17671 src/open.c:17844 src/open.c:18016
-#: src/open.c:18215 src/open.c:18407 src/open.c:18591 src/open.c:18774
-#: src/open.c:18972 src/open.c:19169 src/open.c:19365 src/open.c:19553
-#: src/open.c:19737 src/open.c:19920 src/open.c:20116 src/open.c:20308
-#: src/open.c:20448 src/open.c:20576 src/open.c:20705 src/open.c:20833
-#: src/open.c:20962 src/open.c:21090 src/open.c:21223 src/open.c:21351
-#: src/open.c:21480 src/open.c:21608 src/open.c:21737 src/open.c:21865
-#: src/open.c:22022 src/open.c:22170 src/open.c:22310 src/open.c:22449
-#: src/open.c:22603 src/open.c:22756 src/open.c:22908 src/open.c:23052
-#: src/open.c:23192 src/open.c:23331 src/open.c:23485 src/open.c:23635
-#: src/open.c:24612 src/open.c:24749
+#. within the sentence as needed (as long as the file is given first).
+#: src/data.c:2469 src/open.c:524 src/open.c:696 src/open.c:870
+#: src/open.c:1043 src/open.c:1216 src/open.c:1389 src/open.c:1566
+#: src/open.c:1738 src/open.c:1912 src/open.c:2085 src/open.c:2258
+#: src/open.c:2431 src/open.c:2653 src/open.c:2868 src/open.c:3053
+#: src/open.c:3237 src/open.c:3455 src/open.c:3644 src/open.c:3860
+#: src/open.c:4071 src/open.c:4256 src/open.c:4440 src/open.c:4656
+#: src/open.c:4840 src/open.c:4978 src/open.c:5106 src/open.c:5236
+#: src/open.c:5365 src/open.c:5494 src/open.c:5623 src/open.c:5756
+#: src/open.c:5884 src/open.c:6014 src/open.c:6143 src/open.c:6272
+#: src/open.c:6401 src/open.c:6580 src/open.c:6751 src/open.c:6892
+#: src/open.c:7032 src/open.c:7206 src/open.c:7351 src/open.c:7524
+#: src/open.c:7691 src/open.c:7832 src/open.c:7972 src/open.c:8145
+#: src/open.c:8286 src/open.c:8478 src/open.c:8653 src/open.c:8829
+#: src/open.c:9004 src/open.c:9180 src/open.c:9355 src/open.c:9535
+#: src/open.c:9710 src/open.c:9886 src/open.c:10061 src/open.c:10237
+#: src/open.c:10412 src/open.c:10614 src/open.c:10809 src/open.c:10996
+#: src/open.c:11182 src/open.c:11375 src/open.c:11566 src/open.c:11762
+#: src/open.c:11953 src/open.c:12140 src/open.c:12326 src/open.c:12517
+#: src/open.c:12703 src/open.c:12844 src/open.c:12975 src/open.c:13107
+#: src/open.c:13238 src/open.c:13370 src/open.c:13501 src/open.c:13637
+#: src/open.c:13768 src/open.c:13900 src/open.c:14031 src/open.c:14163
+#: src/open.c:14294 src/open.c:14453 src/open.c:14604 src/open.c:14747
+#: src/open.c:14889 src/open.c:15038 src/open.c:15185 src/open.c:15338
+#: src/open.c:15485 src/open.c:15628 src/open.c:15770 src/open.c:15918
+#: src/open.c:16061 src/open.c:16251 src/open.c:16425 src/open.c:16598
+#: src/open.c:16770 src/open.c:16943 src/open.c:17115 src/open.c:17292
+#: src/open.c:17464 src/open.c:17637 src/open.c:17809 src/open.c:17982
+#: src/open.c:18154 src/open.c:18353 src/open.c:18545 src/open.c:18729
+#: src/open.c:18912 src/open.c:19110 src/open.c:19307 src/open.c:19503
+#: src/open.c:19691 src/open.c:19875 src/open.c:20058 src/open.c:20254
+#: src/open.c:20446 src/open.c:20586 src/open.c:20714 src/open.c:20843
+#: src/open.c:20971 src/open.c:21100 src/open.c:21228 src/open.c:21361
+#: src/open.c:21489 src/open.c:21618 src/open.c:21746 src/open.c:21875
+#: src/open.c:22003 src/open.c:22160 src/open.c:22308 src/open.c:22448
+#: src/open.c:22587 src/open.c:22741 src/open.c:22894 src/open.c:23046
+#: src/open.c:23190 src/open.c:23330 src/open.c:23469 src/open.c:23623
+#: src/open.c:23773 src/open.c:24750 src/open.c:24885
 #, c-format
 msgid "Loading failed for file: %s, Error: %s."
 msgstr "加载失败的文件： %s，错误： %s。"
@@ -751,8 +751,8 @@ msgstr "在频道%d一些剪报发生。增加零填充。"
 #. The user has given an offset of zero which gives divide by
 #. zero errors when the data is in a linear scale (e.g. not in dBs)
 #: src/proc.c:2349 src/proc.c:2387 src/proc.c:2536 src/proc.c:2573
-#: src/open.c:18788 src/open.c:18986 src/open.c:19934 src/open.c:20130
-#: src/open.c:22463 src/open.c:22617 src/open.c:23347 src/open.c:23501
+#: src/open.c:18926 src/open.c:19124 src/open.c:20072 src/open.c:20268
+#: src/open.c:22601 src/open.c:22755 src/open.c:23485 src/open.c:23639
 msgid "Offset must be nonzero for linear measurements."
 msgstr "偏移量必须为线性测量非零。"
 
@@ -764,83 +764,83 @@ msgstr "打开一个文件的第一个进行分析。"
 
 #. Title for a window that allows the user to change the way the
 #. plots are displayed
-#: src/disp.c:1064
+#: src/disp.c:1074
 msgid "Display Properties"
 msgstr "属性的显示"
 
 #. label for a button that allows the user to change the font/size/
 #. style of the labels for the axes.
-#: src/disp.c:1082 src/disp.c:1148 src/disp.c:1248
+#: src/disp.c:1092 src/disp.c:1158 src/disp.c:1258
 msgid "Axis label font:"
 msgstr "轴标签的字体："
 
 #. label for a button that allows the user to change the font/size/
 #. style of the numbers along the axes.
-#: src/disp.c:1085 src/disp.c:1151 src/disp.c:1251
+#: src/disp.c:1095 src/disp.c:1161 src/disp.c:1261
 msgid "Tick label font:"
 msgstr "字体轴数："
 
 #. Label that will be displayed along the horizontal axis.
-#: src/disp.c:1088 src/disp.c:1154 src/disp.c:1281
+#: src/disp.c:1098 src/disp.c:1164 src/disp.c:1291
 msgid "X axis text:"
 msgstr "X轴文本："
 
 #. Label that will be displayed along the vertical axis.
-#: src/disp.c:1091 src/disp.c:1157 src/disp.c:1284
+#: src/disp.c:1101 src/disp.c:1167 src/disp.c:1294
 msgid "Y axis text:"
 msgstr "Y轴文本："
 
 #. Title for window that pops up when changing the font/size/style
 #. of the labels for the axes.
-#: src/disp.c:1110 src/disp.c:1176 src/disp.c:1304
+#: src/disp.c:1120 src/disp.c:1186 src/disp.c:1314
 msgid "Font Selection for Axis Labels"
 msgstr "轴标签的字体选择"
 
 #. Title for window that pops up when changing the font/size/style
 #. of the numbers along the axes.
-#: src/disp.c:1118 src/disp.c:1184 src/disp.c:1309
+#: src/disp.c:1128 src/disp.c:1194 src/disp.c:1319
 msgid "Font Selection for Tick Mark Labels"
 msgstr "字体选择轴数"
 
 #. Whether the graph for the inverse domain will have multiple plots
 #. displayed, each corresponding to a different value for the j index.
-#: src/disp.c:1199
+#: src/disp.c:1209
 msgid "Multiple plots for Inverse Domain"
 msgstr "超过指数相反的域"
 
 #. The text that will appear as a label on one of the radii of the plot
 #. segment
-#: src/disp.c:1259
+#: src/disp.c:1269
 msgid "Radial axis text:"
 msgstr "径向轴文本："
 
 #. The text that will appear as a label on the outer arc of the plot segment
 #. (normally will have the value of "Degrees", "Radians", etc.)
-#: src/disp.c:1262
+#: src/disp.c:1272
 msgid "Azimuthal axis text:"
 msgstr "方位轴文本："
 
 #. Whether the graph for the batch results will have multiple plots
 #. displayed, each corresponding to a different value for the j index.
-#: src/disp.c:1336
+#: src/disp.c:1346
 msgid "Multiple plots for Results over index j"
 msgstr "超过指数结果J多图"
 
 #. Whether the graph for the batch results will have multiple plots
 #. displayed, each corresponding to a different value for the k index.
-#: src/disp.c:1344
+#: src/disp.c:1354
 msgid "Multiple plots for Results over index k"
 msgstr "超过指数结果K多图"
 
 #. The user is trying to run a batch process without performing a single
 #. file test. Asks them to do this.
-#: src/open.c:92
+#: src/open.c:214
 msgid "Perform an initial test of the parameters first."
 msgstr "执行的第一个参数的初步测试。"
 
 #. The user has changed the start/stop etc values since the last single file
 #. test. Asks them to repeat a single file test with the new values.
-#: src/open.c:98
+#: src/open.c:220
 msgid ""
 "Parameters have changed since the last test. Retest with the current values "
 "first."
@@ -848,48 +848,52 @@ msgstr "参数已改变，因为最后的测试。复测与第一电流值。"
 
 #. Asks the user to select or create a file that will govern the batch
 #. process.
-#: src/open.c:104
+#: src/open.c:226
 msgid "Select Config File"
 msgstr "选择配置文件"
 
 #. Title for a window that builds a list of files to batch process and their
 #. associated parameter values.
-#: src/open.c:115
+#: src/open.c:237
 msgid "Configuration file generation"
 msgstr "配置文件的生成"
 
 #. Title for the column containing a list of filenames.
-#: src/open.c:123
+#: src/open.c:243
 msgid "File:"
 msgstr "文件:"
 
 #. Title for the column containing the values of the particular parameter
 #. that will vary from file to file.
-#: src/open.c:126
+#: src/open.c:246
 msgid ""
 "Measurand\n"
 "Value:"
 msgstr "被测值:"
 
 #. Button to add another file and value to the list on the table.
-#: src/open.c:129
+#: src/open.c:249
 msgid "Add another file"
 msgstr "添加其他文件"
 
+#: src/open.c:308
+msgid "No filenames given."
+msgstr "没有给出文件名。"
+
 #. Title for window to select between cartesian and polar coordinates
 #. for plotting.
-#: src/open.c:24519
+#: src/open.c:24657
 msgid "Measurand Variable Type"
 msgstr "被测变量类型"
 
 #. Button to select using cartesian axes.
-#: src/open.c:24519
+#: src/open.c:24657
 msgid "Linear"
 msgstr "线性"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed.
-#: src/open.c:24519
+#: src/open.c:24657
 msgid ""
 "Polar\n"
 "(Degrees)"
@@ -897,7 +901,7 @@ msgstr "极性(度)"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed.
-#: src/open.c:24519
+#: src/open.c:24657
 msgid ""
 "Polar\n"
 "(Radians)"
@@ -905,13 +909,13 @@ msgstr "极性(弧度)"
 
 #. Asks the user to select whether the scale will be on a cartesian or
 #. polar graph.
-#: src/open.c:24521
+#: src/open.c:24659
 msgid "Select Measurand Type:"
 msgstr "选择测量类型"
 
 #. %s refers to the filename. Please leave as "%s", but move within the
 #. sentence as needed
-#: src/open.c:24730
+#: src/open.c:24866
 #, c-format
 msgid "File: %s successfully loaded."
 msgstr "文件： %s 成功加载。"
