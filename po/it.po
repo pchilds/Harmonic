@@ -12,10 +12,10 @@ msgstr ""
 "PO-Revision-Date: 2011-05-29 21:48+0300\n"
 "Last-Translator: Alessandro Candiani <>\n"
 "Language-Team: Italian <>\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Name of the program
@@ -911,6 +911,7 @@ msgstr ""
 msgid "Add another file"
 msgstr "Aggiungere un altro file"
 
+#. Error message when a batch file is saved without any files entered.
 #: src/open.c:308
 msgid "No filenames given."
 msgstr "Nesun dato nomi di file."

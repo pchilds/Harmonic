@@ -11,10 +11,10 @@ msgstr ""
 "PO-Revision-Date: 2011-05-29 21:50+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Greek <>\n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Name of the program
@@ -915,6 +915,7 @@ msgstr "Μετρούμενο αξία:"
 msgid "Add another file"
 msgstr "Προσθέστε ένα άλλο αρχείο"
 
+#. Error message when a batch file is saved without any files entered.
 #: src/open.c:308
 msgid "No filenames given."
 msgstr "Δεν ονόματα αρχείων που."

@@ -875,6 +875,7 @@ msgstr ""
 msgid "Add another file"
 msgstr ""
 
+#. Error message when a batch file is saved without any files entered.
 #: src/open.c:308
 msgid "No filenames given."
 msgstr ""

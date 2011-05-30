@@ -35,11 +35,13 @@
  * TO DO:
  *
  * BAT: allowing to proceed from prior single file opened/transformed data
- * BAT: skip over errorneous data points
+ * BAT: skip over erroneous data points (maybe duplicate previous/next?)
+ * BAT: opening of multiple files for config writer
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
  * SAV: session save/restore routine
  * TRS: wavelets
+ * PLOT: see issues in plotpolar
  */
 
 #include <gdk/gdkkeysyms.h>

@@ -8,18 +8,18 @@ msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
 "POT-Creation-Date: 2011-05-29 21:13+0300\n"
-"PO-Revision-Date: 2011-04-27 14:49+0300\n"
+"PO-Revision-Date: 2011-05-30 16:04+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Kazakh <>\n"
+"Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: kk\n"
 
 #. Name of the program
 #: src/main.c:80
 msgid "Harmonic Spectrum Analyser"
-msgstr ""
+msgstr "Aнализатор Үйлесімділік Cпектрi"
 
 #. Menu option to load a previous state of the program.
 #: src/main.c:109
@@ -52,7 +52,7 @@ msgstr ""
 #. horizontal axis is the first column trace 1 will be column 2 etc.
 #: src/main.c:157
 msgid "Trace:"
-msgstr ""
+msgstr "Iз:"
 
 #. Select this if the measurement was performed in transmission (as opposed
 #. to reflection)
@@ -110,7 +110,7 @@ msgstr ""
 #. The fourier basis (e^-ixs) used for Fourier transformation.
 #: src/main.c:203
 msgid "Fourier"
-msgstr ""
+msgstr "Фурье"
 
 #. The Daubechies 4 wavelet basis (standard wavelet used for DWT).
 #: src/main.c:207
@@ -180,18 +180,18 @@ msgstr ""
 #. a shortcut. Menu heading for various lesser used menu options.
 #: src/main.c:257
 msgid "_Advanced"
-msgstr ""
+msgstr "_Қосымша"
 
 #. Menu option to bring up documentation.
 #: src/main.c:262
 msgid "Instructions"
-msgstr ""
+msgstr "Нұсқау"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for help and documentation related menu options.
 #: src/main.c:271
 msgid "_Help"
-msgstr ""
+msgstr "_Жәрдем"
 
 #. Initial value of the base domain to select a windowed region of the data
 #. from.
@@ -241,7 +241,7 @@ msgstr ""
 #. Title for the notebook tab of teh plot of the base domain spectrum.
 #: src/main.c:346 src/main.c:440 src/disp.c:1154
 msgid "Spectrum"
-msgstr ""
+msgstr "Cпектр"
 
 #. Initial value of the inverse domain to select a windowed region to process.
 #: src/main.c:350
@@ -333,7 +333,7 @@ msgstr ""
 #. put your name here and be famous.
 #: src/util.c:54
 msgid "translator-credits"
-msgstr ""
+msgstr "Paul Childs"
 
 #. "x" and "y" are the standard variables representing the horizontal and
 #. vertical axes. %f refers to their values for the current point on the
@@ -342,7 +342,7 @@ msgstr ""
 #: src/util.c:99 src/util.c:108
 #, c-format
 msgid "x: %f, y: %f"
-msgstr ""
+msgstr "x: %f, y: %f"
 
 #. Asks the user to name a file to save an image of the plot.
 #: src/data.c:38 src/data.c:59 src/data.c:79 src/data.c:108 src/data.c:128
@@ -378,7 +378,7 @@ msgstr ""
 #. Button to select saving results (visibility, domain shift and chirp)
 #: src/data.c:213 src/data.c:318 src/data.c:503
 msgid "All"
-msgstr ""
+msgstr "Барлық"
 
 #. asks the user what of the results they want to save (see below).
 #: src/data.c:215 src/data.c:320 src/data.c:505 src/data.c:689 src/data.c:1063
@@ -623,7 +623,7 @@ msgstr ""
 #. Add a "\n" to give a new line if space is cramped.
 #: src/data.c:1925 src/data.c:2093 src/data.c:2262
 msgid "Real/Imaginary"
-msgstr ""
+msgstr "Реалды/Жалған"
 
 #. Button to select saving the data in magnitude and phase format.
 #. Add a "\n" to give a new line if space is cramped.
@@ -874,6 +874,7 @@ msgstr ""
 msgid "Add another file"
 msgstr ""
 
+#. Error message when a batch file is saved without any files entered.
 #: src/open.c:308
 msgid "No filenames given."
 msgstr ""
@@ -887,7 +888,7 @@ msgstr ""
 #. Button to select using cartesian axes.
 #: src/open.c:24657
 msgid "Linear"
-msgstr ""
+msgstr "Cызықтық"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed.
@@ -896,6 +897,8 @@ msgid ""
 "Polar\n"
 "(Degrees)"
 msgstr ""
+"поляр\n"
+"(градусты)"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed.
@@ -904,6 +907,8 @@ msgid ""
 "Polar\n"
 "(Radians)"
 msgstr ""
+"поляр\n"
+"(радиан)"
 
 #. Asks the user to select whether the scale will be on a cartesian or
 #. polar graph.
