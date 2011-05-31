@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
-"POT-Creation-Date: 2011-05-29 21:13+0300\n"
-"PO-Revision-Date: 2011-05-30 16:03+0300\n"
+"POT-Creation-Date: 2011-05-31 10:45+0300\n"
+"PO-Revision-Date: 2011-05-31 11:27+0300\n"
 "Last-Translator: Paul Childs <pchilds@physics.org>\n"
 "Language-Team: Russian <>\n"
 "Language: ru\n"
@@ -20,74 +20,92 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. Name of the program
-#: src/main.c:80
+#: src/main.c:82
 msgid "Harmonic Spectrum Analyser"
 msgstr "Гармонического Aнализатора Cпектра"
 
 #. Menu option to load a previous state of the program.
-#: src/main.c:109
+#: src/main.c:111
 msgid "Restore Session"
 msgstr "возвратить сеанс"
 
 #. Menu option to save the current state of the program.
-#: src/main.c:113
+#: src/main.c:115
 msgid "Save Session"
 msgstr "Сохранить сеанс"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various file related menu options.
-#: src/main.c:125
+#: src/main.c:127
 msgid "_File"
 msgstr "_Файл"
 
 #. Select this if the data files have no header and are just pure tab
 #. seperated values.
-#: src/main.c:148
+#: src/main.c:150
 msgid "Raw Delimited Data"
 msgstr "сырья данных с разделителями"
 
+#. Menu option for loading data where only the magnitude component is
+#. available.
+#: src/main.c:157
+msgid "Magnitude Only"
+msgstr "Только амплитуд"
+
+#. Menu option for loading data where both magnitude and phase components
+#. are available.
+#: src/main.c:161
+msgid "Magnitude and Phase"
+msgstr "Aмплитуды и фазы"
+
+#. Button to select saving the data in real and imaginary values format.
+#. Add a "\n" to give a new line if space is cramped.
+#: src/data.c:1925 src/data.c:2093 src/data.c:2262
+msgid "Real/Imaginary"
+msgstr "Реальные/Мнимые"
+
 #. Menu option to select what format the data files are in.
-#: src/main.c:152
+#: src/main.c:170
 msgid "Data Format:"
 msgstr "Формат данных:"
 
 #. The trace within the file to use as data for the vertical axis (as the
 #. horizontal axis is the first column trace 1 will be column 2 etc.
-#: src/main.c:157
+#: src/main.c:175
 msgid "Trace:"
 msgstr "След:"
 
 #. Select this if the measurement was performed in transmission (as opposed
 #. to reflection)
-#: src/main.c:164
+#: src/main.c:182
 msgid "Transmission Measurement?"
 msgstr "Передачи измерения"
 
 #. Select this if the measurements are in dBs (or dBs with respect to some
 #. unit, e.g. dBm).
-#: src/main.c:168
+#: src/main.c:186
 msgid "Data in dBs?"
 msgstr "Данных в децибелах"
 
 #. Select this if you want to multiply the data by -1 before transforming.
-#: src/main.c:172
+#: src/main.c:190
 msgid "Negate?"
 msgstr "Отрицайте"
 
 #. Menu option to bring up a window to change the way the plots are displayed.
-#: src/main.c:179
+#: src/main.c:197
 msgid "Display Properties:"
 msgstr "Визуального свойство:"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various options governing how the data is
 #. to be handled and displayed.
-#: src/main.c:184
+#: src/main.c:202
 msgid "_Properties"
 msgstr "_Свойство"
 
 #. No nonlinear compensation needed.
-#: src/main.c:190
+#: src/main.c:208
 msgid "None"
 msgstr "Ничего"
 
@@ -95,7 +113,7 @@ msgstr "Ничего"
 #. delete or move as needed. Select to correct for spectral shadowing (of
 #. downstream devices by upstream devices due to their removal of the
 #. source spectrum) to first order terms.
-#: src/main.c:194
+#: src/main.c:212
 msgid ""
 "1st order\n"
 "spectral shadowing"
@@ -106,7 +124,7 @@ msgstr ""
 #. \n refers to a newline to help the text fit better. Feel free to
 #. delete or move as needed. Menu option to select how nonlinearity is
 #. handled in the system.
-#: src/main.c:198
+#: src/main.c:216
 msgid ""
 "Nonlinear\n"
 "Compensation:"
@@ -115,45 +133,45 @@ msgstr ""
 "компенсации:"
 
 #. The fourier basis (e^-ixs) used for Fourier transformation.
-#: src/main.c:203
+#: src/main.c:221
 msgid "Fourier"
 msgstr "Фурье"
 
 #. The Daubechies 4 wavelet basis (standard wavelet used for DWT).
-#: src/main.c:207
+#: src/main.c:225
 msgid "Daubechies 4"
 msgstr "Добеши 4"
 
 #. The Daubechies 8 wavelet basis.
-#: src/main.c:211
+#: src/main.c:229
 msgid "Daubechies 8"
 msgstr "Добеши 8"
 
 #. The Meyer wavelet basis.
-#: src/main.c:215
+#: src/main.c:233
 msgid "Meyer"
 msgstr "Мейер"
 
 #. The Morlet wavelet basis.
-#: src/main.c:219
+#: src/main.c:237
 msgid "Morlet"
 msgstr "Морле"
 
 #. Menu option for selecting (wavelet) basis function.
-#: src/main.c:223
+#: src/main.c:241
 msgid "Basis Function:"
 msgstr "Основа функции"
 
 #. option to convert the base domain by inverting with respect to
 #. two pi, e.g. wavelength=two*pi/wavenumber
-#: src/main.c:227
+#: src/main.c:245
 msgid "Invert domain?"
 msgstr "Обратите области"
 
 #. \n refers to a newline to help the text fit better. Feel free
 #. to delete or move as needed. Menu option to provide a linear
 #. correction to the spectrum within each window.
-#: src/main.c:231
+#: src/main.c:249
 msgid ""
 "Apply correction\n"
 "to Window edges?"
@@ -163,79 +181,79 @@ msgstr ""
 
 #. Select this if you want the program to automatically adjust the triangle
 #. centre and width parameters.
-#: src/main.c:238
+#: src/main.c:256
 msgid "Optimise Triangle fit?"
 msgstr "Оптимизировайте припадке треугольников"
 
 #. Select this if you want to determine the chirp (as well as visibility and
 #. domain shift).
-#: src/main.c:242
+#: src/main.c:260
 msgid "Calculate Chirp?"
 msgstr "Измерите ЛЧМ"
 
 #. Select this in order to process several files and compare their results
 #. (Batch processing initiates at the next File->Open menu selection).
-#: src/main.c:249
+#: src/main.c:267
 msgid "Batch Process Data?"
 msgstr "пакетной обработки данных"
 
 #. Select this to automatically change the offset value based on how much
 #. the rightmost edge of the spectrum is changing.
-#: src/main.c:253
+#: src/main.c:271
 msgid "Autotrack Offset?"
 msgstr "Автоматизировать смещение"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various lesser used menu options.
-#: src/main.c:257
+#: src/main.c:275
 msgid "_Advanced"
 msgstr "_Дополнительные"
 
 #. Menu option to bring up documentation.
-#: src/main.c:262
+#: src/main.c:280
 msgid "Instructions"
 msgstr "Инструкции"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for help and documentation related menu options.
-#: src/main.c:271
+#: src/main.c:289
 msgid "_Help"
 msgstr "_Помощь"
 
 #. Initial value of the base domain to select a windowed region of the data
 #. from.
-#: src/main.c:300
+#: src/main.c:318
 msgid "Spectrum Start:"
 msgstr "Начала спектра:"
 
 #. Final value of the base domain to select a windowed region of the data
 #. from.
-#: src/main.c:308
+#: src/main.c:326
 msgid "Spectrum Stop:"
 msgstr "Конце спектра:"
 
 #. Reference level to take for the spectrum (typically its maximum value
 #. in the windowed ranges)
-#: src/main.c:316
+#: src/main.c:334
 msgid "Offset:"
 msgstr "Смещение:"
 
 #. The windows are put into an array of length 2 to the power of this value.
 #. The extra data points needed to fill it out are zero valued, hence zero
 #. padding.
-#: src/main.c:323
+#: src/main.c:341
 msgid "Zero Padding 2^:"
 msgstr "Заполнение нулями 2^:"
 
 #. Index of values to take potentially multiple windows over the base domain.
-#: src/main.c:330 src/main.c:390
+#: src/main.c:348 src/main.c:408
 msgid "j index:"
 msgstr "З Индекс:"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed. Reset the values on this page so
 #. that there is only one j index / k index
-#: src/main.c:338 src/main.c:406
+#: src/main.c:356 src/main.c:424
 msgid ""
 "Reset\n"
 "Arrays"
@@ -245,51 +263,51 @@ msgstr ""
 
 #. Perform a harmonic transformation of the data (if the Fourier basis is
 #. selected, then this corresponds to the Fourier transform).
-#: src/main.c:342
+#: src/main.c:360
 msgid "Transform Spectrum"
 msgstr "Преобразите Спектра."
 
 #. Title for the notebook tab of teh plot of the base domain spectrum.
-#: src/main.c:346 src/main.c:440 src/disp.c:1154
+#: src/main.c:364 src/main.c:458 src/disp.c:1177
 msgid "Spectrum"
 msgstr "Спектра"
 
 #. Initial value of the inverse domain to select a windowed region to process.
-#: src/main.c:350
+#: src/main.c:368
 msgid "Inverse Spectrum Start:"
 msgstr "Начала обратный спектр:"
 
 #. Final value of the inverse domain to select a windowed region to process.
-#: src/main.c:358
+#: src/main.c:376
 msgid "Inverse Spectrum Stop:"
 msgstr "Конце обратный спектр:"
 
 #. Centre value of a triangle to fit to a window in the inverse domain.
-#: src/main.c:366
+#: src/main.c:384
 msgid "Triangle Centre:"
 msgstr "Центре Треугольника:"
 
 #. Full width of the base of this triangle.
-#: src/main.c:374
+#: src/main.c:392
 msgid "Triangle Full Width:"
 msgstr "Полная ширина треугольника:"
 
 #. Full width of the base of a triangle that fits the peak centred at an
 #. inverse frequency of zero.
-#: src/main.c:382
+#: src/main.c:400
 msgid "DC Peak Width:"
 msgstr "Ширина пика DC:"
 
 #. Index of values to take potentially multiple windows over the inverse
 #. domain.
-#: src/main.c:398
+#: src/main.c:416
 msgid "k index:"
 msgstr "К Индекс:"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed. Button to press to analyse the
 #. transformed results for visibility/domain-shift/chirp
-#: src/main.c:410
+#: src/main.c:428
 msgid ""
 "Process\n"
 "Spectrum"
@@ -299,32 +317,32 @@ msgstr ""
 
 #. Title for tab showing a plot of the transformed spectrum over the inverse
 #. domain.
-#: src/main.c:413 src/main.c:475 src/disp.c:1250
+#: src/main.c:431 src/main.c:493 src/disp.c:1291
 msgid "Inverse Spectrum"
 msgstr "Обратный спектр"
 
 #. The horizontal domain after transformation (e.g. if the base domain is
 #. time, then it will be frequency).
-#: src/main.c:446
+#: src/main.c:464
 msgid "Inverse Domain"
 msgstr "Обратная области"
 
 #. Visibility of fringes (defined for a sinusoid as (maximum-minimum) divided
 #. by (maximum+minimum))
-#: src/main.c:479 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
-#: src/data.c:1143 src/data.c:1284 src/disp.c:1334 src/open.c:24784
+#: src/main.c:497 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
+#: src/data.c:1143 src/data.c:1284 src/disp.c:1375 src/open.c:24784
 msgid "Visibility"
 msgstr "Видимость"
 
 #. How much the interference fringes are moving in the base domain (the base
 #. domain is the horizontal domain of the original data loaded from the file).
-#: src/main.c:485 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
-#: src/data.c:1143 src/data.c:1284 src/disp.c:1335 src/open.c:24790
+#: src/main.c:503 src/data.c:213 src/data.c:318 src/data.c:503 src/data.c:1061
+#: src/data.c:1143 src/data.c:1284 src/disp.c:1376 src/open.c:24790
 msgid "Domain Shift"
 msgstr "Сдвига области"
 
 #. Title for the notebook tab displaying the results
-#: src/main.c:491 src/disp.c:1422 src/open.c:24673 src/open.c:24699
+#: src/main.c:509 src/disp.c:1480 src/open.c:24673 src/open.c:24699
 #: src/open.c:24726 src/open.c:24796
 msgid "Analysis Results"
 msgstr "Результаты анализа"
@@ -386,7 +404,7 @@ msgstr "Выбор параметр"
 
 #. Button to select just saving chirp
 #: src/data.c:213 src/data.c:318 src/data.c:503 src/proc.c:176 src/proc.c:430
-#: src/disp.c:1338
+#: src/disp.c:1379
 msgid "Chirp"
 msgstr "ЛЧМ"
 
@@ -654,12 +672,6 @@ msgstr "K        \tВИДИМОСТЬ\tСДВЫГ_ОБЛ"
 msgid "J        \tVISIBILTY\tDOMN_SHFT"
 msgstr "З        \tВИДИМОСТЬ\tСДВЫГ_ОБЛ"
 
-#. Button to select saving the data in real and imaginary values format.
-#. Add a "\n" to give a new line if space is cramped.
-#: src/data.c:1925 src/data.c:2093 src/data.c:2262
-msgid "Real/Imaginary"
-msgstr "Реальные/Мнимые"
-
 #. Button to select saving the data in magnitude and phase format.
 #. Add a "\n" to give a new line if space is cramped.
 #: src/data.c:1925 src/data.c:2093 src/data.c:2262
@@ -736,7 +748,7 @@ msgstr "Выберите файл сеанса"
 #: src/open.c:22003 src/open.c:22160 src/open.c:22308 src/open.c:22448
 #: src/open.c:22587 src/open.c:22741 src/open.c:22894 src/open.c:23046
 #: src/open.c:23190 src/open.c:23330 src/open.c:23469 src/open.c:23623
-#: src/open.c:23773 src/open.c:24750 src/open.c:24885
+#: src/open.c:23773 src/open.c:24750 src/open.c:24898
 #, c-format
 msgid "Loading failed for file: %s, Error: %s."
 msgstr "Загрузка не удалась по файл: %s, ошибка: %s."
@@ -804,65 +816,85 @@ msgstr "Визуального свойство"
 
 #. label for a button that allows the user to change the font/size/
 #. style of the labels for the axes.
-#: src/disp.c:1092 src/disp.c:1158 src/disp.c:1258
+#: src/disp.c:1092 src/disp.c:1181 src/disp.c:1299
 msgid "Axis label font:"
 msgstr "Шрифт для подписей оси:"
 
 #. label for a button that allows the user to change the font/size/
 #. style of the numbers along the axes.
-#: src/disp.c:1095 src/disp.c:1161 src/disp.c:1261
+#: src/disp.c:1095 src/disp.c:1184 src/disp.c:1302
 msgid "Tick label font:"
 msgstr "Шрифт для оси номера:"
 
 #. Label that will be displayed along the horizontal axis.
-#: src/disp.c:1098 src/disp.c:1164 src/disp.c:1291
+#: src/disp.c:1098 src/disp.c:1187 src/disp.c:1332
 msgid "X axis text:"
 msgstr "Текст оси x:"
 
 #. Label that will be displayed along the vertical axis.
-#: src/disp.c:1101 src/disp.c:1167 src/disp.c:1294
+#: src/disp.c:1101 src/disp.c:1190 src/disp.c:1335
 msgid "Y axis text:"
 msgstr "Текст оси y:"
 
 #. Title for window that pops up when changing the font/size/style
 #. of the labels for the axes.
-#: src/disp.c:1120 src/disp.c:1186 src/disp.c:1314
+#: src/disp.c:1120 src/disp.c:1209 src/disp.c:1355
 msgid "Font Selection for Axis Labels"
 msgstr "Выбор шрифта для подписей оси"
 
 #. Title for window that pops up when changing the font/size/style
 #. of the numbers along the axes.
-#: src/disp.c:1128 src/disp.c:1194 src/disp.c:1319
+#: src/disp.c:1128 src/disp.c:1217 src/disp.c:1360
 msgid "Font Selection for Tick Mark Labels"
 msgstr "Выбор шрифта для оси номера"
 
+#. button for selecting to plot the magnitude.
+#: src/disp.c:1144 src/disp.c:1233 src/disp.c:1390
+msgid "Magnitude"
+msgstr "Амплитуд"
+
+#. button for selecting to plot the phase.
+#: src/disp.c:1145 src/disp.c:1234 src/disp.c:1391
+msgid "Phase"
+msgstr "Фазе"
+
+#. button for selecting to plot the real part.
+#: src/disp.c:1149 src/disp.c:1238 src/disp.c:1395
+msgid "Real Part"
+msgstr "Мнимaя часть"
+
+#. button for selecting to plot the imaginary part.
+#: src/disp.c:1150 src/disp.c:1239 src/disp.c:1396
+msgid "Imaginary Part"
+msgstr "Реальнaя часть"
+
 #. Whether the graph for the inverse domain will have multiple plots
 #. displayed, each corresponding to a different value for the j index.
-#: src/disp.c:1209
+#: src/disp.c:1244
 msgid "Multiple plots for Inverse Domain"
 msgstr "Несколько участков для обратной области"
 
 #. The text that will appear as a label on one of the radii of the plot
 #. segment
-#: src/disp.c:1269
+#: src/disp.c:1310
 msgid "Radial axis text:"
 msgstr "Текст радиальном оси:"
 
 #. The text that will appear as a label on the outer arc of the plot segment
 #. (normally will have the value of "Degrees", "Radians", etc.)
-#: src/disp.c:1272
+#: src/disp.c:1313
 msgid "Azimuthal axis text:"
 msgstr "Текст азимутальной оси:"
 
 #. Whether the graph for the batch results will have multiple plots
 #. displayed, each corresponding to a different value for the j index.
-#: src/disp.c:1346
+#: src/disp.c:1404
 msgid "Multiple plots for Results over index j"
 msgstr "Несколько участков результаты за индексом J"
 
 #. Whether the graph for the batch results will have multiple plots
 #. displayed, each corresponding to a different value for the k index.
-#: src/disp.c:1354
+#: src/disp.c:1412
 msgid "Multiple plots for Results over index k"
 msgstr "Несколько участков результаты за индексом K"
 

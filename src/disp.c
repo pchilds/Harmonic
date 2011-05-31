@@ -24,9 +24,9 @@
 
 #include "disp.h"
 
-GtkWidget *helpwin, *notebook3, *entry1, *entry2, *butt1, *butt2, *colour1;
-GtkWidget *entry3, *entry4, *butt3, *butt4, *ck1, *jind3, *colour2;
-GtkWidget *entry5, *entry6, *butt5, *butt6, *ck2, *ck3, *ck4, *jind4, *kind2, *colour3;
+GtkWidget *helpwin, *notebook3, *entry1, *entry2, *butt1, *butt2, *ck5, *colour1;
+GtkWidget *entry3, *entry4, *butt3, *butt4, *ck1, *jind3, *ck6, *colour2;
+GtkWidget *entry5, *entry6, *butt5, *butt6, *ck2, *ck3, *jind4, *ck4, *kind2, *ck7, *colour3;
 GdkColormap *cmp;
 gint jdim2, jdim3, kdim2;
 
@@ -1134,9 +1134,32 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_table_attach(GTK_TABLE(table), entry2, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_table_attach(GTK_TABLE(table), butt1, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_table_attach(GTK_TABLE(table), butt2, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+	spr=gtk_hseparator_new();
+	gtk_widget_show(spr);
+	ck5=gtk_combo_box_new_text();
+	if ((flags|PROC_COM)!=0)
+	{
+		if ((flags|PROC_RI)==0)
+		{
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck5), _("Magnitude"));
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck5), _("Phase"));
+		}
+		else
+		{
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck5), _("Real Part"));
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck5), _("Imaginary Part"));
+		}
+		gtk_combo_box_set_active(GTK_COMBO_BOX(ck5), (flagd&(DISP_PHI))/32);
+		gtk_widget_show(ck5);
+	}
+	vbox=gtk_vbox_new(FALSE, 2);
+	gtk_widget_show(vbox);
+	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(vbox), spr, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(vbox), ck5, FALSE, FALSE, 2);
 	hbox=gtk_hbox_new(FALSE, 2);
 	gtk_widget_show(hbox);
-	gtk_box_pack_start(GTK_BOX(hbox), table, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
 	spr=gtk_vseparator_new();
 	gtk_widget_show(spr);
 	gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
@@ -1200,28 +1223,42 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_table_attach(GTK_TABLE(table), entry4, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_table_attach(GTK_TABLE(table), butt3, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_table_attach(GTK_TABLE(table), butt4, 1, 2, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-	vbox=gtk_vbox_new(FALSE, 2);
-	gtk_widget_show(vbox);
-	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 	spr=gtk_hseparator_new();
 	gtk_widget_show(spr);
-	gtk_box_pack_start(GTK_BOX(vbox), spr, FALSE, FALSE, 2);
+	ck6=gtk_combo_box_new_text();
+	if ((flags|PROC_COM)!=0)
+	{
+		if ((flags|PROC_RI)==0)
+		{
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck6), _("Magnitude"));
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck6), _("Phase"));
+		}
+		else
+		{
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck6), _("Real Part"));
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck6), _("Imaginary Part"));
+		}
+		gtk_combo_box_set_active(GTK_COMBO_BOX(ck6), (flagd&(DISP_PHI))/32);
+		gtk_widget_show(ck6);
+	}
 	ck1=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
 	gtk_widget_show(ck1);
-	hbox=gtk_hbox_new(FALSE, 2);
-	gtk_widget_show(hbox);
 	gtk_box_pack_start(GTK_BOX(hbox), ck1, FALSE, FALSE, 2);
 	adj=(GtkAdjustment*) gtk_adjustment_new(jdim, 0, jdimx-1, 1.0, 5.0, 0.0);
 	jind3=gtk_spin_button_new(adj, 0, 0);
 	g_signal_connect(G_OBJECT(jind3), "value-changed", G_CALLBACK(upj3), NULL);
-	gtk_box_pack_start(GTK_BOX(hbox), jind3, FALSE, FALSE, 2);
-	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 2);
 	hbox=gtk_hbox_new(FALSE, 2);
 	gtk_widget_show(hbox);
-	gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(hbox), jind3, FALSE, FALSE, 2);
+	vbox=gtk_vbox_new(FALSE, 2);
+	gtk_widget_show(vbox);	
+	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(vbox), spr, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(vbox), ck6, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(vbox), spr, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 2);
 	spr=gtk_vseparator_new();
 	gtk_widget_show(spr);
-	gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
 	colour2=gtk_color_selection_new();
 	if ((flagd&DISP_MIJ)!=0)
 	{
@@ -1246,6 +1283,10 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour2), &clr2);
 	gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(colour2), TRUE);
 	gtk_widget_show(colour2);
+	hbox=gtk_hbox_new(FALSE, 2);
+	gtk_widget_show(hbox);
+	gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(hbox), colour2, FALSE, FALSE, 2);
 	label=gtk_label_new(_("Inverse Spectrum"));
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook3), hbox, label);
@@ -1341,6 +1382,23 @@ void dpr(GtkWidget *widget, gpointer data)
 	else gtk_combo_box_set_active(GTK_COMBO_BOX(ck4), (flagd&(DISP_CHP|DISP_DMS))/8);
 	gtk_widget_show(ck4);
 	gtk_box_pack_start(GTK_BOX(vbox), ck4, FALSE, FALSE, 2);
+	ck7=gtk_combo_box_new_text();
+	if ((flags|PROC_COM)!=0)
+	{
+		if ((flags|PROC_RI)==0)
+		{
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck7), _("Magnitude"));
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck7), _("Phase"));
+		}
+		else
+		{
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck7), _("Real Part"));
+			gtk_combo_box_append_text(GTK_COMBO_BOX(ck7), _("Imaginary Part"));
+		}
+		gtk_combo_box_set_active(GTK_COMBO_BOX(ck7), (flagd&(DISP_PHI))/32);
+		gtk_widget_show(ck7);
+	}
+	gtk_box_pack_start(GTK_BOX(vbox), ck7, FALSE, FALSE, 2);
 	table=gtk_table_new(2, 2, FALSE);
 	gtk_widget_show(table);
 	ck2=gtk_check_button_new_with_label(_("Multiple plots for Results over index j"));

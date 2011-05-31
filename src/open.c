@@ -24804,81 +24804,94 @@ void opd(GtkWidget *widget, gpointer data)
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(anosa))) {k=2; lc=-1;}
 				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(sws))) {k=0; lc=-1;}
 				else {k=0; lc=0;}
-				while (k<sal)
+				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(mg)))
 				{
-					if (!strary[k]) {k++; continue;}
-					g_strchug(strary[k]);
-					if (!g_strcmp0("", strary[k])) {k++; continue;}
-					if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) {k++; continue;}
-					if (lc<0) {lc++; k++; continue;}
-					strat=g_strsplit_set(strary[k], "\t,", 0);
-					lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-					g_array_append_val(x, lcl);
-					if (lc==0)
+					while (k<sal)
 					{
-						satl=g_strv_length(strat);
-						if (!strat[1]) lcl=0;
-						else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-						mny=lcl;
-						mxy=lcl;
-					}
-					else
-					{
-						if (!strat[1]) lcl=0;
-						else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-						if (lcl<mny) mny=lcl;
-						else if (lcl>mxy) mxy=lcl;
-					}
-					g_array_append_val(specs, lcl);
-					g_array_append_val(yb, lcl);
-					for (l=2; l<satl; l++)
-					{
-						if (!strat[l]) lcl=0;
-						else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
+						if (!strary[k]) {k++; continue;}
+						g_strchug(strary[k]);
+						if (!g_strcmp0("", strary[k])) {k++; continue;}
+						if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) {k++; continue;}
+						if (lc<0) {lc++; k++; continue;}
+						strat=g_strsplit_set(strary[k], "\t,", 0);
+						lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+						g_array_append_val(x, lcl);
+						if (lc==0)
+						{
+							satl=g_strv_length(strat);
+							if (!strat[1]) lcl=0;
+							else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
+							mny=lcl;
+							mxy=lcl;
+						}
+						else
+						{
+							if (!strat[1]) lcl=0;
+							else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
+							if (lcl<mny) mny=lcl;
+							else if (lcl>mxy) mxy=lcl;
+						}
 						g_array_append_val(specs, lcl);
+						g_array_append_val(yb, lcl);
+						for (l=2; l<satl; l++)
+						{
+							if (!strat[l]) lcl=0;
+							else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
+							g_array_append_val(specs, lcl);
+						}
+						g_strfreev(strat);
+						lc++;
+						k++;
 					}
-					g_strfreev(strat);
-					lc++;
-					k++;
+					g_strfreev(strary);
+					satl--;
+					j=g_slist_length(group2);
+					while (j<satl)
+					{
+						j++;
+						g_snprintf(s, 4, "%d", j);
+						trace=gtk_radio_menu_item_new_with_label(group2, s);
+						group2=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(trace));
+						g_signal_connect(G_OBJECT(trace), "toggled", G_CALLBACK(upg), NULL);
+						gtk_menu_shell_append(GTK_MENU_SHELL(tracmenu), trace);
+						gtk_widget_show(trace);
+					}
+					while (j>satl)
+					{
+						list=(group2->next);
+						gtk_widget_destroy(group2->data);
+						group2=list;
+						j--;
+					}
+					str=g_strdup_printf(_("File: %s successfully loaded."), fin);
+					gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+					g_free(str);
+					plt=PLOT_LINEAR(plot1);
+					xi=g_array_index(x, gdouble, 0);
+					xf=g_array_index(x, gdouble, (lc-1));
+					sz=g_array_new(FALSE, FALSE, sizeof(gint));
+					nx=g_array_new(FALSE, FALSE, sizeof(gint));
+					g_array_append_val(sz, lc);/* adjust if multiple traces desired */
+					(plt->sizes)=sz;
+					zp=0;
+					g_array_append_val(nx, zp);
+					(plt->ind)=nx;
+					(plt->xdata)=x;
+					(plt->ydata)=yb;
+					plot_linear_update_scale_pretty(plot1, xi, xf, mny, mxy);
+					flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_CHP|PROC_POL);/*trim?*/
 				}
-				g_strfreev(strary);
-				satl--;
-				j=g_slist_length(group2);
-				while (j<satl)
+				else
 				{
-					j++;
-					g_snprintf(s, 4, "%d", j);
-					trace=gtk_radio_menu_item_new_with_label(group2, s);
-					group2=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(trace));
-					g_signal_connect(G_OBJECT(trace), "toggled", G_CALLBACK(upg), NULL);
-					gtk_menu_shell_append(GTK_MENU_SHELL(tracmenu), trace);
-					gtk_widget_show(trace);
-				}
-				while (j>satl)
-				{
-					list=(group2->next);
-					gtk_widget_destroy(group2->data);
-					group2=list;
-					j--;
+					str=g_strdup("Complex data not yet supported.");
+					gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+					g_free(str);
+					flags|=PROC_COM;
+					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(ri))) flags|=PROC_RI;
+					else flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_CHP|PROC_POL|PROC_COM);/*trim?*/
 				}
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
-				str=g_strdup_printf(_("File: %s successfully loaded."), fin);
-				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-				g_free(str);
-				plt=PLOT_LINEAR(plot1);
-				xi=g_array_index(x, gdouble, 0);
-				xf=g_array_index(x, gdouble, (lc-1));
-				sz=g_array_new(FALSE, FALSE, sizeof(gint));
-				nx=g_array_new(FALSE, FALSE, sizeof(gint));
-				g_array_append_val(sz, lc);/* adjust if multiple traces desired */
-				(plt->sizes)=sz;
-				zp=0;
-				g_array_append_val(nx, zp);
-				(plt->ind)=nx;
-				(plt->xdata)=x;
-				(plt->ydata)=yb;
-				plot_linear_update_scale_pretty(plot1, xi, xf, mny, mxy);
 			}
 			else
 			{

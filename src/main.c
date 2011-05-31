@@ -54,7 +54,7 @@
 #include "util.h"
 
 GtkWidget *window, *tr, *zpd, *pr, *tracmenu, *trac, *fst, *notebook, *notebook2, *plot1, *plot2, *plot3, *statusbar, *rest, *visl, *dsl, *chil;
-GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *ncmp, *lcmp, *frr, *db4, *db8, *myr, *mrl, *bat, *chi, *twopionx, *opttri, *trans, *dBs, *neg, *wll, *oft;
+GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *mg, *mgp, *ri, *ncmp, *lcmp, *frr, *db4, *db8, *myr, *mrl, *bat, *chi, *twopionx, *opttri, *trans, *dBs, *neg, *wll, *oft;
 GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; /* widgets for windowing */
 GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *delf, *vis, *doms, *chp, *msr, *bxr, *byr; /* arrays for windowing and data */
 GArray *sz, *nx, *sz2, *nx2, *bsz, *bnx, *rd1, *gr1, *bl1, *al1, *rd2, *gr2, *bl2, *al2, *rd3, *gr3, *bl3, *al3;
@@ -70,7 +70,7 @@ int main( int argc, char *argv[])
 	GtkAdjustment *adj;
 	GtkWidget *vbox, *mnb, *mnu, *smnu, *mni, *hpane, *table, *label, *butt;
 	GtkAccelGroup *accel_group=NULL;
-	GSList *group=NULL, *group3=NULL, *group4=NULL;
+	GSList *group=NULL, *group3=NULL, *group4=NULL, *group5=NULL;
 	PlotLinear *plt, *plt2;
 	gdouble fll=0;
 
@@ -151,6 +151,22 @@ int main( int argc, char *argv[])
 	group=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(dlm));
 	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), dlm);
 	gtk_widget_show(dlm);
+	mni=gtk_separator_menu_item_new();
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), mni);
+	gtk_widget_show(mni);
+	mg=gtk_radio_menu_item_new_with_label(group, _("Magnitude Only"));
+	group5=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(mg));
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), mg);
+	gtk_widget_show(mg);
+	mgp=gtk_radio_menu_item_new_with_label(group, _("Magnitude and Phase"));
+	group5=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(mgp));
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), mgp);
+	gtk_widget_show(mgp);
+	ri=gtk_radio_menu_item_new_with_label(group, _("Real/Imaginary"));
+	group5=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(ri));
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ri), TRUE);
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), ri);
+	gtk_widget_show(ri);
 	mni=gtk_menu_item_new_with_label(_("Data Format:"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);

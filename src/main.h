@@ -48,7 +48,9 @@
 		PROC_PRS = 1 << 2,
 		PROC_BAT = 1 << 3,
 		PROC_CHP = 1 << 4,
-		PROC_POL = 1 << 5
+		PROC_POL = 1 << 5,
+		PROC_COM = 1 << 6,
+		PROC_RI = 1 << 6
 	} ProcState;
 	typedef enum
 	{
@@ -56,7 +58,8 @@
 		DISP_MRJ = 1 << 1,
 		DISP_MRK = 1 << 2,
 		DISP_DMS = 1 << 3,
-		DISP_CHP = 1 << 4
+		DISP_CHP = 1 << 4,
+		DISP_PHI = 1 << 5
 	} DispState;
 	G_END_DECLS
 #endif
