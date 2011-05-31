@@ -1157,12 +1157,8 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), spr, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), ck5, FALSE, FALSE, 2);
-	hbox=gtk_hbox_new(FALSE, 2);
-	gtk_widget_show(hbox);
-	gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
 	spr=gtk_vseparator_new();
 	gtk_widget_show(spr);
-	gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
 	cmp=gdk_colormap_get_system();
 	(clr1.red)=(guint16) (65535*g_array_index(rd1, gdouble, 0));
 	(clr1.green)=(guint16) (65535*g_array_index(gr1, gdouble, 0));
@@ -1173,6 +1169,10 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colour1), &clr1);
 	gtk_color_selection_set_has_palette(GTK_COLOR_SELECTION(colour1), TRUE);
 	gtk_widget_show(colour1);
+	hbox=gtk_hbox_new(FALSE, 2);
+	gtk_widget_show(hbox);
+	gtk_box_pack_start(GTK_BOX(hbox), vbox, FALSE, FALSE, 2);
+	gtk_box_pack_start(GTK_BOX(hbox), spr, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(hbox), colour1, FALSE, FALSE, 2);
 	label=gtk_label_new(_("Spectrum"));
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook3), hbox, label);
@@ -1243,18 +1243,20 @@ void dpr(GtkWidget *widget, gpointer data)
 	}
 	ck1=gtk_check_button_new_with_label(_("Multiple plots for Inverse Domain"));
 	gtk_widget_show(ck1);
-	gtk_box_pack_start(GTK_BOX(hbox), ck1, FALSE, FALSE, 2);
 	adj=(GtkAdjustment*) gtk_adjustment_new(jdim, 0, jdimx-1, 1.0, 5.0, 0.0);
 	jind3=gtk_spin_button_new(adj, 0, 0);
 	g_signal_connect(G_OBJECT(jind3), "value-changed", G_CALLBACK(upj3), NULL);
 	hbox=gtk_hbox_new(FALSE, 2);
 	gtk_widget_show(hbox);
+	gtk_box_pack_start(GTK_BOX(hbox), ck1, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(hbox), jind3, FALSE, FALSE, 2);
 	vbox=gtk_vbox_new(FALSE, 2);
 	gtk_widget_show(vbox);	
 	gtk_box_pack_start(GTK_BOX(vbox), table, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), spr, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), ck6, FALSE, FALSE, 2);
+	spr=gtk_hseparator_new();
+	gtk_widget_show(spr);
 	gtk_box_pack_start(GTK_BOX(vbox), spr, FALSE, FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 2);
 	spr=gtk_vseparator_new();
