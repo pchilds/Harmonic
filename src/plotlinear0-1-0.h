@@ -69,6 +69,8 @@
 	gboolean plot_linear_update_scale(GtkWidget *widget, gdouble xn, gdouble xx, gdouble yn, gdouble yx);
 	gboolean plot_linear_update_scale_pretty(GtkWidget *widget, gdouble xl, gdouble xu, gdouble yl, gdouble yu);
 	gboolean plot_linear_print_eps(GtkWidget *widget, gchar *fout);
+	gboolean plot_linear_print_png(GtkWidget *widget, gchar *fout);
+	gboolean plot_linear_print_svg(GtkWidget *widget, gchar *fout);
 	GtkWidget *plot_linear_new(void);
 	G_END_DECLS
 #endif

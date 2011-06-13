@@ -8,7 +8,7 @@
  *            Graphical display of data and transformed result
  *            Batch Processing
  *            Analysis for visibility, domain shifts and chirp
- *            Publication ready graphs of results in postscript format
+ *            Publication ready graphs of results in multiple formats
  *
  *  Sat Dec  4 17:18:14 2010
  *  Copyright  2011  Paul Childs
@@ -42,6 +42,7 @@
  * SAV: session save/restore routine
  * TRS: wavelets
  * PLOT: see issues in plotpolar
+ * PLOT: autoscale on axes sometimes not correct # of sig. figs.
  */
 
 #include <gdk/gdkkeysyms.h>
@@ -62,7 +63,7 @@ GSList *group2=NULL; /* list for various traces available and Basis functions fo
 gint lc, mx; /* number of data points and number of files in batch routine */
 guint jdim=0, kdim=0, jdimx=1, kdimx=1, jdimxf=1, kdimxf=1, satl=0, trc=1, flags=0, flagd=0; /* array indices, #of traces, trace number, and current processing state and display flags */
 gulong j1_id, j2_id, k_id, bsr_id, bsp_id, isr_id, isp_id, tc_id, tw_id, zw_id; /* id for disabling/enabling post-transform processing */
-gdouble oe; /* value to hold prior reference level for offset tracking */
+gdouble oe=0; /* value to hold prior reference level for offset tracking */
 gchar *fold=NULL, *folr=NULL;
 
 int main( int argc, char *argv[])

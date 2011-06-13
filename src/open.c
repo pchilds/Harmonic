@@ -137,7 +137,7 @@ void upt(GtkWidget *widget, gpointer dta)
 	gchar *fin=NULL;
 
 	wwfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(dialog), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(wwfile), FALSE);
+	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(wwfile), FALSE);/* change this to handle multiple files later */
 	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(wwfile), FALSE);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(wwfile), fold);
 	g_signal_connect(G_OBJECT(wwfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wwfile));
@@ -343,6 +343,7 @@ void opd(GtkWidget *widget, gpointer data)
 					strat2=g_strsplit_set(strary2[0], "\t,", 0);
 					xi=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 					xf=xi;
+					flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_BAT|PROC_POL|PROC_COM|PROC_RI);
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(wll)))
 					{
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
@@ -4849,7 +4850,6 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
 						{
-							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
@@ -6410,7 +6410,6 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 						{
-							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
@@ -7264,7 +7263,7 @@ void opd(GtkWidget *widget, gpointer data)
 												clc=g_array_index(yp, gdouble, k+st)/ofs;
 												if (clc>DZE) y[k+(j*zp)]=log(clc);
 												else y[k+(j*zp)]=-G_MAXDOUBLE;
-											}											
+											}
 										}
 										{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
 										fftw_execute(p);
@@ -7360,7 +7359,6 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 						{
-							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0w+ */
@@ -7981,7 +7979,6 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0w+ +Tl0w+ */
 						{
-							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							for (m=0; m<mx; m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
@@ -8154,7 +8151,6 @@ void opd(GtkWidget *widget, gpointer data)
 						else /* -Rl0w+ +Rl0w+ */
 						{
 							ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 							for (m=0; m<mx; m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
@@ -8295,10 +8291,11 @@ void opd(GtkWidget *widget, gpointer data)
 					}
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(oft)))
 					{
+						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						ofs-=oe;
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
 						{
-							flags|=PROC_CHP;
+							flags|=(PROC_OFT|PROC_CHP);
 							g_array_free(chp, TRUE);
 							chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
@@ -8309,7 +8306,7 @@ void opd(GtkWidget *widget, gpointer data)
 									{
 										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 										{
-											if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssh- */
+											if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssh-c */
 											{
 												for (m=0; m<mx; m++)
 												{
@@ -8484,7 +8481,7 @@ void opd(GtkWidget *widget, gpointer data)
 													g_strfreev(strat2);
 												}
 											}
-											else /* +TdBssh- */
+											else /* +TdBssh-c */
 											{
 												for (m=0; m<mx; m++)
 												{
@@ -8660,7 +8657,7 @@ void opd(GtkWidget *widget, gpointer data)
 												}
 											}
 										}
-										else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss- */
+										else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBss-c */
 										{
 											for (m=0; m<mx; m++)
 											{
@@ -8835,7 +8832,7 @@ void opd(GtkWidget *widget, gpointer data)
 												g_strfreev(strat2);
 											}
 										}
-										else /* +RdBssh- */
+										else /* +RdBssh-c */
 										{
 											for (m=0; m<mx; m++)
 											{
@@ -9011,7 +9008,7 @@ void opd(GtkWidget *widget, gpointer data)
 											}
 										}
 									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssh- +Tlssh- */
+									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssh-c +Tlssh-c */
 									{
 										for (m=0; m<mx; m++)
 										{
@@ -9186,7 +9183,7 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* -Rlssh- +Rlssh- */
+									else /* -Rlssh-c +Rlssh-c */
 									{
 										for (m=0; m<mx; m++)
 										{
@@ -9366,7 +9363,7 @@ void opd(GtkWidget *widget, gpointer data)
 								{
 									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 									{
-										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0- */
+										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0-c */
 										{
 											for (m=0; m<mx; m++)
 											{
@@ -9541,7 +9538,7 @@ void opd(GtkWidget *widget, gpointer data)
 												g_strfreev(strat2);
 											}
 										}
-										else /* +TdB0h- */
+										else /* +TdB0h-c */
 										{
 											for (m=0; m<mx; m++)
 											{
@@ -9717,7 +9714,7 @@ void opd(GtkWidget *widget, gpointer data)
 											}
 										}
 									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0h- */
+									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0h-c */
 									{
 										for (m=0; m<mx; m++)
 										{
@@ -9892,7 +9889,7 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +RdB0h- */
+									else /* +RdB0h-c */
 									{
 										for (m=0; m<mx; m++)
 										{
@@ -10068,7 +10065,7 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h- +Tl0h- */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h-c +Tl0h-c */
 								{
 									for (m=0; m<mx; m++)
 									{
@@ -10243,7 +10240,7 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* -Rl0h- +Rl0h- */
+								else /* -Rl0h-c +Rl0h-c */
 								{
 									for (m=0; m<mx; m++)
 									{
@@ -10425,7 +10422,7 @@ void opd(GtkWidget *widget, gpointer data)
 								{
 									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 									{
-										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssh+ */
+										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBssh+c */
 										{
 											for (m=0; m<mx; m++)
 											{
@@ -10620,7 +10617,7 @@ void opd(GtkWidget *widget, gpointer data)
 												g_strfreev(strat2);
 											}
 										}
-										else /* +TdBssh+ */
+										else /* +TdBssh+c */
 										{
 											for (m=0; m<mx; m++)
 											{
@@ -10816,7 +10813,7 @@ void opd(GtkWidget *widget, gpointer data)
 											}
 										}
 									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBssh+ */
+									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBssh+c */
 									{
 										for (m=0; m<mx; m++)
 										{
@@ -11002,7 +10999,7 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +RdBssh+ */
+									else /* +RdBssh+c */
 									{
 										for (m=0; m<mx; m++)
 										{
@@ -11189,7 +11186,7 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssh+ +Tlssh+ */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlssh+c +Tlssh+c */
 								{
 									for (m=0; m<mx; m++)
 									{
@@ -11381,7 +11378,7 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* -Rlssh+ +Rlssh+ */
+								else /* -Rlssh+c +Rlssh+c */
 								{
 									for (m=0; m<mx; m++)
 									{
@@ -11577,7 +11574,7 @@ void opd(GtkWidget *widget, gpointer data)
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0h+ */
+									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0h+c */
 									{
 										for (m=0; m<mx; m++)
 										{
@@ -11768,7 +11765,7 @@ void opd(GtkWidget *widget, gpointer data)
 											g_strfreev(strat2);
 										}
 									}
-									else /* +TdB0h+ */
+									else /* +TdB0h+c */
 									{
 										for (m=0; m<mx; m++)
 										{
@@ -11960,7 +11957,7 @@ void opd(GtkWidget *widget, gpointer data)
 										}
 									}
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0h+ */
+								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0h+c */
 								{
 									for (m=0; m<mx; m++)
 									{
@@ -12146,7 +12143,7 @@ void opd(GtkWidget *widget, gpointer data)
 										g_strfreev(strat2);
 									}
 								}
-								else /* +RdB0h+ */
+								else /* +RdB0h+c */
 								{
 									for (m=0; m<mx; m++)
 									{
@@ -12333,7 +12330,7 @@ void opd(GtkWidget *widget, gpointer data)
 									}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h+ +Tl0h+ */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h+c +Tl0h+c */
 							{
 								for (m=0; m<mx; m++)
 								{
@@ -12523,7 +12520,7 @@ void opd(GtkWidget *widget, gpointer data)
 									g_strfreev(strat2);
 								}
 							}
-							else /* -Rl0h+ +Rl0h+ */
+							else /* -Rl0h+c +Rl0h+c */
 							{
 								for (m=0; m<mx; m++)
 								{
@@ -12712,7 +12709,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
 						{
-							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
+							flags|=PROC_OFT;
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
@@ -14303,7 +14300,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 						{
-							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
+							flags|=PROC_OFT;
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
@@ -15194,7 +15191,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 						{
-							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
+							flags|=PROC_OFT;
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 							{
 								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0h+ */
@@ -15779,7 +15776,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h+ +Tl0h+ */
 						{
-							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
+							flags|=PROC_OFT;
 							for (m=0; m<mx; m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
@@ -15926,7 +15923,7 @@ void opd(GtkWidget *widget, gpointer data)
 						}
 						else /* -Rl0h+ +Rl0h+ */
 						{
-							flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
+							flags|=PROC_OFT;
 							for (m=0; m<mx; m++)
 							{
 								strat2=g_strsplit_set(strary2[m], "\t,", 0);
@@ -20457,7 +20454,6 @@ void opd(GtkWidget *widget, gpointer data)
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
 					{
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-						flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
@@ -22013,7 +22009,6 @@ void opd(GtkWidget *widget, gpointer data)
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 					{
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-						flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
@@ -22905,7 +22900,6 @@ void opd(GtkWidget *widget, gpointer data)
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 					{
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-						flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o+ */
@@ -23479,7 +23473,6 @@ void opd(GtkWidget *widget, gpointer data)
 					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0o+ +Tl0o+ */
 					{
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-						flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 						if ((ofs<DZE)&&(ofs>NZE))
 						{
 							str=g_strdup(_("Offset must be nonzero for linear measurements."));
@@ -23633,7 +23626,6 @@ void opd(GtkWidget *widget, gpointer data)
 					else /* -Rl0o+ +Rl0o+ */
 					{
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-						flags&=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 						if ((ofs<DZE)&&(ofs>NZE))
 						{
 							str=g_strdup(_("Offset must be nonzero for linear measurements."));
@@ -24672,7 +24664,7 @@ void opd(GtkWidget *widget, gpointer data)
 							gtk_table_attach(GTK_TABLE(rest), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 							label=gtk_label_new(_("Analysis Results"));
 							gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
-							{flags|=(PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN); flags&=(PROC_CHP|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);}
+							{flags|=(PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN); flags&=(PROC_OFT|PROC_CHP|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);}
 						}
 						plt=PLOT_LINEAR(plot3);
 						if (mx<8) {(plt->flagd)=3; (plt->ptsize)=4;}
@@ -24879,7 +24871,7 @@ void opd(GtkWidget *widget, gpointer data)
 					(plt->xdata)=x;
 					(plt->ydata)=yb;
 					plot_linear_update_scale_pretty(plot1, xi, xf, mny, mxy);
-					flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_CHP|PROC_POL);/*trim?*/
+					flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_CHP|PROC_OFT|PROC_POL);
 				}
 				else
 				{
@@ -24888,7 +24880,7 @@ void opd(GtkWidget *widget, gpointer data)
 					g_free(str);
 					flags|=PROC_COM;
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(ri))) flags|=PROC_RI;
-					else flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_CHP|PROC_POL|PROC_COM);/*trim?*/
+					else flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_CHP|PROC_OFT|PROC_POL|PROC_COM);
 				}
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);

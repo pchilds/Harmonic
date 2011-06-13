@@ -1137,9 +1137,9 @@ void dpr(GtkWidget *widget, gpointer data)
 	spr=gtk_hseparator_new();
 	gtk_widget_show(spr);
 	ck5=gtk_combo_box_new_text();
-	if ((flags|PROC_COM)!=0)
+	if ((flags&PROC_COM)!=0)
 	{
-		if ((flags|PROC_RI)==0)
+		if ((flags&PROC_RI)==0)
 		{
 			gtk_combo_box_append_text(GTK_COMBO_BOX(ck5), _("Magnitude"));
 			gtk_combo_box_append_text(GTK_COMBO_BOX(ck5), _("Phase"));
@@ -1226,9 +1226,9 @@ void dpr(GtkWidget *widget, gpointer data)
 	spr=gtk_hseparator_new();
 	gtk_widget_show(spr);
 	ck6=gtk_combo_box_new_text();
-	if ((flags|PROC_COM)!=0)
+	if ((flags&PROC_COM)!=0)
 	{
-		if ((flags|PROC_RI)==0)
+		if ((flags&PROC_RI)==0)
 		{
 			gtk_combo_box_append_text(GTK_COMBO_BOX(ck6), _("Magnitude"));
 			gtk_combo_box_append_text(GTK_COMBO_BOX(ck6), _("Phase"));
@@ -1385,9 +1385,9 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_widget_show(ck4);
 	gtk_box_pack_start(GTK_BOX(vbox), ck4, FALSE, FALSE, 2);
 	ck7=gtk_combo_box_new_text();
-	if ((flags|PROC_COM)!=0)
+	if ((flags&PROC_COM)!=0)
 	{
-		if ((flags|PROC_RI)==0)
+		if ((flags&PROC_RI)==0)
 		{
 			gtk_combo_box_append_text(GTK_COMBO_BOX(ck7), _("Magnitude"));
 			gtk_combo_box_append_text(GTK_COMBO_BOX(ck7), _("Phase"));

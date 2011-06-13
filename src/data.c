@@ -27,8 +27,8 @@
 void prt(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *wfile;
-	GtkFileFilter *filter;
-	gchar *str, *fout=NULL;
+	GtkFileFilter *epsfilt, *pngfilt, *svgfilt, *filt;
+	gchar *str, *fout=NULL, *fout2=NULL;
 
 	switch (gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook2)))
 	{
@@ -38,18 +38,73 @@ void prt(GtkWidget *widget, gpointer data)
 			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(wfile), folr);
+			gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(wfile), FALSE);
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
-			filter=gtk_file_filter_new();
-			gtk_file_filter_set_name(filter, "Encapsulated Postscript (EPS)");
-			gtk_file_filter_add_pattern(filter, "*.eps");
-			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), filter);
+			pngfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(pngfilt, "Portable Network Graphics (PNG)");
+			gtk_file_filter_add_mime_type(pngfilt, "image/png");
+			gtk_file_filter_add_mime_type(pngfilt, "application/png");
+			gtk_file_filter_add_mime_type(pngfilt, "application/x-png");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), pngfilt);
+			epsfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(epsfilt, "Encapsulated Postscript (EPS)");
+			gtk_file_filter_add_mime_type(epsfilt, "application/postscript");
+			gtk_file_filter_add_mime_type(epsfilt, "application/eps");
+			gtk_file_filter_add_mime_type(epsfilt, "image/eps");
+			gtk_file_filter_add_mime_type(epsfilt, "image/x-eps");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), epsfilt);
+			svgfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(svgfilt, "Scalable Vector Graphics (SVG)");
+			gtk_file_filter_add_mime_type(svgfilt, "image/svg+xml");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), svgfilt);
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				g_free(folr);
 				folr=gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(wfile));
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				if ((flags&PROC_POL)!=0) plot_polar_print_eps(plot3, fout);
-				else plot_linear_print_eps(plot3, fout);
+				filt=gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(wfile));
+				if (filt==epsfilt)
+				{
+					if (g_str_has_suffix(fout, ".eps"))
+					{
+						if ((flags&PROC_POL)!=0) plot_polar_print_eps(plot3, fout);
+						else plot_linear_print_eps(plot3, fout);
+					}
+					else
+					{
+						fout2=g_strconcat(fout, ".eps", NULL);
+						if ((flags&PROC_POL)!=0) plot_polar_print_eps(plot3, fout2);
+						else plot_linear_print_eps(plot3, fout2);
+						g_free(fout2);
+					}
+				}
+				else if (filt==svgfilt)
+				{
+					if (g_str_has_suffix(fout, ".svg"))
+					{
+						if ((flags&PROC_POL)!=0) plot_polar_print_svg(plot3, fout);
+						else plot_linear_print_svg(plot3, fout);
+					}
+					else
+					{
+						fout2=g_strconcat(fout, ".svg", NULL);
+						if ((flags&PROC_POL)!=0) plot_polar_print_svg(plot3, fout2);
+						else plot_linear_print_svg(plot3, fout2);
+						g_free(fout2);
+					}
+				}
+				else if (g_str_has_suffix(fout, ".png"))
+				{
+					if ((flags&PROC_POL)!=0) plot_polar_print_png(plot3, fout);
+					else plot_linear_print_png(plot3, fout);
+				}
+				else
+				{
+					fout2=g_strconcat(fout, ".png", NULL);
+					if ((flags&PROC_POL)!=0) plot_polar_print_png(plot3, fout2);
+					else plot_linear_print_png(plot3, fout2);
+					g_free(fout2);
+				}
 				g_free(fout);
 			}
 			gtk_widget_destroy(wfile);
@@ -59,17 +114,58 @@ void prt(GtkWidget *widget, gpointer data)
 			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(wfile), folr);
+			gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(wfile), FALSE);
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
-			filter=gtk_file_filter_new();
-			gtk_file_filter_set_name(filter, "Encapsulated Postscript (EPS)");
-			gtk_file_filter_add_pattern(filter, "*.eps");
-			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), filter);
+			pngfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(pngfilt, "Portable Network Graphics (PNG)");
+			gtk_file_filter_add_mime_type(pngfilt, "image/png");
+			gtk_file_filter_add_mime_type(pngfilt, "application/png");
+			gtk_file_filter_add_mime_type(pngfilt, "application/x-png");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), pngfilt);
+			epsfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(epsfilt, "Encapsulated Postscript (EPS)");
+			gtk_file_filter_add_mime_type(epsfilt, "application/postscript");
+			gtk_file_filter_add_mime_type(epsfilt, "application/eps");
+			gtk_file_filter_add_mime_type(epsfilt, "image/eps");
+			gtk_file_filter_add_mime_type(epsfilt, "image/x-eps");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), epsfilt);
+			svgfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(svgfilt, "Scalable Vector Graphics (SVG)");
+			gtk_file_filter_add_mime_type(svgfilt, "image/svg+xml");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), svgfilt);
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				g_free(folr);
 				folr=gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(wfile));
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				plot_linear_print_eps(plot2, fout);
+				filt=gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(wfile));
+				if (filt==epsfilt)
+				{
+					if (g_str_has_suffix(fout, ".eps")) plot_linear_print_eps(plot2, fout);
+					else
+					{
+						fout2=g_strconcat(fout, ".eps", NULL);
+						plot_linear_print_eps(plot2, fout2);
+						g_free(fout2);
+					}
+				}
+				else if (filt==svgfilt)
+				{
+					if (g_str_has_suffix(fout, ".svg")) plot_linear_print_svg(plot2, fout);
+					else
+					{
+						fout2=g_strconcat(fout, ".svg", NULL);
+						plot_linear_print_svg(plot2, fout2);
+						g_free(fout2);
+					}
+				}
+				else if (g_str_has_suffix(fout, ".png")) plot_linear_print_png(plot2, fout);
+				else
+				{
+					fout2=g_strconcat(fout, ".png", NULL);
+					plot_linear_print_png(plot2, fout2);
+					g_free(fout2);
+				}
 				g_free(fout);
 			}
 			gtk_widget_destroy(wfile);
@@ -79,17 +175,58 @@ void prt(GtkWidget *widget, gpointer data)
 			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(wfile), folr);
+			gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(wfile), FALSE);
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
-			filter=gtk_file_filter_new();
-			gtk_file_filter_set_name(filter, "Encapsulated Postscript (EPS)");
-			gtk_file_filter_add_pattern(filter, "*.eps");
-			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), filter);
+			pngfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(pngfilt, "Portable Network Graphics (PNG)");
+			gtk_file_filter_add_mime_type(pngfilt, "image/png");
+			gtk_file_filter_add_mime_type(pngfilt, "application/png");
+			gtk_file_filter_add_mime_type(pngfilt, "application/x-png");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), pngfilt);
+			epsfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(epsfilt, "Encapsulated Postscript (EPS)");
+			gtk_file_filter_add_mime_type(epsfilt, "application/postscript");
+			gtk_file_filter_add_mime_type(epsfilt, "application/eps");
+			gtk_file_filter_add_mime_type(epsfilt, "image/eps");
+			gtk_file_filter_add_mime_type(epsfilt, "image/x-eps");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), epsfilt);
+			svgfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(svgfilt, "Scalable Vector Graphics (SVG)");
+			gtk_file_filter_add_mime_type(svgfilt, "image/svg+xml");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), svgfilt);
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				g_free(folr);
 				folr=gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(wfile));
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				plot_linear_print_eps(plot1, fout);
+				filt=gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(wfile));
+				if (filt==epsfilt)
+				{
+					if (g_str_has_suffix(fout, ".eps")) plot_linear_print_eps(plot1, fout);
+					else
+					{
+						fout2=g_strconcat(fout, ".eps", NULL);
+						plot_linear_print_eps(plot1, fout2);
+						g_free(fout2);
+					}
+				}
+				else if (filt==svgfilt)
+				{
+					if (g_str_has_suffix(fout, ".svg")) plot_linear_print_svg(plot1, fout);
+					else
+					{
+						fout2=g_strconcat(fout, ".svg", NULL);
+						plot_linear_print_svg(plot1, fout2);
+						g_free(fout2);
+					}
+				}
+				else if (g_str_has_suffix(fout, ".png")) plot_linear_print_png(plot1, fout);
+				else
+				{
+					fout2=g_strconcat(fout, ".png", NULL);
+					plot_linear_print_png(plot1, fout2);
+					g_free(fout2);
+				}
 				g_free(fout);
 			}
 			gtk_widget_destroy(wfile);
@@ -108,17 +245,58 @@ void prt(GtkWidget *widget, gpointer data)
 			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(wfile), folr);
+			gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(wfile), FALSE);
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
-			filter=gtk_file_filter_new();
-			gtk_file_filter_set_name(filter, "Encapsulated Postscript (EPS)");
-			gtk_file_filter_add_pattern(filter, "*.eps");
-			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), filter);
+			pngfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(pngfilt, "Portable Network Graphics (PNG)");
+			gtk_file_filter_add_mime_type(pngfilt, "image/png");
+			gtk_file_filter_add_mime_type(pngfilt, "application/png");
+			gtk_file_filter_add_mime_type(pngfilt, "application/x-png");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), pngfilt);
+			epsfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(epsfilt, "Encapsulated Postscript (EPS)");
+			gtk_file_filter_add_mime_type(epsfilt, "application/postscript");
+			gtk_file_filter_add_mime_type(epsfilt, "application/eps");
+			gtk_file_filter_add_mime_type(epsfilt, "image/eps");
+			gtk_file_filter_add_mime_type(epsfilt, "image/x-eps");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), epsfilt);
+			svgfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(svgfilt, "Scalable Vector Graphics (SVG)");
+			gtk_file_filter_add_mime_type(svgfilt, "image/svg+xml");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), svgfilt);
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				g_free(folr);
 				folr=gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(wfile));
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				plot_linear_print_eps(plot2, fout);
+				filt=gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(wfile));
+				if (filt==epsfilt)
+				{
+					if (g_str_has_suffix(fout, ".eps")) plot_linear_print_eps(plot2, fout);
+					else
+					{
+						fout2=g_strconcat(fout, ".eps", NULL);
+						plot_linear_print_eps(plot2, fout2);
+						g_free(fout2);
+					}
+				}
+				else if (filt==svgfilt)
+				{
+					if (g_str_has_suffix(fout, ".svg")) plot_linear_print_svg(plot2, fout);
+					else
+					{
+						fout2=g_strconcat(fout, ".svg", NULL);
+						plot_linear_print_svg(plot2, fout2);
+						g_free(fout2);
+					}
+				}
+				else if (g_str_has_suffix(fout, ".png")) plot_linear_print_png(plot2, fout);
+				else
+				{
+					fout2=g_strconcat(fout, ".png", NULL);
+					plot_linear_print_png(plot2, fout2);
+					g_free(fout2);
+				}
 				g_free(fout);
 			}
 			gtk_widget_destroy(wfile);
@@ -128,17 +306,58 @@ void prt(GtkWidget *widget, gpointer data)
 			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(wfile), folr);
+			gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(wfile), FALSE);
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
-			filter=gtk_file_filter_new();
-			gtk_file_filter_set_name(filter, "Encapsulated Postscript (EPS)");
-			gtk_file_filter_add_pattern(filter, "*.eps");
-			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), filter);
+			pngfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(pngfilt, "Portable Network Graphics (PNG)");
+			gtk_file_filter_add_mime_type(pngfilt, "image/png");
+			gtk_file_filter_add_mime_type(pngfilt, "application/png");
+			gtk_file_filter_add_mime_type(pngfilt, "application/x-png");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), pngfilt);
+			epsfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(epsfilt, "Encapsulated Postscript (EPS)");
+			gtk_file_filter_add_mime_type(epsfilt, "application/postscript");
+			gtk_file_filter_add_mime_type(epsfilt, "application/eps");
+			gtk_file_filter_add_mime_type(epsfilt, "image/eps");
+			gtk_file_filter_add_mime_type(epsfilt, "image/x-eps");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), epsfilt);
+			svgfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(svgfilt, "Scalable Vector Graphics (SVG)");
+			gtk_file_filter_add_mime_type(svgfilt, "image/svg+xml");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), svgfilt);
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				g_free(folr);
 				folr=gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(wfile));
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				plot_linear_print_eps(plot1, fout);
+				filt=gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(wfile));
+				if (filt==epsfilt)
+				{
+					if (g_str_has_suffix(fout, ".eps")) plot_linear_print_eps(plot1, fout);
+					else
+					{
+						fout2=g_strconcat(fout, ".eps", NULL);
+						plot_linear_print_eps(plot1, fout2);
+						g_free(fout2);
+					}
+				}
+				else if (filt==svgfilt)
+				{
+					if (g_str_has_suffix(fout, ".svg")) plot_linear_print_svg(plot1, fout);
+					else
+					{
+						fout2=g_strconcat(fout, ".svg", NULL);
+						plot_linear_print_svg(plot1, fout2);
+						g_free(fout2);
+					}
+				}
+				else if (g_str_has_suffix(fout, ".png")) plot_linear_print_png(plot1, fout);
+				else
+				{
+					fout2=g_strconcat(fout, ".png", NULL);
+					plot_linear_print_png(plot1, fout2);
+					g_free(fout2);
+				}
 				g_free(fout);
 			}
 			gtk_widget_destroy(wfile);
@@ -157,17 +376,58 @@ void prt(GtkWidget *widget, gpointer data)
 			wfile=gtk_file_chooser_dialog_new(_("Select Image File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
 			g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(wfile), folr);
+			gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(wfile), FALSE);
 			gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(wfile), TRUE);
-			filter=gtk_file_filter_new();
-			gtk_file_filter_set_name(filter, "Encapsulated Postscript (EPS)");
-			gtk_file_filter_add_pattern(filter, "*.eps");
-			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), filter);
+			pngfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(pngfilt, "Portable Network Graphics (PNG)");
+			gtk_file_filter_add_mime_type(pngfilt, "image/png");
+			gtk_file_filter_add_mime_type(pngfilt, "application/png");
+			gtk_file_filter_add_mime_type(pngfilt, "application/x-png");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), pngfilt);
+			epsfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(epsfilt, "Encapsulated Postscript (EPS)");
+			gtk_file_filter_add_mime_type(epsfilt, "application/postscript");
+			gtk_file_filter_add_mime_type(epsfilt, "application/eps");
+			gtk_file_filter_add_mime_type(epsfilt, "image/eps");
+			gtk_file_filter_add_mime_type(epsfilt, "image/x-eps");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), epsfilt);
+			svgfilt=gtk_file_filter_new();
+			gtk_file_filter_set_name(svgfilt, "Scalable Vector Graphics (SVG)");
+			gtk_file_filter_add_mime_type(svgfilt, "image/svg+xml");
+			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(wfile), svgfilt);
 			if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
 			{
 				g_free(folr);
 				folr=gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(wfile));
 				fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
-				plot_linear_print_eps(plot1, fout);
+				filt=gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(wfile));
+				if (filt==epsfilt)
+				{
+					if (g_str_has_suffix(fout, ".eps")) plot_linear_print_eps(plot1, fout);
+					else
+					{
+						fout2=g_strconcat(fout, ".eps", NULL);
+						plot_linear_print_eps(plot1, fout2);
+						g_free(fout2);
+					}
+				}
+				else if (filt==svgfilt)
+				{
+					if (g_str_has_suffix(fout, ".svg")) plot_linear_print_svg(plot1, fout);
+					else
+					{
+						fout2=g_strconcat(fout, ".svg", NULL);
+						plot_linear_print_svg(plot1, fout2);
+						g_free(fout2);
+					}
+				}
+				else if (g_str_has_suffix(fout, ".png")) plot_linear_print_png(plot1, fout);
+				else
+				{
+					fout2=g_strconcat(fout, ".png", NULL);
+					plot_linear_print_png(plot1, fout2);
+					g_free(fout2);
+				}
 				g_free(fout);
 			}
 			gtk_widget_destroy(wfile);

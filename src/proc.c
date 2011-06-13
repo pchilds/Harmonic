@@ -584,7 +584,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		{
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(wll)))/* window based offset */
 			{
-				ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
+				flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_BAT|PROC_CHP|PROC_POL|PROC_COM|PROC_RI);
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 				{
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
@@ -855,12 +855,13 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(oft)))/* history based offset */
 			{
-				if ((flags&PROC_TRS)==0) ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));/* check if this is right */
-				else
+				ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
+				if ((flags&PROC_OFT)!=0)
 				{
 					ofs+=ce-oe;
 					gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), ofs);
 				}
+				else flags|=PROC_OFT;
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 				{
 					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
@@ -1131,6 +1132,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))/* user defined offset */
 			{
+				flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_BAT|PROC_CHP|PROC_POL|PROC_COM|PROC_RI);
 				ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 				{
@@ -1267,6 +1269,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 			{
+				flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_BAT|PROC_CHP|PROC_POL|PROC_COM|PROC_RI);
 				ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 				{
@@ -1358,6 +1361,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0- +Tl0- */
 			{
+				flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_BAT|PROC_CHP|PROC_POL|PROC_COM|PROC_RI);
 				ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 				for (j=0; j<jdimx; j++)
 				{
@@ -1380,6 +1384,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 			}
 			else /* -Rl0- +Rl0- */
 			{
+				flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_BAT|PROC_CHP|PROC_POL|PROC_COM|PROC_RI);
 				ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 				for (j=0; j<jdimx; j++)
 				{
@@ -1403,6 +1408,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(wll)))/* window based offset */
 		{
+			flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_BAT|PROC_CHP|PROC_POL|PROC_COM|PROC_RI);
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 			{
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
@@ -1882,12 +1888,13 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(oft)))/* history based offset */
 		{
-			if ((flags&PROC_TRS)==0) ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-			else
+			ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
+			if ((flags&PROC_OFT)!=0)
 			{
 				ofs+=ce-oe;
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), ofs);
 			}
+			else flags|=PROC_OFT;
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
 			{
 				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
@@ -2225,6 +2232,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))/* user defined offset */
 		{
+			flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_BAT|PROC_CHP|PROC_POL|PROC_COM|PROC_RI);
 			ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 			{
@@ -2420,6 +2428,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 		{
+			flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_BAT|PROC_CHP|PROC_POL|PROC_COM|PROC_RI);
 			ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 			{
@@ -2530,6 +2539,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0o+ and +Tl0o+ */ 
 		{
+			flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_BAT|PROC_CHP|PROC_POL|PROC_COM|PROC_RI);
 			ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 			if ((ofs<DZE)&&(ofs>NZE))
 			{
@@ -2567,6 +2577,7 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		}
 		else /* -Rl0o+ and +Rl0o+ */ 
 		{
+			flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_BAT|PROC_CHP|PROC_POL|PROC_COM|PROC_RI);
 			ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 			if ((ofs<DZE)&&(ofs>NZE))
 			{
@@ -2749,4 +2760,3 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		g_free(str);
 	}
 }
-

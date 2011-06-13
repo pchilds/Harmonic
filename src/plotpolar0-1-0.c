@@ -5425,6 +5425,33 @@ gboolean plot_polar_print_eps(GtkWidget *plot, gchar* fout)
 	return FALSE;
 }
 
+gboolean plot_polar_print_png(GtkWidget *plot, gchar* fout)
+{
+	cairo_t *cr;
+	cairo_surface_t *surface;
+
+	surface=cairo_image_surface_create(CAIRO_FORMAT_ARGB32, (gdouble) (plot->allocation.width), (gdouble) (plot->allocation.height));
+	cr=cairo_create(surface);
+	draw(plot, cr);
+	cairo_surface_write_to_png(surface, fout);
+	cairo_destroy(cr);
+	cairo_surface_destroy(surface);
+	return FALSE;
+}
+
+gboolean plot_polar_print_svg(GtkWidget *plot, gchar* fout)
+{
+	cairo_t *cr;
+	cairo_surface_t *surface;
+
+	surface=cairo_svg_surface_create(fout, (gdouble) (plot->allocation.width), (gdouble) (plot->allocation.height));
+	cr=cairo_create(surface);
+	draw(plot, cr);
+	cairo_destroy(cr);
+	cairo_surface_destroy(surface);
+	return FALSE;
+}
+
 static gboolean plot_polar_button_press(GtkWidget *widget, GdkEventButton *event)
 {
 	PlotPolarPrivate *priv;
