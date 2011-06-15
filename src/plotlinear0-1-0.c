@@ -46,6 +46,8 @@
 #define WHP 0.020207259 /* wiggle height proportion */
 #define DZE 0.00001 /* divide by zero threshold */
 #define NZE -0.00001 /* negative of this */
+#define FAC 0.05 /* floating point accuracy check for logarithms etc */
+#define NAC 0.95 /* conjugate of this */
 #define JT 5 /* major tick length */
 #define JTI 6 /* this incremented */
 #define NT 3 /* minor tick length */
@@ -155,7 +157,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	PlotLinearPrivate *priv;
 	PlotLinear *plot;
 	gint j, k, xw, yw, xr, xr2, yr, yr2, xa, ya, xl, yl, xu, yu, tf, tz, to, tn, tnn, xv, yv, xvn, yvn, dtt, tx, wd, hg, ft, lt, xt;
-	gdouble vv, wv, zv, av, dt, lr1, lr2, lr3;
+	gdouble vv, wv, zv, av, dt, lr1, lr2, lr3, delx, dely;
 	gchar *str1=NULL, *str2=".", *str3=NULL;
 	gchar lbl[10];
 	PangoLayout *lyt;
@@ -168,6 +170,8 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 	yw=(widget->allocation.height);
 	priv=PLOT_LINEAR_GET_PRIVATE(plot);
 	(priv->flaga)&=(PLOT_LINEAR_AXES_LT|PLOT_LINEAR_AXES_LR);
+	delx=((priv->bounds.xmax)-(priv->bounds.xmin))/(priv->ticks.xj);
+	dely=((priv->bounds.ymax)-(priv->bounds.ymin))/(priv->ticks.yj);
 	lyt=pango_cairo_create_layout(cr);
 	pango_layout_set_font_description(lyt, (plot->lfont));
 	str1=g_strconcat((plot->xlab), (plot->ylab), NULL);
@@ -440,7 +444,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, tn, ya);
 				cairo_line_to(cr, tn, ya-JT);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.xmin)+((j*((priv->bounds.xmax)-(priv->bounds.xmin)))/(priv->ticks.xj));
+				lr3=(priv->bounds.xmin)+(j*delx);
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->xcs)-floor(log10(lr3))-1);
@@ -546,7 +550,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, tn, ya);
 				cairo_line_to(cr, tn, ya+JT);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.xmin)+((j*((priv->bounds.xmax)-(priv->bounds.xmin)))/(priv->ticks.xj));
+				lr3=(priv->bounds.xmin)+(j*delx);
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->xcs)-floor(log10(lr3))-1);
@@ -656,7 +660,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, tn, ya);
 				cairo_line_to(cr, tn, ya-JT);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.xmin)+((j*((priv->bounds.xmax)-(priv->bounds.xmin)))/(priv->ticks.xj));
+				lr3=(priv->bounds.xmin)+(j*delx);
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->xcs)-floor(log10(lr3))-1);
@@ -780,7 +784,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, tn, ya);
 				cairo_line_to(cr, tn, ya+JT);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.xmin)+((j*((priv->bounds.xmax)-(priv->bounds.xmin)))/(priv->ticks.xj));
+				lr3=(priv->bounds.xmin)+(j*delx);
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->xcs)-floor(log10(lr3))-1);
@@ -878,7 +882,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, tn, ya);
 				cairo_line_to(cr, tn, ya-JT);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.xmax)-((j*((priv->bounds.xmax)-(priv->bounds.xmin))*(xu-tf))/((xu-xl)*(priv->ticks.xj)));
+				lr3=(priv->bounds.xmax)-(j*delx*(xu-tf)/(xu-xl));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->xcs)-floor(log10(lr3))-1);
@@ -944,7 +948,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, tn, ya);
 				cairo_line_to(cr, tn, ya-JT);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.xmax)-((j*((priv->bounds.xmax)-(priv->bounds.xmin))*(xu-tf))/((xu-xl)*(priv->ticks.xj)));
+				lr3=(priv->bounds.xmax)-(j*delx*(xu-tf)/(xu-xl));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->xcs)-floor(log10(lr3))-1);
@@ -1024,7 +1028,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, tn, ya);
 				cairo_line_to(cr, tn, ya+JT);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.xmax)-((j*((priv->bounds.xmax)-(priv->bounds.xmin))*(xu-tf))/((xu-xl)*(priv->ticks.xj)));
+				lr3=(priv->bounds.xmax)-(j*delx*(xu-tf)/(xu-xl));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->xcs)-floor(log10(lr3))-1);
@@ -1090,7 +1094,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, tn, ya);
 				cairo_line_to(cr, tn, ya+JT);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.xmax)-((j*((priv->bounds.xmax)-(priv->bounds.xmin))*(xu-tf))/((xu-xl)*(priv->ticks.xj)));
+				lr3=(priv->bounds.xmax)-(j*delx*(xu-tf)/(xu-xl));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->xcs)-floor(log10(lr3))-1);
@@ -1210,7 +1214,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, tn, ya);
 				cairo_line_to(cr, tn, ya-JT);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.xmin)+((j*((priv->bounds.xmax)-(priv->bounds.xmin))*(tf-xl))/((xu-xl)*(priv->ticks.xj)));
+				lr3=(priv->bounds.xmin)+(j*delx*(tf-xl)/(xu-xl));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->xcs)-floor(log10(lr3))-1);
@@ -1276,7 +1280,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, tn, ya);
 				cairo_line_to(cr, tn, ya-JT);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.xmin)+((j*((priv->bounds.xmax)-(priv->bounds.xmin))*(tf-xl))/((xu-xl)*(priv->ticks.xj)));
+				lr3=(priv->bounds.xmin)+(j*delx*(tf-xl)/(xu-xl));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->xcs)-floor(log10(lr3))-1);
@@ -1389,7 +1393,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, tn, ya);
 				cairo_line_to(cr, tn, ya+JT);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.xmin)+((j*((priv->bounds.xmax)-(priv->bounds.xmin))*(tf-xl))/((xu-xl)*(priv->ticks.xj)));
+				lr3=(priv->bounds.xmin)+(j*delx*(tf-xl)/(xu-xl));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->xcs)-floor(log10(lr3))-1);
@@ -1455,7 +1459,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, tn, ya);
 				cairo_line_to(cr, tn, ya+JT);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.xmin)+((j*((priv->bounds.xmax)-(priv->bounds.xmin))*(tf-xl))/((xu-xl)*(priv->ticks.xj)));
+				lr3=(priv->bounds.xmin)+(j*delx*(tf-xl)/(xu-xl));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->xcs)-floor(log10(lr3))-1);
@@ -1583,7 +1587,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, xa, tn);
 				cairo_line_to(cr, xa+JT, tn);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.ymax)-((j*((priv->bounds.ymax)-(priv->bounds.ymin)))/(priv->ticks.yj));
+				lr3=(priv->bounds.ymax)-(j*dely);
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->ycs)-floor(log10(lr3))-1);
@@ -1698,7 +1702,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, xa, tn);
 				cairo_line_to(cr, xa-JT, tn);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.ymax)-((j*((priv->bounds.ymax)-(priv->bounds.ymin)))/(priv->ticks.yj));
+				lr3=(priv->bounds.ymax)-(j*dely);
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->ycs)-floor(log10(lr3))-1);
@@ -1781,7 +1785,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, xa, tn);
 				cairo_line_to(cr, xa+JT, tn);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.ymax)-((j*((priv->bounds.ymax)-(priv->bounds.ymin)))/(priv->ticks.yj));
+				lr3=(priv->bounds.ymax)-(j*dely);
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->ycs)-floor(log10(lr3))-1);
@@ -1860,7 +1864,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, xa, tn);
 				cairo_line_to(cr, xa-JT, tn);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.ymax)-((j*((priv->bounds.ymax)-(priv->bounds.ymin)))/(priv->ticks.yj));
+				lr3=(priv->bounds.ymax)-(j*dely);
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->ycs)-floor(log10(lr3))-1);
@@ -1946,7 +1950,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, xa, tn);
 				cairo_line_to(cr, xa+JT, tn);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.ymax)-((j*((priv->bounds.ymax)-(priv->bounds.ymin))*(tf-yu))/((yl-yu)*(priv->ticks.yj)));
+				lr3=(priv->bounds.ymax)-(j*dely*(tf-yu)/(yl-yu));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->ycs)-floor(log10(lr3))-1);
@@ -2015,7 +2019,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, xa, tn);
 				cairo_line_to(cr, xa+JT, tn);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.ymax)-((j*((priv->bounds.ymax)-(priv->bounds.ymin))*(tf-yu))/((yl-yu)*(priv->ticks.yj)));
+				lr3=(priv->bounds.ymax)-(j*dely*(tf-yu)/(yl-yu));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->ycs)-floor(log10(lr3))-1);
@@ -2101,7 +2105,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, xa, tn);
 				cairo_line_to(cr, xa-JT, tn);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.ymax)-((j*((priv->bounds.ymax)-(priv->bounds.ymin))*(tf-yu))/((yl-yu)*(priv->ticks.yj)));
+				lr3=(priv->bounds.ymax)-(j*dely*(tf-yu)/(yl-yu));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->ycs)-floor(log10(lr3))-1);
@@ -2170,7 +2174,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, xa, tn);
 				cairo_line_to(cr, xa-JT, tn);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.ymax)-((j*((priv->bounds.ymax)-(priv->bounds.ymin))*(tf-yu))/((yl-yu)*(priv->ticks.yj)));
+				lr3=(priv->bounds.ymax)-(j*dely*(tf-yu)/(yl-yu));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->ycs)-floor(log10(lr3))-1);
@@ -2299,7 +2303,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, xa, tn);
 				cairo_line_to(cr, xa+JT, tn);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.ymin)+((j*((priv->bounds.ymax)-(priv->bounds.ymin))*(yl-tf))/((yl-yu)*(priv->ticks.yj)));
+				lr3=(priv->bounds.ymin)+(j*dely*(yl-tf)/(yl-yu));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->ycs)-floor(log10(lr3))-1);
@@ -2368,7 +2372,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, xa, tn);
 				cairo_line_to(cr, xa+JT, tn);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.ymin)+((j*((priv->bounds.ymax)-(priv->bounds.ymin))*(yl-tf))/((yl-yu)*(priv->ticks.yj)));
+				lr3=(priv->bounds.ymin)+(j*dely*(yl-tf)/(yl-yu));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->ycs)-floor(log10(lr3))-1);
@@ -2490,7 +2494,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, xa, tn);
 				cairo_line_to(cr, xa-JT, tn);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.ymin)+((j*((priv->bounds.ymax)-(priv->bounds.ymin))*(yl-tf))/((yl-yu)*(priv->ticks.yj)));
+				lr3=(priv->bounds.ymin)+(j*dely*(yl-tf)/(yl-yu));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->ycs)-floor(log10(lr3))-1);
@@ -2559,7 +2563,7 @@ static void draw(GtkWidget *widget, cairo_t *cr)
 				cairo_move_to(cr, xa, tn);
 				cairo_line_to(cr, xa-JT, tn);
 				cairo_stroke(cr);
-				lr3=(priv->bounds.ymin)+((j*((priv->bounds.ymax)-(priv->bounds.ymin))*(yl-tf))/((yl-yu)*(priv->ticks.yj)));
+				lr3=(priv->bounds.ymin)+(j*dely*(yl-tf)/(yl-yu));
 				if (lr3>=10)
 				{
 					lr1=G_LN10*((priv->ycs)-floor(log10(lr3))-1);
@@ -3394,7 +3398,7 @@ gboolean plot_linear_update_scale(GtkWidget *widget, gdouble xn, gdouble xx, gdo
 gboolean plot_linear_update_scale_pretty(GtkWidget *widget, gdouble xl, gdouble xu, gdouble yl, gdouble yu)
 {
 	PlotLinearPrivate *priv;
-	gdouble num, num3, xn, xx, yn, yx;
+	gdouble num, num3, num4, xn, xx, yn, yx;
 	gint num2, lt, ut, tk;
 
 	if (xl>xu) {xn=xu; xx=xl;}
@@ -3589,7 +3593,9 @@ gboolean plot_linear_update_scale_pretty(GtkWidget *widget, gdouble xl, gdouble 
 	{
 		(priv->xcs)++;
 		num=-log10(num3);
-		num2=(gint)ceil(num);
+		num4=fmod(num,1);
+		if (num4<FAC) num2=(gint)num;
+		else num2=(gint)ceil(num);
 		(priv->xcs)+=num2;
 	}
 	if ((priv->xcs)>10) (priv->xcs)=10;
@@ -3689,7 +3695,9 @@ gboolean plot_linear_update_scale_pretty(GtkWidget *widget, gdouble xl, gdouble 
 	{
 		(priv->ycs)++;
 		num=-log10(num3);
-		num2=(gint)ceil(num);
+		num4=fmod(num,1);
+		if (num4<FAC) num2=(gint)num;
+		else num2=(gint)ceil(num);
 		(priv->ycs)+=num2;
 	}
 	if ((priv->ycs)>10) (priv->ycs)=10;
