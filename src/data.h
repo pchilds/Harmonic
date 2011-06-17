@@ -30,7 +30,9 @@
 	extern guint jdim, kdim, jdimxf, kdimxf, flags;
 	extern gint mx;
 	extern gchar *fold, *folr;
+	void prf(GtkPrintOperation*, GtkPrintContext*, int);
 	void prt(GtkWidget*, gpointer);
+	void prg(GtkWidget*, gpointer);
 	void sav(GtkWidget*, gpointer);
 	void sessres(GtkWidget*, gpointer);
 	void sesssav(GtkWidget*, gpointer);
