@@ -296,7 +296,7 @@ void opd(GtkWidget *widget, gpointer data)
 							g_free(contents2);
 							if (Err)
 							{
-								str=g_strdup_printf(_("Error Saving file: %s."), (gchar*) Err);
+								str=g_strdup_printf(_("Error Saving file: %s."), (Err->message));
 								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 								g_free(str);
 								g_error_free(Err);
@@ -522,7 +522,7 @@ void opd(GtkWidget *widget, gpointer data)
 													}
 													else
 													{
-														str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+														str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (Err->message));
 														gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 														g_free(str);
 														g_error_free(Err);
@@ -694,7 +694,7 @@ void opd(GtkWidget *widget, gpointer data)
 													}
 													else
 													{
-														str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+														str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (Err->message));
 														gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 														g_free(str);
 														g_error_free(Err);
@@ -868,7 +868,7 @@ void opd(GtkWidget *widget, gpointer data)
 												}
 												else
 												{
-													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (Err->message));
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													g_error_free(Err);
@@ -1041,7 +1041,7 @@ void opd(GtkWidget *widget, gpointer data)
 												}
 												else
 												{
-													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (Err->message));
 													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 													g_free(str);
 													g_error_free(Err);

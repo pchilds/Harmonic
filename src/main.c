@@ -66,7 +66,7 @@ gulong j1_id, j2_id, k_id, bsr_id, bsp_id, isr_id, isp_id, tc_id, tw_id, zw_id; 
 gdouble oe=0; /* value to hold prior reference level for offset tracking */
 gchar *fold=NULL, *folr=NULL;
 
-int main( int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	GtkAdjustment *adj;
 	GtkWidget *vbox, *mnb, *mnu, *smnu, *mni, *hpane, *table, *label, *butt;
@@ -96,14 +96,24 @@ int main( int argc, char *argv[])
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(opd), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
-	mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE, NULL);
+	smnu=gtk_menu_new();
+	mni=gtk_menu_item_new_with_label(_("Data"));
 	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(sav), NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), mni);
+	gtk_widget_show(mni);
+	mni=gtk_menu_item_new_with_label(_("Graph"));
+	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_g, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(prg), NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), mni);
+	gtk_widget_show(mni);
+	mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE, NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), smnu);
 	mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_PRINT, NULL);
 	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_p, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(prt), NULL);
+	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(prt), (gpointer)window);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
 	mni=gtk_separator_menu_item_new();

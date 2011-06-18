@@ -1,12 +1,10 @@
 Known Bugs/Issues
 -----------------
+* Plot Polar scales
 
 Future Proposals
 ----------------
-* nonmodal display properties window
 * invert to 2pi/
 * triangle optimisation
 * translations
-* zoom box
-* colour editing
 * wavelets
