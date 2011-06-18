@@ -24898,4 +24898,3 @@ void opd(GtkWidget *widget, gpointer data)
 		gtk_widget_destroy(wfile);
 	}
 }
-
