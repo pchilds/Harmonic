@@ -25,7 +25,7 @@
 #ifndef __DISP_H__
 #	define __DISP_H__
 #	include "main.h"
-	extern GtkWidget *window, *plot1, *plot2, *plot3, *notebook2, *bat, *chi, *jind2, *kind;
+	extern GtkWidget *window, *plot1, *plot2, *plot3, *notebook2, *chi, *jind2, *kind;
 	extern GArray *bxr, *byr, *bsz, *bnx, *msr, *vis, *doms, *chp, *delf, *xsb, *ysb, *stars;
 	extern GArray *sz, *nx, *sz2, *nx2, *rd1, *gr1, *bl1, *al1, *rd2, *gr2, *bl2, *al2, *rd3, *gr3, *bl3, *al3;
 	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, flags, flagd;

@@ -13,8 +13,8 @@ Harmonic_SOURCES=		\
 	proc.h			\
 	disp.c			\
 	disp.h			\
-	open.c			\
-	open.h			\
+	batc.c			\
+	batc.h			\
 	plotlinear0-1-0.c	\
 	plotlinear0-1-0.h	\
 	plotpolar0-1-0.c	\

@@ -48,14 +48,14 @@
 #include <gdk/gdkkeysyms.h>
 #include <fftw3.h>
 #include "main.h"
-#include "open.h"
+#include "batc.h"
 #include "disp.h"
 #include "data.h"
 #include "proc.h"
 #include "util.h"
 
 GtkWidget *window, *tr, *zpd, *pr, *tracmenu, *trac, *fst, *notebook, *notebook2, *plot1, *plot2, *plot3, *statusbar, *rest, *visl, *dsl, *chil;
-GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *mg, *mgp, *ri, *ncmp, *lcmp, *frr, *db4, *db8, *myr, *mrl, *bat, *chi, *twopionx, *opttri, *trans, *dBs, *neg, *wll, *oft;
+GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *mg, *mgp, *ri, *ncmp, *lcmp, *frr, *db4, *db8, *myr, *mrl, *chi, *twopionx, *opttri, *trans, *dBs, *neg, *wll, *oft;
 GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; /* widgets for windowing */
 GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *delf, *vis, *doms, *chp, *msr, *bxr, *byr; /* arrays for windowing and data */
 GArray *sz, *nx, *sz2, *nx2, *bsz, *bnx, *rd1, *gr1, *bl1, *al1, *rd2, *gr2, *bl2, *al2, *rd3, *gr3, *bl3, *al3;
@@ -82,6 +82,8 @@ int main(int argc, char *argv[])
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title(GTK_WINDOW(window), _("Harmonic Spectrum Analyser"));
 	g_signal_connect_swapped(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+	accel_group=gtk_accel_group_new();
+	gtk_window_add_accel_group(GTK_WINDOW(window), accel_group);
 	vbox=gtk_vbox_new(FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(window), vbox);
 	gtk_widget_show(vbox);
@@ -89,13 +91,21 @@ int main(int argc, char *argv[])
 	gtk_box_pack_start(GTK_BOX(vbox), mnb, FALSE, FALSE, 2);
 	gtk_widget_show(mnb);
 	mnu=gtk_menu_new();
-	accel_group=gtk_accel_group_new();
-	gtk_window_add_accel_group(GTK_WINDOW(window), accel_group);
-	mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN, NULL);
+	smnu=gtk_menu_new();
+	mni=gtk_menu_item_new_with_label(_("Data"));
 	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_o, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(opd), NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), mni);
+	gtk_widget_show(mni);
+	mni=gtk_menu_item_new_with_label(_("Batch File"));
+	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_b, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(bat), NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(smnu), mni);
+	gtk_widget_show(mni);
+	mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN, NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), smnu);
 	smnu=gtk_menu_new();
 	mni=gtk_menu_item_new_with_label(_("Data"));
 	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
@@ -275,10 +285,6 @@ int main(int argc, char *argv[])
 	mni=gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
-	bat=gtk_check_menu_item_new_with_label(_("Batch Process Data?"));
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(bat), FALSE);
-	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), bat);
-	gtk_widget_show(bat);
 	oft=gtk_check_menu_item_new_with_label(_("Autotrack Offset?"));
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(oft), FALSE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), oft);

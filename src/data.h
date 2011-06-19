@@ -25,15 +25,21 @@
 #ifndef __DATA_H__
 #	define __DATA_H__
 #	include "main.h"
-	extern GtkWidget *window, *statusbar, *plot1, *plot2, *plot3, *notebook2;
-	extern GArray *stars, *delf, *vis, *doms, *chp, *msr;
-	extern guint jdim, kdim, jdimxf, kdimxf, flags;
-	extern gint mx;
+#	include "util.h"
+	extern GtkWidget *window, *statusbar, *plot1, *plot2, *plot3, *notebook, *notebook2, *visl, *dsl, *rest, *tracmenu, *anosa, *sws, *mg, *ri;
+	extern GArray *stars, *delf, *vis, *doms, *chp, *msr, *x, *yb, *sz, *nx, *specs;
+	extern GSList *group2;
+	extern guint jdim, kdim, jdimxf, kdimxf, flags, satl;
+	extern gint lc, mx;
 	extern gchar *fold, *folr;
+	extern void upg(GtkWidget*, gpointer);
 	void prf(GtkPrintOperation*, GtkPrintContext*, int);
 	void prt(GtkWidget*, gpointer);
 	void prg(GtkWidget*, gpointer);
 	void sav(GtkWidget*, gpointer);
 	void sessres(GtkWidget*, gpointer);
 	void sesssav(GtkWidget*, gpointer);
+	void opd(GtkWidget*, gpointer);
+	/*uses statusbar, plot1, notebook, notebook2, rest, visl, dsl, tracmenu, anosa, sws, mg, ri,
+	 x, yb, sz, nx, specs, group2, flags, satl, lc*/
 #endif

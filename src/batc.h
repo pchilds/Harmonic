@@ -1,5 +1,5 @@
 /***************************************************************************
- *            open.h
+ *            batc.h
  *
  *  Sat Dec  4 17:18:14 2010
  *  Copyright  2010  Paul Childs
@@ -22,25 +22,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
 
-#ifndef __OPEN_H__
-#	define __OPEN_H__
+#ifndef __BATC_H__
+#	define __BATC_H__
 #	include "main.h"
 #	include "util.h"
 #	include <fftw3.h>
-	extern GtkWidget *window, *statusbar, *notebook, *notebook2, *plot1, *plot3, *zpd, *fst, *tracmenu, *rest, *visl, *dsl, *tr, *pr;
-	extern GtkWidget *bat, *chi, *trans, *anosa, *sws, *mg, *mgp, *ri, *wll, *oft, *twopionx, *lcmp, *dBs, *neg, *plot1, *plot3;
-	extern GArray *bxr, *byr, *bsz, *bnx, *msr, *vis, *doms, *chp, *x, *yb, *specs, *sz, *nx;
+	extern GtkWidget *window, *statusbar, *notebook, *notebook2, *plot1, *plot3, *zpd, *fst, *rest, *tr, *pr;
+	extern GtkWidget *chi, *trans, *anosa, *sws, *mg, *mgp, *wll, *oft, *twopionx, *lcmp, *dBs, *neg, *plot3;
+	extern GArray *bxr, *byr, *bsz, *bnx, *msr, *vis, *doms, *chp;
 	extern GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa;
-	extern GSList *group2;
-	extern gint lc, mx;
-	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, flags, flagd, satl, trc;
+	extern gint mx;
+	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, flags, flagd, trc;
 	extern gdouble oe;
 	extern gchar *fold, *folr;
 	extern void trs(GtkWidget*, gpointer);
 	extern void pltmv(PlotLinear*, gpointer);
 	extern void pltmvp(PlotPolar*, gpointer);
-	extern void upg(GtkWidget*, gpointer);
-	void opd(GtkWidget*, gpointer);
+	void bat(GtkWidget*, gpointer);
 	void upt(GtkWidget*, gpointer);
 	void tsw(GtkWidget*, gpointer);
 	void tdl(GtkWidget*, gpointer);

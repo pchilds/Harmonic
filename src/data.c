@@ -2831,3 +2831,162 @@ void sessres(GtkWidget *widget, gpointer data)
 	}
 	gtk_widget_destroy(wfile);
 }
+
+void opd(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *wfile, *label, *mni;
+	GSList *list;
+	gdouble xi, xf, mny, mxy, lcl;
+	gint j, k, l, sal, zp;
+	gchar *contents=NULL, *fin=NULL, *str;
+	gchar **strat=NULL, **strary=NULL;
+	gchar s[5];
+	GError *Err=NULL;
+	PlotLinear *plt;
+
+	wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(wfile), FALSE);
+	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(wfile), FALSE);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(wfile), fold);
+	g_signal_connect(G_OBJECT(wfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wfile));
+	if (gtk_dialog_run(GTK_DIALOG(wfile))==GTK_RESPONSE_ACCEPT)
+	{
+		g_free(fold);
+		g_free(folr);
+		fold=gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(wfile));
+		folr=g_strdup(fold);
+		fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
+		if (g_file_get_contents(fin, &contents, NULL, &Err))
+		{
+			strary=g_strsplit_set(contents, "\r\n", 0);
+			sal=g_strv_length(strary);
+			{g_array_free(x, TRUE); g_array_free(yb, TRUE); g_array_free(sz, TRUE); g_array_free(nx, TRUE); g_array_free(specs, TRUE);}
+			if ((flags&PROC_BAT)!=0)
+			{
+				gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
+				rest=gtk_table_new(4, 2, FALSE);
+				gtk_widget_show(rest);
+				label=gtk_label_new(_("Visibility"));
+				gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+				gtk_widget_show(label);
+				visl=gtk_label_new("");
+				gtk_table_attach(GTK_TABLE(rest), visl, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+				gtk_widget_show(visl);
+				label=gtk_label_new(_("Domain Shift"));
+				gtk_table_attach(GTK_TABLE(rest), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+				gtk_widget_show(label);
+				dsl=gtk_label_new("");
+				gtk_table_attach(GTK_TABLE(rest), dsl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+				gtk_widget_show(dsl);
+				label=gtk_label_new(_("Analysis Results"));
+				gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
+				flags^=PROC_BAT;
+			}
+			flags|=PROC_OPN;
+			x=g_array_new(FALSE, FALSE, sizeof(gdouble));
+			yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
+			specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
+			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(anosa))) {k=2; lc=-1;}
+			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(sws))) {k=0; lc=-1;}
+			else {k=0; lc=0;}
+			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(mg)))
+			{
+				while (k<sal)
+				{
+					if (!strary[k]) {k++; continue;}
+					g_strchug(strary[k]);
+					if (!g_strcmp0("", strary[k])) {k++; continue;}
+					if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) {k++; continue;}
+					if (lc<0) {lc++; k++; continue;}
+					strat=g_strsplit_set(strary[k], "\t,", 0);
+					lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+					g_array_append_val(x, lcl);
+					if (lc==0)
+					{
+						satl=g_strv_length(strat);
+						if (!strat[1]) lcl=0;
+						else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
+						mny=lcl;
+						mxy=lcl;
+					}
+					else
+					{
+						if (!strat[1]) lcl=0;
+						else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
+						if (lcl<mny) mny=lcl;
+						else if (lcl>mxy) mxy=lcl;
+					}
+					g_array_append_val(specs, lcl);
+					g_array_append_val(yb, lcl);
+					for (l=2; l<satl; l++)
+					{
+						if (!strat[l]) lcl=0;
+						else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
+						g_array_append_val(specs, lcl);
+					}
+					g_strfreev(strat);
+					lc++;
+					k++;
+				}
+				g_strfreev(strary);
+				satl--;
+				j=g_slist_length(group2);
+				while (j<satl)
+				{
+					j++;
+					g_snprintf(s, 4, "%d", j);
+					mni=gtk_radio_menu_item_new_with_label(group2, s);
+					group2=gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(mni));
+					g_signal_connect(G_OBJECT(mni), "toggled", G_CALLBACK(upg), NULL);
+					gtk_menu_shell_append(GTK_MENU_SHELL(tracmenu), mni);
+					gtk_widget_show(mni);
+				}
+				while (j>satl)
+				{
+					list=(group2->next);
+					gtk_widget_destroy(group2->data);
+					group2=list;
+					j--;
+				}
+				str=g_strdup_printf(_("File: %s successfully loaded."), fin);
+				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+				g_free(str);
+				plt=PLOT_LINEAR(plot1);
+				xi=g_array_index(x, gdouble, 0);
+				xf=g_array_index(x, gdouble, (lc-1));
+				sz=g_array_new(FALSE, FALSE, sizeof(gint));
+				nx=g_array_new(FALSE, FALSE, sizeof(gint));
+				g_array_append_val(sz, lc);/* adjust if multiple traces desired */
+				(plt->sizes)=sz;
+				zp=0;
+				g_array_append_val(nx, zp);
+				(plt->ind)=nx;
+				(plt->xdata)=x;
+				(plt->ydata)=yb;
+				plot_linear_update_scale_pretty(plot1, xi, xf, mny, mxy);
+				flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_CHP|PROC_OFT|PROC_POL);
+			}
+			else
+			{
+				str=g_strdup("Complex data not yet supported.");
+				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+				g_free(str);
+				flags|=PROC_COM;
+				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(ri))) flags|=PROC_RI;
+				else flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_CHP|PROC_OFT|PROC_POL|PROC_COM);
+			}
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 0);
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
+		}
+		else
+		{
+			str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar*) Err);
+			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+			g_free(str);
+			g_error_free(Err);
+		}
+		g_free(contents);
+		g_free(fin);
+	}
+	gtk_widget_destroy(wfile);
+}
