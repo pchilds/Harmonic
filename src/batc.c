@@ -13998,396 +13998,6 @@ void bat(GtkWidget *widget, gpointer data)
 											else {vt=0; dst=0;}
 											{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
 										}
-											}
-											{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
-										}
-										else
-										{
-											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-											{g_free(str); g_error_free(Err);}
-										}
-										{g_free(contents); g_strfreev(strat2);}
-									}
-								}
-							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0h+ */
-							{
-								for (m=0; m<mx; m++)
-								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-									{
-										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-										g_array_append_val(msr, lcl);
-										if (lcl<xi) xi=lcl;
-										else if (lcl>xf) xf=lcl;
-										strary=g_strsplit_set(contents, "\r\n", 0);
-										sal=g_strv_length(strary);
-										{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-										lc=lcib;
-										for (k=kib; k<sal; k++)
-										{
-											if (!strary[k]) continue;
-											g_strchug(strary[k]);
-											if (!g_strcmp0("", strary[k])) continue;
-											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
-											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-											g_array_append_val(xp, lcl);
-											if (!strat[trc]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-											g_array_append_val(yp, lcl);
-											g_strfreev(strat);
-											lc++;
-										}
-										g_strfreev(strary);
-										delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-										for (j=0; j<n; j++) y[j]=0;
-										ce=0;
-										for (j=1; j<=16; j++) ce+=g_array_index(yp, gdouble, lc-j);
-										ce/=16;
-										for (j=0; j<jdimx; j++)
-										{
-											iv=g_array_index(bsra, gdouble, j);
-											k=0;
-											while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-											st=k;
-											iv=g_array_index(bspa, gdouble, j);
-											while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-											sp=k-st;
-											if (sp>zp) sp=zp;
-											iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-											g_array_append_val(delp, iv);
-											for (k=0; k<sp; k++) y[k+(j*zp)]=exp(LNTOT*(ofs+ce-g_array_index(yp, gdouble, k+st)));
-										}
-										{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-										fftw_execute(p);
-										starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-										for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-										for (j=0; j<jdimx; j++)
-										{
-											vzt=g_array_index(starp, gdouble, j*zp);
-											iv=g_array_index(delp, gdouble, j);
-											if (iv<DZE) idelf=G_MAXDOUBLE;
-											else idelf=1/iv;
-											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											for (l=1; l<iv; l++)
-											{
-												ivd=g_array_index(starp, gdouble, l+(j*zp));
-												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-												vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-											}
-											if (vzt<DZE) vzt=G_MAXDOUBLE;
-											else vzt=l/vzt;
-											for (k=0; k<kdimx; k++)
-											{
-												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
-												{
-													vt=g_array_index(starp, gdouble, st+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-													phio=-atan2(ivdt, vt);
-													vt=sqrt((vt*vt)+(ivdt*ivdt));
-													{dst=0; pn=0;}
-													for (l=st+1; l<=sp; l++)
-													{
-														ivd=g_array_index(starp, gdouble, l+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-														phi=atan2(ivdt, ivd);
-														phio+=phi;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														if (phio>G_PI) phio-=(MY_2PI);
-														else if (phio<=NMY_PI) phio+=(MY_2PI);
-														if (l>(tcn-twd+0.5))
-														{
-															if (l<=(tcn+0.5))
-															{
-																tp=(((gdouble) l)-tcn-0.5)/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-															}
-															else if (l<(tcn+twd+0.5))
-															{
-																tp=(tcn+0.5-((gdouble) l))/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-															}
-														}
-														phio=-phi;
-													}
-													pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-													if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-													else dst/=pn;
-													vt*=vzt/(sp-st+1);
-												}
-												else {vt=0; dst=0;}
-												{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
-											}
-										}
-										{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
-									}
-									else
-									{
-										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-										{g_free(str); g_error_free(Err);}
-									}
-									{g_free(contents); g_strfreev(strat2);}
-								}
-							}
-							else /* +RdB0h+ */
-							{
-								for (m=0; m<mx; m++)
-								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-									{
-										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-										g_array_append_val(msr, lcl);
-										if (lcl<xi) xi=lcl;
-										else if (lcl>xf) xf=lcl;
-										strary=g_strsplit_set(contents, "\r\n", 0);
-										sal=g_strv_length(strary);
-										{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-										lc=lcib;
-										for (k=kib; k<sal; k++)
-										{
-											if (!strary[k]) continue;
-											g_strchug(strary[k]);
-											if (!g_strcmp0("", strary[k])) continue;
-											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
-											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-											g_array_append_val(xp, lcl);
-											if (!strat[trc]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-											g_array_append_val(yp, lcl);
-											g_strfreev(strat);
-											lc++;
-										}
-										g_strfreev(strary);
-										delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-										for (j=0; j<n; j++) y[j]=0;
-										ce=0;
-										for (j=1; j<=16; j++) ce+=g_array_index(yp, gdouble, lc-j);
-										ce/=16;
-										for (j=0; j<jdimx; j++)
-										{
-											iv=g_array_index(bsra, gdouble, j);
-											k=0;
-											while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-											st=k;
-											iv=g_array_index(bspa, gdouble, j);
-											while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-											sp=k-st;
-											if (sp>zp) sp=zp;
-											iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-											g_array_append_val(delp, iv);
-											for (k=0; k<sp; k++) y[k+(j*zp)]=exp(LNTOT*(g_array_index(yp, gdouble, k+st)-ofs-ce));
-										}
-										{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-										fftw_execute(p);
-										starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-										for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-										for (j=0; j<jdimx; j++)
-										{
-											vzt=g_array_index(starp, gdouble, j*zp);
-											iv=g_array_index(delp, gdouble, j);
-											if (iv<DZE) idelf=G_MAXDOUBLE;
-											else idelf=1/iv;
-											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											for (l=1; l<iv; l++)
-											{
-												ivd=g_array_index(starp, gdouble, l+(j*zp));
-												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-												vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-											}
-											if (vzt<DZE) vzt=G_MAXDOUBLE;
-											else vzt=l/vzt;
-											for (k=0; k<kdimx; k++)
-											{
-												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
-												{
-													vt=g_array_index(starp, gdouble, st+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-													phio=-atan2(ivdt, vt);
-													vt=sqrt((vt*vt)+(ivdt*ivdt));
-													{dst=0; pn=0;}
-													for (l=st+1; l<=sp; l++)
-													{
-														ivd=g_array_index(starp, gdouble, l+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-														phi=atan2(ivdt, ivd);
-														phio+=phi;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														if (phio>G_PI) phio-=(MY_2PI);
-														else if (phio<=NMY_PI) phio+=(MY_2PI);
-														if (l>(tcn-twd+0.5))
-														{
-															if (l<=(tcn+0.5))
-															{
-																tp=(((gdouble) l)-tcn-0.5)/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-															}
-															else if (l<(tcn+twd+0.5))
-															{
-																tp=(tcn+0.5-((gdouble) l))/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-															}
-														}
-														phio=-phi;
-													}
-													pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-													if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-													else dst/=pn;
-													vt*=vzt/(sp-st+1);
-												}
-												else {vt=0; dst=0;}
-												{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
-											}
-										}
-										{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
-									}
-									else
-									{
-										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-										{g_free(str); g_error_free(Err);}
-									}
-									{g_free(contents); g_strfreev(strat2);}
-								}
-							}
-						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h+ +Tl0h+ */
-						{
-							flags|=PROC_OFT;
-							for (m=0; m<mx; m++)
-							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-								{
-									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-									g_array_append_val(msr, lcl);
-									if (lcl<xi) xi=lcl;
-									else if (lcl>xf) xf=lcl;
-									strary=g_strsplit_set(contents, "\r\n", 0);
-									sal=g_strv_length(strary);
-									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-									lc=lcib;
-									for (k=kib; k<sal; k++)
-									{
-										if (!strary[k]) continue;
-										g_strchug(strary[k]);
-										if (!g_strcmp0("", strary[k])) continue;
-										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
-										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-										g_array_append_val(xp, lcl);
-										if (!strat[trc]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-										g_array_append_val(yp, lcl);
-										g_strfreev(strat);
-										lc++;
-									}
-									g_strfreev(strary);
-									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-									for (j=0; j<n; j++) y[j]=0;
-									ce=0;
-									for (j=1; j<=16; j++) ce+=g_array_index(yp, gdouble, lc-j);
-									ce/=16;
-									for (j=0; j<jdimx; j++)
-									{
-										iv=g_array_index(bsra, gdouble, j);
-										k=0;
-										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-										st=k;
-										iv=g_array_index(bspa, gdouble, j);
-										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-										sp=k-st;
-										if (sp>zp) sp=zp;
-										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-										g_array_append_val(delp, iv);
-										for (k=0; k<sp; k++) y[k+(j*zp)]=1-(g_array_index(yp, gdouble, k+st)/(ofs+ce));
-									}
-									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-									fftw_execute(p);
-									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-									for (j=0; j<jdimx; j++)
-									{
-										vzt=g_array_index(starp, gdouble, j*zp);
-										iv=g_array_index(delp, gdouble, j);
-										if (iv<DZE) idelf=G_MAXDOUBLE;
-										else idelf=1/iv;
-										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										for (l=1; l<iv; l++)
-										{
-											ivd=g_array_index(starp, gdouble, l+(j*zp));
-											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-										}
-										if (vzt<DZE) vzt=G_MAXDOUBLE;
-										else vzt=l/vzt;
-										for (k=0; k<kdimx; k++)
-										{
-											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
-											{
-												vt=g_array_index(starp, gdouble, st+(j*zp));
-												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-												phio=-atan2(ivdt, vt);
-												vt=sqrt((vt*vt)+(ivdt*ivdt));
-												{dst=0; pn=0;}
-												for (l=st+1; l<=sp; l++)
-												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													phi=atan2(ivdt, ivd);
-													phio+=phi;
-													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													if (phio>G_PI) phio-=(MY_2PI);
-													else if (phio<=NMY_PI) phio+=(MY_2PI);
-													if (l>(tcn-twd+0.5))
-													{
-														if (l<=(tcn+0.5))
-														{
-															tp=(((gdouble) l)-tcn-0.5)/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
-														else if (l<(tcn+twd+0.5))
-														{
-															tp=(tcn+0.5-((gdouble) l))/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
-													}
-													phio=-phi;
-												}
-												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-												else dst/=pn;
-												vt*=vzt/(sp-st+1);
-											}
-											else {vt=0; dst=0;}
-											{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
-										}
 									}
 									{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
 								}
@@ -14400,3092 +14010,546 @@ void bat(GtkWidget *widget, gpointer data)
 								{g_free(contents); g_strfreev(strat2);}
 							}
 						}
-						else /* -Rl0h+ +Rl0h+ */
-						{
-							flags|=PROC_OFT;
-							for (m=0; m<mx; m++)
-							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-								{
-									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-									g_array_append_val(msr, lcl);
-									if (lcl<xi) xi=lcl;
-									else if (lcl>xf) xf=lcl;
-									strary=g_strsplit_set(contents, "\r\n", 0);
-									sal=g_strv_length(strary);
-									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-									lc=lcib;
-									for (k=kib; k<sal; k++)
-									{
-										if (!strary[k]) continue;
-										g_strchug(strary[k]);
-										if (!g_strcmp0("", strary[k])) continue;
-										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
-										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-										g_array_append_val(xp, lcl);
-										if (!strat[trc]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-										g_array_append_val(yp, lcl);
-										g_strfreev(strat);
-										lc++;
-									}
-									g_strfreev(strary);
-									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-									for (j=0; j<n; j++) y[j]=0;
-									ce=0;
-									for (j=1; j<=16; j++) ce+=g_array_index(yp, gdouble, lc-j);
-									ce/=16;
-									for (j=0; j<jdimx; j++)
-									{
-										iv=g_array_index(bsra, gdouble, j);
-										k=0;
-										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-										st=k;
-										iv=g_array_index(bspa, gdouble, j);
-										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-										sp=k-st;
-										if (sp>zp) sp=zp;
-										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-										g_array_append_val(delp, iv);
-										for (k=0; k<sp; k++) y[k+(j*zp)]=g_array_index(yp, gdouble, k+st)/(ofs+ce);
-									}
-									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-									fftw_execute(p);
-									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-									for (j=0; j<jdimx; j++)
-									{
-										vzt=g_array_index(starp, gdouble, j*zp);
-										iv=g_array_index(delp, gdouble, j);
-										if (iv<DZE) idelf=G_MAXDOUBLE;
-										else idelf=1/iv;
-										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										for (l=1; l<iv; l++)
-										{
-											ivd=g_array_index(starp, gdouble, l+(j*zp));
-											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-										}
-										if (vzt<DZE) vzt=G_MAXDOUBLE;
-										else vzt=l/vzt;
-										for (k=0; k<kdimx; k++)
-										{
-											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
-											{
-												vt=g_array_index(starp, gdouble, st+(j*zp));
-												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-												phio=-atan2(ivdt, vt);
-												vt=sqrt((vt*vt)+(ivdt*ivdt));
-												{dst=0; pn=0;}
-												for (l=st+1; l<=sp; l++)
-												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													phi=atan2(ivdt, ivd);
-													phio+=phi;
-													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													if (phio>G_PI) phio-=(MY_2PI);
-													else if (phio<=NMY_PI) phio+=(MY_2PI);
-													if (l>(tcn-twd+0.5))
-													{
-														if (l<=(tcn+0.5))
-														{
-															tp=(((gdouble) l)-tcn-0.5)/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
-														else if (l<(tcn+twd+0.5))
-														{
-															tp=(tcn+0.5-((gdouble) l))/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
-													}
-													phio=-phi;
-												}
-												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-												else dst/=pn;
-												vt*=vzt/(sp-st+1);
-											}
-											else {vt=0; dst=0;}
-											{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
-										}
-									}
-									{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
-								}
-								else
-								{
-									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-									{g_free(str); g_error_free(Err);}
-								}
-								{g_free(contents); g_strfreev(strat2);}
-							}
-						}
-						oe=ce;
-						ofs+=oe;
-						gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), ofs);
 					}
-					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
+					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0h+ */
 					{
-						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-						flags|=PROC_CHP;
-						g_array_free(chp, TRUE);
-						chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
-						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
+						for (m=0; m<mx; m++)
 						{
-							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
+							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
-								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
+								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+								g_array_append_val(msr, lcl);
+								if (lcl<xi) xi=lcl;
+								else if (lcl>xf) xf=lcl;
+								strary=g_strsplit_set(contents, "\r\n", 0);
+								sal=g_strv_length(strary);
+								{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+								lc=lcib;
+								for (k=kib; k<sal; k++)
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
-									{
-										if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBsso-c */
-										{
-											for (m=0; m<mx; m++)
-											{
-												strat2=g_strsplit_set(strary2[m], "\t,", 0);
-												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-												{
-													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-													g_array_append_val(msr, lcl);
-													if (lcl<xi) xi=lcl;
-													else if (lcl>xf) xf=lcl;
-													strary=g_strsplit_set(contents, "\r\n", 0);
-													sal=g_strv_length(strary);
-													{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-													lc=lcib;
-													for (k=kib; k<sal; k++)
-													{
-														if (!strary[k]) continue;
-														g_strchug(strary[k]);
-														if (!g_strcmp0("", strary[k])) continue;
-														if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-														if (lc<0) {lc++; continue;}
-														strat=g_strsplit_set(strary[k], "\t,", 0);
-														lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-														g_array_append_val(xp, lcl);
-														if (!strat[trc]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-														g_array_append_val(yp, lcl);
-														g_strfreev(strat);
-														lc++;
-													}
-													g_strfreev(strary);
-													delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-													for (j=0; j<n; j++) y[j]=0;
-													for (j=0; j<jdimx; j++)
-													{
-													}
-													{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-													fftw_execute(p);
-													starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-													for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-													for (j=0; j<jdimx; j++)
-													{
-														vzt=g_array_index(starp, gdouble, j*zp);
-														iv=g_array_index(delp, gdouble, j);
-														if (iv<DZE) idelf=G_MAXDOUBLE;
-														else idelf=1/iv;
-														iv=g_array_index(zwa, gdouble, j)*idelf/2;
-														for (l=1; l<iv; l++)
-														{
-															ivd=g_array_index(starp, gdouble, l+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-															vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														}
-														if (vzt<DZE) vzt=G_MAXDOUBLE;
-														else vzt=l/vzt;
-														for (k=0; k<kdimx; k++)
-														{
-															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-															{
-																vt=g_array_index(starp, gdouble, st+(j*zp));
-																ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-																phia=atan2(ivdt, vt);
-																vt=sqrt((vt*vt)+(ivdt*ivdt));
-																ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-																ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-																phio=-atan2(ivdt, ivd);
-																phia+=phio;
-																vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-																{pn=0; cn=0; dst=0; ddp=0;}
-																for (l=st+2; l<=sp; l++)
-																{
-																	ivd=g_array_index(starp, gdouble, l+(j*zp));
-																	ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-																	phi=atan2(ivdt, ivd);
-																	phio+=phi;
-																	vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-																	if (phio>G_PI) phio-=(MY_2PI);
-																	else if (phio<=NMY_PI) phio+=(MY_2PI);
-																	if (l>(tcn-twd+0.5))
-																	{
-																		if ((l-1)<=(tcn-twd))
-																		{
-																			tp=(((gdouble) l)-tcn-0.5)/twd;
-																			pn+=++tp;
-																			dst+=tp*phio;
-																		}
-																		else if (l<=(tcn+0.5))
-																		{
-																			tp=(((gdouble) l)-tcn-0.5)/twd;
-																			ct=(((gdouble) l)-tcn-1)/twd;
-																			pn+=++tp;
-																			dst+=tp*phio;
-																			cn+=++ct;
-																			phia+=phio;
-																			ddp+=ct*phia;
-																		}
-																		else if ((l-1)<=tcn)
-																		{
-																			tp=(tcn+0.5-((gdouble) l))/twd;
-																			ct=(((gdouble) l)-tcn-1)/twd;
-																			pn+=++tp;
-																			dst+=tp*phio;
-																			cn+=++ct;
-																			phia+=phio;
-																			ddp+=ct*phia;
-																		}
-																		else if (l<(tcn+twd+0.5))
-																		{
-																			tp=(tcn+0.5-((gdouble) l))/twd;
-																			ct=(tcn+1-((gdouble) l))/twd;
-																			pn+=++tp;
-																			dst+=tp*phio;
-																			cn+=++ct;
-																			phia+=phio;
-																			ddp+=ct*phia;
-																		}
-																		else if ((l-1)<(tcn+twd))
-																		{
-																			ct=(tcn+1-((gdouble) l))/twd;
-																			cn+=++ct;
-																			phia+=phio;
-																			ddp+=ct*phia;
-																		}
-																	}
-																	phia=-phio;
-																	phio=-phi;
-																}
-																pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-																if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-																else dst/=pn;
-																cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-																cn*=G_PI*g_array_index(delp, gdouble, j);
-																if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-																else ddp=cn/ddp;
-																vt*=vzt/(sp-st+1);
-															}
-															else {vt=0; dst=0; ddp=0;}
-															{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-														}
-													}
-													{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-												}
-												else
-												{
-													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-													{g_free(str); g_error_free(Err);}
-												}
-												{g_free(contents); g_strfreev(strat2);}
-											}
-										}
-										else /* +TdBsso-c */
-										{
-											for (m=0; m<g_strv_length(strary2); m++)
-											{
-												strat2=g_strsplit_set(strary2[m], "\t,", 0);
-												if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-												{
-													lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-													g_array_append_val(msr, lcl);
-													if (lcl<xi) xi=lcl;
-													else if (lcl>xf) xf=lcl;
-													strary=g_strsplit_set(contents, "\r\n", 0);
-													sal=g_strv_length(strary);
-													{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-													lc=lcib;
-													for (k=kib; k<sal; k++)
-													{
-														if (!strary[k]) continue;
-														g_strchug(strary[k]);
-														if (!g_strcmp0("", strary[k])) continue;
-														if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-														if (lc<0) {lc++; continue;}
-														strat=g_strsplit_set(strary[k], "\t,", 0);
-														lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-														g_array_append_val(xp, lcl);
-														if (!strat[trc]) lcl=0;
-														else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-														g_array_append_val(yp, lcl);
-														g_strfreev(strat);
-														lc++;
-													}
-													g_strfreev(strary);
-													delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-													for (j=0; j<n; j++) y[j]=0;
-													for (j=0; j<jdimx; j++)
-													{
-													}
-													{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-													fftw_execute(p);
-													starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-													for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-													for (j=0; j<jdimx; j++)
-													{
-														vzt=g_array_index(starp, gdouble, j*zp);
-														iv=g_array_index(delp, gdouble, j);
-														if (iv<DZE) idelf=G_MAXDOUBLE;
-														else idelf=1/iv;
-														iv=g_array_index(zwa, gdouble, j)*idelf/2;
-														for (l=1; l<iv; l++)
-														{
-															ivd=g_array_index(starp, gdouble, l+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-															vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														}
-														if (vzt<DZE) vzt=G_MAXDOUBLE;
-														else vzt=l/vzt;
-														for (k=0; k<kdimx; k++)
-														{
-															st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-															sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-															tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-															twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-															if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-															{
-																vt=g_array_index(starp, gdouble, st+(j*zp));
-																ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-																phia=atan2(ivdt, vt);
-																vt=sqrt((vt*vt)+(ivdt*ivdt));
-																ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-																ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-																phio=-atan2(ivdt, ivd);
-																phia+=phio;
-																vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-																{pn=0; cn=0; dst=0; ddp=0;}
-																for (l=st+2; l<=sp; l++)
-																{
-																	ivd=g_array_index(starp, gdouble, l+(j*zp));
-																	ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-																	phi=atan2(ivdt, ivd);
-																	phio+=phi;
-																	vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-																	if (phio>G_PI) phio-=(MY_2PI);
-																	else if (phio<=NMY_PI) phio+=(MY_2PI);
-																	if (l>(tcn-twd+0.5))
-																	{
-																		if ((l-1)<=(tcn-twd))
-																		{
-																			tp=(((gdouble) l)-tcn-0.5)/twd;
-																			pn+=++tp;
-																			dst+=tp*phio;
-																		}
-																		else if (l<=(tcn+0.5))
-																		{
-																			tp=(((gdouble) l)-tcn-0.5)/twd;
-																			ct=(((gdouble) l)-tcn-1)/twd;
-																			pn+=++tp;
-																			dst+=tp*phio;
-																			cn+=++ct;
-																			phia+=phio;
-																			ddp+=ct*phia;
-																		}
-																		else if ((l-1)<=tcn)
-																		{
-																			tp=(tcn+0.5-((gdouble) l))/twd;
-																			ct=(((gdouble) l)-tcn-1)/twd;
-																			pn+=++tp;
-																			dst+=tp*phio;
-																			cn+=++ct;
-																			phia+=phio;
-																			ddp+=ct*phia;
-																		}
-																		else if (l<(tcn+twd+0.5))
-																		{
-																			tp=(tcn+0.5-((gdouble) l))/twd;
-																			ct=(tcn+1-((gdouble) l))/twd;
-																			pn+=++tp;
-																			dst+=tp*phio;
-																			cn+=++ct;
-																			phia+=phio;
-																			ddp+=ct*phia;
-																		}
-																		else if ((l-1)<(tcn+twd))
-																		{
-																			ct=(tcn+1-((gdouble) l))/twd;
-																			cn+=++ct;
-																			phia+=phio;
-																			ddp+=ct*phia;
-																		}
-																	}
-																	phia=-phio;
-																	phio=-phi;
-																}
-																pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-																if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-																else dst/=pn;
-																cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-																cn*=G_PI*g_array_index(delp, gdouble, j);
-																if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-																else ddp=cn/ddp;
-																vt*=vzt/(sp-st+1);
-															}
-															else {vt=0; dst=0; ddp=0;}
-															{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-														}
-													}
-													{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-												}
-												else
-												{
-													str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-													gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-													{g_free(str); g_error_free(Err);}
-												}
-												{g_free(contents); g_strfreev(strat2);}
-											}
-										}
-									}
-									else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBsso-c */
-									{
-										for (m=0; m<g_strv_length(strary2); m++)
-										{
-											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-											{
-												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-												g_array_append_val(msr, lcl);
-												if (lcl<xi) xi=lcl;
-												else if (lcl>xf) xf=lcl;
-												strary=g_strsplit_set(contents, "\r\n", 0);
-												sal=g_strv_length(strary);
-												{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-												lc=lcib;
-												for (k=kib; k<sal; k++)
-												{
-													if (!strary[k]) continue;
-													g_strchug(strary[k]);
-													if (!g_strcmp0("", strary[k])) continue;
-													if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-													if (lc<0) {lc++; continue;}
-													strat=g_strsplit_set(strary[k], "\t,", 0);
-													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-													g_array_append_val(xp, lcl);
-													if (!strat[trc]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-													g_array_append_val(yp, lcl);
-													g_strfreev(strat);
-													lc++;
-												}
-												g_strfreev(strary);
-												delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-												for (j=0; j<n; j++) y[j]=0;
-												for (j=0; j<jdimx; j++)
-												{
-												}
-												{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-												fftw_execute(p);
-												starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-												for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-												for (j=0; j<jdimx; j++)
-												{
-													vzt=g_array_index(starp, gdouble, j*zp);
-													iv=g_array_index(delp, gdouble, j);
-													if (iv<DZE) idelf=G_MAXDOUBLE;
-													else idelf=1/iv;
-													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													for (l=1; l<iv; l++)
-													{
-														ivd=g_array_index(starp, gdouble, l+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-														vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													}
-													if (vzt<DZE) vzt=G_MAXDOUBLE;
-													else vzt=l/vzt;
-													for (k=0; k<kdimx; k++)
-													{
-														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-														{
-															vt=g_array_index(starp, gdouble, st+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-															phia=atan2(ivdt, vt);
-															vt=sqrt((vt*vt)+(ivdt*ivdt));
-															ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-															phio=-atan2(ivdt, ivd);
-															phia+=phio;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															{pn=0; cn=0; dst=0; ddp=0;}
-															for (l=st+2; l<=sp; l++)
-															{
-																ivd=g_array_index(starp, gdouble, l+(j*zp));
-																ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-																phi=atan2(ivdt, ivd);
-																phio+=phi;
-																vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-																if (phio>G_PI) phio-=(MY_2PI);
-																else if (phio<=NMY_PI) phio+=(MY_2PI);
-																if (l>(tcn-twd+0.5))
-																{
-																	if ((l-1)<=(tcn-twd))
-																	{
-																		tp=(((gdouble) l)-tcn-0.5)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																	}
-																	else if (l<=(tcn+0.5))
-																	{
-																		tp=(((gdouble) l)-tcn-0.5)/twd;
-																		ct=(((gdouble) l)-tcn-1)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if ((l-1)<=tcn)
-																	{
-																		tp=(tcn+0.5-((gdouble) l))/twd;
-																		ct=(((gdouble) l)-tcn-1)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if (l<(tcn+twd+0.5))
-																	{
-																		tp=(tcn+0.5-((gdouble) l))/twd;
-																		ct=(tcn+1-((gdouble) l))/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if ((l-1)<(tcn+twd))
-																	{
-																		ct=(tcn+1-((gdouble) l))/twd;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																}
-																phia=-phio;
-																phio=-phi;
-															}
-															pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-															if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-															else dst/=pn;
-															cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-															cn*=G_PI*g_array_index(delp, gdouble, j);
-															if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-															else ddp=cn/ddp;
-															vt*=vzt/(sp-st+1);
-														}
-														else {vt=0; dst=0; ddp=0;}
-														{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-													}
-												}
-												{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-											}
-											else
-											{
-												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-												{g_free(str); g_error_free(Err);}
-											}
-											{g_free(contents); g_strfreev(strat2);}
-										}
-									}
-									else /* +RdBsso-c */
-									{
-										for (m=0; m<g_strv_length(strary2); m++)
-										{
-											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-											{
-												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-												g_array_append_val(msr, lcl);
-												if (lcl<xi) xi=lcl;
-												else if (lcl>xf) xf=lcl;
-												strary=g_strsplit_set(contents, "\r\n", 0);
-												sal=g_strv_length(strary);
-												{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-												lc=lcib;
-												for (k=kib; k<sal; k++)
-												{
-													if (!strary[k]) continue;
-													g_strchug(strary[k]);
-													if (!g_strcmp0("", strary[k])) continue;
-													if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-													if (lc<0) {lc++; continue;}
-													strat=g_strsplit_set(strary[k], "\t,", 0);
-													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-													g_array_append_val(xp, lcl);
-													if (!strat[trc]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-													g_array_append_val(yp, lcl);
-													g_strfreev(strat);
-													lc++;
-												}
-												g_strfreev(strary);
-												delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-												for (j=0; j<n; j++) y[j]=0;
-												for (j=0; j<jdimx; j++)
-												{
-												}
-												{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-												fftw_execute(p);
-												starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-												for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-												for (j=0; j<jdimx; j++)
-												{
-													vzt=g_array_index(starp, gdouble, j*zp);
-													iv=g_array_index(delp, gdouble, j);
-													if (iv<DZE) idelf=G_MAXDOUBLE;
-													else idelf=1/iv;
-													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													for (l=1; l<iv; l++)
-													{
-														ivd=g_array_index(starp, gdouble, l+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-														vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													}
-													if (vzt<DZE) vzt=G_MAXDOUBLE;
-													else vzt=l/vzt;
-													for (k=0; k<kdimx; k++)
-													{
-														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-														{
-															vt=g_array_index(starp, gdouble, st+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-															phia=atan2(ivdt, vt);
-															vt=sqrt((vt*vt)+(ivdt*ivdt));
-															ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-															phio=-atan2(ivdt, ivd);
-															phia+=phio;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															{pn=0; cn=0; dst=0; ddp=0;}
-															for (l=st+2; l<=sp; l++)
-															{
-																ivd=g_array_index(starp, gdouble, l+(j*zp));
-																ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-																phi=atan2(ivdt, ivd);
-																phio+=phi;
-																vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-																if (phio>G_PI) phio-=(MY_2PI);
-																else if (phio<=NMY_PI) phio+=(MY_2PI);
-																if (l>(tcn-twd+0.5))
-																{
-																	if ((l-1)<=(tcn-twd))
-																	{
-																		tp=(((gdouble) l)-tcn-0.5)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																	}
-																	else if (l<=(tcn+0.5))
-																	{
-																		tp=(((gdouble) l)-tcn-0.5)/twd;
-																		ct=(((gdouble) l)-tcn-1)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if ((l-1)<=tcn)
-																	{
-																		tp=(tcn+0.5-((gdouble) l))/twd;
-																		ct=(((gdouble) l)-tcn-1)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if (l<(tcn+twd+0.5))
-																	{
-																		tp=(tcn+0.5-((gdouble) l))/twd;
-																		ct=(tcn+1-((gdouble) l))/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if ((l-1)<(tcn+twd))
-																	{
-																		ct=(tcn+1-((gdouble) l))/twd;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																}
-																phia=-phio;
-																phio=-phi;
-															}
-															pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-															if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-															else dst/=pn;
-															cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-															cn*=G_PI*g_array_index(delp, gdouble, j);
-															if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-															else ddp=cn/ddp;
-															vt*=vzt/(sp-st+1);
-														}
-														else {vt=0; dst=0; ddp=0;}
-														{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-													}
-												}
-												{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-											}
-											else
-											{
-												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-												{g_free(str); g_error_free(Err);}
-											}
-											{g_free(contents); g_strfreev(strat2);}
-										}
-									}
+									if (!strary[k]) continue;
+									g_strchug(strary[k]);
+									if (!g_strcmp0("", strary[k])) continue;
+									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+									if (lc<0) {lc++; continue;}
+									strat=g_strsplit_set(strary[k], "\t,", 0);
+									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+									g_array_append_val(xp, lcl);
+									if (!strat[trc]) lcl=0;
+									else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+									g_array_append_val(yp, lcl);
+									g_strfreev(strat);
+									lc++;
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlsso-c +Tlsso-c */
+								g_strfreev(strary);
+								delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+								for (j=0; j<n; j++) y[j]=0;
+								ce=0;
+								for (j=1; j<=16; j++) ce+=g_array_index(yp, gdouble, lc-j);
+								ce/=16;
+								for (j=0; j<jdimx; j++)
 								{
-									for (m=0; m<g_strv_length(strary2); m++)
-									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-										{
-											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-											g_array_append_val(msr, lcl);
-											if (lcl<xi) xi=lcl;
-											else if (lcl>xf) xf=lcl;
-											strary=g_strsplit_set(contents, "\r\n", 0);
-											sal=g_strv_length(strary);
-											{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-											lc=lcib;
-											for (k=kib; k<sal; k++)
-											{
-												if (!strary[k]) continue;
-												g_strchug(strary[k]);
-												if (!g_strcmp0("", strary[k])) continue;
-												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
-												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-												g_array_append_val(xp, lcl);
-												if (!strat[trc]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-												g_array_append_val(yp, lcl);
-												g_strfreev(strat);
-												lc++;
-											}
-											g_strfreev(strary);
-											delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-											for (j=0; j<n; j++) y[j]=0;
-											for (j=0; j<jdimx; j++)
-											{
-											}
-											{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-											fftw_execute(p);
-											starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-											for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-											for (j=0; j<jdimx; j++)
-											{
-												vzt=g_array_index(starp, gdouble, j*zp);
-												iv=g_array_index(delp, gdouble, j);
-												if (iv<DZE) idelf=G_MAXDOUBLE;
-												else idelf=1/iv;
-												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												for (l=1; l<iv; l++)
-												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-												}
-												if (vzt<DZE) vzt=G_MAXDOUBLE;
-												else vzt=l/vzt;
-												for (k=0; k<kdimx; k++)
-												{
-													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-													{
-														vt=g_array_index(starp, gdouble, st+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-														phia=atan2(ivdt, vt);
-														vt=sqrt((vt*vt)+(ivdt*ivdt));
-														ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-														phio=-atan2(ivdt, ivd);
-														phia+=phio;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														{pn=0; cn=0; dst=0; ddp=0;}
-														for (l=st+2; l<=sp; l++)
-														{
-															ivd=g_array_index(starp, gdouble, l+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-															phi=atan2(ivdt, ivd);
-															phio+=phi;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															if (phio>G_PI) phio-=(MY_2PI);
-															else if (phio<=NMY_PI) phio+=(MY_2PI);
-															if (l>(tcn-twd+0.5))
-															{
-																if ((l-1)<=(tcn-twd))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																}
-																else if (l<=(tcn+0.5))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<=tcn)
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if (l<(tcn+twd+0.5))
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<(tcn+twd))
-																{
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-															}
-															phia=-phio;
-															phio=-phi;
-														}
-														pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-														else dst/=pn;
-														cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														cn*=G_PI*g_array_index(delp, gdouble, j);
-														if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-														else ddp=cn/ddp;
-														vt*=vzt/(sp-st+1);
-													}
-													else {vt=0; dst=0; ddp=0;}
-													{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-												}
-											}
-											{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-										}
-										else
-										{
-											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-											{g_free(str); g_error_free(Err);}
-										}
-										{g_free(contents); g_strfreev(strat2);}
-									}
+									iv=g_array_index(bsra, gdouble, j);
+									k=0;
+									while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+									st=k;
+									iv=g_array_index(bspa, gdouble, j);
+									while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+									sp=k-st;
+									if (sp>zp) sp=zp;
+									iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+									g_array_append_val(delp, iv);
+									for (k=0; k<sp; k++) y[k+(j*zp)]=exp(LNTOT*(ofs+ce-g_array_index(yp, gdouble, k+st)));
 								}
-								else /* -Rlsso-c +Rlsso-c */
+								{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+								fftw_execute(p);
+								starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+								for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+								for (j=0; j<jdimx; j++)
 								{
-									for (m=0; m<g_strv_length(strary2); m++)
+									vzt=g_array_index(starp, gdouble, j*zp);
+									iv=g_array_index(delp, gdouble, j);
+									if (iv<DZE) idelf=G_MAXDOUBLE;
+									else idelf=1/iv;
+									iv=g_array_index(zwa, gdouble, j)*idelf/2;
+									for (l=1; l<iv; l++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-										{
-											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-											g_array_append_val(msr, lcl);
-											if (lcl<xi) xi=lcl;
-											else if (lcl>xf) xf=lcl;
-											strary=g_strsplit_set(contents, "\r\n", 0);
-											sal=g_strv_length(strary);
-											{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-											lc=lcib;
-											for (k=kib; k<sal; k++)
-											{
-												if (!strary[k]) continue;
-												g_strchug(strary[k]);
-												if (!g_strcmp0("", strary[k])) continue;
-												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
-												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-												g_array_append_val(xp, lcl);
-												if (!strat[trc]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-												g_array_append_val(yp, lcl);
-												g_strfreev(strat);
-												lc++;
-											}
-											g_strfreev(strary);
-											delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-											for (j=0; j<n; j++) y[j]=0;
-											for (j=0; j<jdimx; j++)
-											{
-											}
-											{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-											fftw_execute(p);
-											starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-											for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-											for (j=0; j<jdimx; j++)
-											{
-												vzt=g_array_index(starp, gdouble, j*zp);
-												iv=g_array_index(delp, gdouble, j);
-												if (iv<DZE) idelf=G_MAXDOUBLE;
-												else idelf=1/iv;
-												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												for (l=1; l<iv; l++)
-												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-												}
-												if (vzt<DZE) vzt=G_MAXDOUBLE;
-												else vzt=l/vzt;
-												for (k=0; k<kdimx; k++)
-												{
-													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-													{
-														vt=g_array_index(starp, gdouble, st+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-														phia=atan2(ivdt, vt);
-														vt=sqrt((vt*vt)+(ivdt*ivdt));
-														ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-														phio=-atan2(ivdt, ivd);
-														phia+=phio;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														{pn=0; cn=0; dst=0; ddp=0;}
-														for (l=st+2; l<=sp; l++)
-														{
-															ivd=g_array_index(starp, gdouble, l+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-															phi=atan2(ivdt, ivd);
-															phio+=phi;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															if (phio>G_PI) phio-=(MY_2PI);
-															else if (phio<=NMY_PI) phio+=(MY_2PI);
-															if (l>(tcn-twd+0.5))
-															{
-																if ((l-1)<=(tcn-twd))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																}
-																else if (l<=(tcn+0.5))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<=tcn)
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if (l<(tcn+twd+0.5))
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<(tcn+twd))
-																{
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-															}
-															phia=-phio;
-															phio=-phi;
-														}
-														pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-														else dst/=pn;
-														cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														cn*=G_PI*g_array_index(delp, gdouble, j);
-														if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-														else ddp=cn/ddp;
-														vt*=vzt/(sp-st+1);
-													}
-													else {vt=0; dst=0; ddp=0;}
-													{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-												}
-											}
-											{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-										}
-										else
-										{
-											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-											{g_free(str); g_error_free(Err);}
-										}
-										{g_free(contents); g_strfreev(strat2);}
+										ivd=g_array_index(starp, gdouble, l+(j*zp));
+										ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+										vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
 									}
-								}
-							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
-							{
-								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
-								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o-c */
+									if (vzt<DZE) vzt=G_MAXDOUBLE;
+									else vzt=l/vzt;
+									for (k=0; k<kdimx; k++)
 									{
-										for (m=0; m<g_strv_length(strary2); m++)
+										st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+										sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+										tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+										twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+										if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
 										{
-											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-											{
-												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-												g_array_append_val(msr, lcl);
-												if (lcl<xi) xi=lcl;
-												else if (lcl>xf) xf=lcl;
-												strary=g_strsplit_set(contents, "\r\n", 0);
-												sal=g_strv_length(strary);
-												{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-												lc=lcib;
-												for (k=kib; k<sal; k++)
-												{
-													if (!strary[k]) continue;
-													g_strchug(strary[k]);
-													if (!g_strcmp0("", strary[k])) continue;
-													if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-													if (lc<0) {lc++; continue;}
-													strat=g_strsplit_set(strary[k], "\t,", 0);
-													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-													g_array_append_val(xp, lcl);
-													if (!strat[trc]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-													g_array_append_val(yp, lcl);
-													g_strfreev(strat);
-													lc++;
-												}
-												g_strfreev(strary);
-												delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-												for (j=0; j<n; j++) y[j]=0;
-												for (j=0; j<jdimx; j++)
-												{
-												}
-												{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-												fftw_execute(p);
-												starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-												for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-												for (j=0; j<jdimx; j++)
-												{
-													vzt=g_array_index(starp, gdouble, j*zp);
-													iv=g_array_index(delp, gdouble, j);
-													if (iv<DZE) idelf=G_MAXDOUBLE;
-													else idelf=1/iv;
-													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													for (l=1; l<iv; l++)
-													{
-														ivd=g_array_index(starp, gdouble, l+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-														vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													}
-													if (vzt<DZE) vzt=G_MAXDOUBLE;
-													else vzt=l/vzt;
-													for (k=0; k<kdimx; k++)
-													{
-														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-														{
-															vt=g_array_index(starp, gdouble, st+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-															phia=atan2(ivdt, vt);
-															vt=sqrt((vt*vt)+(ivdt*ivdt));
-															ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-															phio=-atan2(ivdt, ivd);
-															phia+=phio;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															{pn=0; cn=0; dst=0; ddp=0;}
-															for (l=st+2; l<=sp; l++)
-															{
-																ivd=g_array_index(starp, gdouble, l+(j*zp));
-																ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-																phi=atan2(ivdt, ivd);
-																phio+=phi;
-																vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-																if (phio>G_PI) phio-=(MY_2PI);
-																else if (phio<=NMY_PI) phio+=(MY_2PI);
-																if (l>(tcn-twd+0.5))
-																{
-																	if ((l-1)<=(tcn-twd))
-																	{
-																		tp=(((gdouble) l)-tcn-0.5)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																	}
-																	else if (l<=(tcn+0.5))
-																	{
-																		tp=(((gdouble) l)-tcn-0.5)/twd;
-																		ct=(((gdouble) l)-tcn-1)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if ((l-1)<=tcn)
-																	{
-																		tp=(tcn+0.5-((gdouble) l))/twd;
-																		ct=(((gdouble) l)-tcn-1)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if (l<(tcn+twd+0.5))
-																	{
-																		tp=(tcn+0.5-((gdouble) l))/twd;
-																		ct=(tcn+1-((gdouble) l))/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if ((l-1)<(tcn+twd))
-																	{
-																		ct=(tcn+1-((gdouble) l))/twd;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																}
-																phia=-phio;
-																phio=-phi;
-															}
-															pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-															if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-															else dst/=pn;
-															cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-															cn*=G_PI*g_array_index(delp, gdouble, j);
-															if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-															else ddp=cn/ddp;
-															vt*=vzt/(sp-st+1);
-														}
-														else {vt=0; dst=0; ddp=0;}
-														{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-													}
-												}
-												{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-											}
-											else
-											{
-												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-												{g_free(str); g_error_free(Err);}
-											}
-											{g_free(contents); g_strfreev(strat2);}
-										}
-									}
-									else /* +TdB0o-c */
-									{
-										for (m=0; m<g_strv_length(strary2); m++)
-										{
-											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-											{
-												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-												g_array_append_val(msr, lcl);
-												if (lcl<xi) xi=lcl;
-												else if (lcl>xf) xf=lcl;
-												strary=g_strsplit_set(contents, "\r\n", 0);
-												sal=g_strv_length(strary);
-												{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-												lc=lcib;
-												for (k=kib; k<sal; k++)
-												{
-													if (!strary[k]) continue;
-													g_strchug(strary[k]);
-													if (!g_strcmp0("", strary[k])) continue;
-													if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-													if (lc<0) {lc++; continue;}
-													strat=g_strsplit_set(strary[k], "\t,", 0);
-													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-													g_array_append_val(xp, lcl);
-													if (!strat[1]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-													g_array_append_val(yp, lcl);
-													g_strfreev(strat);
-													lc++;
-												}
-												g_strfreev(strary);
-												delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-												for (j=0; j<n; j++) y[j]=0;
-												for (j=0; j<jdimx; j++)
-												{
-												}
-												{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-												fftw_execute(p);
-												starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-												for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-												for (j=0; j<jdimx; j++)
-												{
-													vzt=g_array_index(starp, gdouble, j*zp);
-													iv=g_array_index(delp, gdouble, j);
-													if (iv<DZE) idelf=G_MAXDOUBLE;
-													else idelf=1/iv;
-													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													for (l=1; l<iv; l++)
-													{
-														ivd=g_array_index(starp, gdouble, l+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-														vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													}
-													if (vzt<DZE) vzt=G_MAXDOUBLE;
-													else vzt=l/vzt;
-													for (k=0; k<kdimx; k++)
-													{
-														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-														{
-															vt=g_array_index(starp, gdouble, st+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-															phia=atan2(ivdt, vt);
-															vt=sqrt((vt*vt)+(ivdt*ivdt));
-															ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-															phio=-atan2(ivdt, ivd);
-															phia+=phio;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															{pn=0; cn=0; dst=0; ddp=0;}
-															for (l=st+2; l<=sp; l++)
-															{
-																ivd=g_array_index(starp, gdouble, l+(j*zp));
-																ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-																phi=atan2(ivdt, ivd);
-																phio+=phi;
-																vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-																if (phio>G_PI) phio-=(MY_2PI);
-																else if (phio<=NMY_PI) phio+=(MY_2PI);
-																if (l>(tcn-twd+0.5))
-																{
-																	if ((l-1)<=(tcn-twd))
-																	{
-																		tp=(((gdouble) l)-tcn-0.5)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																	}
-																	else if (l<=(tcn+0.5))
-																	{
-																		tp=(((gdouble) l)-tcn-0.5)/twd;
-																		ct=(((gdouble) l)-tcn-1)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if ((l-1)<=tcn)
-																	{
-																		tp=(tcn+0.5-((gdouble) l))/twd;
-																		ct=(((gdouble) l)-tcn-1)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if (l<(tcn+twd+0.5))
-																	{
-																		tp=(tcn+0.5-((gdouble) l))/twd;
-																		ct=(tcn+1-((gdouble) l))/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if ((l-1)<(tcn+twd))
-																	{
-																		ct=(tcn+1-((gdouble) l))/twd;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																}
-																phia=-phio;
-																phio=-phi;
-															}
-															pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-															if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-															else dst/=pn;
-															cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-															cn*=G_PI*g_array_index(delp, gdouble, j);
-															if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-															else ddp=cn/ddp;
-															vt*=vzt/(sp-st+1);
-														}
-														else {vt=0; dst=0; ddp=0;}
-														{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-													}
-												}
-												{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-											}
-											else
-											{
-												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-												{g_free(str); g_error_free(Err);}
-											}
-											{g_free(contents); g_strfreev(strat2);}
-										}
-									}
-								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0o-c */
-								{
-									for (m=0; m<g_strv_length(strary2); m++)
-									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-										{
-											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-											g_array_append_val(msr, lcl);
-											if (lcl<xi) xi=lcl;
-											else if (lcl>xf) xf=lcl;
-											strary=g_strsplit_set(contents, "\r\n", 0);
-											sal=g_strv_length(strary);
-											{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-											lc=lcib;
-											for (k=kib; k<sal; k++)
-											{
-												if (!strary[k]) continue;
-												g_strchug(strary[k]);
-												if (!g_strcmp0("", strary[k])) continue;
-												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
-												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-												g_array_append_val(xp, lcl);
-												if (!strat[trc]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-												g_array_append_val(yp, lcl);
-												g_strfreev(strat);
-												lc++;
-											}
-											g_strfreev(strary);
-											delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-											for (j=0; j<n; j++) y[j]=0;
-											for (j=0; j<jdimx; j++)
-											{
-											}
-											{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-											fftw_execute(p);
-											starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-											for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-											for (j=0; j<jdimx; j++)
-											{
-												vzt=g_array_index(starp, gdouble, j*zp);
-												iv=g_array_index(delp, gdouble, j);
-												if (iv<DZE) idelf=G_MAXDOUBLE;
-												else idelf=1/iv;
-												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												for (l=1; l<iv; l++)
-												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-												}
-												if (vzt<DZE) vzt=G_MAXDOUBLE;
-												else vzt=l/vzt;
-												for (k=0; k<kdimx; k++)
-												{
-													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-													{
-														vt=g_array_index(starp, gdouble, st+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-														phia=atan2(ivdt, vt);
-														vt=sqrt((vt*vt)+(ivdt*ivdt));
-														ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-														phio=-atan2(ivdt, ivd);
-														phia+=phio;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														{pn=0; cn=0; dst=0; ddp=0;}
-														for (l=st+2; l<=sp; l++)
-														{
-															ivd=g_array_index(starp, gdouble, l+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-															phi=atan2(ivdt, ivd);
-															phio+=phi;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															if (phio>G_PI) phio-=(MY_2PI);
-															else if (phio<=NMY_PI) phio+=(MY_2PI);
-															if (l>(tcn-twd+0.5))
-															{
-																if ((l-1)<=(tcn-twd))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																}
-																else if (l<=(tcn+0.5))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<=tcn)
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if (l<(tcn+twd+0.5))
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<(tcn+twd))
-																{
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-															}
-															phia=-phio;
-															phio=-phi;
-														}
-														pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-														else dst/=pn;
-														cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														cn*=G_PI*g_array_index(delp, gdouble, j);
-														if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-														else ddp=cn/ddp;
-														vt*=vzt/(sp-st+1);
-													}
-													else {vt=0; dst=0; ddp=0;}
-													{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-												}
-											}
-											{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-										}
-										else
-										{
-											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-											{g_free(str); g_error_free(Err);}
-										}
-										{g_free(contents); g_strfreev(strat2);}
-									}
-								}
-								else /* +RdB0o-c */
-								{
-									for (m=0; m<g_strv_length(strary2); m++)
-									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-										{
-											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-											g_array_append_val(msr, lcl);
-											if (lcl<xi) xi=lcl;
-											else if (lcl>xf) xf=lcl;
-											strary=g_strsplit_set(contents, "\r\n", 0);
-											sal=g_strv_length(strary);
-											{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-											lc=lcib;
-											for (k=kib; k<sal; k++)
-											{
-												if (!strary[k]) continue;
-												g_strchug(strary[k]);
-												if (!g_strcmp0("", strary[k])) continue;
-												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
-												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-												g_array_append_val(xp, lcl);
-												if (!strat[trc]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-												g_array_append_val(yp, lcl);
-												g_strfreev(strat);
-												lc++;
-											}
-											g_strfreev(strary);
-											delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-											for (j=0; j<n; j++) y[j]=0;
-											for (j=0; j<jdimx; j++)
-											{
-											}
-											{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-											fftw_execute(p);
-											starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-											for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-											for (j=0; j<jdimx; j++)
-											{
-												vzt=g_array_index(starp, gdouble, j*zp);
-												iv=g_array_index(delp, gdouble, j);
-												if (iv<DZE) idelf=G_MAXDOUBLE;
-												else idelf=1/iv;
-												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												for (l=1; l<iv; l++)
-												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-												}
-												if (vzt<DZE) vzt=G_MAXDOUBLE;
-												else vzt=l/vzt;
-												for (k=0; k<kdimx; k++)
-												{
-													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-													{
-														vt=g_array_index(starp, gdouble, st+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-														phia=atan2(ivdt, vt);
-														vt=sqrt((vt*vt)+(ivdt*ivdt));
-														ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-														phio=-atan2(ivdt, ivd);
-														phia+=phio;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														{pn=0; cn=0; dst=0; ddp=0;}
-														for (l=st+2; l<=sp; l++)
-														{
-															ivd=g_array_index(starp, gdouble, l+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-															phi=atan2(ivdt, ivd);
-															phio+=phi;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															if (phio>G_PI) phio-=(MY_2PI);
-															else if (phio<=NMY_PI) phio+=(MY_2PI);
-															if (l>(tcn-twd+0.5))
-															{
-																if ((l-1)<=(tcn-twd))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																}
-																else if (l<=(tcn+0.5))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<=tcn)
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if (l<(tcn+twd+0.5))
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<(tcn+twd))
-																{
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-															}
-															phia=-phio;
-															phio=-phi;
-														}
-														pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-														else dst/=pn;
-														cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														cn*=G_PI*g_array_index(delp, gdouble, j);
-														if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-														else ddp=cn/ddp;
-														vt*=vzt/(sp-st+1);
-													}
-													else {vt=0; dst=0; ddp=0;}
-													{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-												}
-											}
-											{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-										}
-										else
-										{
-											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-											{g_free(str); g_error_free(Err);}
-										}
-										{g_free(contents); g_strfreev(strat2);}
-									}
-								}
-							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0o-c +Tl0o-c */
-							{
-								for (m=0; m<g_strv_length(strary2); m++)
-								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-									{
-										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-										g_array_append_val(msr, lcl);
-										if (lcl<xi) xi=lcl;
-										else if (lcl>xf) xf=lcl;
-										strary=g_strsplit_set(contents, "\r\n", 0);
-										sal=g_strv_length(strary);
-										{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-										lc=lcib;
-										for (k=kib; k<sal; k++)
-										{
-											if (!strary[k]) continue;
-											g_strchug(strary[k]);
-											if (!g_strcmp0("", strary[k])) continue;
-											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
-											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-											g_array_append_val(xp, lcl);
-											if (!strat[trc]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-											g_array_append_val(yp, lcl);
-											g_strfreev(strat);
-											lc++;
-										}
-										g_strfreev(strary);
-										delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-										for (j=0; j<n; j++) y[j]=0;
-										for (j=0; j<jdimx; j++)
-										{
-										}
-										{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-										fftw_execute(p);
-										starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-										for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-										for (j=0; j<jdimx; j++)
-										{
-											vzt=g_array_index(starp, gdouble, j*zp);
-											iv=g_array_index(delp, gdouble, j);
-											if (iv<DZE) idelf=G_MAXDOUBLE;
-											else idelf=1/iv;
-											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											for (l=1; l<iv; l++)
+											vt=g_array_index(starp, gdouble, st+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+											phio=-atan2(ivdt, vt);
+											vt=sqrt((vt*vt)+(ivdt*ivdt));
+											{dst=0; pn=0;}
+											for (l=st+1; l<=sp; l++)
 											{
 												ivd=g_array_index(starp, gdouble, l+(j*zp));
 												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-												vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-											}
-											if (vzt<DZE) vzt=G_MAXDOUBLE;
-											else vzt=l/vzt;
-											for (k=0; k<kdimx; k++)
-											{
-												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+												phi=atan2(ivdt, ivd);
+												phio+=phi;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												if (phio>G_PI) phio-=(MY_2PI);
+												else if (phio<=NMY_PI) phio+=(MY_2PI);
+												if (l>(tcn-twd+0.5))
 												{
-													vt=g_array_index(starp, gdouble, st+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-													phia=atan2(ivdt, vt);
-													vt=sqrt((vt*vt)+(ivdt*ivdt));
-													ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-													phio=-atan2(ivdt, ivd);
-													phia+=phio;
-													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													{pn=0; cn=0; dst=0; ddp=0;}
-													for (l=st+2; l<=sp; l++)
+													if (l<=(tcn+0.5))
 													{
-														ivd=g_array_index(starp, gdouble, l+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-														phi=atan2(ivdt, ivd);
-														phio+=phi;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														if (phio>G_PI) phio-=(MY_2PI);
-														else if (phio<=NMY_PI) phio+=(MY_2PI);
-														if (l>(tcn-twd+0.5))
-														{
-															if ((l-1)<=(tcn-twd))
-															{
-																tp=(((gdouble) l)-tcn-0.5)/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-															}
-															else if (l<=(tcn+0.5))
-															{
-																tp=(((gdouble) l)-tcn-0.5)/twd;
-																ct=(((gdouble) l)-tcn-1)/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-																cn+=++ct;
-																phia+=phio;
-																ddp+=ct*phia;
-															}
-															else if ((l-1)<=tcn)
-															{
-																tp=(tcn+0.5-((gdouble) l))/twd;
-																ct=(((gdouble) l)-tcn-1)/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-																cn+=++ct;
-																phia+=phio;
-																ddp+=ct*phia;
-															}
-															else if (l<(tcn+twd+0.5))
-															{
-																tp=(tcn+0.5-((gdouble) l))/twd;
-																ct=(tcn+1-((gdouble) l))/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-																cn+=++ct;
-																phia+=phio;
-																ddp+=ct*phia;
-															}
-															else if ((l-1)<(tcn+twd))
-															{
-																ct=(tcn+1-((gdouble) l))/twd;
-																cn+=++ct;
-																phia+=phio;
-																ddp+=ct*phia;
-															}
-														}
-														phia=-phio;
-														phio=-phi;
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
 													}
-													pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-													if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-													else dst/=pn;
-													cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-													cn*=G_PI*g_array_index(delp, gdouble, j);
-													if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-													else ddp=cn/ddp;
-													vt*=vzt/(sp-st+1);
+													else if (l<(tcn+twd+0.5))
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+													}
 												}
-												else {vt=0; dst=0; ddp=0;}
-												{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+												phio=-phi;
 											}
+											pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+											if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+											else dst/=pn;
+											vt*=vzt/(sp-st+1);
 										}
-										{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+										else {vt=0; dst=0;}
+										{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
 									}
-									else
-									{
-										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-										{g_free(str); g_error_free(Err);}
-									}
-									{g_free(contents); g_strfreev(strat2);}
 								}
+								{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
 							}
-							else /* -Rl0o-c +Rl0o-c */
+							else
 							{
-								for (m=0; m<g_strv_length(strary2); m++)
+								str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								{g_free(str); g_error_free(Err);}
+							}
+							{g_free(contents); g_strfreev(strat2);}
+						}
+					}
+					else /* +RdB0h+ */
+					{
+						for (m=0; m<mx; m++)
+						{
+							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+							{
+								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+								g_array_append_val(msr, lcl);
+								if (lcl<xi) xi=lcl;
+								else if (lcl>xf) xf=lcl;
+								strary=g_strsplit_set(contents, "\r\n", 0);
+								sal=g_strv_length(strary);
+								{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+								lc=lcib;
+								for (k=kib; k<sal; k++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+									if (!strary[k]) continue;
+									g_strchug(strary[k]);
+									if (!g_strcmp0("", strary[k])) continue;
+									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+									if (lc<0) {lc++; continue;}
+									strat=g_strsplit_set(strary[k], "\t,", 0);
+									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+									g_array_append_val(xp, lcl);
+									if (!strat[trc]) lcl=0;
+									else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+									g_array_append_val(yp, lcl);
+									g_strfreev(strat);
+									lc++;
+								}
+								g_strfreev(strary);
+								delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+								for (j=0; j<n; j++) y[j]=0;
+								ce=0;
+								for (j=1; j<=16; j++) ce+=g_array_index(yp, gdouble, lc-j);
+								ce/=16;
+								for (j=0; j<jdimx; j++)
+								{
+									iv=g_array_index(bsra, gdouble, j);
+									k=0;
+									while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+									st=k;
+									iv=g_array_index(bspa, gdouble, j);
+									while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+									sp=k-st;
+									if (sp>zp) sp=zp;
+									iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+									g_array_append_val(delp, iv);
+									for (k=0; k<sp; k++) y[k+(j*zp)]=exp(LNTOT*(g_array_index(yp, gdouble, k+st)-ofs-ce));
+								}
+								{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+								fftw_execute(p);
+								starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+								for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+								for (j=0; j<jdimx; j++)
+								{
+									vzt=g_array_index(starp, gdouble, j*zp);
+									iv=g_array_index(delp, gdouble, j);
+									if (iv<DZE) idelf=G_MAXDOUBLE;
+									else idelf=1/iv;
+									iv=g_array_index(zwa, gdouble, j)*idelf/2;
+									for (l=1; l<iv; l++)
 									{
-										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-										g_array_append_val(msr, lcl);
-										if (lcl<xi) xi=lcl;
-										else if (lcl>xf) xf=lcl;
-										strary=g_strsplit_set(contents, "\r\n", 0);
-										sal=g_strv_length(strary);
-										{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-										lc=lcib;
-										for (k=kib; k<sal; k++)
+										ivd=g_array_index(starp, gdouble, l+(j*zp));
+										ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+										vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+									}
+									if (vzt<DZE) vzt=G_MAXDOUBLE;
+									else vzt=l/vzt;
+									for (k=0; k<kdimx; k++)
+									{
+										st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+										sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+										tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+										twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+										if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
 										{
-											if (!strary[k]) continue;
-											g_strchug(strary[k]);
-											if (!g_strcmp0("", strary[k])) continue;
-											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
-											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-											g_array_append_val(xp, lcl);
-											if (!strat[trc]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-											g_array_append_val(yp, lcl);
-											g_strfreev(strat);
-											lc++;
-										}
-										g_strfreev(strary);
-										delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-										for (j=0; j<n; j++) y[j]=0;
-										for (j=0; j<jdimx; j++)
-										{
-										}
-										{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-										fftw_execute(p);
-										starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-										for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-										for (j=0; j<jdimx; j++)
-										{
-											vzt=g_array_index(starp, gdouble, j*zp);
-											iv=g_array_index(delp, gdouble, j);
-											if (iv<DZE) idelf=G_MAXDOUBLE;
-											else idelf=1/iv;
-											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											for (l=1; l<iv; l++)
+											vt=g_array_index(starp, gdouble, st+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+											phio=-atan2(ivdt, vt);
+											vt=sqrt((vt*vt)+(ivdt*ivdt));
+											{dst=0; pn=0;}
+											for (l=st+1; l<=sp; l++)
 											{
 												ivd=g_array_index(starp, gdouble, l+(j*zp));
 												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-												vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-											}
-											if (vzt<DZE) vzt=G_MAXDOUBLE;
-											else vzt=l/vzt;
-											for (k=0; k<kdimx; k++)
-											{
-												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+												phi=atan2(ivdt, ivd);
+												phio+=phi;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												if (phio>G_PI) phio-=(MY_2PI);
+												else if (phio<=NMY_PI) phio+=(MY_2PI);
+												if (l>(tcn-twd+0.5))
 												{
-													vt=g_array_index(starp, gdouble, st+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-													phia=atan2(ivdt, vt);
-													vt=sqrt((vt*vt)+(ivdt*ivdt));
-													ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-													phio=-atan2(ivdt, ivd);
-													phia+=phio;
-													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													{pn=0; cn=0; dst=0; ddp=0;}
-													for (l=st+2; l<=sp; l++)
+													if (l<=(tcn+0.5))
 													{
-														ivd=g_array_index(starp, gdouble, l+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-														phi=atan2(ivdt, ivd);
-														phio+=phi;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														if (phio>G_PI) phio-=(MY_2PI);
-														else if (phio<=NMY_PI) phio+=(MY_2PI);
-														if (l>(tcn-twd+0.5))
-														{
-															if ((l-1)<=(tcn-twd))
-															{
-																tp=(((gdouble) l)-tcn-0.5)/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-															}
-															else if (l<=(tcn+0.5))
-															{
-																tp=(((gdouble) l)-tcn-0.5)/twd;
-																ct=(((gdouble) l)-tcn-1)/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-																cn+=++ct;
-																phia+=phio;
-																ddp+=ct*phia;
-															}
-															else if ((l-1)<=tcn)
-															{
-																tp=(tcn+0.5-((gdouble) l))/twd;
-																ct=(((gdouble) l)-tcn-1)/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-																cn+=++ct;
-																phia+=phio;
-																ddp+=ct*phia;
-															}
-															else if (l<(tcn+twd+0.5))
-															{
-																tp=(tcn+0.5-((gdouble) l))/twd;
-																ct=(tcn+1-((gdouble) l))/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-																cn+=++ct;
-																phia+=phio;
-																ddp+=ct*phia;
-															}
-															else if ((l-1)<(tcn+twd))
-															{
-																ct=(tcn+1-((gdouble) l))/twd;
-																cn+=++ct;
-																phia+=phio;
-																ddp+=ct*phia;
-															}
-														}
-														phia=-phio;
-														phio=-phi;
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
 													}
-													pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-													if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-													else dst/=pn;
-													cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-													cn*=G_PI*g_array_index(delp, gdouble, j);
-													if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-													else ddp=cn/ddp;
-													vt*=vzt/(sp-st+1);
+													else if (l<(tcn+twd+0.5))
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+													}
 												}
-												else {vt=0; dst=0; ddp=0;}
-												{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+												phio=-phi;
 											}
+											pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+											if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+											else dst/=pn;
+											vt*=vzt/(sp-st+1);
 										}
-										{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+										else {vt=0; dst=0;}
+										{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
 									}
-									else
-									{
-										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-										{g_free(str); g_error_free(Err);}
-									}
-									{g_free(contents); g_strfreev(strat2);}
 								}
+								{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
 							}
+							else
+							{
+								str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								{g_free(str); g_error_free(Err);}
+							}
+							{g_free(contents); g_strfreev(strat2);}
 						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
+					}
+				}
+				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0h+ +Tl0h+ */
+				{
+					flags|=PROC_OFT;
+					for (m=0; m<mx; m++)
+					{
+						strat2=g_strsplit_set(strary2[m], "\t,", 0);
+						if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 						{
-							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
+							lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+							g_array_append_val(msr, lcl);
+							if (lcl<xi) xi=lcl;
+							else if (lcl>xf) xf=lcl;
+							strary=g_strsplit_set(contents, "\r\n", 0);
+							sal=g_strv_length(strary);
+							{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+							lc=lcib;
+							for (k=kib; k<sal; k++)
 							{
-								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
+								if (!strary[k]) continue;
+								g_strchug(strary[k]);
+								if (!g_strcmp0("", strary[k])) continue;
+								if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+								if (lc<0) {lc++; continue;}
+								strat=g_strsplit_set(strary[k], "\t,", 0);
+								lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+								g_array_append_val(xp, lcl);
+								if (!strat[trc]) lcl=0;
+								else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+								g_array_append_val(yp, lcl);
+								g_strfreev(strat);
+								lc++;
+							}
+							g_strfreev(strary);
+							delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+							for (j=0; j<n; j++) y[j]=0;
+							ce=0;
+							for (j=1; j<=16; j++) ce+=g_array_index(yp, gdouble, lc-j);
+							ce/=16;
+							for (j=0; j<jdimx; j++)
+							{
+								iv=g_array_index(bsra, gdouble, j);
+								k=0;
+								while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+								st=k;
+								iv=g_array_index(bspa, gdouble, j);
+								while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+								sp=k-st;
+								if (sp>zp) sp=zp;
+								iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+								g_array_append_val(delp, iv);
+								for (k=0; k<sp; k++) y[k+(j*zp)]=1-(g_array_index(yp, gdouble, k+st)/(ofs+ce));
+							}
+							{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+							fftw_execute(p);
+							starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+							for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+							for (j=0; j<jdimx; j++)
+							{
+								vzt=g_array_index(starp, gdouble, j*zp);
+								iv=g_array_index(delp, gdouble, j);
+								if (iv<DZE) idelf=G_MAXDOUBLE;
+								else idelf=1/iv;
+								iv=g_array_index(zwa, gdouble, j)*idelf/2;
+								for (l=1; l<iv; l++)
 								{
-									if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBsso+c */
-									{
-										for (m=0; m<g_strv_length(strary2); m++)
-										{
-											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-											{
-												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-												g_array_append_val(msr, lcl);
-												if (lcl<xi) xi=lcl;
-												else if (lcl>xf) xf=lcl;
-												strary=g_strsplit_set(contents, "\r\n", 0);
-												sal=g_strv_length(strary);
-												{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-												lc=lcib;
-												for (k=kib; k<sal; k++)
-												{
-													if (!strary[k]) continue;
-													g_strchug(strary[k]);
-													if (!g_strcmp0("", strary[k])) continue;
-													if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-													if (lc<0) {lc++; continue;}
-													strat=g_strsplit_set(strary[k], "\t,", 0);
-													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-													g_array_append_val(xp, lcl);
-													if (!strat[trc]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-													g_array_append_val(yp, lcl);
-													g_strfreev(strat);
-													lc++;
-												}
-												g_strfreev(strary);
-												delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-												for (j=0; j<n; j++) y[j]=0;
-												for (j=0; j<jdimx; j++)
-												{
-													iv=g_array_index(bsra, gdouble, j);
-													k=0;
-													while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-													st=k;
-													iv=g_array_index(bspa, gdouble, j);
-													while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-													sp=k-st;
-													if (sp>zp) sp=zp;
-													iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-													g_array_append_val(delp, iv);
-													for (k=0; k<sp; k++)
-													{
-														clc=ofs-g_array_index(yp, gdouble, k+st);
-														if (clc<0) y[k+(j*zp)]=log(1-exp(LNTOT*clc));
-														else y[k+(j*zp)]=-G_MAXDOUBLE;
-													}
-												}
-												{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-												fftw_execute(p);
-												starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-												for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-												for (j=0; j<jdimx; j++)
-												{
-													vzt=g_array_index(starp, gdouble, j*zp);
-													iv=g_array_index(delp, gdouble, j);
-													if (iv<DZE) idelf=G_MAXDOUBLE;
-													else idelf=1/iv;
-													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													for (l=1; l<iv; l++)
-													{
-														ivd=g_array_index(starp, gdouble, l+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-														vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													}
-													if (vzt<DZE) vzt=G_MAXDOUBLE;
-													else vzt=l/vzt;
-													for (k=0; k<kdimx; k++)
-													{
-														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-														{
-															vt=g_array_index(starp, gdouble, st+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-															phia=atan2(ivdt, vt);
-															vt=sqrt((vt*vt)+(ivdt*ivdt));
-															ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-															phio=-atan2(ivdt, ivd);
-															phia+=phio;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															{pn=0; cn=0; dst=0; ddp=0;}
-															for (l=st+2; l<=sp; l++)
-															{
-																ivd=g_array_index(starp, gdouble, l+(j*zp));
-																ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-																phi=atan2(ivdt, ivd);
-																phio+=phi;
-																vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-																if (phio>G_PI) phio-=(MY_2PI);
-																else if (phio<=NMY_PI) phio+=(MY_2PI);
-																if (l>(tcn-twd+0.5))
-																{
-																	if ((l-1)<=(tcn-twd))
-																	{
-																		tp=(((gdouble) l)-tcn-0.5)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																	}
-																	else if (l<=(tcn+0.5))
-																	{
-																		tp=(((gdouble) l)-tcn-0.5)/twd;
-																		ct=(((gdouble) l)-tcn-1)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if ((l-1)<=tcn)
-																	{
-																		tp=(tcn+0.5-((gdouble) l))/twd;
-																		ct=(((gdouble) l)-tcn-1)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if (l<(tcn+twd+0.5))
-																	{
-																		tp=(tcn+0.5-((gdouble) l))/twd;
-																		ct=(tcn+1-((gdouble) l))/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if ((l-1)<(tcn+twd))
-																	{
-																		ct=(tcn+1-((gdouble) l))/twd;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																}
-																phia=-phio;
-																phio=-phi;
-															}
-															pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-															if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-															else dst/=pn;
-															cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-															cn*=G_PI*g_array_index(delp, gdouble, j);
-															if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-															else ddp=cn/ddp;
-															vt*=vzt/(sp-st+1);
-														}
-														else {vt=0; dst=0; ddp=0;}
-														{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-													}
-												}
-												{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-											}
-											else
-											{
-												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-												{g_free(str); g_error_free(Err);}
-											}
-											{g_free(contents); g_strfreev(strat2);}
-										}
-									}
-									else /* +TdBsso+c */
-									{
-										for (m=0; m<g_strv_length(strary2); m++)
-										{
-											strat2=g_strsplit_set(strary2[m], "\t,", 0);
-											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-											{
-												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-												g_array_append_val(msr, lcl);
-												if (lcl<xi) xi=lcl;
-												else if (lcl>xf) xf=lcl;
-												strary=g_strsplit_set(contents, "\r\n", 0);
-												sal=g_strv_length(strary);
-												{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-												lc=lcib;
-												for (k=kib; k<sal; k++)
-												{
-													if (!strary[k]) continue;
-													g_strchug(strary[k]);
-													if (!g_strcmp0("", strary[k])) continue;
-													if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-													if (lc<0) {lc++; continue;}
-													strat=g_strsplit_set(strary[k], "\t,", 0);
-													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-													g_array_append_val(xp, lcl);
-													if (!strat[trc]) lcl=0;
-													else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-													g_array_append_val(yp, lcl);
-													g_strfreev(strat);
-													lc++;
-												}
-												g_strfreev(strary);
-												delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-												for (j=0; j<n; j++) y[j]=0;
-												for (j=0; j<jdimx; j++)
-												{
-													iv=g_array_index(bsra, gdouble, j);
-													k=0;
-													while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-													st=k;
-													iv=g_array_index(bspa, gdouble, j);
-													while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-													sp=k-st;
-													if (sp>zp) sp=zp;
-													iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-													g_array_append_val(delp, iv);
-													for (k=0; k<sp; k++)
-													{
-														clc=g_array_index(yp, gdouble, k+st)-ofs;
-														if (clc<0) y[k+(j*zp)]=log(1-exp(LNTOT*clc));
-														else y[k+(j*zp)]=-G_MAXDOUBLE;
-													}
-												}
-												{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-												fftw_execute(p);
-												starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-												for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-												for (j=0; j<jdimx; j++)
-												{
-													vzt=g_array_index(starp, gdouble, j*zp);
-													iv=g_array_index(delp, gdouble, j);
-													if (iv<DZE) idelf=G_MAXDOUBLE;
-													else idelf=1/iv;
-													iv=g_array_index(zwa, gdouble, j)*idelf/2;
-													for (l=1; l<iv; l++)
-													{
-														ivd=g_array_index(starp, gdouble, l+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-														vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													}
-													if (vzt<DZE) vzt=G_MAXDOUBLE;
-													else vzt=l/vzt;
-													for (k=0; k<kdimx; k++)
-													{
-														st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-														sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-														tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-														twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-														if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-														{
-															vt=g_array_index(starp, gdouble, st+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-															phia=atan2(ivdt, vt);
-															vt=sqrt((vt*vt)+(ivdt*ivdt));
-															ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-															phio=-atan2(ivdt, ivd);
-															phia+=phio;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															{pn=0; cn=0; dst=0; ddp=0;}
-															for (l=st+2; l<=sp; l++)
-															{
-																ivd=g_array_index(starp, gdouble, l+(j*zp));
-																ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-																phi=atan2(ivdt, ivd);
-																phio+=phi;
-																vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-																if (phio>G_PI) phio-=(MY_2PI);
-																else if (phio<=NMY_PI) phio+=(MY_2PI);
-																if (l>(tcn-twd+0.5))
-																{
-																	if ((l-1)<=(tcn-twd))
-																	{
-																		tp=(((gdouble) l)-tcn-0.5)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																	}
-																	else if (l<=(tcn+0.5))
-																	{
-																		tp=(((gdouble) l)-tcn-0.5)/twd;
-																		ct=(((gdouble) l)-tcn-1)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if ((l-1)<=tcn)
-																	{
-																		tp=(tcn+0.5-((gdouble) l))/twd;
-																		ct=(((gdouble) l)-tcn-1)/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if (l<(tcn+twd+0.5))
-																	{
-																		tp=(tcn+0.5-((gdouble) l))/twd;
-																		ct=(tcn+1-((gdouble) l))/twd;
-																		pn+=++tp;
-																		dst+=tp*phio;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																	else if ((l-1)<(tcn+twd))
-																	{
-																		ct=(tcn+1-((gdouble) l))/twd;
-																		cn+=++ct;
-																		phia+=phio;
-																		ddp+=ct*phia;
-																	}
-																}
-																phia=-phio;
-																phio=-phi;
-															}
-															pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-															if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-															else dst/=pn;
-															cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-															cn*=G_PI*g_array_index(delp, gdouble, j);
-															if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-															else ddp=cn/ddp;
-															vt*=vzt/(sp-st+1);
-														}
-														else {vt=0; dst=0; ddp=0;}
-														{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-													}
-												}
-												{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-											}
-											else
-											{
-												str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-												gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-												{g_free(str); g_error_free(Err);}
-											}
-											{g_free(contents); g_strfreev(strat2);}
-										}
-									}
+									ivd=g_array_index(starp, gdouble, l+(j*zp));
+									ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+									vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
 								}
-								else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBsso+c */
+								if (vzt<DZE) vzt=G_MAXDOUBLE;
+								else vzt=l/vzt;
+								for (k=0; k<kdimx; k++)
 								{
-									for (m=0; m<g_strv_length(strary2); m++)
+									st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+									sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+									tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+									twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+									if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+										vt=g_array_index(starp, gdouble, st+(j*zp));
+										ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+										phio=-atan2(ivdt, vt);
+										vt=sqrt((vt*vt)+(ivdt*ivdt));
+										{dst=0; pn=0;}
+										for (l=st+1; l<=sp; l++)
 										{
-											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-											g_array_append_val(msr, lcl);
-											if (lcl<xi) xi=lcl;
-											else if (lcl>xf) xf=lcl;
-											strary=g_strsplit_set(contents, "\r\n", 0);
-											sal=g_strv_length(strary);
-											{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-											lc=lcib;
-											for (k=kib; k<sal; k++)
+											ivd=g_array_index(starp, gdouble, l+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+											phi=atan2(ivdt, ivd);
+											phio+=phi;
+											vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+											if (phio>G_PI) phio-=(MY_2PI);
+											else if (phio<=NMY_PI) phio+=(MY_2PI);
+											if (l>(tcn-twd+0.5))
 											{
-												if (!strary[k]) continue;
-												g_strchug(strary[k]);
-												if (!g_strcmp0("", strary[k])) continue;
-												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
-												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-												g_array_append_val(xp, lcl);
-												if (!strat[trc]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-												g_array_append_val(yp, lcl);
-												g_strfreev(strat);
-												lc++;
-											}
-											g_strfreev(strary);
-											delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-											for (j=0; j<n; j++) y[j]=0;
-											for (j=0; j<jdimx; j++)
-											{
-												iv=g_array_index(bsra, gdouble, j);
-												k=0;
-												while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-												st=k;
-												iv=g_array_index(bspa, gdouble, j);
-												while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-												sp=k-st;
-												if (sp>zp) sp=zp;
-												iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-												g_array_append_val(delp, iv);
-												for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(ofs-g_array_index(yp, gdouble, k+st));
-											}
-											{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-											fftw_execute(p);
-											starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-											for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-											for (j=0; j<jdimx; j++)
-											{
-												vzt=g_array_index(starp, gdouble, j*zp);
-												iv=g_array_index(delp, gdouble, j);
-												if (iv<DZE) idelf=G_MAXDOUBLE;
-												else idelf=1/iv;
-												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												for (l=1; l<iv; l++)
+												if (l<=(tcn+0.5))
 												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													tp=(((gdouble) l)-tcn-0.5)/twd;
+													pn+=++tp;
+													dst+=tp*phio;
 												}
-												if (vzt<DZE) vzt=G_MAXDOUBLE;
-												else vzt=l/vzt;
-												for (k=0; k<kdimx; k++)
+												else if (l<(tcn+twd+0.5))
 												{
-													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-													{
-														vt=g_array_index(starp, gdouble, st+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-														phia=atan2(ivdt, vt);
-														vt=sqrt((vt*vt)+(ivdt*ivdt));
-														ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-														phio=-atan2(ivdt, ivd);
-														phia+=phio;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														{pn=0; cn=0; dst=0; ddp=0;}
-														for (l=st+2; l<=sp; l++)
-														{
-															ivd=g_array_index(starp, gdouble, l+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-															phi=atan2(ivdt, ivd);
-															phio+=phi;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															if (phio>G_PI) phio-=(MY_2PI);
-															else if (phio<=NMY_PI) phio+=(MY_2PI);
-															if (l>(tcn-twd+0.5))
-															{
-																if ((l-1)<=(tcn-twd))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																}
-																else if (l<=(tcn+0.5))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<=tcn)
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if (l<(tcn+twd+0.5))
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<(tcn+twd))
-																{
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-															}
-															phia=-phio;
-															phio=-phi;
-														}
-														pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-														else dst/=pn;
-														cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														cn*=G_PI*g_array_index(delp, gdouble, j);
-														if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-														else ddp=cn/ddp;
-														vt*=vzt/(sp-st+1);
-													}
-													else {vt=0; dst=0; ddp=0;}
-													{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+													tp=(tcn+0.5-((gdouble) l))/twd;
+													pn+=++tp;
+													dst+=tp*phio;
 												}
 											}
-											{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+											phio=-phi;
 										}
-										else
-										{
-											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-											{g_free(str); g_error_free(Err);}
-										}
-										{g_free(contents); g_strfreev(strat2);}
+										pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+										if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+										else dst/=pn;
+										vt*=vzt/(sp-st+1);
 									}
-								}
-								else /* +RdBsso+c */
-								{
-									for (m=0; m<g_strv_length(strary2); m++)
-									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-										{
-											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-											g_array_append_val(msr, lcl);
-											if (lcl<xi) xi=lcl;
-											else if (lcl>xf) xf=lcl;
-											strary=g_strsplit_set(contents, "\r\n", 0);
-											sal=g_strv_length(strary);
-											{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-											lc=lcib;
-											for (k=kib; k<sal; k++)
-											{
-												if (!strary[k]) continue;
-												g_strchug(strary[k]);
-												if (!g_strcmp0("", strary[k])) continue;
-												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
-												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-												g_array_append_val(xp, lcl);
-												if (!strat[trc]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-												g_array_append_val(yp, lcl);
-												g_strfreev(strat);
-												lc++;
-											}
-											g_strfreev(strary);
-											delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-											for (j=0; j<n; j++) y[j]=0;
-											for (j=0; j<jdimx; j++)
-											{
-												iv=g_array_index(bsra, gdouble, j);
-												k=0;
-												while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-												st=k;
-												iv=g_array_index(bspa, gdouble, j);
-												while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-												sp=k-st;
-												if (sp>zp) sp=zp;
-												iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-												g_array_append_val(delp, iv);
-												for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(g_array_index(yp, gdouble, k+st)-ofs);
-											}
-											{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-											fftw_execute(p);
-											starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-											for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-											for (j=0; j<jdimx; j++)
-											{
-												vzt=g_array_index(starp, gdouble, j*zp);
-												iv=g_array_index(delp, gdouble, j);
-												if (iv<DZE) idelf=G_MAXDOUBLE;
-												else idelf=1/iv;
-												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												for (l=1; l<iv; l++)
-												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-												}
-												if (vzt<DZE) vzt=G_MAXDOUBLE;
-												else vzt=l/vzt;
-												for (k=0; k<kdimx; k++)
-												{
-													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-													{
-														vt=g_array_index(starp, gdouble, st+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-														phia=atan2(ivdt, vt);
-														vt=sqrt((vt*vt)+(ivdt*ivdt));
-														ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-														phio=-atan2(ivdt, ivd);
-														phia+=phio;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														{pn=0; cn=0; dst=0; ddp=0;}
-														for (l=st+2; l<=sp; l++)
-														{
-															ivd=g_array_index(starp, gdouble, l+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-															phi=atan2(ivdt, ivd);
-															phio+=phi;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															if (phio>G_PI) phio-=(MY_2PI);
-															else if (phio<=NMY_PI) phio+=(MY_2PI);
-															if (l>(tcn-twd+0.5))
-															{
-																if ((l-1)<=(tcn-twd))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																}
-																else if (l<=(tcn+0.5))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<=tcn)
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if (l<(tcn+twd+0.5))
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<(tcn+twd))
-																{
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-															}
-															phia=-phio;
-															phio=-phi;
-														}
-														pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-														else dst/=pn;
-														cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														cn*=G_PI*g_array_index(delp, gdouble, j);
-														if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-														else ddp=cn/ddp;
-														vt*=vzt/(sp-st+1);
-													}
-													else {vt=0; dst=0; ddp=0;}
-													{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-												}
-											}
-											{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-										}
-										else
-										{
-											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-											{g_free(str); g_error_free(Err);}
-										}
-										{g_free(contents); g_strfreev(strat2);}
-									}
+									else {vt=0; dst=0;}
+									{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
 								}
 							}
-							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlsso+c +Tlsso+c */
-							{
-								if ((ofs<DZE)&&(ofs>NZE))
-								{
-									str=g_strdup(_("Offset must be nonzero for linear measurements."));
-									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-									g_free(str);
-								}
-								else
-								{
-									for (m=0; m<g_strv_length(strary2); m++)
-									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-										{
-											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-											g_array_append_val(msr, lcl);
-											if (lcl<xi) xi=lcl;
-											else if (lcl>xf) xf=lcl;
-											strary=g_strsplit_set(contents, "\r\n", 0);
-											sal=g_strv_length(strary);
-											{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-											lc=lcib;
-											for (k=kib; k<sal; k++)
-											{
-												if (!strary[k]) continue;
-												g_strchug(strary[k]);
-												if (!g_strcmp0("", strary[k])) continue;
-												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
-												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-												g_array_append_val(xp, lcl);
-												if (!strat[trc]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-												g_array_append_val(yp, lcl);
-												g_strfreev(strat);
-												lc++;
-											}
-											g_strfreev(strary);
-											delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-											for (j=0; j<n; j++) y[j]=0;
-											for (j=0; j<jdimx; j++)
-											{
-												iv=g_array_index(bsra, gdouble, j);
-												k=0;
-												while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-												st=k;
-												iv=g_array_index(bspa, gdouble, j);
-												while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-												sp=k-st;
-												if (sp>zp) sp=zp;
-												iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-												g_array_append_val(delp, iv);
-												for (k=0; k<sp; k++)
-												{
-													clc=1-(g_array_index(yp, gdouble, k+st)/ofs);
-													if (clc>0) y[k+(j*zp)]=log(clc);
-													else y[k+(j*zp)]=-G_MAXDOUBLE;
-												}
-											}
-											{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-											fftw_execute(p);
-											starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-											for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-											for (j=0; j<jdimx; j++)
-											{
-												vzt=g_array_index(starp, gdouble, j*zp);
-												iv=g_array_index(delp, gdouble, j);
-												if (iv<DZE) idelf=G_MAXDOUBLE;
-												else idelf=1/iv;
-												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												for (l=1; l<iv; l++)
-												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-												}
-												if (vzt<DZE) vzt=G_MAXDOUBLE;
-												else vzt=l/vzt;
-												for (k=0; k<kdimx; k++)
-												{
-													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-													{
-														vt=g_array_index(starp, gdouble, st+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-														phia=atan2(ivdt, vt);
-														vt=sqrt((vt*vt)+(ivdt*ivdt));
-														ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-														phio=-atan2(ivdt, ivd);
-														phia+=phio;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														{pn=0; cn=0; dst=0; ddp=0;}
-														for (l=st+2; l<=sp; l++)
-														{
-															ivd=g_array_index(starp, gdouble, l+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-															phi=atan2(ivdt, ivd);
-															phio+=phi;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															if (phio>G_PI) phio-=(MY_2PI);
-															else if (phio<=NMY_PI) phio+=(MY_2PI);
-															if (l>(tcn-twd+0.5))
-															{
-																if ((l-1)<=(tcn-twd))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																}
-																else if (l<=(tcn+0.5))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<=tcn)
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if (l<(tcn+twd+0.5))
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<(tcn+twd))
-																{
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-															}
-															phia=-phio;
-															phio=-phi;
-														}
-														pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-														else dst/=pn;
-														cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														cn*=G_PI*g_array_index(delp, gdouble, j);
-														if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-														else ddp=cn/ddp;
-														vt*=vzt/(sp-st+1);
-													}
-													else {vt=0; dst=0; ddp=0;}
-													{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-												}
-											}
-											{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-										}
-										else
-										{
-											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-											{g_free(str); g_error_free(Err);}
-										}
-										{g_free(contents); g_strfreev(strat2);}
-									}
-								}
-							}
-							else /* -Rlsso+c +Rlsso+c */
-							{
-								if ((ofs<DZE)&&(ofs>NZE))
-								{
-									str=g_strdup(_("Offset must be nonzero for linear measurements."));
-									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-									g_free(str);
-								}
-								else
-								{
-									for (m=0; m<g_strv_length(strary2); m++)
-									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
-										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-										{
-											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-											g_array_append_val(msr, lcl);
-											if (lcl<xi) xi=lcl;
-											else if (lcl>xf) xf=lcl;
-											strary=g_strsplit_set(contents, "\r\n", 0);
-											sal=g_strv_length(strary);
-											{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-											lc=lcib;
-											for (k=kib; k<sal; k++)
-											{
-												if (!strary[k]) continue;
-												g_strchug(strary[k]);
-												if (!g_strcmp0("", strary[k])) continue;
-												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
-												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-												g_array_append_val(xp, lcl);
-												if (!strat[trc]) lcl=0;
-												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-												g_array_append_val(yp, lcl);
-												g_strfreev(strat);
-												lc++;
-											}
-											g_strfreev(strary);
-											delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-											for (j=0; j<n; j++) y[j]=0;
-											for (j=0; j<jdimx; j++)
-											{
-												iv=g_array_index(bsra, gdouble, j);
-												k=0;
-												while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-												st=k;
-												iv=g_array_index(bspa, gdouble, j);
-												while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-												sp=k-st;
-												if (sp>zp) sp=zp;
-												iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-												g_array_append_val(delp, iv);
-												for (k=0; k<sp; k++)
-												{
-													clc=g_array_index(yp, gdouble, k+st)/ofs;
-													if (clc>0) y[k+(j*zp)]=log(clc);
-													else y[k+(j*zp)]=-G_MAXDOUBLE;
-												}
-											}
-											{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-											fftw_execute(p);
-											starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-											for (j=0; j<n; j++) g_array_append_val(starp, iv);
-											for (j=0; j<jdimx; j++)
-											{
-												vzt=g_array_index(starp, gdouble, j*zp);
-												iv=g_array_index(delp, gdouble, j);
-												if (iv<DZE) idelf=G_MAXDOUBLE;
-												else idelf=1/iv;
-												iv=g_array_index(zwa, gdouble, j)*idelf/2;
-												for (l=1; l<iv; l++)
-												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-												}
-												if (vzt<DZE) vzt=G_MAXDOUBLE;
-												else vzt=l/vzt;
-												for (k=0; k<kdimx; k++)
-												{
-													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
-													{
-														vt=g_array_index(starp, gdouble, st+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-														phia=atan2(ivdt, vt);
-														vt=sqrt((vt*vt)+(ivdt*ivdt));
-														ivd=g_array_index(starp, gdouble, st+1+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
-														phio=-atan2(ivdt, ivd);
-														phia+=phio;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														{pn=0; cn=0; dst=0; ddp=0;}
-														for (l=st+2; l<=sp; l++)
-														{
-															ivd=g_array_index(starp, gdouble, l+(j*zp));
-															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-															phi=atan2(ivdt, ivd);
-															phio+=phi;
-															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-															if (phio>G_PI) phio-=(MY_2PI);
-															else if (phio<=NMY_PI) phio+=(MY_2PI);
-															if (l>(tcn-twd+0.5))
-															{
-																if ((l-1)<=(tcn-twd))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																}
-																else if (l<=(tcn+0.5))
-																{
-																	tp=(((gdouble) l)-tcn-0.5)/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<=tcn)
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(((gdouble) l)-tcn-1)/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if (l<(tcn+twd+0.5))
-																{
-																	tp=(tcn+0.5-((gdouble) l))/twd;
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	pn+=++tp;
-																	dst+=tp*phio;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-																else if ((l-1)<(tcn+twd))
-																{
-																	ct=(tcn+1-((gdouble) l))/twd;
-																	cn+=++ct;
-																	phia+=phio;
-																	ddp+=ct*phia;
-																}
-															}
-															phia=-phio;
-															phio=-phi;
-														}
-														pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-														else dst/=pn;
-														cn*=NMY_2PI*g_array_index(delp, gdouble, j);
-														cn*=G_PI*g_array_index(delp, gdouble, j);
-														if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
-														else ddp=cn/ddp;
-														vt*=vzt/(sp-st+1);
-													}
-													else {vt=0; dst=0; ddp=0;}
-													{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
-												}
-											}
-											{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
-										}
-										else
-										{
-											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-											{g_free(str); g_error_free(Err);}
-										}
-										{g_free(contents); g_strfreev(strat2);}
-									}
-								}
-							}
+							{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
 						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
+						else
+						{
+							str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							{g_free(str); g_error_free(Err);}
+						}
+						{g_free(contents); g_strfreev(strat2);}
+					}
+				}
+				else /* -Rl0h+ +Rl0h+ */
+				{
+					flags|=PROC_OFT;
+					for (m=0; m<mx; m++)
+					{
+						strat2=g_strsplit_set(strary2[m], "\t,", 0);
+						if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+						{
+							lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+							g_array_append_val(msr, lcl);
+							if (lcl<xi) xi=lcl;
+							else if (lcl>xf) xf=lcl;
+							strary=g_strsplit_set(contents, "\r\n", 0);
+							sal=g_strv_length(strary);
+							{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+							lc=lcib;
+							for (k=kib; k<sal; k++)
+							{
+								if (!strary[k]) continue;
+								g_strchug(strary[k]);
+								if (!g_strcmp0("", strary[k])) continue;
+								if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+								if (lc<0) {lc++; continue;}
+								strat=g_strsplit_set(strary[k], "\t,", 0);
+								lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+								g_array_append_val(xp, lcl);
+								if (!strat[trc]) lcl=0;
+								else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+								g_array_append_val(yp, lcl);
+								g_strfreev(strat);
+								lc++;
+							}
+							g_strfreev(strary);
+							delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+							for (j=0; j<n; j++) y[j]=0;
+							ce=0;
+							for (j=1; j<=16; j++) ce+=g_array_index(yp, gdouble, lc-j);
+							ce/=16;
+							for (j=0; j<jdimx; j++)
+							{
+								iv=g_array_index(bsra, gdouble, j);
+								k=0;
+								while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+								st=k;
+								iv=g_array_index(bspa, gdouble, j);
+								while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+								sp=k-st;
+								if (sp>zp) sp=zp;
+								iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+								g_array_append_val(delp, iv);
+								for (k=0; k<sp; k++) y[k+(j*zp)]=g_array_index(yp, gdouble, k+st)/(ofs+ce);
+							}
+							{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+							fftw_execute(p);
+							starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+							for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+							for (j=0; j<jdimx; j++)
+							{
+								vzt=g_array_index(starp, gdouble, j*zp);
+								iv=g_array_index(delp, gdouble, j);
+								if (iv<DZE) idelf=G_MAXDOUBLE;
+								else idelf=1/iv;
+								iv=g_array_index(zwa, gdouble, j)*idelf/2;
+								for (l=1; l<iv; l++)
+								{
+									ivd=g_array_index(starp, gdouble, l+(j*zp));
+									ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+									vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+								}
+								if (vzt<DZE) vzt=G_MAXDOUBLE;
+								else vzt=l/vzt;
+								for (k=0; k<kdimx; k++)
+								{
+									st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+									sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+									tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+									twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+									if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+									{
+										vt=g_array_index(starp, gdouble, st+(j*zp));
+										ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+										phio=-atan2(ivdt, vt);
+										vt=sqrt((vt*vt)+(ivdt*ivdt));
+										{dst=0; pn=0;}
+										for (l=st+1; l<=sp; l++)
+										{
+											ivd=g_array_index(starp, gdouble, l+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+											phi=atan2(ivdt, ivd);
+											phio+=phi;
+											vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+											if (phio>G_PI) phio-=(MY_2PI);
+											else if (phio<=NMY_PI) phio+=(MY_2PI);
+											if (l>(tcn-twd+0.5))
+											{
+												if (l<=(tcn+0.5))
+												{
+													tp=(((gdouble) l)-tcn-0.5)/twd;
+													pn+=++tp;
+													dst+=tp*phio;
+												}
+												else if (l<(tcn+twd+0.5))
+												{
+													tp=(tcn+0.5-((gdouble) l))/twd;
+													pn+=++tp;
+													dst+=tp*phio;
+												}
+											}
+											phio=-phi;
+										}
+										pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+										if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+										else dst/=pn;
+										vt*=vzt/(sp-st+1);
+									}
+									else {vt=0; dst=0;}
+									{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
+								}
+							}
+							{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
+						}
+						else
+						{
+							str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							{g_free(str); g_error_free(Err);}
+						}
+						{g_free(contents); g_strfreev(strat2);}
+					}
+				}
+				{oe=ce; ofs+=ce;}
+				gtk_spin_button_set_value(GTK_SPIN_BUTTON(fst), ofs);
+			}
+			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
+			{
+				ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
+				flags|=PROC_CHP;
+				g_array_free(chp, TRUE);
+				chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
+				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx)))
+				{
+					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
+					{
+						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
 						{
 							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
 							{
-								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o+c */
+								if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBsso-c */
 								{
-									for (m=0; m<g_strv_length(strary2); m++)
+									for (m=0; m<mx; m++)
 									{
 										strat2=g_strsplit_set(strary2[m], "\t,", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
@@ -17519,22 +14583,6 @@ void bat(GtkWidget *widget, gpointer data)
 											for (j=0; j<n; j++) y[j]=0;
 											for (j=0; j<jdimx; j++)
 											{
-												iv=g_array_index(bsra, gdouble, j);
-												k=0;
-												while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-												st=k;
-												iv=g_array_index(bspa, gdouble, j);
-												while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-												sp=k-st;
-												if (sp>zp) sp=zp;
-												iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-												g_array_append_val(delp, iv);
-												for (k=0; k<sp; k++)
-												{
-													clc=ofs-g_array_index(yp, gdouble, k+st);
-													clc=-exp(LNTOT*clc);
-													y[k+(j*zp)]=++clc;
-												}
 											}
 											{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
 											fftw_execute(p);
@@ -17653,9 +14701,166 @@ void bat(GtkWidget *widget, gpointer data)
 											{g_free(str); g_error_free(Err);}
 										}
 										{g_free(contents); g_strfreev(strat2);}
+									}
+								}
+								else /* +TdBsso-c */
+								{
+									for (m=0; m<g_strv_length(strary2); m++)
+									{
+										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+										{
+											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+											g_array_append_val(msr, lcl);
+											if (lcl<xi) xi=lcl;
+											else if (lcl>xf) xf=lcl;
+											strary=g_strsplit_set(contents, "\r\n", 0);
+											sal=g_strv_length(strary);
+											{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+											lc=lcib;
+											for (k=kib; k<sal; k++)
+											{
+												if (!strary[k]) continue;
+												g_strchug(strary[k]);
+												if (!g_strcmp0("", strary[k])) continue;
+												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+												if (lc<0) {lc++; continue;}
+												strat=g_strsplit_set(strary[k], "\t,", 0);
+												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+												g_array_append_val(xp, lcl);
+												if (!strat[trc]) lcl=0;
+												else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+												g_array_append_val(yp, lcl);
+												g_strfreev(strat);
+												lc++;
+											}
+											g_strfreev(strary);
+											delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+											for (j=0; j<n; j++) y[j]=0;
+											for (j=0; j<jdimx; j++)
+											{
+											}
+											{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+											fftw_execute(p);
+											starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+											for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+											for (j=0; j<jdimx; j++)
+											{
+												vzt=g_array_index(starp, gdouble, j*zp);
+												iv=g_array_index(delp, gdouble, j);
+												if (iv<DZE) idelf=G_MAXDOUBLE;
+												else idelf=1/iv;
+												iv=g_array_index(zwa, gdouble, j)*idelf/2;
+												for (l=1; l<iv; l++)
+												{
+													ivd=g_array_index(starp, gdouble, l+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+													vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												}
+												if (vzt<DZE) vzt=G_MAXDOUBLE;
+												else vzt=l/vzt;
+												for (k=0; k<kdimx; k++)
+												{
+													st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+													sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+													tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+													twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+													if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+													{
+														vt=g_array_index(starp, gdouble, st+(j*zp));
+														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+														phia=atan2(ivdt, vt);
+														vt=sqrt((vt*vt)+(ivdt*ivdt));
+														ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+														phio=-atan2(ivdt, ivd);
+														phia+=phio;
+														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+														{pn=0; cn=0; dst=0; ddp=0;}
+														for (l=st+2; l<=sp; l++)
+														{
+															ivd=g_array_index(starp, gdouble, l+(j*zp));
+															ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+															phi=atan2(ivdt, ivd);
+															phio+=phi;
+															vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+															if (phio>G_PI) phio-=(MY_2PI);
+															else if (phio<=NMY_PI) phio+=(MY_2PI);
+															if (l>(tcn-twd+0.5))
+															{
+																if ((l-1)<=(tcn-twd))
+																{
+																	tp=(((gdouble) l)-tcn-0.5)/twd;
+																	pn+=++tp;
+																	dst+=tp*phio;
+																}
+																else if (l<=(tcn+0.5))
+																{
+																	tp=(((gdouble) l)-tcn-0.5)/twd;
+																	ct=(((gdouble) l)-tcn-1)/twd;
+																	pn+=++tp;
+																	dst+=tp*phio;
+																	cn+=++ct;
+																	phia+=phio;
+																	ddp+=ct*phia;
+																}
+																else if ((l-1)<=tcn)
+																{
+																	tp=(tcn+0.5-((gdouble) l))/twd;
+																	ct=(((gdouble) l)-tcn-1)/twd;
+																	pn+=++tp;
+																	dst+=tp*phio;
+																	cn+=++ct;
+																	phia+=phio;
+																	ddp+=ct*phia;
+																}
+																else if (l<(tcn+twd+0.5))
+																{
+																	tp=(tcn+0.5-((gdouble) l))/twd;
+																	ct=(tcn+1-((gdouble) l))/twd;
+																	pn+=++tp;
+																	dst+=tp*phio;
+																	cn+=++ct;
+																	phia+=phio;
+																	ddp+=ct*phia;
+																}
+																else if ((l-1)<(tcn+twd))
+																{
+																	ct=(tcn+1-((gdouble) l))/twd;
+																	cn+=++ct;
+																	phia+=phio;
+																	ddp+=ct*phia;
+																}
+															}
+															phia=-phio;
+															phio=-phi;
+														}
+														pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+														if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+														else dst/=pn;
+														cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+														cn*=G_PI*g_array_index(delp, gdouble, j);
+														if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+														else ddp=cn/ddp;
+														vt*=vzt/(sp-st+1);
+													}
+													else {vt=0; dst=0; ddp=0;}
+													{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+												}
+											}
+											{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+										}
+										else
+										{
+											str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+											gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+											{g_free(str); g_error_free(Err);}
+										}
+										{g_free(contents); g_strfreev(strat2);}
+									}
 								}
 							}
-							else /* +TdB0o+c */
+							else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBsso-c */
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
@@ -17691,22 +14896,162 @@ void bat(GtkWidget *widget, gpointer data)
 										for (j=0; j<n; j++) y[j]=0;
 										for (j=0; j<jdimx; j++)
 										{
-											iv=g_array_index(bsra, gdouble, j);
-											k=0;
-											while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-											st=k;
-											iv=g_array_index(bspa, gdouble, j);
-											while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-											sp=k-st;
-											if (sp>zp) sp=zp;
-											iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-											g_array_append_val(delp, iv);
-											for (k=0; k<sp; k++)
+										}
+										{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+										fftw_execute(p);
+										starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+										for (j=0; j<jdimx; j++)
+										{
+											vzt=g_array_index(starp, gdouble, j*zp);
+											iv=g_array_index(delp, gdouble, j);
+											if (iv<DZE) idelf=G_MAXDOUBLE;
+											else idelf=1/iv;
+											iv=g_array_index(zwa, gdouble, j)*idelf/2;
+											for (l=1; l<iv; l++)
 											{
-												clc=g_array_index(yp, gdouble, k+st)-ofs;
-												clc=-exp(LNTOT*clc);
-												y[k+(j*zp)]=++clc;
+												ivd=g_array_index(starp, gdouble, l+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+												vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
 											}
+											if (vzt<DZE) vzt=G_MAXDOUBLE;
+											else vzt=l/vzt;
+											for (k=0; k<kdimx; k++)
+											{
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+												{
+													vt=g_array_index(starp, gdouble, st+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+													phia=atan2(ivdt, vt);
+													vt=sqrt((vt*vt)+(ivdt*ivdt));
+													ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+													phio=-atan2(ivdt, ivd);
+													phia+=phio;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													{pn=0; cn=0; dst=0; ddp=0;}
+													for (l=st+2; l<=sp; l++)
+													{
+														ivd=g_array_index(starp, gdouble, l+(j*zp));
+														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+														phi=atan2(ivdt, ivd);
+														phio+=phi;
+														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+														if (phio>G_PI) phio-=(MY_2PI);
+														else if (phio<=NMY_PI) phio+=(MY_2PI);
+														if (l>(tcn-twd+0.5))
+														{
+															if ((l-1)<=(tcn-twd))
+															{
+																tp=(((gdouble) l)-tcn-0.5)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+															}
+															else if (l<=(tcn+0.5))
+															{
+																tp=(((gdouble) l)-tcn-0.5)/twd;
+																ct=(((gdouble) l)-tcn-1)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if ((l-1)<=tcn)
+															{
+																tp=(tcn+0.5-((gdouble) l))/twd;
+																ct=(((gdouble) l)-tcn-1)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if (l<(tcn+twd+0.5))
+															{
+																tp=(tcn+0.5-((gdouble) l))/twd;
+																ct=(tcn+1-((gdouble) l))/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if ((l-1)<(tcn+twd))
+															{
+																ct=(tcn+1-((gdouble) l))/twd;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+														}
+														phia=-phio;
+														phio=-phi;
+													}
+													pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+													if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+													else dst/=pn;
+													cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+													cn*=G_PI*g_array_index(delp, gdouble, j);
+													if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+													else ddp=cn/ddp;
+													vt*=vzt/(sp-st+1);
+												}
+												else {vt=0; dst=0; ddp=0;}
+												{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+											}
+										}
+										{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+									}
+									else
+									{
+										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+										{g_free(str); g_error_free(Err);}
+									}
+									{g_free(contents); g_strfreev(strat2);}
+								}
+							}
+							else /* +RdBsso-c */
+							{
+								for (m=0; m<g_strv_length(strary2); m++)
+								{
+									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+									{
+										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+										g_array_append_val(msr, lcl);
+										if (lcl<xi) xi=lcl;
+										else if (lcl>xf) xf=lcl;
+										strary=g_strsplit_set(contents, "\r\n", 0);
+										sal=g_strv_length(strary);
+										{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+										lc=lcib;
+										for (k=kib; k<sal; k++)
+										{
+											if (!strary[k]) continue;
+											g_strchug(strary[k]);
+											if (!g_strcmp0("", strary[k])) continue;
+											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+											if (lc<0) {lc++; continue;}
+											strat=g_strsplit_set(strary[k], "\t,", 0);
+											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+											g_array_append_val(xp, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+											g_array_append_val(yp, lcl);
+											g_strfreev(strat);
+											lc++;
+										}
+										g_strfreev(strary);
+										delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<jdimx; j++)
+										{
 										}
 										{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
 										fftw_execute(p);
@@ -17828,7 +15173,7 @@ void bat(GtkWidget *widget, gpointer data)
 								}
 							}
 						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0o+c */
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlsso-c +Tlsso-c */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
@@ -17864,17 +15209,6 @@ void bat(GtkWidget *widget, gpointer data)
 									for (j=0; j<n; j++) y[j]=0;
 									for (j=0; j<jdimx; j++)
 									{
-										iv=g_array_index(bsra, gdouble, j);
-										k=0;
-										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-										st=k;
-										iv=g_array_index(bspa, gdouble, j);
-										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-										sp=k-st;
-										if (sp>zp) sp=zp;
-										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-										g_array_append_val(delp, iv);
-										for (k=0; k<sp; k++) y[k+(j*zp)]=exp(LNTOT*(ofs-g_array_index(yp, gdouble, k+st)));
 									}
 									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
 									fftw_execute(p);
@@ -17995,7 +15329,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{g_free(contents); g_strfreev(strat2);}
 							}
 						}
-						else /* +RdB0o+c */
+						else /* -Rlsso-c +Rlsso-c */
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
@@ -18009,6 +15343,2661 @@ void bat(GtkWidget *widget, gpointer data)
 									strary=g_strsplit_set(contents, "\r\n", 0);
 									sal=g_strv_length(strary);
 									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+									lc=lcib;
+									for (k=kib; k<sal; k++)
+									{
+										if (!strary[k]) continue;
+										g_strchug(strary[k]);
+										if (!g_strcmp0("", strary[k])) continue;
+										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+										if (lc<0) {lc++; continue;}
+										strat=g_strsplit_set(strary[k], "\t,", 0);
+										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+										g_array_append_val(xp, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+										g_array_append_val(yp, lcl);
+										g_strfreev(strat);
+										lc++;
+									}
+									g_strfreev(strary);
+									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<jdimx; j++)
+									{
+									}
+									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+									fftw_execute(p);
+									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+									for (j=0; j<jdimx; j++)
+									{
+										vzt=g_array_index(starp, gdouble, j*zp);
+										iv=g_array_index(delp, gdouble, j);
+										if (iv<DZE) idelf=G_MAXDOUBLE;
+										else idelf=1/iv;
+										iv=g_array_index(zwa, gdouble, j)*idelf/2;
+										for (l=1; l<iv; l++)
+										{
+											ivd=g_array_index(starp, gdouble, l+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+										}
+										if (vzt<DZE) vzt=G_MAXDOUBLE;
+										else vzt=l/vzt;
+										for (k=0; k<kdimx; k++)
+										{
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+											if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+											{
+												vt=g_array_index(starp, gdouble, st+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+												phia=atan2(ivdt, vt);
+												vt=sqrt((vt*vt)+(ivdt*ivdt));
+												ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+												phio=-atan2(ivdt, ivd);
+												phia+=phio;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												{pn=0; cn=0; dst=0; ddp=0;}
+												for (l=st+2; l<=sp; l++)
+												{
+													ivd=g_array_index(starp, gdouble, l+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+													phi=atan2(ivdt, ivd);
+													phio+=phi;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													if (phio>G_PI) phio-=(MY_2PI);
+													else if (phio<=NMY_PI) phio+=(MY_2PI);
+													if (l>(tcn-twd+0.5))
+													{
+														if ((l-1)<=(tcn-twd))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+														}
+														else if (l<=(tcn+0.5))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<=tcn)
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if (l<(tcn+twd+0.5))
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(tcn+1-((gdouble) l))/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<(tcn+twd))
+														{
+															ct=(tcn+1-((gdouble) l))/twd;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+													}
+													phia=-phio;
+													phio=-phi;
+												}
+												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+												else dst/=pn;
+												cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												cn*=G_PI*g_array_index(delp, gdouble, j);
+												if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+												else ddp=cn/ddp;
+												vt*=vzt/(sp-st+1);
+											}
+											else {vt=0; dst=0; ddp=0;}
+											{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+										}
+									}
+									{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+								}
+								else
+								{
+									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+									{g_free(str); g_error_free(Err);}
+								}
+								{g_free(contents); g_strfreev(strat2);}
+							}
+						}
+					}
+					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
+					{
+						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
+						{
+							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o-c */
+							{
+								for (m=0; m<g_strv_length(strary2); m++)
+								{
+									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+									{
+										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+										g_array_append_val(msr, lcl);
+										if (lcl<xi) xi=lcl;
+										else if (lcl>xf) xf=lcl;
+										strary=g_strsplit_set(contents, "\r\n", 0);
+										sal=g_strv_length(strary);
+										{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+										lc=lcib;
+										for (k=kib; k<sal; k++)
+										{
+											if (!strary[k]) continue;
+											g_strchug(strary[k]);
+											if (!g_strcmp0("", strary[k])) continue;
+											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+											if (lc<0) {lc++; continue;}
+											strat=g_strsplit_set(strary[k], "\t,", 0);
+											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+											g_array_append_val(xp, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+											g_array_append_val(yp, lcl);
+											g_strfreev(strat);
+											lc++;
+										}
+										g_strfreev(strary);
+										delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<jdimx; j++)
+										{
+										}
+										{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+										fftw_execute(p);
+										starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+										for (j=0; j<jdimx; j++)
+										{
+											vzt=g_array_index(starp, gdouble, j*zp);
+											iv=g_array_index(delp, gdouble, j);
+											if (iv<DZE) idelf=G_MAXDOUBLE;
+											else idelf=1/iv;
+											iv=g_array_index(zwa, gdouble, j)*idelf/2;
+											for (l=1; l<iv; l++)
+											{
+												ivd=g_array_index(starp, gdouble, l+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+												vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+											}
+											if (vzt<DZE) vzt=G_MAXDOUBLE;
+											else vzt=l/vzt;
+											for (k=0; k<kdimx; k++)
+											{
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+												{
+													vt=g_array_index(starp, gdouble, st+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+													phia=atan2(ivdt, vt);
+													vt=sqrt((vt*vt)+(ivdt*ivdt));
+													ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+													phio=-atan2(ivdt, ivd);
+													phia+=phio;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													{pn=0; cn=0; dst=0; ddp=0;}
+													for (l=st+2; l<=sp; l++)
+													{
+														ivd=g_array_index(starp, gdouble, l+(j*zp));
+														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+														phi=atan2(ivdt, ivd);
+														phio+=phi;
+														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+														if (phio>G_PI) phio-=(MY_2PI);
+														else if (phio<=NMY_PI) phio+=(MY_2PI);
+														if (l>(tcn-twd+0.5))
+														{
+															if ((l-1)<=(tcn-twd))
+															{
+																tp=(((gdouble) l)-tcn-0.5)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+															}
+															else if (l<=(tcn+0.5))
+															{
+																tp=(((gdouble) l)-tcn-0.5)/twd;
+																ct=(((gdouble) l)-tcn-1)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if ((l-1)<=tcn)
+															{
+																tp=(tcn+0.5-((gdouble) l))/twd;
+																ct=(((gdouble) l)-tcn-1)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if (l<(tcn+twd+0.5))
+															{
+																tp=(tcn+0.5-((gdouble) l))/twd;
+																ct=(tcn+1-((gdouble) l))/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if ((l-1)<(tcn+twd))
+															{
+																ct=(tcn+1-((gdouble) l))/twd;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+														}
+														phia=-phio;
+														phio=-phi;
+													}
+													pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+													if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+													else dst/=pn;
+													cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+													cn*=G_PI*g_array_index(delp, gdouble, j);
+													if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+													else ddp=cn/ddp;
+													vt*=vzt/(sp-st+1);
+												}
+												else {vt=0; dst=0; ddp=0;}
+												{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+											}
+										}
+										{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+									}
+									else
+									{
+										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+										{g_free(str); g_error_free(Err);}
+									}
+									{g_free(contents); g_strfreev(strat2);}
+								}
+							}
+							else /* +TdB0o-c */
+							{
+								for (m=0; m<g_strv_length(strary2); m++)
+								{
+									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+									{
+										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+										g_array_append_val(msr, lcl);
+										if (lcl<xi) xi=lcl;
+										else if (lcl>xf) xf=lcl;
+										strary=g_strsplit_set(contents, "\r\n", 0);
+										sal=g_strv_length(strary);
+										{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+										lc=lcib;
+										for (k=kib; k<sal; k++)
+										{
+											if (!strary[k]) continue;
+											g_strchug(strary[k]);
+											if (!g_strcmp0("", strary[k])) continue;
+											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+											if (lc<0) {lc++; continue;}
+											strat=g_strsplit_set(strary[k], "\t,", 0);
+											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+											g_array_append_val(xp, lcl);
+											if (!strat[1]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+											g_array_append_val(yp, lcl);
+											g_strfreev(strat);
+											lc++;
+										}
+										g_strfreev(strary);
+										delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<jdimx; j++)
+										{
+										}
+										{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+										fftw_execute(p);
+										starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+										for (j=0; j<jdimx; j++)
+										{
+											vzt=g_array_index(starp, gdouble, j*zp);
+											iv=g_array_index(delp, gdouble, j);
+											if (iv<DZE) idelf=G_MAXDOUBLE;
+											else idelf=1/iv;
+											iv=g_array_index(zwa, gdouble, j)*idelf/2;
+											for (l=1; l<iv; l++)
+											{
+												ivd=g_array_index(starp, gdouble, l+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+												vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+											}
+											if (vzt<DZE) vzt=G_MAXDOUBLE;
+											else vzt=l/vzt;
+											for (k=0; k<kdimx; k++)
+											{
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+												{
+													vt=g_array_index(starp, gdouble, st+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+													phia=atan2(ivdt, vt);
+													vt=sqrt((vt*vt)+(ivdt*ivdt));
+													ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+													phio=-atan2(ivdt, ivd);
+													phia+=phio;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													{pn=0; cn=0; dst=0; ddp=0;}
+													for (l=st+2; l<=sp; l++)
+													{
+														ivd=g_array_index(starp, gdouble, l+(j*zp));
+														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+														phi=atan2(ivdt, ivd);
+														phio+=phi;
+														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+														if (phio>G_PI) phio-=(MY_2PI);
+														else if (phio<=NMY_PI) phio+=(MY_2PI);
+														if (l>(tcn-twd+0.5))
+														{
+															if ((l-1)<=(tcn-twd))
+															{
+																tp=(((gdouble) l)-tcn-0.5)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+															}
+															else if (l<=(tcn+0.5))
+															{
+																tp=(((gdouble) l)-tcn-0.5)/twd;
+																ct=(((gdouble) l)-tcn-1)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if ((l-1)<=tcn)
+															{
+																tp=(tcn+0.5-((gdouble) l))/twd;
+																ct=(((gdouble) l)-tcn-1)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if (l<(tcn+twd+0.5))
+															{
+																tp=(tcn+0.5-((gdouble) l))/twd;
+																ct=(tcn+1-((gdouble) l))/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if ((l-1)<(tcn+twd))
+															{
+																ct=(tcn+1-((gdouble) l))/twd;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+														}
+														phia=-phio;
+														phio=-phi;
+													}
+													pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+													if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+													else dst/=pn;
+													cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+													cn*=G_PI*g_array_index(delp, gdouble, j);
+													if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+													else ddp=cn/ddp;
+													vt*=vzt/(sp-st+1);
+												}
+												else {vt=0; dst=0; ddp=0;}
+												{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+											}
+										}
+										{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+									}
+									else
+									{
+										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+										{g_free(str); g_error_free(Err);}
+									}
+									{g_free(contents); g_strfreev(strat2);}
+								}
+							}
+						}
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0o-c */
+						{
+							for (m=0; m<g_strv_length(strary2); m++)
+							{
+								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+								{
+									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+									g_array_append_val(msr, lcl);
+									if (lcl<xi) xi=lcl;
+									else if (lcl>xf) xf=lcl;
+									strary=g_strsplit_set(contents, "\r\n", 0);
+									sal=g_strv_length(strary);
+									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+									lc=lcib;
+									for (k=kib; k<sal; k++)
+									{
+										if (!strary[k]) continue;
+										g_strchug(strary[k]);
+										if (!g_strcmp0("", strary[k])) continue;
+										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+										if (lc<0) {lc++; continue;}
+										strat=g_strsplit_set(strary[k], "\t,", 0);
+										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+										g_array_append_val(xp, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+										g_array_append_val(yp, lcl);
+										g_strfreev(strat);
+										lc++;
+									}
+									g_strfreev(strary);
+									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<jdimx; j++)
+									{
+									}
+									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+									fftw_execute(p);
+									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+									for (j=0; j<jdimx; j++)
+									{
+										vzt=g_array_index(starp, gdouble, j*zp);
+										iv=g_array_index(delp, gdouble, j);
+										if (iv<DZE) idelf=G_MAXDOUBLE;
+										else idelf=1/iv;
+										iv=g_array_index(zwa, gdouble, j)*idelf/2;
+										for (l=1; l<iv; l++)
+										{
+											ivd=g_array_index(starp, gdouble, l+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+										}
+										if (vzt<DZE) vzt=G_MAXDOUBLE;
+										else vzt=l/vzt;
+										for (k=0; k<kdimx; k++)
+										{
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+											if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+											{
+												vt=g_array_index(starp, gdouble, st+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+												phia=atan2(ivdt, vt);
+												vt=sqrt((vt*vt)+(ivdt*ivdt));
+												ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+												phio=-atan2(ivdt, ivd);
+												phia+=phio;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												{pn=0; cn=0; dst=0; ddp=0;}
+												for (l=st+2; l<=sp; l++)
+												{
+													ivd=g_array_index(starp, gdouble, l+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+													phi=atan2(ivdt, ivd);
+													phio+=phi;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													if (phio>G_PI) phio-=(MY_2PI);
+													else if (phio<=NMY_PI) phio+=(MY_2PI);
+													if (l>(tcn-twd+0.5))
+													{
+														if ((l-1)<=(tcn-twd))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+														}
+														else if (l<=(tcn+0.5))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<=tcn)
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if (l<(tcn+twd+0.5))
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(tcn+1-((gdouble) l))/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<(tcn+twd))
+														{
+															ct=(tcn+1-((gdouble) l))/twd;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+													}
+													phia=-phio;
+													phio=-phi;
+												}
+												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+												else dst/=pn;
+												cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												cn*=G_PI*g_array_index(delp, gdouble, j);
+												if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+												else ddp=cn/ddp;
+												vt*=vzt/(sp-st+1);
+											}
+											else {vt=0; dst=0; ddp=0;}
+											{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+										}
+									}
+									{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+								}
+								else
+								{
+									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+									{g_free(str); g_error_free(Err);}
+								}
+								{g_free(contents); g_strfreev(strat2);}
+							}
+						}
+						else /* +RdB0o-c */
+						{
+							for (m=0; m<g_strv_length(strary2); m++)
+							{
+								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+								{
+									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+									g_array_append_val(msr, lcl);
+									if (lcl<xi) xi=lcl;
+									else if (lcl>xf) xf=lcl;
+									strary=g_strsplit_set(contents, "\r\n", 0);
+									sal=g_strv_length(strary);
+									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+									lc=lcib;
+									for (k=kib; k<sal; k++)
+									{
+										if (!strary[k]) continue;
+										g_strchug(strary[k]);
+										if (!g_strcmp0("", strary[k])) continue;
+										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+										if (lc<0) {lc++; continue;}
+										strat=g_strsplit_set(strary[k], "\t,", 0);
+										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+										g_array_append_val(xp, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+										g_array_append_val(yp, lcl);
+										g_strfreev(strat);
+										lc++;
+									}
+									g_strfreev(strary);
+									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<jdimx; j++)
+									{
+									}
+									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+									fftw_execute(p);
+									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+									for (j=0; j<jdimx; j++)
+									{
+										vzt=g_array_index(starp, gdouble, j*zp);
+										iv=g_array_index(delp, gdouble, j);
+										if (iv<DZE) idelf=G_MAXDOUBLE;
+										else idelf=1/iv;
+										iv=g_array_index(zwa, gdouble, j)*idelf/2;
+										for (l=1; l<iv; l++)
+										{
+											ivd=g_array_index(starp, gdouble, l+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+										}
+										if (vzt<DZE) vzt=G_MAXDOUBLE;
+										else vzt=l/vzt;
+										for (k=0; k<kdimx; k++)
+										{
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+											if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+											{
+												vt=g_array_index(starp, gdouble, st+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+												phia=atan2(ivdt, vt);
+												vt=sqrt((vt*vt)+(ivdt*ivdt));
+												ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+												phio=-atan2(ivdt, ivd);
+												phia+=phio;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												{pn=0; cn=0; dst=0; ddp=0;}
+												for (l=st+2; l<=sp; l++)
+												{
+													ivd=g_array_index(starp, gdouble, l+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+													phi=atan2(ivdt, ivd);
+													phio+=phi;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													if (phio>G_PI) phio-=(MY_2PI);
+													else if (phio<=NMY_PI) phio+=(MY_2PI);
+													if (l>(tcn-twd+0.5))
+													{
+														if ((l-1)<=(tcn-twd))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+														}
+														else if (l<=(tcn+0.5))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<=tcn)
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if (l<(tcn+twd+0.5))
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(tcn+1-((gdouble) l))/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<(tcn+twd))
+														{
+															ct=(tcn+1-((gdouble) l))/twd;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+													}
+													phia=-phio;
+													phio=-phi;
+												}
+												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+												else dst/=pn;
+												cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												cn*=G_PI*g_array_index(delp, gdouble, j);
+												if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+												else ddp=cn/ddp;
+												vt*=vzt/(sp-st+1);
+											}
+											else {vt=0; dst=0; ddp=0;}
+											{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+										}
+									}
+									{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+								}
+								else
+								{
+									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+									{g_free(str); g_error_free(Err);}
+								}
+								{g_free(contents); g_strfreev(strat2);}
+							}
+						}
+					}
+					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tl0o-c +Tl0o-c */
+					{
+						for (m=0; m<g_strv_length(strary2); m++)
+						{
+							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+							{
+								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+								g_array_append_val(msr, lcl);
+								if (lcl<xi) xi=lcl;
+								else if (lcl>xf) xf=lcl;
+								strary=g_strsplit_set(contents, "\r\n", 0);
+								sal=g_strv_length(strary);
+								{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+								lc=lcib;
+								for (k=kib; k<sal; k++)
+								{
+									if (!strary[k]) continue;
+									g_strchug(strary[k]);
+									if (!g_strcmp0("", strary[k])) continue;
+									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+									if (lc<0) {lc++; continue;}
+									strat=g_strsplit_set(strary[k], "\t,", 0);
+									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+									g_array_append_val(xp, lcl);
+									if (!strat[trc]) lcl=0;
+									else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+									g_array_append_val(yp, lcl);
+									g_strfreev(strat);
+									lc++;
+								}
+								g_strfreev(strary);
+								delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+								for (j=0; j<n; j++) y[j]=0;
+								for (j=0; j<jdimx; j++)
+								{
+								}
+								{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+								fftw_execute(p);
+								starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+								for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+								for (j=0; j<jdimx; j++)
+								{
+									vzt=g_array_index(starp, gdouble, j*zp);
+									iv=g_array_index(delp, gdouble, j);
+									if (iv<DZE) idelf=G_MAXDOUBLE;
+									else idelf=1/iv;
+									iv=g_array_index(zwa, gdouble, j)*idelf/2;
+									for (l=1; l<iv; l++)
+									{
+										ivd=g_array_index(starp, gdouble, l+(j*zp));
+										ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+										vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+									}
+									if (vzt<DZE) vzt=G_MAXDOUBLE;
+									else vzt=l/vzt;
+									for (k=0; k<kdimx; k++)
+									{
+										st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+										sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+										tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+										twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+										if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+										{
+											vt=g_array_index(starp, gdouble, st+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+											phia=atan2(ivdt, vt);
+											vt=sqrt((vt*vt)+(ivdt*ivdt));
+											ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+											phio=-atan2(ivdt, ivd);
+											phia+=phio;
+											vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+											{pn=0; cn=0; dst=0; ddp=0;}
+											for (l=st+2; l<=sp; l++)
+											{
+												ivd=g_array_index(starp, gdouble, l+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+												phi=atan2(ivdt, ivd);
+												phio+=phi;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												if (phio>G_PI) phio-=(MY_2PI);
+												else if (phio<=NMY_PI) phio+=(MY_2PI);
+												if (l>(tcn-twd+0.5))
+												{
+													if ((l-1)<=(tcn-twd))
+													{
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+													}
+													else if (l<=(tcn+0.5))
+													{
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														ct=(((gdouble) l)-tcn-1)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+														cn+=++ct;
+														phia+=phio;
+														ddp+=ct*phia;
+													}
+													else if ((l-1)<=tcn)
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														ct=(((gdouble) l)-tcn-1)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+														cn+=++ct;
+														phia+=phio;
+														ddp+=ct*phia;
+													}
+													else if (l<(tcn+twd+0.5))
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														ct=(tcn+1-((gdouble) l))/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+														cn+=++ct;
+														phia+=phio;
+														ddp+=ct*phia;
+													}
+													else if ((l-1)<(tcn+twd))
+													{
+														ct=(tcn+1-((gdouble) l))/twd;
+														cn+=++ct;
+														phia+=phio;
+														ddp+=ct*phia;
+													}
+												}
+												phia=-phio;
+												phio=-phi;
+											}
+											pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+											if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+											else dst/=pn;
+											cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+											cn*=G_PI*g_array_index(delp, gdouble, j);
+											if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+											else ddp=cn/ddp;
+											vt*=vzt/(sp-st+1);
+										}
+										else {vt=0; dst=0; ddp=0;}
+										{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+									}
+								}
+								{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+							}
+							else
+							{
+								str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								{g_free(str); g_error_free(Err);}
+							}
+							{g_free(contents); g_strfreev(strat2);}
+						}
+					}
+					else /* -Rl0o-c +Rl0o-c */
+					{
+						for (m=0; m<g_strv_length(strary2); m++)
+						{
+							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+							{
+								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+								g_array_append_val(msr, lcl);
+								if (lcl<xi) xi=lcl;
+								else if (lcl>xf) xf=lcl;
+								strary=g_strsplit_set(contents, "\r\n", 0);
+								sal=g_strv_length(strary);
+								{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+								lc=lcib;
+								for (k=kib; k<sal; k++)
+								{
+									if (!strary[k]) continue;
+									g_strchug(strary[k]);
+									if (!g_strcmp0("", strary[k])) continue;
+									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+									if (lc<0) {lc++; continue;}
+									strat=g_strsplit_set(strary[k], "\t,", 0);
+									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+									g_array_append_val(xp, lcl);
+									if (!strat[trc]) lcl=0;
+									else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+									g_array_append_val(yp, lcl);
+									g_strfreev(strat);
+									lc++;
+								}
+								g_strfreev(strary);
+								delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+								for (j=0; j<n; j++) y[j]=0;
+								for (j=0; j<jdimx; j++)
+								{
+								}
+								{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+								fftw_execute(p);
+								starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+								for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+								for (j=0; j<jdimx; j++)
+								{
+									vzt=g_array_index(starp, gdouble, j*zp);
+									iv=g_array_index(delp, gdouble, j);
+									if (iv<DZE) idelf=G_MAXDOUBLE;
+									else idelf=1/iv;
+									iv=g_array_index(zwa, gdouble, j)*idelf/2;
+									for (l=1; l<iv; l++)
+									{
+										ivd=g_array_index(starp, gdouble, l+(j*zp));
+										ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+										vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+									}
+									if (vzt<DZE) vzt=G_MAXDOUBLE;
+									else vzt=l/vzt;
+									for (k=0; k<kdimx; k++)
+									{
+										st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+										sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+										tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+										twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+										if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+										{
+											vt=g_array_index(starp, gdouble, st+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+											phia=atan2(ivdt, vt);
+											vt=sqrt((vt*vt)+(ivdt*ivdt));
+											ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+											phio=-atan2(ivdt, ivd);
+											phia+=phio;
+											vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+											{pn=0; cn=0; dst=0; ddp=0;}
+											for (l=st+2; l<=sp; l++)
+											{
+												ivd=g_array_index(starp, gdouble, l+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+												phi=atan2(ivdt, ivd);
+												phio+=phi;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												if (phio>G_PI) phio-=(MY_2PI);
+												else if (phio<=NMY_PI) phio+=(MY_2PI);
+												if (l>(tcn-twd+0.5))
+												{
+													if ((l-1)<=(tcn-twd))
+													{
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+													}
+													else if (l<=(tcn+0.5))
+													{
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														ct=(((gdouble) l)-tcn-1)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+														cn+=++ct;
+														phia+=phio;
+														ddp+=ct*phia;
+													}
+													else if ((l-1)<=tcn)
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														ct=(((gdouble) l)-tcn-1)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+														cn+=++ct;
+														phia+=phio;
+														ddp+=ct*phia;
+													}
+													else if (l<(tcn+twd+0.5))
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														ct=(tcn+1-((gdouble) l))/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+														cn+=++ct;
+														phia+=phio;
+														ddp+=ct*phia;
+													}
+													else if ((l-1)<(tcn+twd))
+													{
+														ct=(tcn+1-((gdouble) l))/twd;
+														cn+=++ct;
+														phia+=phio;
+														ddp+=ct*phia;
+													}
+												}
+												phia=-phio;
+												phio=-phi;
+											}
+											pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+											if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+											else dst/=pn;
+											cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+											cn*=G_PI*g_array_index(delp, gdouble, j);
+											if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+											else ddp=cn/ddp;
+											vt*=vzt/(sp-st+1);
+										}
+										else {vt=0; dst=0; ddp=0;}
+										{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+									}
+								}
+								{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+							}
+							else
+							{
+								str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								{g_free(str); g_error_free(Err);}
+							}
+							{g_free(contents); g_strfreev(strat2);}
+						}
+					}
+				}
+				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(lcmp)))
+				{
+					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
+					{
+						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
+						{
+							if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdBsso+c */
+							{
+								for (m=0; m<g_strv_length(strary2); m++)
+								{
+									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+									{
+										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+										g_array_append_val(msr, lcl);
+										if (lcl<xi) xi=lcl;
+										else if (lcl>xf) xf=lcl;
+										strary=g_strsplit_set(contents, "\r\n", 0);
+										sal=g_strv_length(strary);
+										{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+										lc=lcib;
+										for (k=kib; k<sal; k++)
+										{
+											if (!strary[k]) continue;
+											g_strchug(strary[k]);
+											if (!g_strcmp0("", strary[k])) continue;
+											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+											if (lc<0) {lc++; continue;}
+											strat=g_strsplit_set(strary[k], "\t,", 0);
+											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+											g_array_append_val(xp, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+											g_array_append_val(yp, lcl);
+											g_strfreev(strat);
+											lc++;
+										}
+										g_strfreev(strary);
+										delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<jdimx; j++)
+										{
+											iv=g_array_index(bsra, gdouble, j);
+											k=0;
+											while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+											st=k;
+											iv=g_array_index(bspa, gdouble, j);
+											while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+											sp=k-st;
+											if (sp>zp) sp=zp;
+											iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+											g_array_append_val(delp, iv);
+											for (k=0; k<sp; k++)
+											{
+												clc=ofs-g_array_index(yp, gdouble, k+st);
+												if (clc<0) y[k+(j*zp)]=log(1-exp(LNTOT*clc));
+												else y[k+(j*zp)]=-G_MAXDOUBLE;
+											}
+										}
+										{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+										fftw_execute(p);
+										starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+										for (j=0; j<jdimx; j++)
+										{
+											vzt=g_array_index(starp, gdouble, j*zp);
+											iv=g_array_index(delp, gdouble, j);
+											if (iv<DZE) idelf=G_MAXDOUBLE;
+											else idelf=1/iv;
+											iv=g_array_index(zwa, gdouble, j)*idelf/2;
+											for (l=1; l<iv; l++)
+											{
+												ivd=g_array_index(starp, gdouble, l+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+												vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+											}
+											if (vzt<DZE) vzt=G_MAXDOUBLE;
+											else vzt=l/vzt;
+											for (k=0; k<kdimx; k++)
+											{
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+												{
+													vt=g_array_index(starp, gdouble, st+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+													phia=atan2(ivdt, vt);
+													vt=sqrt((vt*vt)+(ivdt*ivdt));
+													ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+													phio=-atan2(ivdt, ivd);
+													phia+=phio;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													{pn=0; cn=0; dst=0; ddp=0;}
+													for (l=st+2; l<=sp; l++)
+													{
+														ivd=g_array_index(starp, gdouble, l+(j*zp));
+														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+														phi=atan2(ivdt, ivd);
+														phio+=phi;
+														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+														if (phio>G_PI) phio-=(MY_2PI);
+														else if (phio<=NMY_PI) phio+=(MY_2PI);
+														if (l>(tcn-twd+0.5))
+														{
+															if ((l-1)<=(tcn-twd))
+															{
+																tp=(((gdouble) l)-tcn-0.5)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+															}
+															else if (l<=(tcn+0.5))
+															{
+																tp=(((gdouble) l)-tcn-0.5)/twd;
+																ct=(((gdouble) l)-tcn-1)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if ((l-1)<=tcn)
+															{
+																tp=(tcn+0.5-((gdouble) l))/twd;
+																ct=(((gdouble) l)-tcn-1)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if (l<(tcn+twd+0.5))
+															{
+																tp=(tcn+0.5-((gdouble) l))/twd;
+																ct=(tcn+1-((gdouble) l))/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if ((l-1)<(tcn+twd))
+															{
+																ct=(tcn+1-((gdouble) l))/twd;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+														}
+														phia=-phio;
+														phio=-phi;
+													}
+													pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+													if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+													else dst/=pn;
+													cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+													cn*=G_PI*g_array_index(delp, gdouble, j);
+													if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+													else ddp=cn/ddp;
+													vt*=vzt/(sp-st+1);
+												}
+												else {vt=0; dst=0; ddp=0;}
+												{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+											}
+										}
+										{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+									}
+									else
+									{
+										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+										{g_free(str); g_error_free(Err);}
+									}
+									{g_free(contents); g_strfreev(strat2);}
+								}
+							}
+							else /* +TdBsso+c */
+							{
+								for (m=0; m<g_strv_length(strary2); m++)
+								{
+									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+									{
+										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+										g_array_append_val(msr, lcl);
+										if (lcl<xi) xi=lcl;
+										else if (lcl>xf) xf=lcl;
+										strary=g_strsplit_set(contents, "\r\n", 0);
+										sal=g_strv_length(strary);
+										{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+										lc=lcib;
+										for (k=kib; k<sal; k++)
+										{
+											if (!strary[k]) continue;
+											g_strchug(strary[k]);
+											if (!g_strcmp0("", strary[k])) continue;
+											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+											if (lc<0) {lc++; continue;}
+											strat=g_strsplit_set(strary[k], "\t,", 0);
+											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+											g_array_append_val(xp, lcl);
+											if (!strat[trc]) lcl=0;
+											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+											g_array_append_val(yp, lcl);
+											g_strfreev(strat);
+											lc++;
+										}
+										g_strfreev(strary);
+										delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+										for (j=0; j<n; j++) y[j]=0;
+										for (j=0; j<jdimx; j++)
+										{
+											iv=g_array_index(bsra, gdouble, j);
+											k=0;
+											while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+											st=k;
+											iv=g_array_index(bspa, gdouble, j);
+											while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+											sp=k-st;
+											if (sp>zp) sp=zp;
+											iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+											g_array_append_val(delp, iv);
+											for (k=0; k<sp; k++)
+											{
+												clc=g_array_index(yp, gdouble, k+st)-ofs;
+												if (clc<0) y[k+(j*zp)]=log(1-exp(LNTOT*clc));
+												else y[k+(j*zp)]=-G_MAXDOUBLE;
+											}
+										}
+										{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+										fftw_execute(p);
+										starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+										for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+										for (j=0; j<jdimx; j++)
+										{
+											vzt=g_array_index(starp, gdouble, j*zp);
+											iv=g_array_index(delp, gdouble, j);
+											if (iv<DZE) idelf=G_MAXDOUBLE;
+											else idelf=1/iv;
+											iv=g_array_index(zwa, gdouble, j)*idelf/2;
+											for (l=1; l<iv; l++)
+											{
+												ivd=g_array_index(starp, gdouble, l+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+												vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+											}
+											if (vzt<DZE) vzt=G_MAXDOUBLE;
+											else vzt=l/vzt;
+											for (k=0; k<kdimx; k++)
+											{
+												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+												if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+												{
+													vt=g_array_index(starp, gdouble, st+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+													phia=atan2(ivdt, vt);
+													vt=sqrt((vt*vt)+(ivdt*ivdt));
+													ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+													phio=-atan2(ivdt, ivd);
+													phia+=phio;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													{pn=0; cn=0; dst=0; ddp=0;}
+													for (l=st+2; l<=sp; l++)
+													{
+														ivd=g_array_index(starp, gdouble, l+(j*zp));
+														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+														phi=atan2(ivdt, ivd);
+														phio+=phi;
+														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+														if (phio>G_PI) phio-=(MY_2PI);
+														else if (phio<=NMY_PI) phio+=(MY_2PI);
+														if (l>(tcn-twd+0.5))
+														{
+															if ((l-1)<=(tcn-twd))
+															{
+																tp=(((gdouble) l)-tcn-0.5)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+															}
+															else if (l<=(tcn+0.5))
+															{
+																tp=(((gdouble) l)-tcn-0.5)/twd;
+																ct=(((gdouble) l)-tcn-1)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if ((l-1)<=tcn)
+															{
+																tp=(tcn+0.5-((gdouble) l))/twd;
+																ct=(((gdouble) l)-tcn-1)/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if (l<(tcn+twd+0.5))
+															{
+																tp=(tcn+0.5-((gdouble) l))/twd;
+																ct=(tcn+1-((gdouble) l))/twd;
+																pn+=++tp;
+																dst+=tp*phio;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+															else if ((l-1)<(tcn+twd))
+															{
+																ct=(tcn+1-((gdouble) l))/twd;
+																cn+=++ct;
+																phia+=phio;
+																ddp+=ct*phia;
+															}
+														}
+														phia=-phio;
+														phio=-phi;
+													}
+													pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+													if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+													else dst/=pn;
+													cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+													cn*=G_PI*g_array_index(delp, gdouble, j);
+													if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+													else ddp=cn/ddp;
+													vt*=vzt/(sp-st+1);
+												}
+												else {vt=0; dst=0; ddp=0;}
+												{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+											}
+										}
+										{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+									}
+									else
+									{
+										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+										{g_free(str); g_error_free(Err);}
+									}
+									{g_free(contents); g_strfreev(strat2);}
+								}
+							}
+						}
+						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBsso+c */
+						{
+							for (m=0; m<g_strv_length(strary2); m++)
+							{
+								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+								{
+									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+									g_array_append_val(msr, lcl);
+									if (lcl<xi) xi=lcl;
+									else if (lcl>xf) xf=lcl;
+									strary=g_strsplit_set(contents, "\r\n", 0);
+									sal=g_strv_length(strary);
+									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+									lc=lcib;
+									for (k=kib; k<sal; k++)
+									{
+										if (!strary[k]) continue;
+										g_strchug(strary[k]);
+										if (!g_strcmp0("", strary[k])) continue;
+										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+										if (lc<0) {lc++; continue;}
+										strat=g_strsplit_set(strary[k], "\t,", 0);
+										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+										g_array_append_val(xp, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+										g_array_append_val(yp, lcl);
+										g_strfreev(strat);
+										lc++;
+									}
+									g_strfreev(strary);
+									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<jdimx; j++)
+									{
+										iv=g_array_index(bsra, gdouble, j);
+										k=0;
+										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+										st=k;
+										iv=g_array_index(bspa, gdouble, j);
+										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+										sp=k-st;
+										if (sp>zp) sp=zp;
+										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+										g_array_append_val(delp, iv);
+										for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(ofs-g_array_index(yp, gdouble, k+st));
+									}
+									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+									fftw_execute(p);
+									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+									for (j=0; j<jdimx; j++)
+									{
+										vzt=g_array_index(starp, gdouble, j*zp);
+										iv=g_array_index(delp, gdouble, j);
+										if (iv<DZE) idelf=G_MAXDOUBLE;
+										else idelf=1/iv;
+										iv=g_array_index(zwa, gdouble, j)*idelf/2;
+										for (l=1; l<iv; l++)
+										{
+											ivd=g_array_index(starp, gdouble, l+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+										}
+										if (vzt<DZE) vzt=G_MAXDOUBLE;
+										else vzt=l/vzt;
+										for (k=0; k<kdimx; k++)
+										{
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+											if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+											{
+												vt=g_array_index(starp, gdouble, st+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+												phia=atan2(ivdt, vt);
+												vt=sqrt((vt*vt)+(ivdt*ivdt));
+												ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+												phio=-atan2(ivdt, ivd);
+												phia+=phio;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												{pn=0; cn=0; dst=0; ddp=0;}
+												for (l=st+2; l<=sp; l++)
+												{
+													ivd=g_array_index(starp, gdouble, l+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+													phi=atan2(ivdt, ivd);
+													phio+=phi;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													if (phio>G_PI) phio-=(MY_2PI);
+													else if (phio<=NMY_PI) phio+=(MY_2PI);
+													if (l>(tcn-twd+0.5))
+													{
+														if ((l-1)<=(tcn-twd))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+														}
+														else if (l<=(tcn+0.5))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<=tcn)
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if (l<(tcn+twd+0.5))
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(tcn+1-((gdouble) l))/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<(tcn+twd))
+														{
+															ct=(tcn+1-((gdouble) l))/twd;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+													}
+													phia=-phio;
+													phio=-phi;
+												}
+												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+												else dst/=pn;
+												cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												cn*=G_PI*g_array_index(delp, gdouble, j);
+												if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+												else ddp=cn/ddp;
+												vt*=vzt/(sp-st+1);
+											}
+											else {vt=0; dst=0; ddp=0;}
+											{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+										}
+									}
+									{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+								}
+								else
+								{
+									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+									{g_free(str); g_error_free(Err);}
+								}
+								{g_free(contents); g_strfreev(strat2);}
+							}
+						}
+						else /* +RdBsso+c */
+						{
+							for (m=0; m<g_strv_length(strary2); m++)
+							{
+								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+								{
+									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+									g_array_append_val(msr, lcl);
+									if (lcl<xi) xi=lcl;
+									else if (lcl>xf) xf=lcl;
+									strary=g_strsplit_set(contents, "\r\n", 0);
+									sal=g_strv_length(strary);
+									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+									lc=lcib;
+									for (k=kib; k<sal; k++)
+									{
+										if (!strary[k]) continue;
+										g_strchug(strary[k]);
+										if (!g_strcmp0("", strary[k])) continue;
+										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+										if (lc<0) {lc++; continue;}
+										strat=g_strsplit_set(strary[k], "\t,", 0);
+										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+										g_array_append_val(xp, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+										g_array_append_val(yp, lcl);
+										g_strfreev(strat);
+										lc++;
+									}
+									g_strfreev(strary);
+									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<jdimx; j++)
+									{
+										iv=g_array_index(bsra, gdouble, j);
+										k=0;
+										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+										st=k;
+										iv=g_array_index(bspa, gdouble, j);
+										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+										sp=k-st;
+										if (sp>zp) sp=zp;
+										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+										g_array_append_val(delp, iv);
+										for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(g_array_index(yp, gdouble, k+st)-ofs);
+									}
+									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+									fftw_execute(p);
+									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+									for (j=0; j<jdimx; j++)
+									{
+										vzt=g_array_index(starp, gdouble, j*zp);
+										iv=g_array_index(delp, gdouble, j);
+										if (iv<DZE) idelf=G_MAXDOUBLE;
+										else idelf=1/iv;
+										iv=g_array_index(zwa, gdouble, j)*idelf/2;
+										for (l=1; l<iv; l++)
+										{
+											ivd=g_array_index(starp, gdouble, l+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+										}
+										if (vzt<DZE) vzt=G_MAXDOUBLE;
+										else vzt=l/vzt;
+										for (k=0; k<kdimx; k++)
+										{
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+											if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+											{
+												vt=g_array_index(starp, gdouble, st+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+												phia=atan2(ivdt, vt);
+												vt=sqrt((vt*vt)+(ivdt*ivdt));
+												ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+												phio=-atan2(ivdt, ivd);
+												phia+=phio;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												{pn=0; cn=0; dst=0; ddp=0;}
+												for (l=st+2; l<=sp; l++)
+												{
+													ivd=g_array_index(starp, gdouble, l+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+													phi=atan2(ivdt, ivd);
+													phio+=phi;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													if (phio>G_PI) phio-=(MY_2PI);
+													else if (phio<=NMY_PI) phio+=(MY_2PI);
+													if (l>(tcn-twd+0.5))
+													{
+														if ((l-1)<=(tcn-twd))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+														}
+														else if (l<=(tcn+0.5))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<=tcn)
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if (l<(tcn+twd+0.5))
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(tcn+1-((gdouble) l))/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<(tcn+twd))
+														{
+															ct=(tcn+1-((gdouble) l))/twd;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+													}
+													phia=-phio;
+													phio=-phi;
+												}
+												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+												else dst/=pn;
+												cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												cn*=G_PI*g_array_index(delp, gdouble, j);
+												if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+												else ddp=cn/ddp;
+												vt*=vzt/(sp-st+1);
+											}
+											else {vt=0; dst=0; ddp=0;}
+											{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+										}
+									}
+									{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+								}
+								else
+								{
+									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+									{g_free(str); g_error_free(Err);}
+								}
+								{g_free(contents); g_strfreev(strat2);}
+							}
+						}
+					}
+					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlsso+c +Tlsso+c */
+					{
+						if ((ofs<DZE)&&(ofs>NZE))
+						{
+							str=g_strdup(_("Offset must be nonzero for linear measurements."));
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+						}
+						else
+						{
+							for (m=0; m<g_strv_length(strary2); m++)
+							{
+								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+								{
+									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+									g_array_append_val(msr, lcl);
+									if (lcl<xi) xi=lcl;
+									else if (lcl>xf) xf=lcl;
+									strary=g_strsplit_set(contents, "\r\n", 0);
+									sal=g_strv_length(strary);
+									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+									lc=lcib;
+									for (k=kib; k<sal; k++)
+									{
+										if (!strary[k]) continue;
+										g_strchug(strary[k]);
+										if (!g_strcmp0("", strary[k])) continue;
+										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+										if (lc<0) {lc++; continue;}
+										strat=g_strsplit_set(strary[k], "\t,", 0);
+										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+										g_array_append_val(xp, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+										g_array_append_val(yp, lcl);
+										g_strfreev(strat);
+										lc++;
+									}
+									g_strfreev(strary);
+									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<jdimx; j++)
+									{
+										iv=g_array_index(bsra, gdouble, j);
+										k=0;
+										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+										st=k;
+										iv=g_array_index(bspa, gdouble, j);
+										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+										sp=k-st;
+										if (sp>zp) sp=zp;
+										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+										g_array_append_val(delp, iv);
+										for (k=0; k<sp; k++)
+										{
+											clc=1-(g_array_index(yp, gdouble, k+st)/ofs);
+											if (clc>0) y[k+(j*zp)]=log(clc);
+											else y[k+(j*zp)]=-G_MAXDOUBLE;
+										}
+									}
+									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+									fftw_execute(p);
+									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+									for (j=0; j<jdimx; j++)
+									{
+										vzt=g_array_index(starp, gdouble, j*zp);
+										iv=g_array_index(delp, gdouble, j);
+										if (iv<DZE) idelf=G_MAXDOUBLE;
+										else idelf=1/iv;
+										iv=g_array_index(zwa, gdouble, j)*idelf/2;
+										for (l=1; l<iv; l++)
+										{
+											ivd=g_array_index(starp, gdouble, l+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+										}
+										if (vzt<DZE) vzt=G_MAXDOUBLE;
+										else vzt=l/vzt;
+										for (k=0; k<kdimx; k++)
+										{
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+											if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+											{
+												vt=g_array_index(starp, gdouble, st+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+												phia=atan2(ivdt, vt);
+												vt=sqrt((vt*vt)+(ivdt*ivdt));
+												ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+												phio=-atan2(ivdt, ivd);
+												phia+=phio;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												{pn=0; cn=0; dst=0; ddp=0;}
+												for (l=st+2; l<=sp; l++)
+												{
+													ivd=g_array_index(starp, gdouble, l+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+													phi=atan2(ivdt, ivd);
+													phio+=phi;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													if (phio>G_PI) phio-=(MY_2PI);
+													else if (phio<=NMY_PI) phio+=(MY_2PI);
+													if (l>(tcn-twd+0.5))
+													{
+														if ((l-1)<=(tcn-twd))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+														}
+														else if (l<=(tcn+0.5))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<=tcn)
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if (l<(tcn+twd+0.5))
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(tcn+1-((gdouble) l))/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<(tcn+twd))
+														{
+															ct=(tcn+1-((gdouble) l))/twd;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+													}
+													phia=-phio;
+													phio=-phi;
+												}
+												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+												else dst/=pn;
+												cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												cn*=G_PI*g_array_index(delp, gdouble, j);
+												if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+												else ddp=cn/ddp;
+												vt*=vzt/(sp-st+1);
+											}
+											else {vt=0; dst=0; ddp=0;}
+											{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+										}
+									}
+									{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+								}
+								else
+								{
+									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+									{g_free(str); g_error_free(Err);}
+								}
+								{g_free(contents); g_strfreev(strat2);}
+							}
+						}
+					}
+					else /* -Rlsso+c +Rlsso+c */
+					{
+						if ((ofs<DZE)&&(ofs>NZE))
+						{
+							str=g_strdup(_("Offset must be nonzero for linear measurements."));
+							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+							g_free(str);
+						}
+						else
+						{
+							for (m=0; m<g_strv_length(strary2); m++)
+							{
+								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+								{
+									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+									g_array_append_val(msr, lcl);
+									if (lcl<xi) xi=lcl;
+									else if (lcl>xf) xf=lcl;
+									strary=g_strsplit_set(contents, "\r\n", 0);
+									sal=g_strv_length(strary);
+									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+									lc=lcib;
+									for (k=kib; k<sal; k++)
+									{
+										if (!strary[k]) continue;
+										g_strchug(strary[k]);
+										if (!g_strcmp0("", strary[k])) continue;
+										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+										if (lc<0) {lc++; continue;}
+										strat=g_strsplit_set(strary[k], "\t,", 0);
+										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+										g_array_append_val(xp, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+										g_array_append_val(yp, lcl);
+										g_strfreev(strat);
+										lc++;
+									}
+									g_strfreev(strary);
+									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<jdimx; j++)
+									{
+										iv=g_array_index(bsra, gdouble, j);
+										k=0;
+										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+										st=k;
+										iv=g_array_index(bspa, gdouble, j);
+										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+										sp=k-st;
+										if (sp>zp) sp=zp;
+										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+										g_array_append_val(delp, iv);
+										for (k=0; k<sp; k++)
+										{
+											clc=g_array_index(yp, gdouble, k+st)/ofs;
+											if (clc>0) y[k+(j*zp)]=log(clc);
+											else y[k+(j*zp)]=-G_MAXDOUBLE;
+										}
+									}
+									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+									fftw_execute(p);
+									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++) g_array_append_val(starp, iv);
+									for (j=0; j<jdimx; j++)
+									{
+										vzt=g_array_index(starp, gdouble, j*zp);
+										iv=g_array_index(delp, gdouble, j);
+										if (iv<DZE) idelf=G_MAXDOUBLE;
+										else idelf=1/iv;
+										iv=g_array_index(zwa, gdouble, j)*idelf/2;
+										for (l=1; l<iv; l++)
+										{
+											ivd=g_array_index(starp, gdouble, l+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+										}
+										if (vzt<DZE) vzt=G_MAXDOUBLE;
+										else vzt=l/vzt;
+										for (k=0; k<kdimx; k++)
+										{
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+											if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+											{
+												vt=g_array_index(starp, gdouble, st+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+												phia=atan2(ivdt, vt);
+												vt=sqrt((vt*vt)+(ivdt*ivdt));
+												ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+												phio=-atan2(ivdt, ivd);
+												phia+=phio;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												{pn=0; cn=0; dst=0; ddp=0;}
+												for (l=st+2; l<=sp; l++)
+												{
+													ivd=g_array_index(starp, gdouble, l+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+													phi=atan2(ivdt, ivd);
+													phio+=phi;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													if (phio>G_PI) phio-=(MY_2PI);
+													else if (phio<=NMY_PI) phio+=(MY_2PI);
+													if (l>(tcn-twd+0.5))
+													{
+														if ((l-1)<=(tcn-twd))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+														}
+														else if (l<=(tcn+0.5))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<=tcn)
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if (l<(tcn+twd+0.5))
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(tcn+1-((gdouble) l))/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<(tcn+twd))
+														{
+															ct=(tcn+1-((gdouble) l))/twd;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+													}
+													phia=-phio;
+													phio=-phi;
+												}
+												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+												else dst/=pn;
+												cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												cn*=G_PI*g_array_index(delp, gdouble, j);
+												if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+												else ddp=cn/ddp;
+												vt*=vzt/(sp-st+1);
+											}
+											else {vt=0; dst=0; ddp=0;}
+											{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+										}
+									}
+									{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+								}
+								else
+								{
+									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+									{g_free(str); g_error_free(Err);}
+								}
+								{g_free(contents); g_strfreev(strat2);}
+							}
+						}
+					}
+				}
+				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
+				{
+					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
+					{
+						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o+c */
+						{
+							for (m=0; m<g_strv_length(strary2); m++)
+							{
+								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+								{
+									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+									g_array_append_val(msr, lcl);
+									if (lcl<xi) xi=lcl;
+									else if (lcl>xf) xf=lcl;
+									strary=g_strsplit_set(contents, "\r\n", 0);
+									sal=g_strv_length(strary);
+									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+									lc=lcib;
+									for (k=kib; k<sal; k++)
+									{
+										if (!strary[k]) continue;
+										g_strchug(strary[k]);
+										if (!g_strcmp0("", strary[k])) continue;
+										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+										if (lc<0) {lc++; continue;}
+										strat=g_strsplit_set(strary[k], "\t,", 0);
+										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+										g_array_append_val(xp, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+										g_array_append_val(yp, lcl);
+										g_strfreev(strat);
+										lc++;
+									}
+									g_strfreev(strary);
+									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<jdimx; j++)
+									{
+										iv=g_array_index(bsra, gdouble, j);
+										k=0;
+										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+										st=k;
+										iv=g_array_index(bspa, gdouble, j);
+										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+										sp=k-st;
+										if (sp>zp) sp=zp;
+										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+										g_array_append_val(delp, iv);
+										for (k=0; k<sp; k++) y[k+(j*zp)]=1-exp(LNTOT*(ofs-g_array_index(yp, gdouble, k+st)));
+									}
+									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+									fftw_execute(p);
+									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+									for (j=0; j<jdimx; j++)
+									{
+										vzt=g_array_index(starp, gdouble, j*zp);
+										iv=g_array_index(delp, gdouble, j);
+										if (iv<DZE) idelf=G_MAXDOUBLE;
+										else idelf=1/iv;
+										iv=g_array_index(zwa, gdouble, j)*idelf/2;
+										for (l=1; l<iv; l++)
+										{
+											ivd=g_array_index(starp, gdouble, l+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+										}
+										if (vzt<DZE) vzt=G_MAXDOUBLE;
+										else vzt=l/vzt;
+										for (k=0; k<kdimx; k++)
+										{
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+											if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+											{
+												vt=g_array_index(starp, gdouble, st+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+												phia=atan2(ivdt, vt);
+												vt=sqrt((vt*vt)+(ivdt*ivdt));
+												ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+												phio=-atan2(ivdt, ivd);
+												phia+=phio;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												{pn=0; cn=0; dst=0; ddp=0;}
+												for (l=st+2; l<=sp; l++)
+												{
+													ivd=g_array_index(starp, gdouble, l+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+													phi=atan2(ivdt, ivd);
+													phio+=phi;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													if (phio>G_PI) phio-=(MY_2PI);
+													else if (phio<=NMY_PI) phio+=(MY_2PI);
+													if (l>(tcn-twd+0.5))
+													{
+														if ((l-1)<=(tcn-twd))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+														}
+														else if (l<=(tcn+0.5))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<=tcn)
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if (l<(tcn+twd+0.5))
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(tcn+1-((gdouble) l))/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<(tcn+twd))
+														{
+															ct=(tcn+1-((gdouble) l))/twd;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+													}
+													phia=-phio;
+													phio=-phi;
+												}
+												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+												else dst/=pn;
+												cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												cn*=G_PI*g_array_index(delp, gdouble, j);
+												if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+												else ddp=cn/ddp;
+												vt*=vzt/(sp-st+1);
+											}
+											else {vt=0; dst=0; ddp=0;}
+											{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+										}
+									}
+									{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+								}
+								else
+								{
+									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+									{g_free(str); g_error_free(Err);}
+								}
+								{g_free(contents); g_strfreev(strat2);}
+							}
+						}
+						else /* +TdB0o+c */
+						{
+							for (m=0; m<g_strv_length(strary2); m++)
+							{
+								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+								{
+									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+									g_array_append_val(msr, lcl);
+									if (lcl<xi) xi=lcl;
+									else if (lcl>xf) xf=lcl;
+									strary=g_strsplit_set(contents, "\r\n", 0);
+									sal=g_strv_length(strary);
+									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+									lc=lcib;
+									for (k=kib; k<sal; k++)
+									{
+										if (!strary[k]) continue;
+										g_strchug(strary[k]);
+										if (!g_strcmp0("", strary[k])) continue;
+										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+										if (lc<0) {lc++; continue;}
+										strat=g_strsplit_set(strary[k], "\t,", 0);
+										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+										g_array_append_val(xp, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+										g_array_append_val(yp, lcl);
+										g_strfreev(strat);
+										lc++;
+									}
+									g_strfreev(strary);
+									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<jdimx; j++)
+									{
+										iv=g_array_index(bsra, gdouble, j);
+										k=0;
+										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+										st=k;
+										iv=g_array_index(bspa, gdouble, j);
+										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+										sp=k-st;
+										if (sp>zp) sp=zp;
+										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+										g_array_append_val(delp, iv);
+										for (k=0; k<sp; k++) y[k+(j*zp)]=1-exp(LNTOT*(g_array_index(yp, gdouble, k+st)-ofs));
+									}
+									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+									fftw_execute(p);
+									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+									for (j=0; j<jdimx; j++)
+									{
+										vzt=g_array_index(starp, gdouble, j*zp);
+										iv=g_array_index(delp, gdouble, j);
+										if (iv<DZE) idelf=G_MAXDOUBLE;
+										else idelf=1/iv;
+										iv=g_array_index(zwa, gdouble, j)*idelf/2;
+										for (l=1; l<iv; l++)
+										{
+											ivd=g_array_index(starp, gdouble, l+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+										}
+										if (vzt<DZE) vzt=G_MAXDOUBLE;
+										else vzt=l/vzt;
+										for (k=0; k<kdimx; k++)
+										{
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+											if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+											{
+												vt=g_array_index(starp, gdouble, st+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+												phia=atan2(ivdt, vt);
+												vt=sqrt((vt*vt)+(ivdt*ivdt));
+												ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+												phio=-atan2(ivdt, ivd);
+												phia+=phio;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												{pn=0; cn=0; dst=0; ddp=0;}
+												for (l=st+2; l<=sp; l++)
+												{
+													ivd=g_array_index(starp, gdouble, l+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+													phi=atan2(ivdt, ivd);
+													phio+=phi;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													if (phio>G_PI) phio-=(MY_2PI);
+													else if (phio<=NMY_PI) phio+=(MY_2PI);
+													if (l>(tcn-twd+0.5))
+													{
+														if ((l-1)<=(tcn-twd))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+														}
+														else if (l<=(tcn+0.5))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<=tcn)
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(((gdouble) l)-tcn-1)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if (l<(tcn+twd+0.5))
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															ct=(tcn+1-((gdouble) l))/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+														else if ((l-1)<(tcn+twd))
+														{
+															ct=(tcn+1-((gdouble) l))/twd;
+															cn+=++ct;
+															phia+=phio;
+															ddp+=ct*phia;
+														}
+													}
+													phia=-phio;
+													phio=-phi;
+												}
+												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+												else dst/=pn;
+												cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												cn*=G_PI*g_array_index(delp, gdouble, j);
+												if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+												else ddp=cn/ddp;
+												vt*=vzt/(sp-st+1);
+											}
+											else {vt=0; dst=0; ddp=0;}
+											{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+										}
+									}
+									{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+								}
+								else
+								{
+									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+									{g_free(str); g_error_free(Err);}
+								}
+								{g_free(contents); g_strfreev(strat2);}
+							}
+						}
+					}
+					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdB0o+c */
+					{
+						for (m=0; m<g_strv_length(strary2); m++)
+						{
+							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+							{
+								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+								g_array_append_val(msr, lcl);
+								if (lcl<xi) xi=lcl;
+								else if (lcl>xf) xf=lcl;
+								strary=g_strsplit_set(contents, "\r\n", 0);
+								sal=g_strv_length(strary);
+								{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+								lc=lcib;
+								for (k=kib; k<sal; k++)
+								{
+									if (!strary[k]) continue;
+									g_strchug(strary[k]);
+									if (!g_strcmp0("", strary[k])) continue;
+									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+									if (lc<0) {lc++; continue;}
+									strat=g_strsplit_set(strary[k], "\t,", 0);
+									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+									g_array_append_val(xp, lcl);
+									if (!strat[trc]) lcl=0;
+									else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+									g_array_append_val(yp, lcl);
+									g_strfreev(strat);
+									lc++;
+								}
+								g_strfreev(strary);
+								delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+								for (j=0; j<n; j++) y[j]=0;
+								for (j=0; j<jdimx; j++)
+								{
+									iv=g_array_index(bsra, gdouble, j);
+									k=0;
+									while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+									st=k;
+									iv=g_array_index(bspa, gdouble, j);
+									while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+									sp=k-st;
+									if (sp>zp) sp=zp;
+									iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+									g_array_append_val(delp, iv);
+									for (k=0; k<sp; k++) y[k+(j*zp)]=exp(LNTOT*(ofs-g_array_index(yp, gdouble, k+st)));
+								}
+								{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+								fftw_execute(p);
+								starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+								for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+								for (j=0; j<jdimx; j++)
+								{
+									vzt=g_array_index(starp, gdouble, j*zp);
+									iv=g_array_index(delp, gdouble, j);
+									if (iv<DZE) idelf=G_MAXDOUBLE;
+									else idelf=1/iv;
+									iv=g_array_index(zwa, gdouble, j)*idelf/2;
+									for (l=1; l<iv; l++)
+									{
+										ivd=g_array_index(starp, gdouble, l+(j*zp));
+										ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+										vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+									}
+									if (vzt<DZE) vzt=G_MAXDOUBLE;
+									else vzt=l/vzt;
+									for (k=0; k<kdimx; k++)
+									{
+										st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+										sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+										tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+										twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+										if ((st<((zp-1)/2))&&(sp<(zp/2))&&((sp-st)>1))
+										{
+											vt=g_array_index(starp, gdouble, st+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+											phia=atan2(ivdt, vt);
+											vt=sqrt((vt*vt)+(ivdt*ivdt));
+											ivd=g_array_index(starp, gdouble, st+1+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st-1);
+											phio=-atan2(ivdt, ivd);
+											phia+=phio;
+											vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+											{pn=0; cn=0; dst=0; ddp=0;}
+											for (l=st+2; l<=sp; l++)
+											{
+												ivd=g_array_index(starp, gdouble, l+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+												phi=atan2(ivdt, ivd);
+												phio+=phi;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												if (phio>G_PI) phio-=(MY_2PI);
+												else if (phio<=NMY_PI) phio+=(MY_2PI);
+												if (l>(tcn-twd+0.5))
+												{
+													if ((l-1)<=(tcn-twd))
+													{
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+													}
+													else if (l<=(tcn+0.5))
+													{
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														ct=(((gdouble) l)-tcn-1)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+														cn+=++ct;
+														phia+=phio;
+														ddp+=ct*phia;
+													}
+													else if ((l-1)<=tcn)
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														ct=(((gdouble) l)-tcn-1)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+														cn+=++ct;
+														phia+=phio;
+														ddp+=ct*phia;
+													}
+													else if (l<(tcn+twd+0.5))
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														ct=(tcn+1-((gdouble) l))/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+														cn+=++ct;
+														phia+=phio;
+														ddp+=ct*phia;
+													}
+													else if ((l-1)<(tcn+twd))
+													{
+														ct=(tcn+1-((gdouble) l))/twd;
+														cn+=++ct;
+														phia+=phio;
+														ddp+=ct*phia;
+													}
+												}
+												phia=-phio;
+												phio=-phi;
+											}
+											pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+											if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+											else dst/=pn;
+											cn*=NMY_2PI*g_array_index(delp, gdouble, j);
+											cn*=G_PI*g_array_index(delp, gdouble, j);
+											if ((cn<DZE)&&(cn>NZE)) ddp=G_MAXDOUBLE;
+											else ddp=cn/ddp;
+											vt*=vzt/(sp-st+1);
+										}
+										else {vt=0; dst=0; ddp=0;}
+										{g_array_append_val(vis, vt); g_array_append_val(doms, dst); g_array_append_val(chp, ddp);}
+									}
+								}
+								{g_array_free(starp, TRUE); g_array_free(delp, TRUE);}
+							}
+							else
+							{
+								str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								{g_free(str); g_error_free(Err);}
+							}
+							{g_free(contents); g_strfreev(strat2);}
+						}
+					}
+					else /* +RdB0o+c */
+					{
+						for (m=0; m<g_strv_length(strary2); m++)
+						{
+							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+							{
+								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+								g_array_append_val(msr, lcl);
+								if (lcl<xi) xi=lcl;
+								else if (lcl>xf) xf=lcl;
+								strary=g_strsplit_set(contents, "\r\n", 0);
+								sal=g_strv_length(strary);
+								{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 									lc=lcib;
 									for (k=kib; k<sal; k++)
 									{
@@ -20008,827 +19997,827 @@ void bat(GtkWidget *widget, gpointer data)
 													vt=sqrt((vt*vt)+(ivdt*ivdt));
 													{dst=0; pn=0;}
 													for (l=st+1; l<=sp; l++)
+												{
+													ivd=g_array_index(starp, gdouble, l+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+													phi=atan2(ivdt, ivd);
+													phio+=phi;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													if (phio>G_PI) phio-=(MY_2PI);
+													else if (phio<=NMY_PI) phio+=(MY_2PI);
+													if (l>(tcn-twd+0.5))
 													{
-														ivd=g_array_index(starp, gdouble, l+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-														phi=atan2(ivdt, ivd);
-														phio+=phi;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														if (phio>G_PI) phio-=(MY_2PI);
-														else if (phio<=NMY_PI) phio+=(MY_2PI);
-														if (l>(tcn-twd+0.5))
+														if (l<=(tcn+0.5))
 														{
-															if (l<=(tcn+0.5))
-															{
-																tp=(((gdouble) l)-tcn-0.5)/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-															}
-															else if (l<(tcn+twd+0.5))
-															{
-																tp=(tcn+0.5-((gdouble) l))/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-															}
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
 														}
-														phio=-phi;
+														else if (l<(tcn+twd+0.5))
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+														}
 													}
-													pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-													if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-													else dst/=pn;
-													vt*=vzt/(sp-st+1);
+													phio=-phi;
 												}
-												else {vt=0; dst=0;}
-												{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
+												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+												else dst/=pn;
+												vt*=vzt/(sp-st+1);
 											}
+											else {vt=0; dst=0;}
+											{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
 										}
-										{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
 									}
-									else
-									{
-										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-										{g_free(str); g_error_free(Err);}
-									}
-									{g_free(contents); g_strfreev(strat2);}
+									{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
 								}
-							}
-							else /* +TdBsso+ */
-							{
-								for (m=0; m<g_strv_length(strary2); m++)
+								else
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
-									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+									{g_free(str); g_error_free(Err);}
+								}
+								{g_free(contents); g_strfreev(strat2);}
+							}
+						}
+						else /* +TdBsso+ */
+						{
+							for (m=0; m<g_strv_length(strary2); m++)
+							{
+								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+								{
+									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+									g_array_append_val(msr, lcl);
+									if (lcl<xi) xi=lcl;
+									else if (lcl>xf) xf=lcl;
+									strary=g_strsplit_set(contents, "\r\n", 0);
+									sal=g_strv_length(strary);
+									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+									lc=lcib;
+									for (k=kib; k<sal; k++)
 									{
-										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-										g_array_append_val(msr, lcl);
-										if (lcl<xi) xi=lcl;
-										else if (lcl>xf) xf=lcl;
-										strary=g_strsplit_set(contents, "\r\n", 0);
-										sal=g_strv_length(strary);
-										{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-										lc=lcib;
-										for (k=kib; k<sal; k++)
+										if (!strary[k]) continue;
+										g_strchug(strary[k]);
+										if (!g_strcmp0("", strary[k])) continue;
+										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+										if (lc<0) {lc++; continue;}
+										strat=g_strsplit_set(strary[k], "\t,", 0);
+										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+										g_array_append_val(xp, lcl);
+										if (!strat[trc]) lcl=0;
+										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+										g_array_append_val(yp, lcl);
+										g_strfreev(strat);
+										lc++;
+									}
+									g_strfreev(strary);
+									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+									for (j=0; j<n; j++) y[j]=0;
+									for (j=0; j<jdimx; j++)
+									{
+										iv=g_array_index(bsra, gdouble, j);
+										k=0;
+										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+										st=k;
+										iv=g_array_index(bspa, gdouble, j);
+										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+										sp=k-st;
+										if (sp>zp) sp=zp;
+										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+										g_array_append_val(delp, iv);
+										for (k=0; k<sp; k++)
 										{
-											if (!strary[k]) continue;
-											g_strchug(strary[k]);
-											if (!g_strcmp0("", strary[k])) continue;
-											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
-											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-											g_array_append_val(xp, lcl);
-											if (!strat[trc]) lcl=0;
-											else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-											g_array_append_val(yp, lcl);
-											g_strfreev(strat);
-											lc++;
+											clc=g_array_index(yp, gdouble, k+st)-ofs;
+											if (clc<0) y[k+(j*zp)]=log(1-exp(LNTOT*clc));
+											else y[k+(j*zp)]=-G_MAXDOUBLE;
 										}
-										g_strfreev(strary);
-										delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-										for (j=0; j<n; j++) y[j]=0;
-										for (j=0; j<jdimx; j++)
+									}
+									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+									fftw_execute(p);
+									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+									for (j=0; j<jdimx; j++)
+									{
+										vzt=g_array_index(starp, gdouble, j*zp);
+										iv=g_array_index(delp, gdouble, j);
+										if (iv<DZE) idelf=G_MAXDOUBLE;
+										else idelf=1/iv;
+										iv=g_array_index(zwa, gdouble, j)*idelf/2;
+										for (l=1; l<iv; l++)
 										{
-											iv=g_array_index(bsra, gdouble, j);
-											k=0;
-											while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-											st=k;
-											iv=g_array_index(bspa, gdouble, j);
-											while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-											sp=k-st;
-											if (sp>zp) sp=zp;
-											iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-											g_array_append_val(delp, iv);
-											for (k=0; k<sp; k++)
+											ivd=g_array_index(starp, gdouble, l+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+										}
+										if (vzt<DZE) vzt=G_MAXDOUBLE;
+										else vzt=l/vzt;
+										for (k=0; k<kdimx; k++)
+										{
+											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
 											{
-												clc=g_array_index(yp, gdouble, k+st)-ofs;
-												if (clc<0) y[k+(j*zp)]=log(1-exp(LNTOT*clc));
-												else y[k+(j*zp)]=-G_MAXDOUBLE;
+												vt=g_array_index(starp, gdouble, st+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+												phio=-atan2(ivdt, vt);
+												vt=sqrt((vt*vt)+(ivdt*ivdt));
+												{dst=0; pn=0;}
+												for (l=st+1; l<=sp; l++)
+												{
+													ivd=g_array_index(starp, gdouble, l+(j*zp));
+													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+													phi=atan2(ivdt, ivd);
+													phio+=phi;
+													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+													if (phio>G_PI) phio-=(MY_2PI);
+													else if (phio<=NMY_PI) phio+=(MY_2PI);
+													if (l>(tcn-twd+0.5))
+													{
+														if (l<=(tcn+0.5))
+														{
+															tp=(((gdouble) l)-tcn-0.5)/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+														}
+														else if (l<(tcn+twd+0.5))
+														{
+															tp=(tcn+0.5-((gdouble) l))/twd;
+															pn+=++tp;
+															dst+=tp*phio;
+														}
+													}
+													phio=-phi;
+												}
+												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+												else dst/=pn;
+												vt*=vzt/(sp-st+1);
 											}
+											else {vt=0; dst=0;}
+											{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
 										}
-										{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-										fftw_execute(p);
-										starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-										for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-										for (j=0; j<jdimx; j++)
+									}
+									{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
+								}
+								else
+								{
+									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+									{g_free(str); g_error_free(Err);}
+								}
+								{g_free(contents); g_strfreev(strat2);}
+							}
+						}
+					}
+					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBsso+ */
+					{
+						for (m=0; m<g_strv_length(strary2); m++)
+						{
+							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+							{
+								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+								g_array_append_val(msr, lcl);
+								if (lcl<xi) xi=lcl;
+								else if (lcl>xf) xf=lcl;
+								strary=g_strsplit_set(contents, "\r\n", 0);
+								sal=g_strv_length(strary);
+								{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+								lc=lcib;
+								for (k=kib; k<sal; k++)
+								{
+									if (!strary[k]) continue;
+									g_strchug(strary[k]);
+									if (!g_strcmp0("", strary[k])) continue;
+									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+									if (lc<0) {lc++; continue;}
+									strat=g_strsplit_set(strary[k], "\t,", 0);
+									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+									g_array_append_val(xp, lcl);
+									if (!strat[trc]) lcl=0;
+									else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+									g_array_append_val(yp, lcl);
+									g_strfreev(strat);
+									lc++;
+								}
+								g_strfreev(strary);
+								delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+								for (j=0; j<n; j++) y[j]=0;
+								for (j=0; j<jdimx; j++)
+								{
+									iv=g_array_index(bsra, gdouble, j);
+									k=0;
+									while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+									st=k;
+									iv=g_array_index(bspa, gdouble, j);
+									while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+									sp=k-st;
+									if (sp>zp) sp=zp;
+									iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+									g_array_append_val(delp, iv);
+									for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(ofs-g_array_index(yp, gdouble, k+st));
+								}
+								{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+								fftw_execute(p);
+								starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+								for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+								for (j=0; j<jdimx; j++)
+								{
+									vzt=g_array_index(starp, gdouble, j*zp);
+									iv=g_array_index(delp, gdouble, j);
+									if (iv<DZE) idelf=G_MAXDOUBLE;
+									else idelf=1/iv;
+									iv=g_array_index(zwa, gdouble, j)*idelf/2;
+									for (l=1; l<iv; l++)
+									{
+										ivd=g_array_index(starp, gdouble, l+(j*zp));
+										ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+										vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+									}
+									if (vzt<DZE) vzt=G_MAXDOUBLE;
+									else vzt=l/vzt;
+									for (k=0; k<kdimx; k++)
+									{
+										st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+										sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+										tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+										twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+										if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
 										{
-											vzt=g_array_index(starp, gdouble, j*zp);
-											iv=g_array_index(delp, gdouble, j);
-											if (iv<DZE) idelf=G_MAXDOUBLE;
-											else idelf=1/iv;
-											iv=g_array_index(zwa, gdouble, j)*idelf/2;
-											for (l=1; l<iv; l++)
+											vt=g_array_index(starp, gdouble, st+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+											phio=-atan2(ivdt, vt);
+											vt=sqrt((vt*vt)+(ivdt*ivdt));
+											{dst=0; pn=0;}
+											for (l=st+1; l<=sp; l++)
 											{
 												ivd=g_array_index(starp, gdouble, l+(j*zp));
 												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-												vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-											}
-											if (vzt<DZE) vzt=G_MAXDOUBLE;
-											else vzt=l/vzt;
-											for (k=0; k<kdimx; k++)
-											{
-												st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-												sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-												tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-												twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-												if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+												phi=atan2(ivdt, ivd);
+												phio+=phi;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												if (phio>G_PI) phio-=(MY_2PI);
+												else if (phio<=NMY_PI) phio+=(MY_2PI);
+												if (l>(tcn-twd+0.5))
 												{
-													vt=g_array_index(starp, gdouble, st+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-													phio=-atan2(ivdt, vt);
-													vt=sqrt((vt*vt)+(ivdt*ivdt));
-													{dst=0; pn=0;}
-													for (l=st+1; l<=sp; l++)
+													if (l<=(tcn+0.5))
 													{
-														ivd=g_array_index(starp, gdouble, l+(j*zp));
-														ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-														phi=atan2(ivdt, ivd);
-														phio+=phi;
-														vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-														if (phio>G_PI) phio-=(MY_2PI);
-														else if (phio<=NMY_PI) phio+=(MY_2PI);
-														if (l>(tcn-twd+0.5))
-														{
-															if (l<=(tcn+0.5))
-															{
-																tp=(((gdouble) l)-tcn-0.5)/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-															}
-															else if (l<(tcn+twd+0.5))
-															{
-																tp=(tcn+0.5-((gdouble) l))/twd;
-																pn+=++tp;
-																dst+=tp*phio;
-															}
-														}
-														phio=-phi;
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
 													}
-													pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-													if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-													else dst/=pn;
-													vt*=vzt/(sp-st+1);
+													else if (l<(tcn+twd+0.5))
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+													}
 												}
-												else {vt=0; dst=0;}
-												{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
+												phio=-phi;
 											}
+											pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+											if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+											else dst/=pn;
+											vt*=vzt/(sp-st+1);
 										}
-										{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
+										else {vt=0; dst=0;}
+										{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
 									}
-									else
-									{
-										str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-										gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-										{g_free(str); g_error_free(Err);}
-									}
-									{g_free(contents); g_strfreev(strat2);}
 								}
+								{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
 							}
-						}
-						else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -RdBsso+ */
-						{
-							for (m=0; m<g_strv_length(strary2); m++)
+							else
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-								{
-									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-									g_array_append_val(msr, lcl);
-									if (lcl<xi) xi=lcl;
-									else if (lcl>xf) xf=lcl;
-									strary=g_strsplit_set(contents, "\r\n", 0);
-									sal=g_strv_length(strary);
-									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-									lc=lcib;
-									for (k=kib; k<sal; k++)
-									{
-										if (!strary[k]) continue;
-										g_strchug(strary[k]);
-										if (!g_strcmp0("", strary[k])) continue;
-										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
-										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-										g_array_append_val(xp, lcl);
-										if (!strat[trc]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-										g_array_append_val(yp, lcl);
-										g_strfreev(strat);
-										lc++;
-									}
-									g_strfreev(strary);
-									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-									for (j=0; j<n; j++) y[j]=0;
-									for (j=0; j<jdimx; j++)
-									{
-										iv=g_array_index(bsra, gdouble, j);
-										k=0;
-										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-										st=k;
-										iv=g_array_index(bspa, gdouble, j);
-										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-										sp=k-st;
-										if (sp>zp) sp=zp;
-										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-										g_array_append_val(delp, iv);
-										for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(ofs-g_array_index(yp, gdouble, k+st));
-									}
-									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-									fftw_execute(p);
-									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-									for (j=0; j<jdimx; j++)
-									{
-										vzt=g_array_index(starp, gdouble, j*zp);
-										iv=g_array_index(delp, gdouble, j);
-										if (iv<DZE) idelf=G_MAXDOUBLE;
-										else idelf=1/iv;
-										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										for (l=1; l<iv; l++)
-										{
-											ivd=g_array_index(starp, gdouble, l+(j*zp));
-											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-										}
-										if (vzt<DZE) vzt=G_MAXDOUBLE;
-										else vzt=l/vzt;
-										for (k=0; k<kdimx; k++)
-										{
-											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
-											{
-												vt=g_array_index(starp, gdouble, st+(j*zp));
-												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-												phio=-atan2(ivdt, vt);
-												vt=sqrt((vt*vt)+(ivdt*ivdt));
-												{dst=0; pn=0;}
-												for (l=st+1; l<=sp; l++)
-												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													phi=atan2(ivdt, ivd);
-													phio+=phi;
-													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													if (phio>G_PI) phio-=(MY_2PI);
-													else if (phio<=NMY_PI) phio+=(MY_2PI);
-													if (l>(tcn-twd+0.5))
-													{
-														if (l<=(tcn+0.5))
-														{
-															tp=(((gdouble) l)-tcn-0.5)/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
-														else if (l<(tcn+twd+0.5))
-														{
-															tp=(tcn+0.5-((gdouble) l))/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
-													}
-													phio=-phi;
-												}
-												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-												else dst/=pn;
-												vt*=vzt/(sp-st+1);
-											}
-											else {vt=0; dst=0;}
-											{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
-										}
-									}
-									{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
-								}
-								else
-								{
-									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-									{g_free(str); g_error_free(Err);}
-								}
-								{g_free(contents); g_strfreev(strat2);}
+								str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								{g_free(str); g_error_free(Err);}
 							}
-						}
-						else /* +RdBsso+ */
-						{
-							for (m=0; m<g_strv_length(strary2); m++)
-							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-								{
-									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-									g_array_append_val(msr, lcl);
-									if (lcl<xi) xi=lcl;
-									else if (lcl>xf) xf=lcl;
-									strary=g_strsplit_set(contents, "\r\n", 0);
-									sal=g_strv_length(strary);
-									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-									lc=lcib;
-									for (k=kib; k<sal; k++)
-									{
-										if (!strary[k]) continue;
-										g_strchug(strary[k]);
-										if (!g_strcmp0("", strary[k])) continue;
-										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
-										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-										g_array_append_val(xp, lcl);
-										if (!strat[trc]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-										g_array_append_val(yp, lcl);
-										g_strfreev(strat);
-										lc++;
-									}
-									g_strfreev(strary);
-									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-									for (j=0; j<n; j++) y[j]=0;
-									for (j=0; j<jdimx; j++)
-									{
-										iv=g_array_index(bsra, gdouble, j);
-										k=0;
-										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-										st=k;
-										iv=g_array_index(bspa, gdouble, j);
-										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-										sp=k-st;
-										if (sp>zp) sp=zp;
-										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-										g_array_append_val(delp, iv);
-										for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(g_array_index(yp, gdouble, k+st)-ofs);
-									}
-									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-									fftw_execute(p);
-									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-									for (j=0; j<jdimx; j++)
-									{
-										vzt=g_array_index(starp, gdouble, j*zp);
-										iv=g_array_index(delp, gdouble, j);
-										if (iv<DZE) idelf=G_MAXDOUBLE;
-										else idelf=1/iv;
-										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										for (l=1; l<iv; l++)
-										{
-											ivd=g_array_index(starp, gdouble, l+(j*zp));
-											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-										}
-										if (vzt<DZE) vzt=G_MAXDOUBLE;
-										else vzt=l/vzt;
-										for (k=0; k<kdimx; k++)
-										{
-											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
-											{
-												vt=g_array_index(starp, gdouble, st+(j*zp));
-												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-												phio=-atan2(ivdt, vt);
-												vt=sqrt((vt*vt)+(ivdt*ivdt));
-												{dst=0; pn=0;}
-												for (l=st+1; l<=sp; l++)
-												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													phi=atan2(ivdt, ivd);
-													phio+=phi;
-													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													if (phio>G_PI) phio-=(MY_2PI);
-													else if (phio<=NMY_PI) phio+=(MY_2PI);
-													if (l>(tcn-twd+0.5))
-													{
-														if (l<=(tcn+0.5))
-														{
-															tp=(((gdouble) l)-tcn-0.5)/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
-														else if (l<(tcn+twd+0.5))
-														{
-															tp=(tcn+0.5-((gdouble) l))/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
-													}
-													phio=-phi;
-												}
-												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-												else dst/=pn;
-												vt*=vzt/(sp-st+1);
-											}
-											else {vt=0; dst=0;}
-											{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
-										}
-									}
-									{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
-								}
-								else
-								{
-									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-									{g_free(str); g_error_free(Err);}
-								}
-								{g_free(contents); g_strfreev(strat2);}
-							}
+							{g_free(contents); g_strfreev(strat2);}
 						}
 					}
-					else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlsso+ +Tlsso+ */
+					else /* +RdBsso+ */
 					{
-						if ((ofs<DZE)&&(ofs>NZE))
+						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							str=g_strdup(_("Offset must be nonzero for linear measurements."));
-							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-							g_free(str);
-						}
-						else
-						{
-							for (m=0; m<g_strv_length(strary2); m++)
+							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+								g_array_append_val(msr, lcl);
+								if (lcl<xi) xi=lcl;
+								else if (lcl>xf) xf=lcl;
+								strary=g_strsplit_set(contents, "\r\n", 0);
+								sal=g_strv_length(strary);
+								{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+								lc=lcib;
+								for (k=kib; k<sal; k++)
 								{
-									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-									g_array_append_val(msr, lcl);
-									if (lcl<xi) xi=lcl;
-									else if (lcl>xf) xf=lcl;
-									strary=g_strsplit_set(contents, "\r\n", 0);
-									sal=g_strv_length(strary);
-									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-									lc=lcib;
-									for (k=kib; k<sal; k++)
+									if (!strary[k]) continue;
+									g_strchug(strary[k]);
+									if (!g_strcmp0("", strary[k])) continue;
+									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+									if (lc<0) {lc++; continue;}
+									strat=g_strsplit_set(strary[k], "\t,", 0);
+									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+									g_array_append_val(xp, lcl);
+									if (!strat[trc]) lcl=0;
+									else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+									g_array_append_val(yp, lcl);
+									g_strfreev(strat);
+									lc++;
+								}
+								g_strfreev(strary);
+								delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+								for (j=0; j<n; j++) y[j]=0;
+								for (j=0; j<jdimx; j++)
+								{
+									iv=g_array_index(bsra, gdouble, j);
+									k=0;
+									while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+									st=k;
+									iv=g_array_index(bspa, gdouble, j);
+									while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+									sp=k-st;
+									if (sp>zp) sp=zp;
+									iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+									g_array_append_val(delp, iv);
+									for (k=0; k<sp; k++) y[k+(j*zp)]=0.1*(g_array_index(yp, gdouble, k+st)-ofs);
+								}
+								{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+								fftw_execute(p);
+								starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+								for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+								for (j=0; j<jdimx; j++)
+								{
+									vzt=g_array_index(starp, gdouble, j*zp);
+									iv=g_array_index(delp, gdouble, j);
+									if (iv<DZE) idelf=G_MAXDOUBLE;
+									else idelf=1/iv;
+									iv=g_array_index(zwa, gdouble, j)*idelf/2;
+									for (l=1; l<iv; l++)
 									{
-										if (!strary[k]) continue;
-										g_strchug(strary[k]);
-										if (!g_strcmp0("", strary[k])) continue;
-										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
-										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-										g_array_append_val(xp, lcl);
-										if (!strat[trc]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-										g_array_append_val(yp, lcl);
-										g_strfreev(strat);
-										lc++;
+										ivd=g_array_index(starp, gdouble, l+(j*zp));
+										ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+										vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
 									}
-									g_strfreev(strary);
-									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-									for (j=0; j<n; j++) y[j]=0;
-									for (j=0; j<jdimx; j++)
+									if (vzt<DZE) vzt=G_MAXDOUBLE;
+									else vzt=l/vzt;
+									for (k=0; k<kdimx; k++)
 									{
-										iv=g_array_index(bsra, gdouble, j);
-										k=0;
-										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-										st=k;
-										iv=g_array_index(bspa, gdouble, j);
-										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-										sp=k-st;
-										if (sp>zp) sp=zp;
-										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-										g_array_append_val(delp, iv);
-										for (k=0; k<sp; k++)
+										st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+										sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+										tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+										twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+										if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
 										{
-											clc=1-(g_array_index(yp, gdouble, k+st)/ofs);
-											if (clc>0) y[k+(j*zp)]=log(clc);
-											else y[k+(j*zp)]=-G_MAXDOUBLE;
-										}
-									}
-									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-									fftw_execute(p);
-									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-									for (j=0; j<jdimx; j++)
-									{
-										vzt=g_array_index(starp, gdouble, j*zp);
-										iv=g_array_index(delp, gdouble, j);
-										if (iv<DZE) idelf=G_MAXDOUBLE;
-										else idelf=1/iv;
-										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										for (l=1; l<iv; l++)
-										{
-											ivd=g_array_index(starp, gdouble, l+(j*zp));
-											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-										}
-										if (vzt<DZE) vzt=G_MAXDOUBLE;
-										else vzt=l/vzt;
-										for (k=0; k<kdimx; k++)
-										{
-											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+											vt=g_array_index(starp, gdouble, st+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+											phio=-atan2(ivdt, vt);
+											vt=sqrt((vt*vt)+(ivdt*ivdt));
+											{dst=0; pn=0;}
+											for (l=st+1; l<=sp; l++)
 											{
-												vt=g_array_index(starp, gdouble, st+(j*zp));
-												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-												phio=-atan2(ivdt, vt);
-												vt=sqrt((vt*vt)+(ivdt*ivdt));
-												{dst=0; pn=0;}
-												for (l=st+1; l<=sp; l++)
+												ivd=g_array_index(starp, gdouble, l+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+												phi=atan2(ivdt, ivd);
+												phio+=phi;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												if (phio>G_PI) phio-=(MY_2PI);
+												else if (phio<=NMY_PI) phio+=(MY_2PI);
+												if (l>(tcn-twd+0.5))
 												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													phi=atan2(ivdt, ivd);
-													phio+=phi;
-													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													if (phio>G_PI) phio-=(MY_2PI);
-													else if (phio<=NMY_PI) phio+=(MY_2PI);
-													if (l>(tcn-twd+0.5))
+													if (l<=(tcn+0.5))
 													{
-														if (l<=(tcn+0.5))
-														{
-															tp=(((gdouble) l)-tcn-0.5)/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
-														else if (l<(tcn+twd+0.5))
-														{
-															tp=(tcn+0.5-((gdouble) l))/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
 													}
-													phio=-phi;
+													else if (l<(tcn+twd+0.5))
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+													}
 												}
-												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-												else dst/=pn;
-												vt*=vzt/(sp-st+1);
+												phio=-phi;
 											}
-											else {vt=0; dst=0;}
-											{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
+											pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+											if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+											else dst/=pn;
+											vt*=vzt/(sp-st+1);
 										}
+										else {vt=0; dst=0;}
+										{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
 									}
-									{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
 								}
-								else
-								{
-									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-									{g_free(str); g_error_free(Err);}
-								}
-								{g_free(contents); g_strfreev(strat2);}
+								{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
 							}
-						}
-					}
-					else /* -Rlsso+ +Rlsso+ */
-					{
-						if ((ofs<DZE)&&(ofs>NZE))
-						{
-							str=g_strdup(_("Offset must be nonzero for linear measurements."));
-							gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-							g_free(str);
-						}
-						else
-						{
-							for (m=0; m<g_strv_length(strary2); m++)
+							else
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
-								{
-									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-									g_array_append_val(msr, lcl);
-									if (lcl<xi) xi=lcl;
-									else if (lcl>xf) xf=lcl;
-									strary=g_strsplit_set(contents, "\r\n", 0);
-									sal=g_strv_length(strary);
-									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-									lc=lcib;
-									for (k=kib; k<sal; k++)
-									{
-										if (!strary[k]) continue;
-										g_strchug(strary[k]);
-										if (!g_strcmp0("", strary[k])) continue;
-										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
-										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-										g_array_append_val(xp, lcl);
-										if (!strat[trc]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-										g_array_append_val(yp, lcl);
-										g_strfreev(strat);
-										lc++;
-									}
-									g_strfreev(strary);
-									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-									for (j=0; j<n; j++) y[j]=0;
-									for (j=0; j<jdimx; j++)
-									{
-										iv=g_array_index(bsra, gdouble, j);
-										k=0;
-										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-										st=k;
-										iv=g_array_index(bspa, gdouble, j);
-										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-										sp=k-st;
-										if (sp>zp) sp=zp;
-										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-										g_array_append_val(delp, iv);
-										for (k=0; k<sp; k++)
-										{
-											clc=g_array_index(yp, gdouble, k+st)/ofs;
-											if (clc>0) y[k+(j*zp)]=log(clc);
-											else y[k+(j*zp)]=-G_MAXDOUBLE;
-										}
-									}
-									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-									fftw_execute(p);
-									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-									for (j=0; j<jdimx; j++)
-									{
-										vzt=g_array_index(starp, gdouble, j*zp);
-										iv=g_array_index(delp, gdouble, j);
-										if (iv<DZE) idelf=G_MAXDOUBLE;
-										else idelf=1/iv;
-										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										for (l=1; l<iv; l++)
-										{
-											ivd=g_array_index(starp, gdouble, l+(j*zp));
-											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-										}
-										if (vzt<DZE) vzt=G_MAXDOUBLE;
-										else vzt=l/vzt;
-										for (k=0; k<kdimx; k++)
-										{
-											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
-											{
-												vt=g_array_index(starp, gdouble, st+(j*zp));
-												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-												phio=-atan2(ivdt, vt);
-												vt=sqrt((vt*vt)+(ivdt*ivdt));
-												{dst=0; pn=0;}
-												for (l=st+1; l<=sp; l++)
-												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													phi=atan2(ivdt, ivd);
-													phio+=phi;
-													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													if (phio>G_PI) phio-=(MY_2PI);
-													else if (phio<=NMY_PI) phio+=(MY_2PI);
-													if (l>(tcn-twd+0.5))
-													{
-														if (l<=(tcn+0.5))
-														{
-															tp=(((gdouble) l)-tcn-0.5)/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
-														else if (l<(tcn+twd+0.5))
-														{
-															tp=(tcn+0.5-((gdouble) l))/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
-													}
-													phio=-phi;
-												}
-												pn*=NMY_2PI*g_array_index(delp, gdouble, j);
-												if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
-												else dst/=pn;
-												vt*=vzt/(sp-st+1);
-											}
-											else {vt=0; dst=0;}
-											{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
-										}
-									}
-									{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
-								}
-								else
-								{
-									str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
-									gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-									{g_free(str); g_error_free(Err);}
-								}
-								{g_free(contents); g_strfreev(strat2);}
+								str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								{g_free(str); g_error_free(Err);}
 							}
+							{g_free(contents); g_strfreev(strat2);}
 						}
 					}
 				}
-				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
+				else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) /* -Tlsso+ +Tlsso+ */
 				{
-					ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
-					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
+					if ((ofs<DZE)&&(ofs>NZE))
 					{
-						if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o+ */
+						str=g_strdup(_("Offset must be nonzero for linear measurements."));
+						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+						g_free(str);
+					}
+					else
+					{
+						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							for (m=0; m<g_strv_length(strary2); m++)
+							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
-								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+								g_array_append_val(msr, lcl);
+								if (lcl<xi) xi=lcl;
+								else if (lcl>xf) xf=lcl;
+								strary=g_strsplit_set(contents, "\r\n", 0);
+								sal=g_strv_length(strary);
+								{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+								lc=lcib;
+								for (k=kib; k<sal; k++)
 								{
-									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
-									g_array_append_val(msr, lcl);
-									if (lcl<xi) xi=lcl;
-									else if (lcl>xf) xf=lcl;
-									strary=g_strsplit_set(contents, "\r\n", 0);
-									sal=g_strv_length(strary);
-									{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-									lc=lcib;
-									for (k=kib; k<sal; k++)
+									if (!strary[k]) continue;
+									g_strchug(strary[k]);
+									if (!g_strcmp0("", strary[k])) continue;
+									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+									if (lc<0) {lc++; continue;}
+									strat=g_strsplit_set(strary[k], "\t,", 0);
+									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+									g_array_append_val(xp, lcl);
+									if (!strat[trc]) lcl=0;
+									else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+									g_array_append_val(yp, lcl);
+									g_strfreev(strat);
+									lc++;
+								}
+								g_strfreev(strary);
+								delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+								for (j=0; j<n; j++) y[j]=0;
+								for (j=0; j<jdimx; j++)
+								{
+									iv=g_array_index(bsra, gdouble, j);
+									k=0;
+									while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+									st=k;
+									iv=g_array_index(bspa, gdouble, j);
+									while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+									sp=k-st;
+									if (sp>zp) sp=zp;
+									iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+									g_array_append_val(delp, iv);
+									for (k=0; k<sp; k++)
 									{
-										if (!strary[k]) continue;
-										g_strchug(strary[k]);
-										if (!g_strcmp0("", strary[k])) continue;
-										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
-										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
-										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-										g_array_append_val(xp, lcl);
-										if (!strat[trc]) lcl=0;
-										else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
-										g_array_append_val(yp, lcl);
-										g_strfreev(strat);
-										lc++;
+										clc=1-(g_array_index(yp, gdouble, k+st)/ofs);
+										if (clc>0) y[k+(j*zp)]=log(clc);
+										else y[k+(j*zp)]=-G_MAXDOUBLE;
 									}
-									g_strfreev(strary);
-									delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
-									for (j=0; j<n; j++) y[j]=0;
-									for (j=0; j<jdimx; j++)
+								}
+								{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+								fftw_execute(p);
+								starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+								for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+								for (j=0; j<jdimx; j++)
+								{
+									vzt=g_array_index(starp, gdouble, j*zp);
+									iv=g_array_index(delp, gdouble, j);
+									if (iv<DZE) idelf=G_MAXDOUBLE;
+									else idelf=1/iv;
+									iv=g_array_index(zwa, gdouble, j)*idelf/2;
+									for (l=1; l<iv; l++)
 									{
-										iv=g_array_index(bsra, gdouble, j);
-										k=0;
-										while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
-										st=k;
-										iv=g_array_index(bspa, gdouble, j);
-										while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
-										sp=k-st;
-										if (sp>zp) sp=zp;
-										iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
-										g_array_append_val(delp, iv);
-										for (k=0; k<sp; k++) y[k+(j*zp)]=1-exp(LNTOT*(ofs-g_array_index(yp, gdouble, k+st)));
+										ivd=g_array_index(starp, gdouble, l+(j*zp));
+										ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+										vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
 									}
-									{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
-									fftw_execute(p);
-									starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
-									for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
-									for (j=0; j<jdimx; j++)
+									if (vzt<DZE) vzt=G_MAXDOUBLE;
+									else vzt=l/vzt;
+									for (k=0; k<kdimx; k++)
 									{
-										vzt=g_array_index(starp, gdouble, j*zp);
-										iv=g_array_index(delp, gdouble, j);
-										if (iv<DZE) idelf=G_MAXDOUBLE;
-										else idelf=1/iv;
-										iv=g_array_index(zwa, gdouble, j)*idelf/2;
-										for (l=1; l<iv; l++)
+										st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+										sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+										tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+										twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+										if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
 										{
-											ivd=g_array_index(starp, gdouble, l+(j*zp));
-											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-											vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-										}
-										if (vzt<DZE) vzt=G_MAXDOUBLE;
-										else vzt=l/vzt;
-										for (k=0; k<kdimx; k++)
-										{
-											st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
-											sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
-											tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
-											twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
-											if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+											vt=g_array_index(starp, gdouble, st+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+											phio=-atan2(ivdt, vt);
+											vt=sqrt((vt*vt)+(ivdt*ivdt));
+											{dst=0; pn=0;}
+											for (l=st+1; l<=sp; l++)
 											{
-												vt=g_array_index(starp, gdouble, st+(j*zp));
-												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
-												phio=-atan2(ivdt, vt);
-												vt=sqrt((vt*vt)+(ivdt*ivdt));
-												{dst=0; pn=0;}
-												for (l=st+1; l<=sp; l++)
+												ivd=g_array_index(starp, gdouble, l+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+												phi=atan2(ivdt, ivd);
+												phio+=phi;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												if (phio>G_PI) phio-=(MY_2PI);
+												else if (phio<=NMY_PI) phio+=(MY_2PI);
+												if (l>(tcn-twd+0.5))
 												{
-													ivd=g_array_index(starp, gdouble, l+(j*zp));
-													ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
-													phi=atan2(ivdt, ivd);
-													phio+=phi;
-													vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
-													if (phio>G_PI) phio-=(MY_2PI);
-													else if (phio<=NMY_PI) phio+=(MY_2PI);
-													if (l>(tcn-twd+0.5))
+													if (l<=(tcn+0.5))
 													{
-														if (l<=(tcn+0.5))
-														{
-															tp=(((gdouble) l)-tcn-0.5)/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
-														else if (l<(tcn+twd+0.5))
-														{
-															tp=(tcn+0.5-((gdouble) l))/twd;
-															pn+=++tp;
-															dst+=tp*phio;
-														}
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
 													}
-													phio=-phi;
+													else if (l<(tcn+twd+0.5))
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+													}
+												}
+												phio=-phi;
+											}
+											pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+											if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+											else dst/=pn;
+											vt*=vzt/(sp-st+1);
+										}
+										else {vt=0; dst=0;}
+										{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
+									}
+								}
+								{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
+							}
+							else
+							{
+								str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								{g_free(str); g_error_free(Err);}
+							}
+							{g_free(contents); g_strfreev(strat2);}
+						}
+					}
+				}
+				else /* -Rlsso+ +Rlsso+ */
+				{
+					if ((ofs<DZE)&&(ofs>NZE))
+					{
+						str=g_strdup(_("Offset must be nonzero for linear measurements."));
+						gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+						g_free(str);
+					}
+					else
+					{
+						for (m=0; m<g_strv_length(strary2); m++)
+						{
+							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+							{
+								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+								g_array_append_val(msr, lcl);
+								if (lcl<xi) xi=lcl;
+								else if (lcl>xf) xf=lcl;
+								strary=g_strsplit_set(contents, "\r\n", 0);
+								sal=g_strv_length(strary);
+								{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+								lc=lcib;
+								for (k=kib; k<sal; k++)
+								{
+									if (!strary[k]) continue;
+									g_strchug(strary[k]);
+									if (!g_strcmp0("", strary[k])) continue;
+									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+									if (lc<0) {lc++; continue;}
+									strat=g_strsplit_set(strary[k], "\t,", 0);
+									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+									g_array_append_val(xp, lcl);
+									if (!strat[trc]) lcl=0;
+									else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+									g_array_append_val(yp, lcl);
+									g_strfreev(strat);
+									lc++;
+								}
+								g_strfreev(strary);
+								delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+								for (j=0; j<n; j++) y[j]=0;
+								for (j=0; j<jdimx; j++)
+								{
+									iv=g_array_index(bsra, gdouble, j);
+									k=0;
+									while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+									st=k;
+									iv=g_array_index(bspa, gdouble, j);
+									while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+									sp=k-st;
+									if (sp>zp) sp=zp;
+									iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+									g_array_append_val(delp, iv);
+									for (k=0; k<sp; k++)
+									{
+										clc=g_array_index(yp, gdouble, k+st)/ofs;
+										if (clc>0) y[k+(j*zp)]=log(clc);
+										else y[k+(j*zp)]=-G_MAXDOUBLE;
+									}
+								}
+								{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+								fftw_execute(p);
+								starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+								for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+								for (j=0; j<jdimx; j++)
+								{
+									vzt=g_array_index(starp, gdouble, j*zp);
+									iv=g_array_index(delp, gdouble, j);
+									if (iv<DZE) idelf=G_MAXDOUBLE;
+									else idelf=1/iv;
+									iv=g_array_index(zwa, gdouble, j)*idelf/2;
+									for (l=1; l<iv; l++)
+									{
+										ivd=g_array_index(starp, gdouble, l+(j*zp));
+										ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+										vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+									}
+									if (vzt<DZE) vzt=G_MAXDOUBLE;
+									else vzt=l/vzt;
+									for (k=0; k<kdimx; k++)
+									{
+										st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+										sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+										tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+										twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+										if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+										{
+											vt=g_array_index(starp, gdouble, st+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+											phio=-atan2(ivdt, vt);
+											vt=sqrt((vt*vt)+(ivdt*ivdt));
+											{dst=0; pn=0;}
+											for (l=st+1; l<=sp; l++)
+											{
+												ivd=g_array_index(starp, gdouble, l+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+												phi=atan2(ivdt, ivd);
+												phio+=phi;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												if (phio>G_PI) phio-=(MY_2PI);
+												else if (phio<=NMY_PI) phio+=(MY_2PI);
+												if (l>(tcn-twd+0.5))
+												{
+													if (l<=(tcn+0.5))
+													{
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+													}
+													else if (l<(tcn+twd+0.5))
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+													}
+												}
+												phio=-phi;
+											}
+											pn*=NMY_2PI*g_array_index(delp, gdouble, j);
+											if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
+											else dst/=pn;
+											vt*=vzt/(sp-st+1);
+										}
+										else {vt=0; dst=0;}
+										{g_array_append_val(vis, vt); g_array_append_val(doms, dst);}
+									}
+								}
+								{g_array_free(delp, TRUE); g_array_free(starp, TRUE);}
+							}
+							else
+							{
+								str=g_strdup_printf(_("Loading failed for file: %s, Error: %s."), fin, (gchar *) Err);
+								gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+								{g_free(str); g_error_free(Err);}
+							}
+							{g_free(contents); g_strfreev(strat2);}
+						}
+					}
+				}
+			}
+			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs)))
+			{
+				ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
+				if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans)))
+				{
+					if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) /* -TdB0o+ */
+					{
+						for (m=0; m<g_strv_length(strary2); m++)
+						{
+							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
+							{
+								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
+								g_array_append_val(msr, lcl);
+								if (lcl<xi) xi=lcl;
+								else if (lcl>xf) xf=lcl;
+								strary=g_strsplit_set(contents, "\r\n", 0);
+								sal=g_strv_length(strary);
+								{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+								lc=lcib;
+								for (k=kib; k<sal; k++)
+								{
+									if (!strary[k]) continue;
+									g_strchug(strary[k]);
+									if (!g_strcmp0("", strary[k])) continue;
+									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
+									if (lc<0) {lc++; continue;}
+									strat=g_strsplit_set(strary[k], "\t,", 0);
+									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+									g_array_append_val(xp, lcl);
+									if (!strat[trc]) lcl=0;
+									else lcl=g_ascii_strtod(g_strstrip(strat[trc]), NULL);
+									g_array_append_val(yp, lcl);
+									g_strfreev(strat);
+									lc++;
+								}
+								g_strfreev(strary);
+								delp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
+								for (j=0; j<n; j++) y[j]=0;
+								for (j=0; j<jdimx; j++)
+								{
+									iv=g_array_index(bsra, gdouble, j);
+									k=0;
+									while ((k<lc)&&(iv>g_array_index(xp, gdouble, k))) k++;
+									st=k;
+									iv=g_array_index(bspa, gdouble, j);
+									while ((k<lc)&&(iv>=g_array_index(xp, gdouble, k))) k++;
+									sp=k-st;
+									if (sp>zp) sp=zp;
+									iv=(sp-1)/(zp*(g_array_index(xp, gdouble, sp+st-1)-g_array_index(xp, gdouble, st)));
+									g_array_append_val(delp, iv);
+									for (k=0; k<sp; k++) y[k+(j*zp)]=1-exp(LNTOT*(ofs-g_array_index(yp, gdouble, k+st)));
+								}
+								{g_array_free(xp, TRUE); g_array_free(yp, TRUE);}
+								fftw_execute(p);
+								starp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);
+								for (j=0; j<n; j++) g_array_append_val(starp, star[j]);
+								for (j=0; j<jdimx; j++)
+								{
+									vzt=g_array_index(starp, gdouble, j*zp);
+									iv=g_array_index(delp, gdouble, j);
+									if (iv<DZE) idelf=G_MAXDOUBLE;
+									else idelf=1/iv;
+									iv=g_array_index(zwa, gdouble, j)*idelf/2;
+									for (l=1; l<iv; l++)
+									{
+										ivd=g_array_index(starp, gdouble, l+(j*zp));
+										ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+										vzt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+									}
+									if (vzt<DZE) vzt=G_MAXDOUBLE;
+									else vzt=l/vzt;
+									for (k=0; k<kdimx; k++)
+									{
+										st=(gint) ceil(g_array_index(isra, gdouble, j+(k*jdimx))*idelf);
+										sp=(gint) floor(g_array_index(ispa, gdouble, j+(k*jdimx))*idelf);
+										tcn=g_array_index(tca, gdouble, j+(k*jdimx))*idelf;
+										twd=g_array_index(twa, gdouble, j+(k*jdimx))*idelf/2;
+										if ((st<((zp/2)-1))&&(sp<(zp/2))&&((sp-st)>0))
+										{
+											vt=g_array_index(starp, gdouble, st+(j*zp));
+											ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-st);
+											phio=-atan2(ivdt, vt);
+											vt=sqrt((vt*vt)+(ivdt*ivdt));
+											{dst=0; pn=0;}
+											for (l=st+1; l<=sp; l++)
+											{
+												ivd=g_array_index(starp, gdouble, l+(j*zp));
+												ivdt=g_array_index(starp, gdouble, ((j+1)*zp)-l);
+												phi=atan2(ivdt, ivd);
+												phio+=phi;
+												vt+=sqrt((ivd*ivd)+(ivdt*ivdt));
+												if (phio>G_PI) phio-=(MY_2PI);
+												else if (phio<=NMY_PI) phio+=(MY_2PI);
+												if (l>(tcn-twd+0.5))
+												{
+													if (l<=(tcn+0.5))
+													{
+														tp=(((gdouble) l)-tcn-0.5)/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+													}
+													else if (l<(tcn+twd+0.5))
+													{
+														tp=(tcn+0.5-((gdouble) l))/twd;
+														pn+=++tp;
+														dst+=tp*phio;
+													}
+												}
+												phio=-phi;
 											}
 											pn*=NMY_2PI*g_array_index(delp, gdouble, j);
 											if ((pn<DZE)&&(pn>NZE)) dst=G_MAXDOUBLE;
