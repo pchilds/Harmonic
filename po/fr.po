@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk-harmonic 0.1.0\n"
 "Report-Msgid-Bugs-To: pchilds@physics.org\n"
 "POT-Creation-Date: 2011-05-31 10:45+0300\n"
-"PO-Revision-Date: 2011-05-31 11:26+0300\n"
+"PO-Revision-Date: 2011-06-23 22:12+0300\n"
 "Last-Translator: Matthieu Bellec <>\n"
 "Language-Team: French <>\n"
 "MIME-Version: 1.0\n"
@@ -26,12 +26,12 @@ msgstr "Analyseur de spectre harmonique"
 #. Menu option to load a previous state of the program.
 #: src/main.c:111
 msgid "Restore Session"
-msgstr "Restaurer le fichier de session"
+msgstr "Restaurer la session"
 
 #. Menu option to save the current state of the program.
 #: src/main.c:115
 msgid "Save Session"
-msgstr "Sauver le fichier de session"
+msgstr "Sauvegarder la session"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various file related menu options.
@@ -43,19 +43,19 @@ msgstr "_Fichier"
 #. seperated values.
 #: src/main.c:150
 msgid "Raw Delimited Data"
-msgstr "Données délimitées brutes"
+msgstr "Données brutes délimitées"
 
 #. Menu option for loading data where only the magnitude component is
 #. available.
 #: src/main.c:157
 msgid "Magnitude Only"
-msgstr "Grandeur que"
+msgstr "Amplitude seulement"
 
 #. Menu option for loading data where both magnitude and phase components
 #. are available.
 #: src/main.c:161
 msgid "Magnitude and Phase"
-msgstr "Grandeur et la phase"
+msgstr "Amplitude et phase"
 
 #. Button to select saving the data in real and imaginary values format.
 #. Add a "\n" to give a new line if space is cramped.
@@ -66,7 +66,7 @@ msgstr "Réelle/Imaginaire"
 #. Menu option to select what format the data files are in.
 #: src/main.c:170
 msgid "Data Format:"
-msgstr "Format de données:"
+msgstr "Format des données:"
 
 #. The trace within the file to use as data for the vertical axis (as the
 #. horizontal axis is the first column trace 1 will be column 2 etc.
@@ -175,8 +175,8 @@ msgid ""
 "Apply correction\n"
 "to Window edges?"
 msgstr ""
-"Appliquer à la fenêtre\n"
-"de correction bords?"
+"Appliquer les corrections\n"
+"aux bords des fenêtres?"
 
 #. Select this if you want the program to automatically adjust the triangle
 #. centre and width parameters.
@@ -194,13 +194,13 @@ msgstr "Calculer le chirp?"
 #. (Batch processing initiates at the next File->Open menu selection).
 #: src/main.c:267
 msgid "Batch Process Data?"
-msgstr "Données de traitement par lots?"
+msgstr "Traiter les données par lots?"
 
 #. Select this to automatically change the offset value based on how much
 #. the rightmost edge of the spectrum is changing.
 #: src/main.c:271
 msgid "Autotrack Offset?"
-msgstr "Automatiser décalage"
+msgstr "Automatiser le décalage"
 
 #. The "_" here precedes whichever letter the user is to press with alt as
 #. a shortcut. Menu heading for various lesser used menu options.
@@ -242,12 +242,12 @@ msgstr "Décalage:"
 #. padding.
 #: src/main.c:341
 msgid "Zero Padding 2^:"
-msgstr "zero padding 2^:"
+msgstr "Bourrage de zéros 2^:"
 
 #. Index of values to take potentially multiple windows over the base domain.
 #: src/main.c:348 src/main.c:408
 msgid "j index:"
-msgstr "index j:"
+msgstr "indice j:"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed. Reset the values on this page so
@@ -258,7 +258,7 @@ msgid ""
 "Arrays"
 msgstr ""
 "Réinitialiser\n"
-"les rangees"
+"les rangées"
 
 #. Perform a harmonic transformation of the data (if the Fourier basis is
 #. selected, then this corresponds to the Fourier transform).
@@ -274,12 +274,12 @@ msgstr "Spectre"
 #. Initial value of the inverse domain to select a windowed region to process.
 #: src/main.c:368
 msgid "Inverse Spectrum Start:"
-msgstr "Début du spectre inverse:"
+msgstr "Début du spectre inversé:"
 
 #. Final value of the inverse domain to select a windowed region to process.
 #: src/main.c:376
 msgid "Inverse Spectrum Stop:"
-msgstr "Fin du spectre inverse:"
+msgstr "Fin du spectre inversé:"
 
 #. Centre value of a triangle to fit to a window in the inverse domain.
 #: src/main.c:384
@@ -301,7 +301,7 @@ msgstr "Largeur du pic DC:"
 #. domain.
 #: src/main.c:416
 msgid "k index:"
-msgstr "index k:"
+msgstr "indice k:"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed. Button to press to analyse the
@@ -318,13 +318,13 @@ msgstr ""
 #. domain.
 #: src/main.c:431 src/main.c:493 src/disp.c:1291
 msgid "Inverse Spectrum"
-msgstr "Spectre inverse"
+msgstr "Spectre inversé"
 
 #. The horizontal domain after transformation (e.g. if the base domain is
 #. time, then it will be frequency).
 #: src/main.c:464
 msgid "Inverse Domain"
-msgstr "Domaine inverse"
+msgstr "Domaine inversé"
 
 #. Visibility of fringes (defined for a sinusoid as (maximum-minimum) divided
 #. by (maximum+minimum))
@@ -359,14 +359,16 @@ msgid ""
 "analysis) and obtaining visibility of fringes, domain shift and chirp "
 "measurements."
 msgstr ""
-"Harmonique est un programme pour effectuer l'analyse harmonique (par exemple "
-"l'analyse de Fourier) et l'obtention de la visibilité des franges, du "
-"changement de domaine et des mesures de chirp."
+"Harmonique est un programme permettant d'effectuer l'analyse harmonique (par "
+"exemple l'analyse de Fourier) et obtenir la visibilité des franges, le "
+"décalage du domaine et les mesures de chirp."
 
 #. put your name here and be famous.
 #: src/util.c:54
 msgid "translator-credits"
-msgstr "Matthieu Bellec"
+msgstr ""
+"Matthieu Bellec\n"
+"Matthieu Puigt"
 
 #. "x" and "y" are the standard variables representing the horizontal and
 #. vertical axes. %f refers to their values for the current point on the
@@ -411,14 +413,14 @@ msgstr "Chirp"
 #. Button to select saving results (visibility, domain shift and chirp)
 #: src/data.c:213 src/data.c:318 src/data.c:503
 msgid "All"
-msgstr "Toutes"
+msgstr "Tous"
 
 #. asks the user what of the results they want to save (see below).
 #: src/data.c:215 src/data.c:320 src/data.c:505 src/data.c:689 src/data.c:1063
 #: src/data.c:1145 src/data.c:1286 src/data.c:1426 src/data.c:1927
 #: src/data.c:2095 src/data.c:2264
 msgid "Select Parameter to save:"
-msgstr "Choisissez le paramètre a sauver:"
+msgstr "Choisissez le paramètre à sauvegarder:"
 
 #. Column headings in the save file. The format must be four sets of
 #. exactly nine (2 byte) characters seperated by "\t"'s (take care as
@@ -446,7 +448,7 @@ msgstr "MESURE   \tVISIBILTE\tDECAL_DOM\tCHIRP    "
 #: src/open.c:299
 #, c-format
 msgid "Error Saving file: %s."
-msgstr "Fichier d'erreur sauvée: %s."
+msgstr "Fichier d'erreur sauvegardé: %s."
 
 #. Column headings in the save file. The format must be two sets of
 #. exactly nine (2 byte) characters seperated by "\t"'s (take care as
@@ -524,7 +526,7 @@ msgid ""
 "All\n"
 "over J"
 msgstr ""
-"Toutes\n"
+"Tous\n"
 "sur J"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
@@ -569,13 +571,13 @@ msgid ""
 "All\n"
 "over K"
 msgstr ""
-"Toutes\n"
+"Tous\n"
 "sur K"
 
 #. Button to select saving results (both visibility and domain shift).
 #: src/data.c:1061 src/data.c:1143 src/data.c:1284
 msgid "Both"
-msgstr "Deux"
+msgstr "Les deux"
 
 #. Column headings in the save file. The format must be three sets of
 #. exactly nine (2 byte) characters seperated by "\t"'s (take care as
@@ -597,7 +599,7 @@ msgid ""
 "Both\n"
 "over J"
 msgstr ""
-"Deux\n"
+"Les deux\n"
 "sur J"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
@@ -609,7 +611,7 @@ msgid ""
 "Both\n"
 "over K"
 msgstr ""
-"Deux\n"
+"Les deux\n"
 "sur K"
 
 #. Column headings in the save file. The format must be three sets of
@@ -676,7 +678,7 @@ msgstr "J        \tVISIBILTE\tDECAL_DOM"
 #. Add a "\n" to give a new line if space is cramped.
 #: src/data.c:1925 src/data.c:2093 src/data.c:2262
 msgid "Magnitude/Phase"
-msgstr "Grandeur/Phase"
+msgstr "Amplitude/Phase"
 
 #. Column headings in the save file. The format must be three sets of
 #. exactly nine (2 byte) characters seperated by "\t"'s (take care as
@@ -708,7 +710,7 @@ msgstr "Aucunes données traitées disponibles."
 #. state of the program.
 #: src/data.c:2426 src/data.c:2456
 msgid "Select Session File"
-msgstr "Sélectionnez le fichier de session"
+msgstr "Sélectionnez le fichier de la session"
 
 #. %s refers to the filename and the error. Please leave as "%s", but move
 #. within the sentence as needed (as long as the file is given first).
@@ -760,7 +762,7 @@ msgstr "Échec du chargement du fichier: %s, Erreur: %s."
 #: src/proc.c:166 src/proc.c:278 src/proc.c:420 src/proc.c:524
 #, c-format
 msgid "Insufficient windowing range in channel %d, %d."
-msgstr "Largeur de fenêtre insuffisante dans le canal %d, %d."
+msgstr "Largeur de fenêtre insuffisante sur le canal %d, %d."
 
 #. The user hasn't transformed the data yet, so processing it is impossible.
 #: src/proc.c:556
@@ -792,7 +794,7 @@ msgstr "Aucunes transformations existantes pour l'analyse."
 #, c-format
 msgid "Some clipping occured in channel %d. Increase zero padding."
 msgstr ""
-"Une coupure s'est produite dans le canal %d. Augmentez le zero padding."
+"Une coupure s'est produite dans le canal %d. Augmentez le bourrage de zéros."
 
 #. The user has given an offset of zero which gives divide by
 #. zero errors when the data is in a linear scale (e.g. not in dBs)
@@ -800,13 +802,13 @@ msgstr ""
 #: src/open.c:18926 src/open.c:19124 src/open.c:20072 src/open.c:20268
 #: src/open.c:22601 src/open.c:22755 src/open.c:23485 src/open.c:23639
 msgid "Offset must be nonzero for linear measurements."
-msgstr "Décalage doit être égale à zéro pour des mesures linéaires."
+msgstr "Le décalage doit être égale à zéro pour les mesures linéaires."
 
 #. The user is trying to perform a transformation without having
 #. opened a data file.
 #: src/proc.c:2747
 msgid "Open a file for analysis first."
-msgstr "Ouvrissiez un fichier pour l'analyse d'abord."
+msgstr "Ouvrez d'abord un fichier pour l'analyse."
 
 #. Title for a window that allows the user to change the way the
 #. plots are displayed
@@ -818,13 +820,13 @@ msgstr "Propriétés d'affichage"
 #. style of the labels for the axes.
 #: src/disp.c:1092 src/disp.c:1181 src/disp.c:1299
 msgid "Axis label font:"
-msgstr "Police pour les étiquettes:"
+msgstr "Police des étiquettes des axes:"
 
 #. label for a button that allows the user to change the font/size/
 #. style of the numbers along the axes.
 #: src/disp.c:1095 src/disp.c:1184 src/disp.c:1302
 msgid "Tick label font:"
-msgstr "Police pour coche de numérotation:"
+msgstr "Police des graduations:"
 
 #. Label that will be displayed along the horizontal axis.
 #: src/disp.c:1098 src/disp.c:1187 src/disp.c:1332
@@ -840,18 +842,18 @@ msgstr "Texte de l'axe Y:"
 #. of the labels for the axes.
 #: src/disp.c:1120 src/disp.c:1209 src/disp.c:1355
 msgid "Font Selection for Axis Labels"
-msgstr "Sélection de polices pour les étiquettes des axes"
+msgstr "Sélection des polices pour les étiquettes des axes"
 
 #. Title for window that pops up when changing the font/size/style
 #. of the numbers along the axes.
 #: src/disp.c:1128 src/disp.c:1217 src/disp.c:1360
 msgid "Font Selection for Tick Mark Labels"
-msgstr "Sélection de polices pour les coche de numérotation"
+msgstr "Sélection de polices pour les graduations"
 
 #. button for selecting to plot the magnitude.
 #: src/disp.c:1144 src/disp.c:1233 src/disp.c:1390
 msgid "Magnitude"
-msgstr "Grandeur"
+msgstr "Amplitude"
 
 #. button for selecting to plot the phase.
 #: src/disp.c:1145 src/disp.c:1234 src/disp.c:1391
@@ -896,13 +898,13 @@ msgstr "Traces multiples des résultats au-dessus de l'index j"
 #. displayed, each corresponding to a different value for the k index.
 #: src/disp.c:1412
 msgid "Multiple plots for Results over index k"
-msgstr "Traces multiples pour des résultats au-dessus de l'index k"
+msgstr "Traces multiples des résultats au-dessus de l'index k"
 
 #. The user is trying to run a batch process without performing a single
 #. file test. Asks them to do this.
 #: src/open.c:214
 msgid "Perform an initial test of the parameters first."
-msgstr "Réalisez un premier essai des paramètres d'abord."
+msgstr "Réalisez d'abord un test initial des paramètres ."
 
 #. The user has changed the start/stop etc values since the last single file
 #. test. Asks them to repeat a single file test with the new values.
@@ -911,8 +913,8 @@ msgid ""
 "Parameters have changed since the last test. Retest with the current values "
 "first."
 msgstr ""
-"Les paramètres ont changé depuis le dernier test. Refaites le test avec les "
-"valeurs actuelles en premier."
+"Les paramètres ont changé depuis le dernier test. Refaites d'abord le test "
+"avec les valeurs actuelles."
 
 #. Asks the user to select or create a file that will govern the batch
 #. process.
@@ -924,7 +926,7 @@ msgstr "Choisissez le fichier de configuration"
 #. associated parameter values.
 #: src/open.c:237
 msgid "Configuration file generation"
-msgstr "la génération de fichier de configuration"
+msgstr "Génération du fichier de configuration"
 
 #. Title for the column containing a list of filenames.
 #: src/open.c:243
@@ -939,7 +941,7 @@ msgid ""
 "Value:"
 msgstr ""
 "Valeur\n"
-"Measurand:"
+"du mesurande:"
 
 #. Button to add another file and value to the list on the table.
 #: src/open.c:249
@@ -955,12 +957,12 @@ msgstr "Pas de noms de fichiers donnés."
 #. for plotting.
 #: src/open.c:24657
 msgid "Measurand Variable Type"
-msgstr "Paramètre variable"
+msgstr "Type du mesurande"
 
 #. Button to select using cartesian axes.
 #: src/open.c:24657
 msgid "Linear"
-msgstr "Linear"
+msgstr "Lineaire"
 
 #. \n refers to a newline to help the text fit on the button nicer. Feel
 #. free to delete or move as needed.
@@ -986,14 +988,14 @@ msgstr ""
 #. polar graph.
 #: src/open.c:24659
 msgid "Select Measurand Type:"
-msgstr "Sélectionnez le type mesurande:"
+msgstr "Sélectionnez le type du mesurande:"
 
 #. %s refers to the filename. Please leave as "%s", but move within the
 #. sentence as needed
 #: src/open.c:24866
 #, c-format
 msgid "File: %s successfully loaded."
-msgstr "Fichier: %s charge avec succes."
+msgstr "Fichier: %s chargé avec succès."
 
 #~ msgid "Polar"
 #~ msgstr "Polar"
