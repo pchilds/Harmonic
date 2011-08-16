@@ -39,13 +39,38 @@ void prs(GtkWidget *widget, gpointer data)
 		sz4=g_array_index((plt->sizes), gint, 0);/* check placing of this with what is desired for multiplots (within for loop?) */
 		g_array_free(vis, TRUE);
 		g_array_free(doms, TRUE);
+		g_array_free(chp, TRUE);
+		if ((flags&PROC_BAT)!=0)
+		{
+			gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
+			rest=gtk_table_new(4, 2, FALSE);
+			gtk_widget_show(rest);
+			label=gtk_label_new(_("Visibility"));
+			gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(label);
+			visl=gtk_label_new("");
+			gtk_table_attach(GTK_TABLE(rest), visl, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(visl);
+			label=gtk_label_new(_("Domain Shift"));
+			gtk_table_attach(GTK_TABLE(rest), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(label);
+			dsl=gtk_label_new("");
+			gtk_table_attach(GTK_TABLE(rest), dsl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(dsl);
+			label=gtk_label_new(_("Analysis Results"));
+			gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
+			bxr=g_array_new(FALSE, FALSE, sizeof(gdouble));
+			byr=g_array_new(FALSE, FALSE, sizeof(gdouble));
+			bsz=g_array_new(FALSE, FALSE, sizeof(gint));
+			bnx=g_array_new(FALSE, FALSE, sizeof(gint));
+			flags^=PROC_BAT;
+		}
 		vis=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimxf*kdimx);
 		doms=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimxf*kdimx);
 		if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(opttri)))
 		{
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
 			{
-				g_array_free(chp, TRUE);
 				chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimxf*kdimx);
 				for (j=0; j<jdimxf; j++)
 				{
@@ -202,6 +227,7 @@ void prs(GtkWidget *widget, gpointer data)
 			}
 			else
 			{
+				chp=g_array_new(FALSE, FALSE, sizeof(gdouble));
 				for (j=0; j<jdimxf; j++)
 				{
 					iv=g_array_index(delf, gdouble, j);
@@ -305,7 +331,6 @@ void prs(GtkWidget *widget, gpointer data)
 		}
 		else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi)))
 		{
-			g_array_free(chp, TRUE);
 			chp=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), (jdimxf*kdimx));
 			for (j=0; j<jdimxf; j++)
 			{
@@ -454,6 +479,7 @@ void prs(GtkWidget *widget, gpointer data)
 		}
 		else
 		{
+			chp=g_array_new(FALSE, FALSE, sizeof(gdouble));
 			for (j=0; j<jdimxf; j++)
 			{
 				vzt=g_array_index(stars, gdouble, 2*j*sz4);
@@ -561,6 +587,7 @@ void prs(GtkWidget *widget, gpointer data)
 
 void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inversion to 2pi/x */
 {
+	GtkWidget *label;
 	PlotLinear *plt;
 	gint j, k, st, sp, n, zp, dx, dx2;
 	gdouble iv, clc, ofs, ofe, xx, yx, ce;
@@ -572,6 +599,31 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 	if ((flags&PROC_OPN)!=0)
 	{
 		{g_array_free(stars, TRUE); g_array_free(xsb, TRUE); g_array_free(ysb, TRUE); g_array_free(nx2, TRUE); g_array_free(sz2, TRUE); g_array_free(delf, TRUE);}
+		if ((flags&PROC_BAT)!=0)
+		{
+			gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
+			rest=gtk_table_new(4, 2, FALSE);
+			gtk_widget_show(rest);
+			label=gtk_label_new(_("Visibility"));
+			gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(label);
+			visl=gtk_label_new("");
+			gtk_table_attach(GTK_TABLE(rest), visl, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(visl);
+			label=gtk_label_new(_("Domain Shift"));
+			gtk_table_attach(GTK_TABLE(rest), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(label);
+			dsl=gtk_label_new("");
+			gtk_table_attach(GTK_TABLE(rest), dsl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(dsl);
+			label=gtk_label_new(_("Analysis Results"));
+			gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
+			bxr=g_array_new(FALSE, FALSE, sizeof(gdouble));
+			byr=g_array_new(FALSE, FALSE, sizeof(gdouble));
+			bsz=g_array_new(FALSE, FALSE, sizeof(gint));
+			bnx=g_array_new(FALSE, FALSE, sizeof(gint));
+			flags^=PROC_BAT;
+		}
 		delf=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx);
 		zp=1<<(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(zpd)));
 		n=zp*jdimx;

@@ -27,8 +27,9 @@
 #	include "main.h"
 #	include "util.h"
 	extern GtkWidget *window, *statusbar, *plot1, *plot2, *plot3, *notebook, *notebook2, *visl, *dsl, *rest, *tracmenu, *anosa, *sws, *mg, *ri;
+	extern GtkWidget *trans, *neg, *dBs, *twopionx, *wll, *opttri, *chi, *oft;
 	extern GArray *stars, *delf, *vis, *doms, *chp, *msr, *x, *yb, *sz, *nx, *specs;
-	extern GSList *group2;
+	extern GSList *group, *group2, *group3, *group4, *group5;
 	extern guint jdim, kdim, jdimxf, kdimxf, flags, satl;
 	extern gint lc, mx;
 	extern gchar *fold, *folr;

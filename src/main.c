@@ -34,7 +34,6 @@
 /*
  * TO DO:
  *
- * BAT: allowing to proceed from prior single file opened/transformed data
  * BAT: skip over erroneous data points (maybe duplicate previous/next?)
  * BAT: opening of multiple files for config writer
  * FFT: implement invert to 2pi/x routine
@@ -42,7 +41,6 @@
  * SAV: session save/restore routine
  * TRS: wavelets
  * PLOT: see issues in plotpolar
- * PLOT: autoscale on axes sometimes not correct # of sig. figs.
  */
 
 #include <gdk/gdkkeysyms.h>
@@ -59,7 +57,7 @@ GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *mg, *mgp, *ri, *ncmp, *lcmp, *frr,
 GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; /* widgets for windowing */
 GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *delf, *vis, *doms, *chp, *msr, *bxr, *byr; /* arrays for windowing and data */
 GArray *sz, *nx, *sz2, *nx2, *bsz, *bnx, *rd1, *gr1, *bl1, *al1, *rd2, *gr2, *bl2, *al2, *rd3, *gr3, *bl3, *al3;
-GSList *group2=NULL; /* list for various traces available and Basis functions for Transformation*/
+GSList *group=NULL, *group2=NULL, *group3=NULL, *group4=NULL, *group5=NULL;
 gint lc, mx; /* number of data points and number of files in batch routine */
 guint jdim=0, kdim=0, jdimx=1, kdimx=1, jdimxf=1, kdimxf=1, satl=0, trc=1, flags=0, flagd=0; /* array indices, #of traces, trace number, and current processing state and display flags */
 gulong j1_id, j2_id, k_id, bsr_id, bsp_id, isr_id, isp_id, tc_id, tw_id, zw_id; /* id for disabling/enabling post-transform processing */
@@ -71,7 +69,6 @@ int main(int argc, char *argv[])
 	GtkAdjustment *adj;
 	GtkWidget *vbox, *mnb, *mnu, *smnu, *mni, *hpane, *table, *label, *butt;
 	GtkAccelGroup *accel_group=NULL;
-	GSList *group=NULL, *group3=NULL, *group4=NULL, *group5=NULL;
 	PlotLinear *plt, *plt2;
 	AtkObject *atk_widget, *atk_label;
 	AtkRelationSet *relation_set;
@@ -347,8 +344,8 @@ int main(int argc, char *argv[])
 	gtk_widget_show(bsr);
 	atk_widget=gtk_widget_get_accessible(bsr);
 	atk_label=gtk_widget_get_accessible(GTK_WIDGET(label));
-	atk_object_add_relation(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
-	atk_object_add_relation(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
+	atk_object_add_relationship(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
+	atk_object_add_relationship(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
 	label=gtk_label_new(_("Spectrum Stop:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
@@ -359,8 +356,8 @@ int main(int argc, char *argv[])
 	gtk_widget_show(bsp);
 	atk_widget=gtk_widget_get_accessible(bsp);
 	atk_label=gtk_widget_get_accessible(GTK_WIDGET(label));
-	atk_object_add_relation(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
-	atk_object_add_relation(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
+	atk_object_add_relationship(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
+	atk_object_add_relationship(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
 	label=gtk_label_new(_("Offset:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
@@ -370,8 +367,8 @@ int main(int argc, char *argv[])
 	gtk_widget_show(fst);
 	atk_widget=gtk_widget_get_accessible(fst);
 	atk_label=gtk_widget_get_accessible(GTK_WIDGET(label));
-	atk_object_add_relation(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
-	atk_object_add_relation(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
+	atk_object_add_relationship(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
+	atk_object_add_relationship(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
 	label=gtk_label_new(_("Zero Padding 2^:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
@@ -381,8 +378,8 @@ int main(int argc, char *argv[])
 	gtk_widget_show(zpd);
 	atk_widget=gtk_widget_get_accessible(zpd);
 	atk_label=gtk_widget_get_accessible(GTK_WIDGET(label));
-	atk_object_add_relation(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
-	atk_object_add_relation(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
+	atk_object_add_relationship(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
+	atk_object_add_relationship(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
 	label=gtk_label_new(_("j index:"));
 	gtk_table_attach(GTK_TABLE(table), label, 2, 3, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
@@ -393,8 +390,8 @@ int main(int argc, char *argv[])
 	gtk_widget_show(jind);
 	atk_widget=gtk_widget_get_accessible(jind);
 	atk_label=gtk_widget_get_accessible(GTK_WIDGET(label));
-	atk_object_add_relation(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
-	atk_object_add_relation(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
+	atk_object_add_relationship(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
+	atk_object_add_relationship(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
 	butt=gtk_button_new_with_label(_("Reset\nArrays"));
 	g_signal_connect(G_OBJECT(butt), "clicked", G_CALLBACK(reset), NULL);
 	gtk_table_attach(GTK_TABLE(table), butt, 2, 3, 2, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -417,8 +414,8 @@ int main(int argc, char *argv[])
 	gtk_widget_show(isr);
 	atk_widget=gtk_widget_get_accessible(isr);
 	atk_label=gtk_widget_get_accessible(GTK_WIDGET(label));
-	atk_object_add_relation(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
-	atk_object_add_relation(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
+	atk_object_add_relationship(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
+	atk_object_add_relationship(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
 	label=gtk_label_new(_("Inverse Spectrum Stop:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
@@ -429,8 +426,8 @@ int main(int argc, char *argv[])
 	gtk_widget_show(isp);
 	atk_widget=gtk_widget_get_accessible(isp);
 	atk_label=gtk_widget_get_accessible(GTK_WIDGET(label));
-	atk_object_add_relation(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
-	atk_object_add_relation(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
+	atk_object_add_relationship(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
+	atk_object_add_relationship(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
 	label=gtk_label_new(_("Triangle Centre:"));
 	gtk_table_attach(GTK_TABLE(table), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
@@ -441,8 +438,8 @@ int main(int argc, char *argv[])
 	gtk_widget_show(tc);
 	atk_widget=gtk_widget_get_accessible(tc);
 	atk_label=gtk_widget_get_accessible(GTK_WIDGET(label));
-	atk_object_add_relation(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
-	atk_object_add_relation(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
+	atk_object_add_relationship(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
+	atk_object_add_relationship(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
 	label=gtk_label_new(_("Triangle Full Width:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
@@ -453,8 +450,8 @@ int main(int argc, char *argv[])
 	gtk_widget_show(tw);
 	atk_widget=gtk_widget_get_accessible(tw);
 	atk_label=gtk_widget_get_accessible(GTK_WIDGET(label));
-	atk_object_add_relation(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
-	atk_object_add_relation(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
+	atk_object_add_relationship(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
+	atk_object_add_relationship(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
 	label=gtk_label_new(_("DC Peak Width:"));
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 4, 5, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
@@ -465,8 +462,8 @@ int main(int argc, char *argv[])
 	gtk_widget_show(zw);
 	atk_widget=gtk_widget_get_accessible(zw);
 	atk_label=gtk_widget_get_accessible(GTK_WIDGET(label));
-	atk_object_add_relation(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
-	atk_object_add_relation(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
+	atk_object_add_relationship(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
+	atk_object_add_relationship(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
 	label=gtk_label_new(_("j index:"));
 	gtk_table_attach(GTK_TABLE(table), label, 2, 3, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
@@ -477,8 +474,8 @@ int main(int argc, char *argv[])
 	gtk_widget_show(jind2);
 	atk_widget=gtk_widget_get_accessible(jind2);
 	atk_label=gtk_widget_get_accessible(GTK_WIDGET(label));
-	atk_object_add_relation(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
-	atk_object_add_relation(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
+	atk_object_add_relationship(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
+	atk_object_add_relationship(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
 	label=gtk_label_new(_("k index:"));
 	gtk_table_attach(GTK_TABLE(table), label, 2, 3, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(label);
@@ -489,8 +486,8 @@ int main(int argc, char *argv[])
 	gtk_widget_show(kind);
 	atk_widget=gtk_widget_get_accessible(kind);
 	atk_label=gtk_widget_get_accessible(GTK_WIDGET(label));
-	atk_object_add_relation(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
-	atk_object_add_relation(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
+	atk_object_add_relationship(atk_label, ATK_RELATION_LABEL_FOR, atk_widget);
+	atk_object_add_relationship(atk_widget, ATK_RELATION_LABELLED_BY, atk_label);
 	butt=gtk_button_new_with_label(_("Reset\nArrays"));
 	g_signal_connect(G_OBJECT(butt), "clicked", G_CALLBACK(reset2), NULL);
 	gtk_table_attach(GTK_TABLE(table), butt, 2, 3, 4, 6, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);

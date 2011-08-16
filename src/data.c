@@ -2775,7 +2775,9 @@ void sav(GtkWidget *widget, gpointer data)
 void sesssav(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *wfile;
-	gchar *contents, *str, *fout=NULL;
+	GSList *list;
+	gchar *contents, *contents2, *str, *fout=NULL;
+	guint16 fv, fv2;
 	GError *Err=NULL;
 
 	wfile=gtk_file_chooser_dialog_new(_("Select Session File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
@@ -2786,6 +2788,50 @@ void sesssav(GtkWidget *widget, gpointer data)
 	{
 		g_free(folr);
 		folr=gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(wfile));
+		str=g_strdup("#menuitems");
+		{fv=0; list=group4;}/*need to ensure fv values don't conflict with DLMT, \t \0 etc */
+		while (list)
+		{
+			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(list->data))) break;
+			{list=(list->next); fv++;}
+		}
+		{fv<<=2; list=group5;}
+		while (list)
+		{
+			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(list->data))) break;
+			{list=(list->next); fv++;}
+		}
+		{fv<<=2; list=group3;}
+		while (list)
+		{
+			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(list->data))) break;
+			{list=(list->next); fv++;}
+		}
+		if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(trans))) fv|=256;
+		if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(neg))) fv|=512;
+		if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(dBs))) fv|=1024;
+		if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(twopionx))) fv|=2048;
+		if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(wll))) fv|=4096;
+		if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(opttri))) fv|=8192;
+		if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(chi))) fv|=16384;
+		if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(oft))) fv|=32768;
+		{fv2=0; list=group2;}
+		while (list)
+		{
+			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(list->data))) break;
+			{list=(list->next); fv2++;}
+		}
+		{fv2<<=8; list=group;}
+		while (list)
+		{
+			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(list->data))) break;
+			{list=(list->next); fv2++;}
+		}
+		str=g_strjoin("\t", str, (gchar) fv, (gchar) fv2, NULL);
+		contents2=g_strdup(contents);
+		g_free(contents);
+		contents=g_strjoin(DLMT, contents2, str, NULL);
+		g_free(str);
 		fout=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
 		g_file_set_contents(fout, contents, -1, &Err);
 		g_free(contents);
@@ -2880,6 +2926,10 @@ void opd(GtkWidget *widget, gpointer data)
 				gtk_widget_show(dsl);
 				label=gtk_label_new(_("Analysis Results"));
 				gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
+				bxr=g_array_new(FALSE, FALSE, sizeof(gdouble));
+				byr=g_array_new(FALSE, FALSE, sizeof(gdouble));
+				bsz=g_array_new(FALSE, FALSE, sizeof(gint));
+				bnx=g_array_new(FALSE, FALSE, sizeof(gint));
 				flags^=PROC_BAT;
 			}
 			flags|=PROC_OPN;
@@ -2898,7 +2948,7 @@ void opd(GtkWidget *widget, gpointer data)
 					if (!g_strcmp0("", strary[k])) {k++; continue;}
 					if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) {k++; continue;}
 					if (lc<0) {lc++; k++; continue;}
-					strat=g_strsplit_set(strary[k], "\t,", 0);
+					strat=g_strsplit_set(strary[k], "\t", 0);
 					lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 					g_array_append_val(x, lcl);
 					if (lc==0)

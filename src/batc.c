@@ -24,7 +24,8 @@
 
 #include "batc.h"
 GtkWidget *dialog, *adb, *spin, *cft;
-GList *conff=NULL, *confv=NULL, *confb=NULL;
+GList *conff=NULL, *confv=NULL;
+GSList *confb=NULL;
 
 void tsw(GtkWidget *widget, gpointer dta)
 {
@@ -33,7 +34,7 @@ void tsw(GtkWidget *widget, gpointer dta)
 	gdouble val, val2;
 	guint ps;
 
-	ps=GPOINTER_TO_UINT(dta);
+	ps=GPOINTER_TO_INT(dta);
 	iter=g_list_nth(conff, ps);
 	s2=g_strdup(gtk_label_get_label(GTK_LABEL(iter->data)));
 	iter=(iter->prev);
@@ -55,38 +56,34 @@ void tsw(GtkWidget *widget, gpointer dta)
 void tdl(GtkWidget *widget, gpointer dta)
 {
 	GList *iter1=NULL, *iter2=NULL;
+	GSList *iter=NULL;
 	gchar *s=NULL;
 	gdouble val;
 	guint ps;
 	gint rw;
 
-	ps=GPOINTER_TO_UINT(dta);
+	ps=GPOINTER_TO_INT(dta);
 	g_object_get(G_OBJECT(cft), "n-rows", &rw, NULL);
 	rw-=3;
-	if (rw<=4)
+	if (rw<=2)
 	{
 		gtk_container_remove(GTK_CONTAINER(cft), widget);
 		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(conff->data));
 		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(confv->data));
-		g_list_free(confb);
-		confb=NULL;
-		g_list_free(conff);
-		conff=NULL;
-		g_list_free(confv);
-		confv=NULL;
+		{g_slist_free(confb); g_list_free(conff); g_list_free(confv);}
+		{confb=NULL; conff=NULL; confv=NULL;}
 	}
 	else
 	{
-		iter1=g_list_last(confb);
-		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(iter1->data));
-		iter1=(iter1->prev);
-		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(iter1->data));
-		iter1=(iter1->prev);
-		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(iter1->data));
-		iter2=(iter1->prev);
-		(iter2->next)=NULL;
-		(iter1->prev)=NULL;
-		g_list_free(iter1);
+		iter=(confb->next);
+		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(confb->data));
+		confb=iter;
+		iter=(confb->next);
+		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(confb->data));
+		confb=iter;
+		iter=(confb->next);
+		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(confb->data));
+		confb=iter;
 		iter1=g_list_nth(conff, ps);
 		iter1=(iter1->next);
 		iter2=g_list_nth(confv, ps);
@@ -117,11 +114,11 @@ void tdl(GtkWidget *widget, gpointer dta)
 	}
 	g_object_ref(G_OBJECT(adb));
 	gtk_container_remove(GTK_CONTAINER(cft), adb);
-	gtk_table_attach(GTK_TABLE(cft), adb, 1, 2, rw-3, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+	gtk_table_attach(GTK_TABLE(cft), adb, 1, 2, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	g_object_unref(G_OBJECT(adb));
 	g_object_ref(G_OBJECT(spin));
 	gtk_container_remove(GTK_CONTAINER(cft), spin);
-	gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, rw-3, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+	gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	g_object_unref(G_OBJECT(spin));
 	gtk_table_resize(GTK_TABLE(cft), rw, 3);
 }
@@ -131,55 +128,78 @@ void upt(GtkWidget *widget, gpointer dta)
 	GtkWidget *wwfile, *lbl, *btt;
 	GtkAdjustment *adj;
 	GList *chld;
-	gint rw;
-	guint ps;
+	GSList *fls, *list;
+	gint rw, j;
+	gint ps;
 	gdouble val;
-	gchar *fin=NULL;
 
 	wwfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(dialog), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(wwfile), FALSE);/* change this to handle multiple files later */
+	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(wwfile), TRUE);
 	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(wwfile), FALSE);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(wwfile), fold);
 	g_signal_connect(G_OBJECT(wwfile), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(wwfile));
 	if (gtk_dialog_run(GTK_DIALOG(wwfile))==GTK_RESPONSE_ACCEPT)
 	{
 		g_object_get(G_OBJECT(cft), "n-rows", &rw, NULL);
-		ps=1-((rw-1)/3);
-		gtk_table_resize(GTK_TABLE(cft), rw+3, 3);
+		ps=(rw-2)/3;
+		fls=gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(wwfile));
+		j=g_slist_length(fls);
+		gtk_table_resize(GTK_TABLE(cft), rw+(3*j), 3);
+		val=gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin));
 		g_object_ref(G_OBJECT(widget));
 		gtk_container_remove(GTK_CONTAINER(cft), widget);
-		fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wwfile));
-		lbl=gtk_label_new(fin);
-		g_free(fin);
-		gtk_widget_show(lbl);
-		gtk_table_attach(GTK_TABLE(cft), lbl, 1, 2, rw-3, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		gtk_table_attach(GTK_TABLE(cft), widget, 1, 2, rw, rw+3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		g_object_unref(G_OBJECT(widget));
-		val=gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin));
-		btt=gtk_button_new_from_stock(GTK_STOCK_DELETE);
-		g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tdl), GUINT_TO_POINTER(ps));
-		gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, rw-2, rw-1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-		gtk_widget_show(btt);
-		confb=g_list_append(confb, (gpointer) btt);
-		if (ps>0)
+		if (ps==0)
 		{
-			btt=gtk_button_new_from_stock(GTK_STOCK_GO_UP);
-			g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tsw), GUINT_TO_POINTER(ps));
+			btt=gtk_button_new_from_stock(GTK_STOCK_DELETE);
+			g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tdl), GINT_TO_POINTER(ps));
+			gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(btt);
+			confb=g_slist_prepend(confb, (gpointer) btt);
+			list=(fls->next);
+			lbl=gtk_label_new((gchar*) (fls->data));
+			gtk_table_attach(GTK_TABLE(cft), lbl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			conff=g_list_append(conff, (gpointer) lbl);
+			g_free(fls->data);
+			fls=list;
+			confv=g_list_append(confv, (gpointer) spin);
+			adj=(GtkAdjustment*) gtk_adjustment_new(val, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+			spin=gtk_spin_button_new(adj, 0, 0);
+			gtk_widget_show(spin);
+			gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, 4, 5, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			{ps++; rw+=3;}
+		}
+		while (fls)
+		{
+			btt=gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
+			g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tsw), GINT_TO_POINTER(ps));
 			gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, rw-3, rw-2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_widget_show(btt);
-			confb=g_list_append(confb, (gpointer) btt);
-			btt=gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
-			g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tsw), GUINT_TO_POINTER(ps));
-			gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, rw-4, rw-3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			confb=g_slist_prepend(confb, (gpointer) btt);
+			btt=gtk_button_new_from_stock(GTK_STOCK_GO_UP);
+			g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tsw), GINT_TO_POINTER(ps));
+			gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, rw-2, rw-1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_widget_show(btt);
-			confb=g_list_append(confb, (gpointer) btt);
+			confb=g_slist_prepend(confb, (gpointer) btt);
+			btt=gtk_button_new_from_stock(GTK_STOCK_DELETE);
+			g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tdl), GINT_TO_POINTER(ps));
+			gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(btt);
+			confb=g_slist_prepend(confb, (gpointer) btt);
+			list=(fls->next);
+			lbl=gtk_label_new((gchar*) (fls->data));
+			gtk_table_attach(GTK_TABLE(cft), lbl, 1, 2, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			conff=g_list_append(conff, (gpointer) lbl);
+			g_free(fls->data);
+			fls=list;
+			confv=g_list_append(confv, (gpointer) spin);
+			{ps++; rw+=3;}
+			adj=(GtkAdjustment*) gtk_adjustment_new(val, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
+			spin=gtk_spin_button_new(adj, 0, 0);
+			gtk_widget_show(spin);
+			gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		}
-		conff=g_list_append(conff, (gpointer) lbl);
-		confv=g_list_append(confv, (gpointer) spin);
-		adj=(GtkAdjustment*) gtk_adjustment_new(val, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
-		spin=gtk_spin_button_new(adj, 0, 0);
-		gtk_widget_show(spin);
-		gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, rw, rw+3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		gtk_table_attach(GTK_TABLE(cft), widget, 1, 2, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+		g_object_unref(G_OBJECT(widget));
 	}
 	gtk_widget_destroy(wwfile);
 }
@@ -218,7 +238,7 @@ void bat(GtkWidget *widget, gpointer data)
 			g_signal_connect_swapped(G_OBJECT(dialog), "destroy", G_CALLBACK(gtk_widget_destroy), G_OBJECT(dialog));
 			gtk_widget_show(dialog);
 			content=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-			cft=gtk_table_new(4, 3, FALSE);
+			cft=gtk_table_new(2, 3, FALSE);
 			gtk_widget_show(cft);
 			label=gtk_label_new(_("File:"));
 			gtk_widget_show(label);
@@ -228,12 +248,12 @@ void bat(GtkWidget *widget, gpointer data)
 			gtk_table_attach(GTK_TABLE(cft), label, 2, 3, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			adb=gtk_button_new_with_label(_("Add another file"));
 			gtk_widget_show(adb);
-			gtk_table_attach(GTK_TABLE(cft), adb, 1, 2, 1, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_table_attach(GTK_TABLE(cft), adb, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			g_signal_connect(G_OBJECT(adb), "clicked", G_CALLBACK(upt), NULL);
 			adj=(GtkAdjustment*) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 			spin=gtk_spin_button_new(adj, 0, 0);
 			gtk_widget_show(spin);
-			gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, 1, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			adj=(GtkAdjustment*) gtk_adjustment_new(0, 0, 0, 0.0, 0.0, 0.0);
 			adj2=(GtkAdjustment*) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 			scroll=gtk_scrolled_window_new(adj, adj2);
@@ -285,7 +305,7 @@ void bat(GtkWidget *widget, gpointer data)
 					g_free(str);
 				}
 			}
-			{g_list_free(conff); g_list_free(confv); g_list_free(confb); gtk_widget_destroy(dialog);}
+			{g_list_free(conff); g_list_free(confv); g_slist_free(confb); gtk_widget_destroy(dialog);}
 		}
 		g_free(fin);
 	}
@@ -312,7 +332,7 @@ void bat(GtkWidget *widget, gpointer data)
 			vis=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
 			doms=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), jdimx*kdimx*mx);
 			msr=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), mx);
-			strat2=g_strsplit_set(strary2[0], "\t,", 0);
+			strat2=g_strsplit_set(strary2[0], "\t", 0);
 			xi=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
 			xf=xi;
 			flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_BAT|PROC_POL|PROC_COM|PROC_RI);
@@ -335,7 +355,7 @@ void bat(GtkWidget *widget, gpointer data)
 									{
 										for (m=0; m<mx; m++)
 										{
-											strat2=g_strsplit_set(strary2[m], "\t,", 0);
+											strat2=g_strsplit_set(strary2[m], "\t", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -353,7 +373,7 @@ void bat(GtkWidget *widget, gpointer data)
 													if (!g_strcmp0("", strary[k])) continue;
 													if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 													if (lc<0) {lc++; continue;}
-													strat=g_strsplit_set(strary[k], "\t,", 0);
+													strat=g_strsplit_set(strary[k], "\t", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(xp, lcl);
 													if (!strat[trc]) lcl=0;
@@ -491,7 +511,7 @@ void bat(GtkWidget *widget, gpointer data)
 									{
 										for (m=0; m<mx; m++)
 										{
-											strat2=g_strsplit_set(strary2[m], "\t,", 0);
+											strat2=g_strsplit_set(strary2[m], "\t", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -509,7 +529,7 @@ void bat(GtkWidget *widget, gpointer data)
 													if (!g_strcmp0("", strary[k])) continue;
 													if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 													if (lc<0) {lc++; continue;}
-													strat=g_strsplit_set(strary[k], "\t,", 0);
+													strat=g_strsplit_set(strary[k], "\t", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(xp, lcl);
 													if (!strat[trc]) lcl=0;
@@ -649,7 +669,7 @@ void bat(GtkWidget *widget, gpointer data)
 									ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -667,7 +687,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -806,7 +826,7 @@ void bat(GtkWidget *widget, gpointer data)
 									ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -824,7 +844,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -963,7 +983,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -981,7 +1001,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -1120,7 +1140,7 @@ void bat(GtkWidget *widget, gpointer data)
 								ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -1138,7 +1158,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -1281,7 +1301,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -1299,7 +1319,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -1437,7 +1457,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -1455,7 +1475,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -1595,7 +1615,7 @@ void bat(GtkWidget *widget, gpointer data)
 								ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -1613,7 +1633,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -1752,7 +1772,7 @@ void bat(GtkWidget *widget, gpointer data)
 								ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -1770,7 +1790,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -1909,7 +1929,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -1927,7 +1947,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -2066,7 +2086,7 @@ void bat(GtkWidget *widget, gpointer data)
 							ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -2084,7 +2104,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -2229,7 +2249,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -2247,7 +2267,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -2422,7 +2442,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -2440,7 +2460,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -2617,7 +2637,7 @@ void bat(GtkWidget *widget, gpointer data)
 								ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -2635,7 +2655,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -2787,7 +2807,7 @@ void bat(GtkWidget *widget, gpointer data)
 								ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -2805,7 +2825,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -2955,7 +2975,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -2973,7 +2993,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -3154,7 +3174,7 @@ void bat(GtkWidget *widget, gpointer data)
 							ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -3172,7 +3192,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -3331,7 +3351,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -3349,7 +3369,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -3519,7 +3539,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -3537,7 +3557,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -3709,7 +3729,7 @@ void bat(GtkWidget *widget, gpointer data)
 							ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -3727,7 +3747,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -3877,7 +3897,7 @@ void bat(GtkWidget *widget, gpointer data)
 							ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -3895,7 +3915,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -4045,7 +4065,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -4063,7 +4083,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -4239,7 +4259,7 @@ void bat(GtkWidget *widget, gpointer data)
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -4257,7 +4277,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -4415,7 +4435,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -4433,7 +4453,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -4530,7 +4550,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -4548,7 +4568,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -4647,7 +4667,7 @@ void bat(GtkWidget *widget, gpointer data)
 								ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -4665,7 +4685,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -4763,7 +4783,7 @@ void bat(GtkWidget *widget, gpointer data)
 								ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -4781,7 +4801,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -4879,7 +4899,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -4897,7 +4917,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -4995,7 +5015,7 @@ void bat(GtkWidget *widget, gpointer data)
 							ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -5013,7 +5033,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -5115,7 +5135,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -5133,7 +5153,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -5230,7 +5250,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -5248,7 +5268,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -5347,7 +5367,7 @@ void bat(GtkWidget *widget, gpointer data)
 							ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -5365,7 +5385,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -5463,7 +5483,7 @@ void bat(GtkWidget *widget, gpointer data)
 							ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -5481,7 +5501,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -5579,7 +5599,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -5597,7 +5617,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -5695,7 +5715,7 @@ void bat(GtkWidget *widget, gpointer data)
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -5713,7 +5733,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -5817,7 +5837,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -5835,7 +5855,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -5969,7 +5989,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -5987,7 +6007,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -6123,7 +6143,7 @@ void bat(GtkWidget *widget, gpointer data)
 							ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -6141,7 +6161,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -6250,7 +6270,7 @@ void bat(GtkWidget *widget, gpointer data)
 							ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -6268,7 +6288,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -6377,7 +6397,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -6395,7 +6415,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -6535,7 +6555,7 @@ void bat(GtkWidget *widget, gpointer data)
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -6553,7 +6573,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -6671,7 +6691,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -6689,7 +6709,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -6818,7 +6838,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -6836,7 +6856,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -6967,7 +6987,7 @@ void bat(GtkWidget *widget, gpointer data)
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -6985,7 +7005,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -7094,7 +7114,7 @@ void bat(GtkWidget *widget, gpointer data)
 						ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -7112,7 +7132,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -7221,7 +7241,7 @@ void bat(GtkWidget *widget, gpointer data)
 				{
 					for (m=0; m<mx; m++)
 					{
-						strat2=g_strsplit_set(strary2[m], "\t,", 0);
+						strat2=g_strsplit_set(strary2[m], "\t", 0);
 						if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 						{
 							lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -7239,7 +7259,7 @@ void bat(GtkWidget *widget, gpointer data)
 								if (!g_strcmp0("", strary[k])) continue;
 								if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 								if (lc<0) {lc++; continue;}
-								strat=g_strsplit_set(strary[k], "\t,", 0);
+								strat=g_strsplit_set(strary[k], "\t", 0);
 								lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 								g_array_append_val(xp, lcl);
 								if (!strat[trc]) lcl=0;
@@ -7374,7 +7394,7 @@ void bat(GtkWidget *widget, gpointer data)
 					ofs=gtk_spin_button_get_value(GTK_SPIN_BUTTON(fst));
 					for (m=0; m<mx; m++)
 					{
-						strat2=g_strsplit_set(strary2[m], "\t,", 0);
+						strat2=g_strsplit_set(strary2[m], "\t", 0);
 						if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 						{
 							lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -7392,7 +7412,7 @@ void bat(GtkWidget *widget, gpointer data)
 								if (!g_strcmp0("", strary[k])) continue;
 								if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 								if (lc<0) {lc++; continue;}
-								strat=g_strsplit_set(strary[k], "\t,", 0);
+								strat=g_strsplit_set(strary[k], "\t", 0);
 								lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 								g_array_append_val(xp, lcl);
 								if (!strat[trc]) lcl=0;
@@ -7518,7 +7538,7 @@ void bat(GtkWidget *widget, gpointer data)
 									{
 										for (m=0; m<mx; m++)
 										{
-											strat2=g_strsplit_set(strary2[m], "\t,", 0);
+											strat2=g_strsplit_set(strary2[m], "\t", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -7536,7 +7556,7 @@ void bat(GtkWidget *widget, gpointer data)
 													if (!g_strcmp0("", strary[k])) continue;
 													if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 													if (lc<0) {lc++; continue;}
-													strat=g_strsplit_set(strary[k], "\t,", 0);
+													strat=g_strsplit_set(strary[k], "\t", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(xp, lcl);
 													if (!strat[trc]) lcl=0;
@@ -7677,7 +7697,7 @@ void bat(GtkWidget *widget, gpointer data)
 									{
 										for (m=0; m<mx; m++)
 										{
-											strat2=g_strsplit_set(strary2[m], "\t,", 0);
+											strat2=g_strsplit_set(strary2[m], "\t", 0);
 											if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 											{
 												lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -7695,7 +7715,7 @@ void bat(GtkWidget *widget, gpointer data)
 													if (!g_strcmp0("", strary[k])) continue;
 													if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 													if (lc<0) {lc++; continue;}
-													strat=g_strsplit_set(strary[k], "\t,", 0);
+													strat=g_strsplit_set(strary[k], "\t", 0);
 													lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 													g_array_append_val(xp, lcl);
 													if (!strat[trc]) lcl=0;
@@ -7837,7 +7857,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -7855,7 +7875,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -7996,7 +8016,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -8014,7 +8034,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -8156,7 +8176,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -8174,7 +8194,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -8315,7 +8335,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -8333,7 +8353,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -8479,7 +8499,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -8497,7 +8517,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -8638,7 +8658,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -8656,7 +8676,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -8798,7 +8818,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -8816,7 +8836,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -8957,7 +8977,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -8975,7 +8995,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -9117,7 +9137,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -9135,7 +9155,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -9276,7 +9296,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -9294,7 +9314,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -9442,7 +9462,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -9460,7 +9480,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -9617,7 +9637,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -9635,7 +9655,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -9793,7 +9813,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -9811,7 +9831,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -9963,7 +9983,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -9981,7 +10001,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -10134,7 +10154,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -10152,7 +10172,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -10309,7 +10329,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -10327,7 +10347,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -10489,7 +10509,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -10507,7 +10527,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -10659,7 +10679,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -10677,7 +10697,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -10830,7 +10850,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -10848,7 +10868,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -11000,7 +11020,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -11018,7 +11038,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -11171,7 +11191,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -11189,7 +11209,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -11341,7 +11361,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -11359,7 +11379,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -11521,7 +11541,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -11539,7 +11559,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -11639,7 +11659,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -11657,7 +11677,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -11758,7 +11778,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -11776,7 +11796,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -11876,7 +11896,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -11894,7 +11914,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -11995,7 +12015,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -12013,7 +12033,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -12113,7 +12133,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -12131,7 +12151,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -12236,7 +12256,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -12254,7 +12274,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -12354,7 +12374,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -12372,7 +12392,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -12473,7 +12493,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -12491,7 +12511,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -12591,7 +12611,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -12609,7 +12629,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -12710,7 +12730,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -12728,7 +12748,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -12828,7 +12848,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -12846,7 +12866,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -12954,7 +12974,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -12972,7 +12992,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -13088,7 +13108,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<mx; m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -13106,7 +13126,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -13223,7 +13243,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -13241,7 +13261,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -13352,7 +13372,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -13370,7 +13390,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -13482,7 +13502,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -13500,7 +13520,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -13616,7 +13636,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -13634,7 +13654,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -13756,7 +13776,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -13774,7 +13794,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -13885,7 +13905,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<mx; m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -13903,7 +13923,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -14015,7 +14035,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -14033,7 +14053,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -14144,7 +14164,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<mx; m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -14162,7 +14182,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -14275,7 +14295,7 @@ void bat(GtkWidget *widget, gpointer data)
 					flags|=PROC_OFT;
 					for (m=0; m<mx; m++)
 					{
-						strat2=g_strsplit_set(strary2[m], "\t,", 0);
+						strat2=g_strsplit_set(strary2[m], "\t", 0);
 						if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 						{
 							lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -14293,7 +14313,7 @@ void bat(GtkWidget *widget, gpointer data)
 								if (!g_strcmp0("", strary[k])) continue;
 								if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 								if (lc<0) {lc++; continue;}
-								strat=g_strsplit_set(strary[k], "\t,", 0);
+								strat=g_strsplit_set(strary[k], "\t", 0);
 								lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 								g_array_append_val(xp, lcl);
 								if (!strat[trc]) lcl=0;
@@ -14405,7 +14425,7 @@ void bat(GtkWidget *widget, gpointer data)
 					flags|=PROC_OFT;
 					for (m=0; m<mx; m++)
 					{
-						strat2=g_strsplit_set(strary2[m], "\t,", 0);
+						strat2=g_strsplit_set(strary2[m], "\t", 0);
 						if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 						{
 							lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -14423,7 +14443,7 @@ void bat(GtkWidget *widget, gpointer data)
 								if (!g_strcmp0("", strary[k])) continue;
 								if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 								if (lc<0) {lc++; continue;}
-								strat=g_strsplit_set(strary[k], "\t,", 0);
+								strat=g_strsplit_set(strary[k], "\t", 0);
 								lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 								g_array_append_val(xp, lcl);
 								if (!strat[trc]) lcl=0;
@@ -14551,7 +14571,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<mx; m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -14569,7 +14589,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -14707,7 +14727,7 @@ void bat(GtkWidget *widget, gpointer data)
 								{
 									for (m=0; m<g_strv_length(strary2); m++)
 									{
-										strat2=g_strsplit_set(strary2[m], "\t,", 0);
+										strat2=g_strsplit_set(strary2[m], "\t", 0);
 										if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 										{
 											lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -14725,7 +14745,7 @@ void bat(GtkWidget *widget, gpointer data)
 												if (!g_strcmp0("", strary[k])) continue;
 												if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 												if (lc<0) {lc++; continue;}
-												strat=g_strsplit_set(strary[k], "\t,", 0);
+												strat=g_strsplit_set(strary[k], "\t", 0);
 												lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 												g_array_append_val(xp, lcl);
 												if (!strat[trc]) lcl=0;
@@ -14864,7 +14884,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -14882,7 +14902,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -15020,7 +15040,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -15038,7 +15058,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -15177,7 +15197,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -15195,7 +15215,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -15333,7 +15353,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -15351,7 +15371,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -15494,7 +15514,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -15512,7 +15532,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -15650,7 +15670,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -15668,7 +15688,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[1]) lcl=0;
@@ -15807,7 +15827,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -15825,7 +15845,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -15963,7 +15983,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -15981,7 +16001,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -16120,7 +16140,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -16138,7 +16158,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -16276,7 +16296,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -16294,7 +16314,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -16439,7 +16459,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -16457,7 +16477,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -16611,7 +16631,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -16629,7 +16649,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -16784,7 +16804,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -16802,7 +16822,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -16951,7 +16971,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -16969,7 +16989,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -17127,7 +17147,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -17145,7 +17165,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -17308,7 +17328,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -17326,7 +17346,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -17486,7 +17506,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -17504,7 +17524,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -17653,7 +17673,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -17671,7 +17691,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -17821,7 +17841,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -17839,7 +17859,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -17988,7 +18008,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -18006,7 +18026,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -18164,7 +18184,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -18182,7 +18202,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -18340,7 +18360,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -18358,7 +18378,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -18518,7 +18538,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -18536,7 +18556,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -18633,7 +18653,7 @@ void bat(GtkWidget *widget, gpointer data)
 							{
 								for (m=0; m<g_strv_length(strary2); m++)
 								{
-									strat2=g_strsplit_set(strary2[m], "\t,", 0);
+									strat2=g_strsplit_set(strary2[m], "\t", 0);
 									if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 									{
 										lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -18651,7 +18671,7 @@ void bat(GtkWidget *widget, gpointer data)
 											if (!g_strcmp0("", strary[k])) continue;
 											if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 											if (lc<0) {lc++; continue;}
-											strat=g_strsplit_set(strary[k], "\t,", 0);
+											strat=g_strsplit_set(strary[k], "\t", 0);
 											lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 											g_array_append_val(xp, lcl);
 											if (!strat[trc]) lcl=0;
@@ -18749,7 +18769,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -18767,7 +18787,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -18864,7 +18884,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -18882,7 +18902,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -18980,7 +19000,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -18998,7 +19018,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -19095,7 +19115,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -19113,7 +19133,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -19215,7 +19235,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -19233,7 +19253,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -19330,7 +19350,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -19348,7 +19368,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -19446,7 +19466,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -19464,7 +19484,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -19561,7 +19581,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -19579,7 +19599,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -19677,7 +19697,7 @@ void bat(GtkWidget *widget, gpointer data)
 				{
 					for (m=0; m<g_strv_length(strary2); m++)
 					{
-						strat2=g_strsplit_set(strary2[m], "\t,", 0);
+						strat2=g_strsplit_set(strary2[m], "\t", 0);
 						if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 						{
 							lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -19695,7 +19715,7 @@ void bat(GtkWidget *widget, gpointer data)
 								if (!g_strcmp0("", strary[k])) continue;
 								if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 								if (lc<0) {lc++; continue;}
-								strat=g_strsplit_set(strary[k], "\t,", 0);
+								strat=g_strsplit_set(strary[k], "\t", 0);
 								lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 								g_array_append_val(xp, lcl);
 								if (!strat[trc]) lcl=0;
@@ -19792,7 +19812,7 @@ void bat(GtkWidget *widget, gpointer data)
 				{
 					for (m=0; m<g_strv_length(strary2); m++)
 					{
-						strat2=g_strsplit_set(strary2[m], "\t,", 0);
+						strat2=g_strsplit_set(strary2[m], "\t", 0);
 						if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 						{
 							lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -19810,7 +19830,7 @@ void bat(GtkWidget *widget, gpointer data)
 								if (!g_strcmp0("", strary[k])) continue;
 								if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 								if (lc<0) {lc++; continue;}
-								strat=g_strsplit_set(strary[k], "\t,", 0);
+								strat=g_strsplit_set(strary[k], "\t", 0);
 								lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 								g_array_append_val(xp, lcl);
 								if (!strat[trc]) lcl=0;
@@ -19915,7 +19935,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -19933,7 +19953,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -20046,7 +20066,7 @@ void bat(GtkWidget *widget, gpointer data)
 						{
 							for (m=0; m<g_strv_length(strary2); m++)
 							{
-								strat2=g_strsplit_set(strary2[m], "\t,", 0);
+								strat2=g_strsplit_set(strary2[m], "\t", 0);
 								if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 								{
 									lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -20064,7 +20084,7 @@ void bat(GtkWidget *widget, gpointer data)
 										if (!g_strcmp0("", strary[k])) continue;
 										if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 										if (lc<0) {lc++; continue;}
-										strat=g_strsplit_set(strary[k], "\t,", 0);
+										strat=g_strsplit_set(strary[k], "\t", 0);
 										lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 										g_array_append_val(xp, lcl);
 										if (!strat[trc]) lcl=0;
@@ -20178,7 +20198,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -20196,7 +20216,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -20304,7 +20324,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -20322,7 +20342,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -20439,7 +20459,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -20457,7 +20477,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -20579,7 +20599,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -20597,7 +20617,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -20717,7 +20737,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -20735,7 +20755,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -20843,7 +20863,7 @@ void bat(GtkWidget *widget, gpointer data)
 					{
 						for (m=0; m<g_strv_length(strary2); m++)
 						{
-							strat2=g_strsplit_set(strary2[m], "\t,", 0);
+							strat2=g_strsplit_set(strary2[m], "\t", 0);
 							if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 							{
 								lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -20861,7 +20881,7 @@ void bat(GtkWidget *widget, gpointer data)
 									if (!g_strcmp0("", strary[k])) continue;
 									if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 									if (lc<0) {lc++; continue;}
-									strat=g_strsplit_set(strary[k], "\t,", 0);
+									strat=g_strsplit_set(strary[k], "\t", 0);
 									lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 									g_array_append_val(xp, lcl);
 									if (!strat[trc]) lcl=0;
@@ -20970,7 +20990,7 @@ void bat(GtkWidget *widget, gpointer data)
 				{
 					for (m=0; m<g_strv_length(strary2); m++)
 					{
-						strat2=g_strsplit_set(strary2[m], "\t,", 0);
+						strat2=g_strsplit_set(strary2[m], "\t", 0);
 						if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 						{
 							lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -20988,7 +21008,7 @@ void bat(GtkWidget *widget, gpointer data)
 								if (!g_strcmp0("", strary[k])) continue;
 								if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 								if (lc<0) {lc++; continue;}
-								strat=g_strsplit_set(strary[k], "\t,", 0);
+								strat=g_strsplit_set(strary[k], "\t", 0);
 								lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 								g_array_append_val(xp, lcl);
 								if (!strat[trc]) lcl=0;
@@ -21096,7 +21116,7 @@ void bat(GtkWidget *widget, gpointer data)
 				{
 					for (m=0; m<g_strv_length(strary2); m++)
 					{
-						strat2=g_strsplit_set(strary2[m], "\t,", 0);
+						strat2=g_strsplit_set(strary2[m], "\t", 0);
 						if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 						{
 							lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -21114,7 +21134,7 @@ void bat(GtkWidget *widget, gpointer data)
 								if (!g_strcmp0("", strary[k])) continue;
 								if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 								if (lc<0) {lc++; continue;}
-								strat=g_strsplit_set(strary[k], "\t,", 0);
+								strat=g_strsplit_set(strary[k], "\t", 0);
 								lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 								g_array_append_val(xp, lcl);
 								if (!strat[trc]) lcl=0;
@@ -21232,7 +21252,7 @@ void bat(GtkWidget *widget, gpointer data)
 				{
 					for (m=0; m<g_strv_length(strary2); m++)
 					{
-						strat2=g_strsplit_set(strary2[m], "\t,", 0);
+						strat2=g_strsplit_set(strary2[m], "\t", 0);
 						if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 						{
 							lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -21250,7 +21270,7 @@ void bat(GtkWidget *widget, gpointer data)
 								if (!g_strcmp0("", strary[k])) continue;
 								if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 								if (lc<0) {lc++; continue;}
-								strat=g_strsplit_set(strary[k], "\t,", 0);
+								strat=g_strsplit_set(strary[k], "\t", 0);
 								lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 								g_array_append_val(xp, lcl);
 								if (!strat[trc]) lcl=0;
@@ -21368,7 +21388,7 @@ void bat(GtkWidget *widget, gpointer data)
 				{
 					for (m=0; m<g_strv_length(strary2); m++)
 					{
-						strat2=g_strsplit_set(strary2[m], "\t,", 0);
+						strat2=g_strsplit_set(strary2[m], "\t", 0);
 						if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 						{
 							lcl=g_ascii_strtod(g_strstrip(strat2[0]), NULL);
@@ -21386,7 +21406,7 @@ void bat(GtkWidget *widget, gpointer data)
 								if (!g_strcmp0("", strary[k])) continue;
 								if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 								if (lc<0) {lc++; continue;}
-								strat=g_strsplit_set(strary[k], "\t,", 0);
+								strat=g_strsplit_set(strary[k], "\t", 0);
 								lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 								g_array_append_val(xp, lcl);
 								if (!strat[trc]) lcl=0;
