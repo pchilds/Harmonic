@@ -71,9 +71,6 @@ int main(int argc, char *argv[])
 	GtkAccelGroup *accel_group=NULL;
 	PlotLinear *plt, *plt2;
 	AtkObject *atk_widget, *atk_label;
-	AtkRelationSet *relation_set;
-	AtkRelation *relation;
-	AtkObject *targets[1];
 
 	gdouble fll=0;
 
