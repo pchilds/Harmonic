@@ -14,9 +14,5 @@ Harmonic_SOURCES=		\
 	disp.c			\
 	disp.h			\
 	batc.c			\
-	batc.h			\
-	plotlinear0-1-0.c	\
-	plotlinear0-1-0.h	\
-	plotpolar0-1-0.c	\
-	plotpolar0-1-0.h
+	batc.h
 Harmonic_LDADD=$(HARM_LIBS)
