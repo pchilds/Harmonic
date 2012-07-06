@@ -39,8 +39,9 @@ The simplest way to compile this package is:
      execute `configure' itself.  While running, configure prints some
      messages telling which features it is checking for. If it tells
      you that dependenceies aren't met, then you will need to install
-     the -dev package corresponding to them, e.g. libfftw3-dev is
-     required by this program.
+     the -dev package corresponding to them, e.g. libfftw3-dev and
+     libgtkplot-dev are required by this program (or the headers
+     installed from compiling the source).
 
   3. Type `make' to compile the package.
 
@@ -49,7 +50,9 @@ The simplest way to compile this package is:
 
   5. Type `make install' to install the programs and any data files and
      documentation. Keep the package in its current directory so you can
-     later uninstall it with `make uninstall'. 
+     later uninstall it with `make uninstall'. These commands require
+     root access which on some systems can be provided by prefixing the
+     commands with 'sudo'
 
   6. You can, however, remove the program binaries and object files from
      the source code directory by typing `make clean'.  To also remove
@@ -60,15 +63,10 @@ The simplest way to compile this package is:
      all sorts of other programs in order to regenerate files that came
      with the distribution.
 
-Alternately the following should work with gcc:
-
-   cd src
-   gcc -o Harmonic harmonic.c -lfftw3 -lm \
-       `pkg-config --cflags --libs gtk+-2.0` \
-       plotlinear0-1-0.h plotlinear0-1-0.c 
-
-and when batch procesing is implemented add to the end of this:
-       plotpolarboth0-1-0.h plotpolarboth0-1-0.c
+If an error finding the shared libraries occurs when trying to run the
+program, this could be because ldconfig hasn't cached the library
+location yet. This can be fixed with the command 'ldconfig -v' with root
+access.
 
 Compilers and Options
 =====================
