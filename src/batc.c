@@ -206,8 +206,8 @@ void upt(GtkWidget *widget, gpointer dta)
 
 void bat(GtkWidget *widget, gpointer data)
 {
-	PlotLinear *plt;
-	PlotPolar *plt2;
+	GtkPlotLinear *plt;
+	GtkPlotPolar *plt2;
 	GtkWidget *wfile, *content, *hbox, *vsc, *scroll, *label, *cont;
 	GArray *xp, *yp, *starp, *delp;
 	GtkAdjustment *adj, *adj2;
@@ -22371,7 +22371,7 @@ void bat(GtkWidget *widget, gpointer data)
 					gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
 					rest=gtk_table_new(1, 1, FALSE);
 					gtk_widget_show(rest);
-					plot3=plot_linear_new();
+					plot3=gtk_plot_linear_new();
 					g_signal_connect(plot3, "moved", G_CALLBACK(pltmv), NULL);
 					gtk_widget_show(plot3);
 					gtk_table_attach(GTK_TABLE(rest), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -22379,12 +22379,12 @@ void bat(GtkWidget *widget, gpointer data)
 					gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
 					{flags|=(PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN); flags&=(PROC_OFT|PROC_CHP|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);}
 				}
-				plt=PLOT_LINEAR(plot3);
+				plt=GTK_PLOT_LINEAR(plot3);
 				if (mx<8) {(plt->flagd)=3; (plt->ptsize)=4;}
 				else if (mx<20){(plt->flagd)=3; (plt->ptsize)=3;}
 				else if (mx<50){(plt->flagd)=3; (plt->ptsize)=2;}
 				{(plt->xdata)=bxr; (plt->ydata)=byr; (plt->sizes)=bsz; (plt->ind)=bnx;}
-				plot_linear_update_scale_pretty(plot3, xi, xf, mny, mxy);
+				gtk_plot_linear_update_scale_pretty(plot3, xi, xf, mny, mxy);
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 2);
 				break;
@@ -22394,7 +22394,7 @@ void bat(GtkWidget *widget, gpointer data)
 					gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
 					rest=gtk_table_new(1, 1, FALSE);
 					gtk_widget_show(rest);
-					plot3=plot_polar_new();
+					plot3=gtk_plot_polar_new();
 					g_signal_connect(plot3, "moved", G_CALLBACK(pltmvp), NULL);
 					gtk_widget_show(plot3);
 					gtk_table_attach(GTK_TABLE(rest), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -22402,13 +22402,13 @@ void bat(GtkWidget *widget, gpointer data)
 					gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
 					flags|=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 				}
-				plt2=PLOT_POLAR(plot3);
+				plt2=GTK_PLOT_POLAR(plot3);
 				if (mx<8) (plt2->ptsize)=4;
 				else if (mx<20)(plt2->ptsize)=3;
 				else if (mx<50)(plt2->ptsize)=2;
 				else (plt2->flagd)=2;
 				{(plt2->thdata)=bxr; (plt2->rdata)=byr; (plt2->sizes)=bsz; (plt2->ind)=bnx;}
-				plot_polar_update_scale_pretty(plot3, mny, mxy, xi, xf);
+				gtk_plot_polar_update_scale_pretty(plot3, mny, mxy, xi, xf);
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 2);
 				break;
@@ -22418,7 +22418,7 @@ void bat(GtkWidget *widget, gpointer data)
 					gtk_notebook_remove_page(GTK_NOTEBOOK(notebook2), 2);
 					rest=gtk_table_new(1, 1, FALSE);
 					gtk_widget_show(rest);
-					plot3=plot_polar_new();
+					plot3=gtk_plot_polar_new();
 					g_signal_connect(plot3, "moved", G_CALLBACK(pltmvp), NULL);
 					gtk_widget_show(plot3);
 					gtk_table_attach(GTK_TABLE(rest), plot3, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -22426,13 +22426,13 @@ void bat(GtkWidget *widget, gpointer data)
 					gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
 					flags|=(PROC_POL|PROC_BAT|PROC_PRS|PROC_TRS|PROC_OPN);
 				}
-				plt2=PLOT_POLAR(plot3);
+				plt2=GTK_PLOT_POLAR(plot3);
 				if (mx<8) {(plt2->flagd)=7; (plt2->ptsize)=4;}
 				else if (mx<20){(plt2->flagd)=7; (plt2->ptsize)=3;}
 				else if (mx<50){(plt2->flagd)=7; (plt2->ptsize)=2;}
 				else (plt2->flagd)=3;
 				{(plt2->thdata)=bxr; (plt2->rdata)=byr; (plt2->sizes)=bsz; (plt2->ind)=bnx;}
-				plot_polar_update_scale_pretty(plot3, mny, mxy, xi, xf);
+				gtk_plot_polar_update_scale_pretty(plot3, mny, mxy, xi, xf);
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
 				gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 2);
 				break;

@@ -162,14 +162,14 @@ void prg(GtkWidget *widget, gpointer data)
 				{
 					if (g_str_has_suffix(fout, ".eps"))
 					{
-						if ((flags&PROC_POL)!=0) plot_polar_print_eps(plot3, fout);
-						else plot_linear_print_eps(plot3, fout);
+						if ((flags&PROC_POL)!=0) gtk_plot_polar_print_eps(plot3, fout);
+						else gtk_plot_linear_print_eps(plot3, fout);
 					}
 					else
 					{
 						fout2=g_strconcat(fout, ".eps", NULL);
-						if ((flags&PROC_POL)!=0) plot_polar_print_eps(plot3, fout2);
-						else plot_linear_print_eps(plot3, fout2);
+						if ((flags&PROC_POL)!=0) gtk_plot_polar_print_eps(plot3, fout2);
+						else gtk_plot_linear_print_eps(plot3, fout2);
 						g_free(fout2);
 					}
 				}
@@ -177,27 +177,27 @@ void prg(GtkWidget *widget, gpointer data)
 				{
 					if (g_str_has_suffix(fout, ".svg"))
 					{
-						if ((flags&PROC_POL)!=0) plot_polar_print_svg(plot3, fout);
-						else plot_linear_print_svg(plot3, fout);
+						if ((flags&PROC_POL)!=0) gtk_plot_polar_print_svg(plot3, fout);
+						else gtk_plot_linear_print_svg(plot3, fout);
 					}
 					else
 					{
 						fout2=g_strconcat(fout, ".svg", NULL);
-						if ((flags&PROC_POL)!=0) plot_polar_print_svg(plot3, fout2);
-						else plot_linear_print_svg(plot3, fout2);
+						if ((flags&PROC_POL)!=0) gtk_plot_polar_print_svg(plot3, fout2);
+						else gtk_plot_linear_print_svg(plot3, fout2);
 						g_free(fout2);
 					}
 				}
 				else if (g_str_has_suffix(fout, ".png"))
 				{
-					if ((flags&PROC_POL)!=0) plot_polar_print_png(plot3, fout);
-					else plot_linear_print_png(plot3, fout);
+					if ((flags&PROC_POL)!=0) gtk_plot_polar_print_png(plot3, fout);
+					else gtk_plot_linear_print_png(plot3, fout);
 				}
 				else
 				{
 					fout2=g_strconcat(fout, ".png", NULL);
-					if ((flags&PROC_POL)!=0) plot_polar_print_png(plot3, fout2);
-					else plot_linear_print_png(plot3, fout2);
+					if ((flags&PROC_POL)!=0) gtk_plot_polar_print_png(plot3, fout2);
+					else gtk_plot_linear_print_png(plot3, fout2);
 					g_free(fout2);
 				}
 				g_free(fout);
@@ -236,29 +236,29 @@ void prg(GtkWidget *widget, gpointer data)
 				filt=gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(wfile));
 				if (filt==epsfilt)
 				{
-					if (g_str_has_suffix(fout, ".eps")) plot_linear_print_eps(plot2, fout);
+					if (g_str_has_suffix(fout, ".eps")) gtk_plot_linear_print_eps(plot2, fout);
 					else
 					{
 						fout2=g_strconcat(fout, ".eps", NULL);
-						plot_linear_print_eps(plot2, fout2);
+						gtk_plot_linear_print_eps(plot2, fout2);
 						g_free(fout2);
 					}
 				}
 				else if (filt==svgfilt)
 				{
-					if (g_str_has_suffix(fout, ".svg")) plot_linear_print_svg(plot2, fout);
+					if (g_str_has_suffix(fout, ".svg")) gtk_plot_linear_print_svg(plot2, fout);
 					else
 					{
 						fout2=g_strconcat(fout, ".svg", NULL);
-						plot_linear_print_svg(plot2, fout2);
+						gtk_plot_linear_print_svg(plot2, fout2);
 						g_free(fout2);
 					}
 				}
-				else if (g_str_has_suffix(fout, ".png")) plot_linear_print_png(plot2, fout);
+				else if (g_str_has_suffix(fout, ".png")) gtk_plot_linear_print_png(plot2, fout);
 				else
 				{
 					fout2=g_strconcat(fout, ".png", NULL);
-					plot_linear_print_png(plot2, fout2);
+					gtk_plot_linear_print_png(plot2, fout2);
 					g_free(fout2);
 				}
 				g_free(fout);
@@ -297,29 +297,29 @@ void prg(GtkWidget *widget, gpointer data)
 				filt=gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(wfile));
 				if (filt==epsfilt)
 				{
-					if (g_str_has_suffix(fout, ".eps")) plot_linear_print_eps(plot1, fout);
+					if (g_str_has_suffix(fout, ".eps")) gtk_plot_linear_print_eps(plot1, fout);
 					else
 					{
 						fout2=g_strconcat(fout, ".eps", NULL);
-						plot_linear_print_eps(plot1, fout2);
+						gtk_plot_linear_print_eps(plot1, fout2);
 						g_free(fout2);
 					}
 				}
 				else if (filt==svgfilt)
 				{
-					if (g_str_has_suffix(fout, ".svg")) plot_linear_print_svg(plot1, fout);
+					if (g_str_has_suffix(fout, ".svg")) gtk_plot_linear_print_svg(plot1, fout);
 					else
 					{
 						fout2=g_strconcat(fout, ".svg", NULL);
-						plot_linear_print_svg(plot1, fout2);
+						gtk_plot_linear_print_svg(plot1, fout2);
 						g_free(fout2);
 					}
 				}
-				else if (g_str_has_suffix(fout, ".png")) plot_linear_print_png(plot1, fout);
+				else if (g_str_has_suffix(fout, ".png")) gtk_plot_linear_print_png(plot1, fout);
 				else
 				{
 					fout2=g_strconcat(fout, ".png", NULL);
-					plot_linear_print_png(plot1, fout2);
+					gtk_plot_linear_print_png(plot1, fout2);
 					g_free(fout2);
 				}
 				g_free(fout);
@@ -367,29 +367,29 @@ void prg(GtkWidget *widget, gpointer data)
 				filt=gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(wfile));
 				if (filt==epsfilt)
 				{
-					if (g_str_has_suffix(fout, ".eps")) plot_linear_print_eps(plot2, fout);
+					if (g_str_has_suffix(fout, ".eps")) gtk_plot_linear_print_eps(plot2, fout);
 					else
 					{
 						fout2=g_strconcat(fout, ".eps", NULL);
-						plot_linear_print_eps(plot2, fout2);
+						gtk_plot_linear_print_eps(plot2, fout2);
 						g_free(fout2);
 					}
 				}
 				else if (filt==svgfilt)
 				{
-					if (g_str_has_suffix(fout, ".svg")) plot_linear_print_svg(plot2, fout);
+					if (g_str_has_suffix(fout, ".svg")) gtk_plot_linear_print_svg(plot2, fout);
 					else
 					{
 						fout2=g_strconcat(fout, ".svg", NULL);
-						plot_linear_print_svg(plot2, fout2);
+						gtk_plot_linear_print_svg(plot2, fout2);
 						g_free(fout2);
 					}
 				}
-				else if (g_str_has_suffix(fout, ".png")) plot_linear_print_png(plot2, fout);
+				else if (g_str_has_suffix(fout, ".png")) gtk_plot_linear_print_png(plot2, fout);
 				else
 				{
 					fout2=g_strconcat(fout, ".png", NULL);
-					plot_linear_print_png(plot2, fout2);
+					gtk_plot_linear_print_png(plot2, fout2);
 					g_free(fout2);
 				}
 				g_free(fout);
@@ -428,29 +428,29 @@ void prg(GtkWidget *widget, gpointer data)
 				filt=gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(wfile));
 				if (filt==epsfilt)
 				{
-					if (g_str_has_suffix(fout, ".eps")) plot_linear_print_eps(plot1, fout);
+					if (g_str_has_suffix(fout, ".eps")) gtk_plot_linear_print_eps(plot1, fout);
 					else
 					{
 						fout2=g_strconcat(fout, ".eps", NULL);
-						plot_linear_print_eps(plot1, fout2);
+						gtk_plot_linear_print_eps(plot1, fout2);
 						g_free(fout2);
 					}
 				}
 				else if (filt==svgfilt)
 				{
-					if (g_str_has_suffix(fout, ".svg")) plot_linear_print_svg(plot1, fout);
+					if (g_str_has_suffix(fout, ".svg")) gtk_plot_linear_print_svg(plot1, fout);
 					else
 					{
 						fout2=g_strconcat(fout, ".svg", NULL);
-						plot_linear_print_svg(plot1, fout2);
+						gtk_plot_linear_print_svg(plot1, fout2);
 						g_free(fout2);
 					}
 				}
-				else if (g_str_has_suffix(fout, ".png")) plot_linear_print_png(plot1, fout);
+				else if (g_str_has_suffix(fout, ".png")) gtk_plot_linear_print_png(plot1, fout);
 				else
 				{
 					fout2=g_strconcat(fout, ".png", NULL);
-					plot_linear_print_png(plot1, fout2);
+					gtk_plot_linear_print_png(plot1, fout2);
 					g_free(fout2);
 				}
 				g_free(fout);
@@ -498,29 +498,29 @@ void prg(GtkWidget *widget, gpointer data)
 				filt=gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(wfile));
 				if (filt==epsfilt)
 				{
-					if (g_str_has_suffix(fout, ".eps")) plot_linear_print_eps(plot1, fout);
+					if (g_str_has_suffix(fout, ".eps")) gtk_plot_linear_print_eps(plot1, fout);
 					else
 					{
 						fout2=g_strconcat(fout, ".eps", NULL);
-						plot_linear_print_eps(plot1, fout2);
+						gtk_plot_linear_print_eps(plot1, fout2);
 						g_free(fout2);
 					}
 				}
 				else if (filt==svgfilt)
 				{
-					if (g_str_has_suffix(fout, ".svg")) plot_linear_print_svg(plot1, fout);
+					if (g_str_has_suffix(fout, ".svg")) gtk_plot_linear_print_svg(plot1, fout);
 					else
 					{
 						fout2=g_strconcat(fout, ".svg", NULL);
-						plot_linear_print_svg(plot1, fout2);
+						gtk_plot_linear_print_svg(plot1, fout2);
 						g_free(fout2);
 					}
 				}
-				else if (g_str_has_suffix(fout, ".png")) plot_linear_print_png(plot1, fout);
+				else if (g_str_has_suffix(fout, ".png")) gtk_plot_linear_print_png(plot1, fout);
 				else
 				{
 					fout2=g_strconcat(fout, ".png", NULL);
-					plot_linear_print_png(plot1, fout2);
+					gtk_plot_linear_print_png(plot1, fout2);
 					g_free(fout2);
 				}
 				g_free(fout);
@@ -540,7 +540,7 @@ void prg(GtkWidget *widget, gpointer data)
 void sav(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *wfile, *dialog, *cont, *label;
-	PlotLinear *plt;
+	GtkPlotLinear *plt;
 	gchar *contents, *str, *str2, *fout=NULL;
 	gchar s1[10], s2[10], s3[10], s4[10];
 	gint j, k, sz4;
@@ -2294,7 +2294,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(str);
 					}
 					g_free(str2);
-					plt=PLOT_LINEAR(plot2);
+					plt=GTK_PLOT_LINEAR(plot2);
 					sz4=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
@@ -2356,7 +2356,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(str);
 					}
 					g_free(str2);
-					plt=PLOT_LINEAR(plot2);
+					plt=GTK_PLOT_LINEAR(plot2);
 					sz4=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
@@ -2462,7 +2462,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(str);
 					}
 					g_free(str2);
-					plt=PLOT_LINEAR(plot2);
+					plt=GTK_PLOT_LINEAR(plot2);
 					sz4=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
@@ -2524,7 +2524,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(str);
 					}
 					g_free(str2);
-					plt=PLOT_LINEAR(plot2);
+					plt=GTK_PLOT_LINEAR(plot2);
 					sz4=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
@@ -2631,7 +2631,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(str);
 					}
 					g_free(str2);
-					plt=PLOT_LINEAR(plot2);
+					plt=GTK_PLOT_LINEAR(plot2);
 					sz4=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
@@ -2693,7 +2693,7 @@ void sav(GtkWidget *widget, gpointer data)
 						g_free(str);
 					}
 					g_free(str2);
-					plt=PLOT_LINEAR(plot2);
+					plt=GTK_PLOT_LINEAR(plot2);
 					sz4=g_array_index((plt->sizes), gint, 0);
 					g_snprintf(s1, 10, "%f", g_array_index(stars, gdouble, 0));
 					str2=g_strjoin("\t", "0.0000000", s1, "0.0000000", NULL);
@@ -2888,7 +2888,7 @@ void opd(GtkWidget *widget, gpointer data)
 	gchar **strat=NULL, **strary=NULL;
 	gchar s[5];
 	GError *Err=NULL;
-	PlotLinear *plt;
+	GtkPlotLinear *plt;
 
 	wfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(wfile), FALSE);
@@ -3001,7 +3001,7 @@ void opd(GtkWidget *widget, gpointer data)
 				str=g_strdup_printf(_("File: %s successfully loaded."), fin);
 				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 				g_free(str);
-				plt=PLOT_LINEAR(plot1);
+				plt=GTK_PLOT_LINEAR(plot1);
 				xi=g_array_index(x, gdouble, 0);
 				xf=g_array_index(x, gdouble, (lc-1));
 				sz=g_array_new(FALSE, FALSE, sizeof(gint));
@@ -3013,7 +3013,7 @@ void opd(GtkWidget *widget, gpointer data)
 				(plt->ind)=nx;
 				(plt->xdata)=x;
 				(plt->ydata)=yb;
-				plot_linear_update_scale_pretty(plot1, xi, xf, mny, mxy);
+				gtk_plot_linear_update_scale_pretty(plot1, xi, xf, mny, mxy);
 				flags&=(PROC_OPN|PROC_TRS|PROC_PRS|PROC_CHP|PROC_OFT|PROC_POL);
 			}
 			else

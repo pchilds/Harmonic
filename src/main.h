@@ -27,8 +27,8 @@
 #	include <gtk/gtk.h>
 #	include <glib/gi18n.h>
 #	include <math.h>
-#	include <gtkplot-1.0/plotlinear.h>
-#	include <gtkplot-1.0/plotpolar.h>
+#	include <gtk2plot-1.0/gtkplotlinear.h>
+#	include <gtk2plot-1.0/gtkplotpolar.h>
 	G_BEGIN_DECLS
 #	define DZE 0.00001 /* divide by zero threshold */
 #	define NZE -0.00001 /* negative of this */

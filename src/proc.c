@@ -27,7 +27,7 @@
 void prs(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *label;
-	PlotLinear *plt;
+	GtkPlotLinear *plt;
 	gint j, k, l, st, sp, sz4;
 	gdouble idelf, iv, vzt, vt, ivd, ivdt, tcn, twd, phi, phio, phia, dst, ddp, pn, cn, tp, ct;
 	gchar *str;
@@ -35,7 +35,7 @@ void prs(GtkWidget *widget, gpointer data)
 
 	if ((flags&PROC_TRS)!=0)
 	{
-		plt=PLOT_LINEAR(plot2);
+		plt=GTK_PLOT_LINEAR(plot2);
 		sz4=g_array_index((plt->sizes), gint, 0);/* check placing of this with what is desired for multiplots (within for loop?) */
 		g_array_free(vis, TRUE);
 		g_array_free(doms, TRUE);
@@ -588,7 +588,7 @@ void prs(GtkWidget *widget, gpointer data)
 void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inversion to 2pi/x */
 {
 	GtkWidget *label;
-	PlotLinear *plt;
+	GtkPlotLinear *plt;
 	gint j, k, st, sp, n, zp, dx, dx2;
 	gdouble iv, clc, ofs, ofe, xx, yx, ce;
 	gchar *str;
@@ -2793,12 +2793,12 @@ void trs(GtkWidget *widget, gpointer data) /* need to incorporate case for inver
 		}
 		fftw_free(star);
 		oe=ce;
-		plt=PLOT_LINEAR(plot2);
+		plt=GTK_PLOT_LINEAR(plot2);
 		(plt->sizes)=sz2;
 		(plt->ind)=nx2;
 		(plt->xdata)=xsb;
 		(plt->ydata)=ysb;
-		plot_linear_update_scale_pretty(plot2, 0, xx, 0, yx);
+		gtk_plot_linear_update_scale_pretty(plot2, 0, xx, 0, yx);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook), 1);
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 1);
 		jdimxf=jdimx;

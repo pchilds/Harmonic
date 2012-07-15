@@ -58,7 +58,7 @@ void about(GtkWidget *widget, gpointer data)
 
 void upg(GtkWidget *widget, gpointer data)
 {
-	PlotLinear *plt;
+	GtkPlotLinear *plt;
 	gdouble dt, xi, xf, mny, mxy;
 	gint j, sz4;
 	GSList *list;
@@ -71,7 +71,7 @@ void upg(GtkWidget *widget, gpointer data)
 		list=list->next;
 		trc--;
 	}
-	plt=PLOT_LINEAR(plot1);
+	plt=GTK_PLOT_LINEAR(plot1);
 	sz4=g_array_index((plt->sizes), gint, 0);/* adjust accordingly with multitrace considerations*/
 	g_array_free(yb, TRUE);
 	yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
@@ -89,10 +89,10 @@ void upg(GtkWidget *widget, gpointer data)
 	(plt->ydata)=yb;
 	xi=g_array_index(x, gdouble, 0);
 	xf=g_array_index(x, gdouble, (lc-1));
-	plot_linear_update_scale(plot1, xi, xf, mny, mxy);
+	gtk_plot_linear_update_scale(plot1, xi, xf, mny, mxy);
 }
 
-void pltmv(PlotLinear *plot, gpointer data)
+void pltmv(GtkPlotLinear *plot, gpointer data)
 {
 	gchar *str;
 
@@ -101,7 +101,7 @@ void pltmv(PlotLinear *plot, gpointer data)
 	g_free(str);
 }
 
-void pltmvp(PlotPolar *plot, gpointer data)
+void pltmvp(GtkPlotPolar *plot, gpointer data)
 {
 	gchar *str;
 
@@ -118,8 +118,8 @@ void upj(GtkWidget *widget, gpointer data)
 	 * If transform has been performed and in single plot mode, changes the graph in plot 2
 	 * If processing has been performed, updates the displayed value/plot
 	 */
-	PlotLinear *plt2, *plt3;
-	PlotPolar *plt4;
+	GtkPlotLinear *plt2, *plt3;
+	GtkPlotPolar *plt4;
 	gint j, k, l, sz4;
 	gdouble num, num2, num3, num4, num5, num6, num7, xi, xf, mny, mxy;
 	gdouble *ptr;
@@ -196,7 +196,7 @@ void upj(GtkWidget *widget, gpointer data)
 		if (((flags&PROC_TRS)!=0)&&((flagd&DISP_MIJ)==0))
 		{
 			g_object_get(G_OBJECT(plot2), "xmin", &num, "xmax", &num2, NULL);
-			plt2=PLOT_LINEAR(plot2);
+			plt2=GTK_PLOT_LINEAR(plot2);
 			sz4=g_array_index((plt2->sizes), gint, 0);
 			g_array_free(nx2, TRUE);
 			nx2=g_array_new(FALSE, FALSE, sizeof(gint));
@@ -209,7 +209,7 @@ void upj(GtkWidget *widget, gpointer data)
 				if (num4>num3) num3=num4;
 			}
 			(plt2->ind)=nx2;
-			plot_linear_update_scale_pretty(plot2, num, num2, 0, num3);
+			gtk_plot_linear_update_scale_pretty(plot2, num, num2, 0, num3);
 		}
 		if ((flags&PROC_PRS)!=0)
 		{
@@ -269,17 +269,17 @@ void upj(GtkWidget *widget, gpointer data)
 					}
 					if ((flags&PROC_POL)==0)
 					{
-						plt3=PLOT_LINEAR(plot3);
+						plt3=GTK_PLOT_LINEAR(plot3);
 						(plt3->sizes)=bsz;
 						(plt3->ind)=bnx;
-						plot_linear_update_scale_pretty(plot3, num, num2, num3, num4);
+						gtk_plot_linear_update_scale_pretty(plot3, num, num2, num3, num4);
 					}
 					else
 					{
-						plt4=PLOT_POLAR(plot3);
+						plt4=GTK_PLOT_POLAR(plot3);
 						(plt4->sizes)=bsz;
 						(plt4->ind)=bnx;
-						plot_polar_update_scale_pretty(plot3, num3, num4, num, num2);
+						gtk_plot_polar_update_scale_pretty(plot3, num3, num4, num, num2);
 					}
 				}
 			}
@@ -337,8 +337,8 @@ void upk(GtkWidget *widget, gpointer data)
 	 * updates front panel to display parameters for new j,k values
 	 * If processing has been performed, updates the displayed value/plot
 	 */
-	PlotLinear *plt3;
-	PlotPolar *plt4;
+	GtkPlotLinear *plt3;
+	GtkPlotPolar *plt4;
 	gint j, k, l, sz4;
 	gdouble num, num2, num3, num4, num5;
 	gchar s[10];
@@ -439,17 +439,17 @@ void upk(GtkWidget *widget, gpointer data)
 					}
 					if ((flags&PROC_POL)==0)
 					{
-						plt3=PLOT_LINEAR(plot3);
+						plt3=GTK_PLOT_LINEAR(plot3);
 						(plt3->sizes)=bsz;
 						(plt3->ind)=bnx;
-						plot_linear_update_scale_pretty(plot3, num, num2, num3, num4);
+						gtk_plot_linear_update_scale_pretty(plot3, num, num2, num3, num4);
 					}
 					else
 					{
-						plt4=PLOT_POLAR(plot3);
+						plt4=GTK_PLOT_POLAR(plot3);
 						(plt4->sizes)=bsz;
 						(plt4->ind)=bnx;
-						plot_polar_update_scale_pretty(plot3, num3, num4, num, num2);
+						gtk_plot_polar_update_scale_pretty(plot3, num3, num4, num, num2);
 					}
 				}
 			}

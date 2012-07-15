@@ -40,7 +40,7 @@
  * PRC: triangle optimisation
  * SAV: session save/restore routine
  * TRS: wavelets
- * PLOT: see issues in plotpolar
+ * PLOT: see issues in gtkplotpolar
  */
 
 #include <gdk/gdkkeysyms.h>
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 	GtkAdjustment *adj;
 	GtkWidget *vbox, *mnb, *mnu, *smnu, *mni, *hpane, *table, *label, *butt;
 	GtkAccelGroup *accel_group=NULL;
-	PlotLinear *plt, *plt2;
+	GtkPlotLinear *plt, *plt2;
 	AtkObject *atk_widget, *atk_label;
 
 	gdouble fll=0;
@@ -500,7 +500,7 @@ int main(int argc, char *argv[])
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(notebook2), GTK_POS_TOP);
 	table=gtk_table_new(1, 1, FALSE);
 	gtk_widget_show(table);
-	plot1=plot_linear_new();
+	plot1=gtk_plot_linear_new();
 	rd1=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	gr1=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	bl1=g_array_new(FALSE, FALSE, sizeof(gdouble));
@@ -511,7 +511,7 @@ int main(int argc, char *argv[])
 	g_array_append_val(bl1, fll);
 	fll=1;
 	g_array_append_val(al1, fll);
-	plt=PLOT_LINEAR(plot1);
+	plt=GTK_PLOT_LINEAR(plot1);
 	(plt->rd)=rd1;
 	(plt->gr)=gr1;
 	(plt->bl)=bl1;
@@ -523,8 +523,8 @@ int main(int argc, char *argv[])
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), table, label);
 	table=gtk_table_new(1, 1, FALSE);
 	gtk_widget_show(table);
-	plot2=plot_linear_new();
-	plt2=PLOT_LINEAR(plot2);
+	plot2=gtk_plot_linear_new();
+	plt2=GTK_PLOT_LINEAR(plot2);
 	(plt2->xlab)=g_strdup(_("Inverse Domain"));
 	rd2=g_array_new(FALSE, FALSE, sizeof(gdouble));
 	gr2=g_array_new(FALSE, FALSE, sizeof(gdouble));

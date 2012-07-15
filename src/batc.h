@@ -36,8 +36,8 @@
 	extern gdouble oe;
 	extern gchar *fold, *folr;
 	extern void trs(GtkWidget*, gpointer);
-	extern void pltmv(PlotLinear*, gpointer);
-	extern void pltmvp(PlotPolar*, gpointer);
+	extern void pltmv(GtkPlotLinear*, gpointer);
+	extern void pltmvp(GtkPlotPolar*, gpointer);
 	void bat(GtkWidget*, gpointer);
 	void upt(GtkWidget*, gpointer);
 	void tsw(GtkWidget*, gpointer);

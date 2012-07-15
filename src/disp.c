@@ -32,8 +32,8 @@ gint jdim2, jdim3, kdim2;
 
 void dpa(GtkWidget *widget, gpointer data)
 {
-	PlotLinear *plt;
-	PlotPolar *plt2;
+	GtkPlotLinear *plt;
+	GtkPlotPolar *plt2;
 	GdkColor clr;
 	GArray *car, *cag, *cab, *caa;
 	gdouble xi, xf, mny, mxy, rcn, thc, iv;
@@ -47,7 +47,7 @@ void dpa(GtkWidget *widget, gpointer data)
 		case 2:
 		if ((flags&PROC_POL)!=0)
 		{
-			plt2=PLOT_POLAR(plot3);
+			plt2=GTK_PLOT_POLAR(plot3);
 			g_free(plt2->rlab);
 			g_free(plt2->thlab);
 			pango_font_description_free(plt2->lfont);
@@ -353,12 +353,12 @@ void dpa(GtkWidget *widget, gpointer data)
 			(plt2->gr)=gr3;
 			(plt2->bl)=bl3;
 			(plt2->al)=al3;
-			if (pry) plot_polar_update_scale_pretty(plot3, xi, xf, mny, mxy);
-			else plot_polar_update_scale(plot3, xi, xf, mny, mxy, rcn, thc);
+			if (pry) gtk_plot_polar_update_scale_pretty(plot3, xi, xf, mny, mxy);
+			else gtk_plot_polar_update_scale(plot3, xi, xf, mny, mxy, rcn, thc);
 		}
 		else if ((flags&PROC_BAT)!=0)
 		{
-			plt=PLOT_LINEAR(plot3);
+			plt=GTK_PLOT_LINEAR(plot3);
 			g_free(plt->xlab);
 			g_free(plt->ylab);
 			pango_font_description_free(plt->lfont);
@@ -664,8 +664,8 @@ void dpa(GtkWidget *widget, gpointer data)
 			(plt->gr)=gr3;
 			(plt->bl)=bl3;
 			(plt->al)=al3;
-			if (pry) plot_linear_update_scale_pretty(plot3, xi, xf, mny, mxy);
-			else plot_linear_update_scale(plot3, xi, xf, mny, mxy);
+			if (pry) gtk_plot_linear_update_scale_pretty(plot3, xi, xf, mny, mxy);
+			else gtk_plot_linear_update_scale(plot3, xi, xf, mny, mxy);
 		}
 		else
 		{
@@ -677,7 +677,7 @@ void dpa(GtkWidget *widget, gpointer data)
 		}
 		break;
 		case 1:
-		plt=PLOT_LINEAR(plot2);
+		plt=GTK_PLOT_LINEAR(plot2);
 		g_free(plt->xlab);
 		g_free(plt->ylab);
 		pango_font_description_free(plt->lfont);
@@ -831,11 +831,11 @@ void dpa(GtkWidget *widget, gpointer data)
 		(plt->gr)=gr2;
 		(plt->bl)=bl2;
 		(plt->al)=al2;
-		if (pry) plot_linear_update_scale_pretty(plot2, xi, xf, mny, mxy);
-		else plot_linear_update_scale(plot2, xi, xf, mny, mxy);
+		if (pry) gtk_plot_linear_update_scale_pretty(plot2, xi, xf, mny, mxy);
+		else gtk_plot_linear_update_scale(plot2, xi, xf, mny, mxy);
 		break;
 		default:
-		plt=PLOT_LINEAR(plot1);
+		plt=GTK_PLOT_LINEAR(plot1);
 		g_free(plt->xlab);
 		g_free(plt->ylab);
 		pango_font_description_free(plt->lfont);
@@ -863,17 +863,13 @@ void dpa(GtkWidget *widget, gpointer data)
 		(plt->gr)=gr1;
 		(plt->bl)=bl1;
 		g_object_get(G_OBJECT(plot1), "xmin", &xi, "xmax", &xf, "ymin", &mny, "ymax", &mxy, NULL);
-		plot_linear_update_scale(plot1, xi, xf, mny, mxy);
+		gtk_plot_linear_update_scale(plot1, xi, xf, mny, mxy);
 		break;
 	}
 }
 
 void dpo(GtkWidget *widget, gpointer data)
 {
-	PlotLinear *plt, *plt2, *plt3;
-	PlotPolar *plt4;
-	gchar *str;
-
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook3), 0);
 	dpa(NULL, NULL);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook3), 1);
@@ -1062,8 +1058,8 @@ void dpr(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *butt, *hbox, *vbox, *table, *label, *spr;
 	GtkAdjustment *adj;
-	PlotLinear *plt, *plt2, *plt3;
-	PlotPolar *plt4;
+	GtkPlotLinear *plt, *plt2, *plt3;
+	GtkPlotPolar *plt4;
 	AtkObject *atk_widget, *atk_label;
 	AtkRelationSet *relation_set;
 	AtkRelation *relation;
@@ -1093,7 +1089,7 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(notebook3), GTK_POS_TOP);
 	table=gtk_table_new(4, 2, FALSE);
 	gtk_widget_show(table);
-	plt=PLOT_LINEAR(plot1);
+	plt=GTK_PLOT_LINEAR(plot1);
 	label=gtk_label_new(_("Axis label font:"));
 	gtk_widget_show(label);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -1198,7 +1194,7 @@ void dpr(GtkWidget *widget, gpointer data)
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook3), hbox, label);
 	table=gtk_table_new(4, 2, FALSE);
 	gtk_widget_show(table);
-	plt2=PLOT_LINEAR(plot2);
+	plt2=GTK_PLOT_LINEAR(plot2);
 	label=gtk_label_new(_("Axis label font:"));
 	gtk_widget_show(label);
 	gtk_table_attach(GTK_TABLE(table), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -1342,7 +1338,7 @@ void dpr(GtkWidget *widget, gpointer data)
 		gtk_table_attach(GTK_TABLE(table), entry6, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		if ((flags&PROC_POL)!=0)
 		{
-			plt4=PLOT_POLAR(plot3);
+			plt4=GTK_PLOT_POLAR(plot3);
 			label=gtk_label_new(_("Radial axis text:"));
 			gtk_widget_show(label);
 			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -1366,7 +1362,7 @@ void dpr(GtkWidget *widget, gpointer data)
 		}
 		else
 		{
-			plt3=PLOT_LINEAR(plot3);
+			plt3=GTK_PLOT_LINEAR(plot3);
 			label=gtk_label_new(_("X axis text:"));
 			gtk_widget_show(label);
 			gtk_table_attach(GTK_TABLE(table), label, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
