@@ -8,6 +8,14 @@ AM_GNU_GETTEXT([external])
 GNOME_DOC_INIT
 AC_PROG_CC([gcc cc])
 AC_CONFIG_HEADERS([config.h])
+case "$host_os" in
+   mingw*)
+      AC_DEFINE([DLMT],["\r\n"],[End Of Line delimiter])
+      ;;
+   *)
+      AC_DEFINE([DLMT],["\n"],[End Of Line delimiter])
+      ;;
+esac
 gtk_rqr="gtk+-2.0 >= 2.14 gthread-2.0 gtkplot-2.0"
 PKG_CHECK_MODULES([HARM], [$gtk_rqr fftw3])
 AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile po/Makefile.in])

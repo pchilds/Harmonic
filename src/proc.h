@@ -26,13 +26,12 @@
 #	define __PROC_H__
 #	include <fftw3.h>
 #	include "main.h"
-	extern GtkWidget *window, *statusbar, *plot2, *plot3, *fst, *zpd, *pr, *jind, *jind2, *kind, *notebook, *notebook2;
-	extern GtkWidget *chi, *wll, *oft, *opttri, *twopionx, *lcmp, *dBs, *trans, *neg, *rest, *visl, *dsl, *chil;
-	extern GArray *x, *xsb, *ysb, *specs, *stars, *delf, *sz2, *nx2, *vis, *doms, *chp, *bxr, *byr, *bsz, *bnx;
+	extern GtkWidget *fst, *jind, *jind2, *kind, *notebook, *notebook2, *statusbar, *plot1, *plot2, *plot3, *pr, *window, *zpd;
+	extern GtkWidget *chi, *chil, *dBs, *dsl, *lcmp, *neg, *oft, *opttri, *rest, *trans, *twopionx, *visl, *wll;
+	extern GArray *chp, *doms, *vis;
 	extern GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa;
 	extern GSList *group2;
-	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, trc, satl, flags, flagd;
-	extern gint lc;
+	extern guint flags, flagd, kdimxf;
 	extern gdouble oe;
 	void prs(GtkWidget*, gpointer);
 	void trs(GtkWidget*, gpointer);

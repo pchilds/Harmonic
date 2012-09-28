@@ -9,5 +9,6 @@ EXTRA_DIST=confsupp/gnome-doc-utils.make \
 	AUTHORS ChangeLog COPYING COPYING-DOCS INSTALL NEWS README TODO \
 	$(pixmap_DATA) $(Applications_DATA) \
 	configure.ac
-DISTCHECK_CONFIGURE_FLAGS= --disable-scrollkeeper
-ACLOCAL_AMFLAGS = -I m4
+DISTCHECK_CONFIGURE_FLAGS=--disable-scrollkeeper
+ACLOCAL_AMFLAGS=-I m4
+MAINTAINERCLEANFILES=Makefile.in configure

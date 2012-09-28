@@ -58,38 +58,38 @@ void about(GtkWidget *widget, gpointer data)
 
 void upg(GtkWidget *widget, gpointer data)
 {
-	GtkPlotLinear *plt;
-	gdouble dt, xi, xf, mny, mxy;
-	gint j, sz4;
+	GArray *nx;
+	gdouble dt, mny, mxy, xi, xf;
+	gint j, satl, sz4, trc;
 	GSList *list;
+	GtkPlot *pt;
+	GtkPlotLinear *plt;
 
-	trc=satl;
+	plt=GTK_PLOT_LINEAR(plot1);
+	pt=GTK_PLOT(plot1);
+	satl=g_array_index(pt->stride, gint, 0);
+	trc=satl-1;
 	list=group2;
 	while (list)
 	{
 		if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(list->data))) break;
-		list=list->next;
-		trc--;
+		{list=(list->next); trc--;}
 	}
-	plt=GTK_PLOT_LINEAR(plot1);
-	sz4=g_array_index((plt->sizes), gint, 0);/* adjust accordingly with multitrace considerations*/
-	g_array_free(yb, TRUE);
-	yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	dt=g_array_index(specs, gdouble, trc-1);
-	mny=dt;
-	mxy=dt;
-	g_array_append_val(yb, dt);
+	sz4=g_array_index((pt->sizes), gint, 0);/* adjust accordingly with multitrace considerations*/
+	nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1);
+	g_array_append_val(nx, trc);
+	{xi=g_array_index(plt->xdata, gdouble, trc); dt=g_array_index(plt->ydata, gdouble, trc);}
+	{mny=dt; mxy=dt;}
 	for (j=1; j<sz4; j++)
 	{
-		dt=g_array_index(specs, gdouble, trc-1+(j*satl));
-		g_array_append_val(yb, dt);
+		dt=g_array_index(plt->ydata, gdouble, trc+(j*satl));
 		if (dt<mny) mny=dt;
 		else if (dt>mxy) mxy=dt;
 	}
-	(plt->ydata)=yb;
-	xi=g_array_index(x, gdouble, 0);
-	xf=g_array_index(x, gdouble, (lc-1));
+	xf=g_array_index(plt->xdata, gdouble, trc+((sz4-1)*satl));
+	gtk_plot_set_index(pt, nx);
 	gtk_plot_linear_update_scale(plot1, xi, xf, mny, mxy);
+	g_array_unref(nx);
 }
 
 void pltmv(GtkPlotLinear *plot, gpointer data)
@@ -118,57 +118,34 @@ void upj(GtkWidget *widget, gpointer data)
 	 * If transform has been performed and in single plot mode, changes the graph in plot 2
 	 * If processing has been performed, updates the displayed value/plot
 	 */
-	GtkPlotLinear *plt2, *plt3;
-	GtkPlotPolar *plt4;
-	gint j, k, l, sz4;
-	gdouble num, num2, num3, num4, num5, num6, num7, xi, xf, mny, mxy;
-	gdouble *ptr;
+	GArray *nx, *sz, *x, *y;
 	gchar s[10];
 	gchar *str;
+	gdouble mny, mxy, num, num2, num3, num4, num5, num6, num7, xf, xi;
+	gdouble *ptr;
+	gint j, jdim, jdimx, k, kdim, kdimx, l, sz4;
+	GtkPlot *pt;
+	GtkPlotLinear *plt;
+	GtkPlotPolar *plt2;
 
 	jdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+	kdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind));
+	jdimx=bsra->len;
 	if (jdim>=jdimx)
 	{
-		num=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isr));
-		num2=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isp));
-		num3=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tc));
-		num4=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tw));
-		num5=gtk_spin_button_get_value(GTK_SPIN_BUTTON(zw));
-		num6=gtk_spin_button_get_value(GTK_SPIN_BUTTON(bsr));
-		num7=gtk_spin_button_get_value(GTK_SPIN_BUTTON(bsp));
+		{num=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isr)); num2=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isp)); num3=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tc)); num4=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tw)); num5=gtk_spin_button_get_value(GTK_SPIN_BUTTON(zw)); num6=gtk_spin_button_get_value(GTK_SPIN_BUTTON(bsr)); num7=gtk_spin_button_get_value(GTK_SPIN_BUTTON(bsp));}
 		k=0;
+		kdimx=(isra->len)/jdimx;
 		while (k<(kdimx-1))
 		{
-			for (j=jdimx; j<=jdim; j++)
-			{
-				g_array_insert_val(isra, j+(k*jdim), num);
-				g_array_insert_val(ispa, j+(k*jdim), num2);
-				g_array_insert_val(tca, j+(k*jdim), num3);
-				g_array_insert_val(twa, j+(k*jdim), num4);
-			}
+			for (j=jdimx; j<=jdim; j++) {g_array_insert_val(isra, j+(k*jdim), num); g_array_insert_val(ispa, j+(k*jdim), num2); g_array_insert_val(tca, j+(k*jdim), num3); g_array_insert_val(twa, j+(k*jdim), num4);}
 			k++;
 		}
-		for (j=jdimx; j<=jdim; j++)
-		{
-			g_array_append_val(isra, num);
-			g_array_append_val(ispa, num2);
-			g_array_append_val(tca, num3);
-			g_array_append_val(twa, num4);
-			g_array_append_val(zwa, num5);
-			g_array_append_val(bsra, num6);
-			g_array_append_val(bspa, num7);
-		}
-		jdimx=(jdim+1);
+		for (j=jdimx; j<=jdim; j++) {g_array_append_val(isra, num); g_array_append_val(ispa, num2); g_array_append_val(tca, num3); g_array_append_val(twa, num4); g_array_append_val(zwa, num5); g_array_append_val(bsra, num6); g_array_append_val(bspa, num7);}
 	}
 	else
 	{
-		g_signal_handler_block(G_OBJECT(isr), isr_id);
-		g_signal_handler_block(G_OBJECT(isp), isp_id);
-		g_signal_handler_block(G_OBJECT(tc), tc_id);
-		g_signal_handler_block(G_OBJECT(tw), tw_id);
-		g_signal_handler_block(G_OBJECT(zw), zw_id);
-		g_signal_handler_block(G_OBJECT(bsr), bsr_id);
-		g_signal_handler_block(G_OBJECT(bsp), bsp_id);
+		{g_signal_handler_block(G_OBJECT(isr), isr_id); g_signal_handler_block(G_OBJECT(isp), isp_id); g_signal_handler_block(G_OBJECT(tc), tc_id); g_signal_handler_block(G_OBJECT(tw), tw_id); g_signal_handler_block(G_OBJECT(zw), zw_id); g_signal_handler_block(G_OBJECT(bsr), bsr_id); g_signal_handler_block(G_OBJECT(bsp), bsp_id);}
 		num=g_array_index(isra, gdouble, (jdim+(kdim*jdimx)));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(isr), num);
 		num=g_array_index(ispa, gdouble, (jdim+(kdim*jdimx)));
@@ -183,74 +160,98 @@ void upj(GtkWidget *widget, gpointer data)
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(bsr), num6);
 		num6=g_array_index(bspa, gdouble, jdim);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(bsp), num6);
-		g_signal_handler_unblock(G_OBJECT(isr), isr_id);
-		g_signal_handler_unblock(G_OBJECT(isp), isp_id);
-		g_signal_handler_unblock(G_OBJECT(tc), tc_id);
-		g_signal_handler_unblock(G_OBJECT(tw), tw_id);
-		g_signal_handler_unblock(G_OBJECT(zw), zw_id);
-		g_signal_handler_unblock(G_OBJECT(bsr), bsr_id);
-		g_signal_handler_unblock(G_OBJECT(bsp), bsp_id);
+		{g_signal_handler_unblock(G_OBJECT(isr), isr_id); g_signal_handler_unblock(G_OBJECT(isp), isp_id); g_signal_handler_unblock(G_OBJECT(tc), tc_id); g_signal_handler_unblock(G_OBJECT(tw), tw_id); g_signal_handler_unblock(G_OBJECT(zw), zw_id); g_signal_handler_unblock(G_OBJECT(bsr), bsr_id); g_signal_handler_unblock(G_OBJECT(bsp), bsp_id);}
 	}
-	if (jdim<jdimxf)
+	if (((flags&PROC_TRS)!=0)&&((flagd&DISP_MIJ)==0))
 	{
-		if (((flags&PROC_TRS)!=0)&&((flagd&DISP_MIJ)==0))
+		pt=GTK_PLOT(plot2);
+		sz4=g_array_index(pt->sizes, gint, 0);
+		plt=GTK_PLOT_LINEAR(plot2);
+		jdimx=(plt->ydata->len)/(2*sz4);
+		if (jdim<jdimx)
 		{
 			g_object_get(G_OBJECT(plot2), "xmin", &num, "xmax", &num2, NULL);
-			plt2=GTK_PLOT_LINEAR(plot2);
-			sz4=g_array_index((plt2->sizes), gint, 0);
-			g_array_free(nx2, TRUE);
-			nx2=g_array_new(FALSE, FALSE, sizeof(gint));
-			k=jdim*sz4;
-			g_array_append_val(nx2, k);
-			num3=g_array_index(ysb, gdouble, k);
-			for (j=k+1; j<k+sz4; j++)
+			nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1);
+			k=2*jdim*sz4;
+			g_array_append_val(nx, k);
+			num3=g_array_index(plt->ydata, gdouble, k);
+			for (j=k+2; j<k+(2*sz4); j+=2)
 			{
-				num4=g_array_index(ysb, gdouble, j);
+				num4=g_array_index(plt->ydata, gdouble, j);
 				if (num4>num3) num3=num4;
 			}
-			(plt2->ind)=nx2;
+			gtk_plot_set_index(pt, nx);
 			gtk_plot_linear_update_scale_pretty(plot2, num, num2, 0, num3);
 		}
-		if ((flags&PROC_PRS)!=0)
+	}
+	if ((flags&PROC_PRS)!=0)
+	{
+		if (((flags&PROC_BAT)!=0)&&((flagd&DISP_MRJ)==0))
 		{
-			if ((flags&PROC_BAT)!=0)
+			pt=GTK_PLOT(plot3);
+			jdimx=g_array_index(pt->stride, gint, 0)/kdimxf;/*resync jdimx in terms of plot rather than parameter arrays*/
+			if (jdim<jdimx)
 			{
-				if ((flagd&DISP_MRJ)==0)
+				sz4=g_array_index(pt->sizes, gint, 0);
+				if ((flagd&DISP_MRK)==0)/* single plot */
 				{
-					sz4=g_array_index(bsz, gint, 0);
-					g_array_free(bnx, TRUE);
-					if ((flagd&DISP_MRK)==0)/* single plot */
+					l=kdim+(jdim*kdimxf);
+					nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1);
+					g_array_append_val(nx, l);
+					gtk_plot_set_index(pt, nx);
+					g_array_unref(nx);
+					if ((flags&PROC_POL)==0)
 					{
-						l=sz4*(kdim+(jdim*kdimxf));
-						bnx=g_array_new(FALSE, FALSE, sizeof(gint));
-						g_array_append_val(bnx, l);
-						num=g_array_index(bxr, gdouble, 0);
-						num3=g_array_index(byr, gdouble, l);
+						num=g_array_index(plt->xdata, gdouble, l);
+						num3=g_array_index(plt->ydata, gdouble, l);
 						{num2=num; num4=num3;}
 						for (k=1; k<sz4; k++)
 						{
-							num5=g_array_index(bxr, gdouble, k);
+							num5=g_array_index(plt->xdata, gdouble, k);
 							if (num5>num2) num2=num5;
 							else if (num5<num) num=num5;
-							num5=g_array_index(byr, gdouble, l+k);
+							num5=g_array_index(plt->ydata, gdouble, l+k);
 							if (num5>num4) num4=num5;
 							else if (num5<num3) num3=num5;
 						}
+						gtk_plot_linear_update_scale_pretty(plot3, num, num2, num3, num4);
 					}
-					else/* multiplot over k */
+					else
 					{
-						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
-						num=g_array_index(bxr, gdouble, 0);
-						l=sz4*jdim*kdimxf;
-						g_array_append_val(bnx, l);
-						num3=g_array_index(byr, gdouble, l);
+						plt2=GTK_PLOT_POLAR(plot3);
+						num=g_array_index(plt2->thdata, gdouble, l);
+						num3=g_array_index(plt2->rdata, gdouble, l);
+						{num2=num; num4=num3;}
+						for (k=1; k<sz4; k++)
+						{
+							num5=g_array_index(plt2->thdata, gdouble, k);
+							if (num5>num2) num2=num5;
+							else if (num5<num) num=num5;
+							num5=g_array_index(plt2->rdata, gdouble, l+k);
+							if (num5>num4) num4=num5;
+							else if (num5<num3) num3=num5;
+						}
+						gtk_plot_polar_update_scale_pretty(plot3, num3, num4, num, num2);
+					}
+				}
+				else/* multiplot over k */
+				{
+					nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);
+					for (l=jdim*kdimxf; l<(jdim+1)*kdimxf; l++) g_array_append_val(nx, l);
+					gtk_plot_set_index(pt, nx);
+					g_array_unref(nx);
+					if ((flags&PROC_POL)==0)
+					{
+						plt=GTK_PLOT_LINEAR(plot3);
+						num=g_array_index(plt->xdata, gdouble, l);
+						num3=g_array_index(plt->ydata, gdouble, l);
 						{num2=num; num4=num3;}
 						for (j=1; j<sz4; j++)
 						{
-							num5=g_array_index(bxr, gdouble, j);
+							num5=g_array_index(plt->xdata, gdouble, j);
 							if (num5>num2) num2=num5;
 							else if (num5<num) num=num5;
-							num5=g_array_index(byr, gdouble, j+l);
+							num5=g_array_index(plt->ydata, gdouble, j+l);
 							if (num5>num4) num4=num5;
 							else if (num5<num3) num3=num5;
 						}
@@ -258,63 +259,71 @@ void upj(GtkWidget *widget, gpointer data)
 						while (k<kdimxf)
 						{
 							{l+=sz4; k++;}
-							g_array_append_val(bnx, l);
 							for (j=0; j<sz4; j++)
 							{
-								num5=g_array_index(byr, gdouble, j+l);
+								num5=g_array_index(plt->ydata, gdouble, j+l);
 								if (num5>num4) num4=num5;
 								else if (num5<num3) num3=num5;
 							}
 						}
-					}
-					if ((flags&PROC_POL)==0)
-					{
-						plt3=GTK_PLOT_LINEAR(plot3);
-						(plt3->sizes)=bsz;
-						(plt3->ind)=bnx;
 						gtk_plot_linear_update_scale_pretty(plot3, num, num2, num3, num4);
 					}
 					else
 					{
-						plt4=GTK_PLOT_POLAR(plot3);
-						(plt4->sizes)=bsz;
-						(plt4->ind)=bnx;
+						plt2=GTK_PLOT_POLAR(plot3);
+						num=g_array_index(plt2->thdata, gdouble, l);
+						num3=g_array_index(plt2->rdata, gdouble, l);
+						{num2=num; num4=num3;}
+						for (j=1; j<sz4; j++)
+						{
+							num5=g_array_index(plt2->thdata, gdouble, j);
+							if (num5>num2) num2=num5;
+							else if (num5<num) num=num5;
+							num5=g_array_index(plt2->rdata, gdouble, j+l);
+							if (num5>num4) num4=num5;
+							else if (num5<num3) num3=num5;
+						}
+						k=1;
+						while (k<kdimxf)
+						{
+							{l+=sz4; k++;}
+							for (j=0; j<sz4; j++)
+							{
+								num5=g_array_index(plt2->rdata, gdouble, j+l);
+								if (num5>num4) num4=num5;
+								else if (num5<num3) num3=num5;
+							}
+						}
 						gtk_plot_polar_update_scale_pretty(plot3, num3, num4, num, num2);
 					}
 				}
 			}
-			else if (kdim<kdimxf)
+		}
+		else
+		{
+			jdimx=(vis->len)/kdimxf;/*resync jdimx in terms of vis rather than parameter arrays*/
+			if ((kdim<kdimxf)&&(jdim<jdimx))
 			{
-				num=g_array_index(vis, gdouble, (jdim+(kdim*jdimxf)));
+				num=g_array_index(vis, gdouble, (jdim+(kdim*jdimx)));
 				g_snprintf(s, 7, "%f", num);
 				gtk_label_set_text(GTK_LABEL(visl), s);
-				num=g_array_index(doms, gdouble, (jdim+(kdim*jdimxf)));
+				num=g_array_index(doms, gdouble, (jdim+(kdim*jdimx)));
 				g_snprintf(s, 9, "%f", num);
 				gtk_label_set_text(GTK_LABEL(dsl), s);
 				if ((flags&PROC_CHP)!=0)
 				{
-					num=g_array_index(chp, gdouble, (jdim+(kdim*jdimxf)));
+					num=g_array_index(chp, gdouble, (jdim+(kdim*jdimx)));
 					g_snprintf(s, 8, "%f", num);
 					gtk_label_set_text(GTK_LABEL(chil), s);
 				}
 			}
 			else
 			{
-				str=g_strdup("");
-				gtk_label_set_text(GTK_LABEL(visl), str);
-				gtk_label_set_text(GTK_LABEL(dsl), str);
-				if ((flags&PROC_CHP)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
-				g_free(str);
+				gtk_label_set_text(GTK_LABEL(visl), "");
+				gtk_label_set_text(GTK_LABEL(dsl), "");
+				if ((flags&PROC_CHP)!=0) gtk_label_set_text(GTK_LABEL(chil), "");
 			}
 		}
-	}
-	else if (((flags&PROC_PRS)!=0)&&((flags&PROC_BAT)==0))
-	{
-		str=g_strdup("");
-		gtk_label_set_text(GTK_LABEL(visl), str);
-		gtk_label_set_text(GTK_LABEL(dsl), str);
-		if ((flags&PROC_CHP)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
-		g_free(str);
 	}
 	if (widget==jind)
 	{
@@ -337,35 +346,28 @@ void upk(GtkWidget *widget, gpointer data)
 	 * updates front panel to display parameters for new j,k values
 	 * If processing has been performed, updates the displayed value/plot
 	 */
-	GtkPlotLinear *plt3;
-	GtkPlotPolar *plt4;
-	gint j, k, l, sz4;
-	gdouble num, num2, num3, num4, num5;
+	GArray *nx;
 	gchar s[10];
 	gchar *str;
+	gdouble num, num2, num3, num4, num5;
+	gint j, jdim, jdimx, k, kdim, kdimx, l, st4, sz4;
+	GtkPlot *pt;
+	GtkPlotLinear *plt;
+	GtkPlotPolar *plt2;
 
 	kdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+	jdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind2));
+	jdimx=(bsra->len);
+	if (jdimx==0) kdimx=0;
+	kdimx=(isra->len)/jdimx;
 	if (kdim>=kdimx)
 	{
-		num=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isr));
-		num2=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isp));
-		num3=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tc));
-		num4=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tw));
-		for (j=0; j<jdimx*(kdim-kdimx+1); j++)
-		{
-			g_array_append_val(isra, num);
-			g_array_append_val(ispa, num2);
-			g_array_append_val(tca, num3);
-			g_array_append_val(twa, num4);
-		}
-		kdimx=(kdim+1);
+		{num=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isr)); num2=gtk_spin_button_get_value(GTK_SPIN_BUTTON(isp)); num3=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tc)); num4=gtk_spin_button_get_value(GTK_SPIN_BUTTON(tw));}
+		for (j=0; j<jdimx*(kdim-kdimx+1); j++) {g_array_append_val(isra, num); g_array_append_val(ispa, num2); g_array_append_val(tca, num3); g_array_append_val(twa, num4);}
 	}
 	else
 	{
-		g_signal_handler_block(G_OBJECT(isr), isr_id);
-		g_signal_handler_block(G_OBJECT(isp), isp_id);
-		g_signal_handler_block(G_OBJECT(tc), tc_id);
-		g_signal_handler_block(G_OBJECT(tw), tw_id);
+		{g_signal_handler_block(G_OBJECT(isr), isr_id); g_signal_handler_block(G_OBJECT(isp), isp_id); g_signal_handler_block(G_OBJECT(tc), tc_id); g_signal_handler_block(G_OBJECT(tw), tw_id);}
 		num=g_array_index(isra, gdouble, (jdim+(kdim*jdimx)));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(isr), num);
 		num=g_array_index(ispa, gdouble, (jdim+(kdim*jdimx)));
@@ -374,10 +376,7 @@ void upk(GtkWidget *widget, gpointer data)
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tc), num);
 		num=g_array_index(twa, gdouble, (jdim+(kdim*jdimx)));
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(tw), num);
-		g_signal_handler_unblock(G_OBJECT(isr), isr_id);
-		g_signal_handler_unblock(G_OBJECT(isp), isp_id);
-		g_signal_handler_unblock(G_OBJECT(tc), tc_id);
-		g_signal_handler_unblock(G_OBJECT(tw), tw_id);
+		{g_signal_handler_unblock(G_OBJECT(isr), isr_id); g_signal_handler_unblock(G_OBJECT(isp), isp_id); g_signal_handler_unblock(G_OBJECT(tc), tc_id); g_signal_handler_unblock(G_OBJECT(tw), tw_id);}
 	}
 	if ((flags&PROC_PRS)!=0)
 	{
@@ -387,103 +386,142 @@ void upk(GtkWidget *widget, gpointer data)
 			{
 				if ((flagd&DISP_MRK)==0)
 				{
-					sz4=g_array_index(bsz, gint, 0);
-					g_array_free(bnx, TRUE);
+					pt=GTK_PLOT(plot3);
+					st4=g_array_index(pt->stride, gint, 0);
+					sz4=g_array_index(pt->sizes, gint, 0);
 					if ((flagd&DISP_MRJ)==0)/* single plot*/
 					{
-						l=sz4*(kdim+(jdim*kdimxf));
-						bnx=g_array_new(FALSE, FALSE, sizeof(gint));
-						g_array_append_val(bnx, l);
-						num=g_array_index(bxr, gdouble, 0);
-						num3=g_array_index(byr, gdouble, l);
-						{num2=num; num4=num3;}
-						for (k=1; k<sz4; k++)
+						nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1);
+						l=kdim+(jdim*kdimxf);
+						g_array_append_val(nx, l);
+						gtk_plot_set_index(pt, nx);
+						g_array_unref(nx);
+						if ((flags&PROC_POL)==0)
 						{
-							num5=g_array_index(bxr, gdouble, k);
-							if (num5>num2) num2=num5;
-							else if (num5<num) num=num5;
-							num5=g_array_index(byr, gdouble, l+k);
-							if (num5>num4) num4=num5;
-							else if (num5<num3) num3=num5;
+							plt=GTK_PLOT_LINEAR(plot3);
+							num=g_array_index((plt->xdata), gdouble, l);
+							num3=g_array_index((plt->ydata), gdouble, l);
+							{num2=num; num4=num3;}
+							for (k=1; k<sz4; k++)
+							{
+								l+=st4;
+								num5=g_array_index((plt->xdata), gdouble, l);
+								if (num5>num2) num2=num5;
+								else if (num5<num) num=num5;
+								num5=g_array_index((plt->ydata), gdouble, l);
+								if (num5>num4) num4=num5;
+								else if (num5<num3) num3=num5;
+							}
+							gtk_plot_linear_update_scale_pretty(plot3, num, num2, num3, num4);
+						}
+						else
+						{
+							plt2=GTK_PLOT_POLAR(plot3);
+							num=g_array_index((plt2->thdata), gdouble, l);
+							num3=g_array_index((plt2->rdata), gdouble, l);
+							{num2=num; num4=num3;}
+							for (k=1; k<sz4; k++)
+							{
+								l+=st4;
+								num5=g_array_index((plt2->thdata), gdouble, l);
+								if (num5>num2) num2=num5;
+								else if (num5<num) num=num5;
+								num5=g_array_index((plt2->rdata), gdouble, l);
+								if (num5>num4) num4=num5;
+								else if (num5<num3) num3=num5;
+							}
+							gtk_plot_polar_update_scale_pretty(plot3, num3, num4, num, num2);
 						}
 					}
 					else/* multiplot over j */
 					{
-						bnx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimxf);
-						l=sz4*kdim;
-						g_array_append_val(bnx, l);
-						num=g_array_index(bxr, gdouble, 0);
-						num3=g_array_index(byr, gdouble, l);
-						{num2=num; num4=num3;}
-						for (k=1; k<sz4; k++)
+						jdimx=st4/kdimxf;/*resync jdimx in terms of the plot rather than parameter arrays*/
+						nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx);
+						for (l=kdim; l<st4; l+=kdimxf) g_array_append_val(nx, l);
+						gtk_plot_set_index(pt, nx);
+						g_array_unref(nx);
+						l=kdim+st4;
+						if ((flags&PROC_POL)==0)
 						{
-							num5=g_array_index(bxr, gdouble, k);
-							if (num5>num2) num2=num5;
-							else if (num5<num) num=num5;
-							num5=g_array_index(byr, gdouble, k+l);
-							if (num5>num4) num4=num5;
-							else if (num5<num3) num3=num5;
-						}
-						j=1;
-						while (j<jdimxf)
-						{
-							{l+=sz4*kdimxf; j++;}
-							g_array_append_val(bnx, l);
-							for (k=0; k<sz4; k++)
+							plt=GTK_PLOT_LINEAR(plot3);
+							l=kdim;
+							num=g_array_index((plt->xdata), gdouble, kdim);
+							num3=g_array_index((plt->ydata), gdouble, kdim);
+							{num2=num; num4=num3;}
+							for (k=1; k<sz4; k++)
 							{
-								num5=g_array_index(byr, gdouble, k+l);
+								num5=g_array_index((plt->xdata), gdouble, l);
+								if (num5>num2) num2=num5;
+								else if (num5<num) num=num5;
+								num5=g_array_index((plt->ydata), gdouble, l);
 								if (num5>num4) num4=num5;
 								else if (num5<num3) num3=num5;
+								{j=1; l+=kdimxf;}
+								while (j<jdimx)
+								{
+									num5=g_array_index((plt->ydata), gdouble, l);
+									if (num5>num4) num4=num5;
+									else if (num5<num3) num3=num5;
+									{l+=kdimxf; j++;}
+								}
 							}
+							gtk_plot_linear_update_scale_pretty(plot3, num, num2, num3, num4);
 						}
-					}
-					if ((flags&PROC_POL)==0)
-					{
-						plt3=GTK_PLOT_LINEAR(plot3);
-						(plt3->sizes)=bsz;
-						(plt3->ind)=bnx;
-						gtk_plot_linear_update_scale_pretty(plot3, num, num2, num3, num4);
-					}
-					else
-					{
-						plt4=GTK_PLOT_POLAR(plot3);
-						(plt4->sizes)=bsz;
-						(plt4->ind)=bnx;
-						gtk_plot_polar_update_scale_pretty(plot3, num3, num4, num, num2);
+						else
+						{
+							plt2=GTK_PLOT_POLAR(plot3);
+							num=g_array_index((plt2->thdata), gdouble, kdim);
+							num3=g_array_index((plt2->rdata), gdouble, kdim);
+							{num2=num; num4=num3;}
+							for (k=1; k<sz4; k++)
+							{
+								num5=g_array_index((plt2->thdata), gdouble, l);
+								if (num5>num2) num2=num5;
+								else if (num5<num) num=num5;
+								num5=g_array_index((plt2->rdata), gdouble, l);
+								if (num5>num4) num4=num5;
+								else if (num5<num3) num3=num5;
+								{j=1; l+=kdimxf;}
+								while (j<jdimx)
+								{
+									num5=g_array_index((plt2->rdata), gdouble, l);
+									if (num5>num4) num4=num5;
+									else if (num5<num3) num3=num5;
+									{l+=kdimxf; j++;}
+								}
+							}
+							gtk_plot_polar_update_scale_pretty(plot3, num3, num4, num, num2);
+						}
 					}
 				}
 			}
-			else if (jdim<jdimxf)
+			else if ((jdim*kdimxf)<(vis->len))
 			{
-				num=g_array_index(vis, gdouble, (jdim+(kdim*jdimxf)));
+				num=g_array_index(vis, gdouble, (kdim+(jdim*kdimxf)));
 				g_snprintf(s, 7, "%f", num);
 				gtk_label_set_text(GTK_LABEL(visl), s);
-				num=g_array_index(doms, gdouble, (jdim+(kdim*jdimxf)));
+				num=g_array_index(doms, gdouble, (kdim+(jdim*kdimxf)));
 				g_snprintf(s, 9, "%f", num);
 				gtk_label_set_text(GTK_LABEL(dsl), s);
 				if ((flags&PROC_CHP)!=0)
 				{
-					num=g_array_index(chp, gdouble, (jdim+(kdim*jdimxf)));
+					num=g_array_index(chp, gdouble, (kdim+(jdim*kdimxf)));
 					g_snprintf(s, 8, "%f", num);
 					gtk_label_set_text(GTK_LABEL(chil), s);
 				}
 			}
 			else
 			{
-				str=g_strdup("");
-				gtk_label_set_text(GTK_LABEL(visl), str);
-				gtk_label_set_text(GTK_LABEL(dsl), str);
-				if ((flags&PROC_CHP)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
-				g_free(str);
+				gtk_label_set_text(GTK_LABEL(visl), "");
+				gtk_label_set_text(GTK_LABEL(dsl), "");
+				if ((flags&PROC_CHP)!=0) gtk_label_set_text(GTK_LABEL(chil), "");
 			}
 		}
 		else if ((flags&PROC_BAT)==0)
 		{
-			str=g_strdup("");
-			gtk_label_set_text(GTK_LABEL(visl), str);
-			gtk_label_set_text(GTK_LABEL(dsl), str);
-			if ((flags&PROC_CHP)!=0) gtk_label_set_text(GTK_LABEL(chil), str);
-			g_free(str);
+			gtk_label_set_text(GTK_LABEL(visl), "");
+			gtk_label_set_text(GTK_LABEL(dsl), "");
+			if ((flags&PROC_CHP)!=0) gtk_label_set_text(GTK_LABEL(chil), "");
 		}
 	}
 }
@@ -491,7 +529,11 @@ void upk(GtkWidget *widget, gpointer data)
 void upa2(GtkWidget *widget, gpointer data)
 {
 	gdouble *ptr;
+	gint jdim, jdimx, kdim;
 
+	kdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind));
+	jdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind2));
+	jdimx=(bsra->len);
 	ptr=&g_array_index((GArray*)data, gdouble, jdim+(kdim*jdimx));
 	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 }
@@ -499,7 +541,9 @@ void upa2(GtkWidget *widget, gpointer data)
 void upa1(GtkWidget *widget, gpointer data)
 {
 	gdouble *ptr;
+	gint jdim;
 
+	jdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind));
 	ptr=&g_array_index((GArray*)data, gdouble, jdim);
 	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 }
@@ -524,7 +568,6 @@ void reset(GtkWidget *widget, gpointer data)
 	*ptr=gtk_spin_button_get_value(GTK_SPIN_BUTTON(zw));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), 0);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
-	{jdim=0; jdimx=1; kdim=0; kdimx=1;}
 	{(bsra->len)=1; (bspa->len)=1;}
 	{(isra->len)=1; (ispa->len)=1; (tca->len)=1; (twa->len)=1; (zwa->len)=1;}
 }
@@ -533,9 +576,11 @@ void reset2(GtkWidget *widget, gpointer data)
 {/*update arrays to current values*/
 	gdouble *ptr;
 	gdouble num;
+	gint jdim, jdimx;
 	
-	{kdim=0; kdimx=1;}
+	jdim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind2));
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(kind), 0);
+	jdimx=bsra->len;
 	{(isra->len)=jdimx; (ispa->len)=jdimx; (tca->len)=jdimx; (twa->len)=jdimx;}
 	num=g_array_index(isra, gdouble, jdim);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(isr), num);

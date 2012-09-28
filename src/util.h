@@ -25,14 +25,13 @@
 #ifndef __UTIL_H__
 #	define __UTIL_H__
 #	include "main.h"
-	extern GtkWidget *window, *statusbar, *plot1, *plot2, *plot3, *visl, *dsl, *chil;
-	extern GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; 
-	extern GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *vis, *doms, *chp, *byr;
-	extern GArray *x, *yb, *xsb, *ysb, *nx2, *bxr, *byr, *bsz, *bnx, *delf, *stars, *specs;
+	extern GtkWidget *chil, *dsl, *plot1, *plot2, *plot3, *statusbar, *visl, *window;
+	extern GtkWidget *bsr, *bsp, *isr, *isp, *jind, *jind2, *kind, *tc, *tw, *zw; 
+	extern GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa;
+	extern GArray *chp, *doms, *vis;
 	extern GSList *group2;
-	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, satl, trc, flags, flagd;
+	extern guint flagd, flags, kdimxf;
 	extern gulong j1_id, j2_id, k_id, bsr_id, bsp_id, isr_id, isp_id, tc_id, tw_id, zw_id;
-	extern gint lc, mx;
 	void help(GtkWidget*, gpointer);
 	void about(GtkWidget*, gpointer);
 	void upg(GtkWidget*, gpointer);

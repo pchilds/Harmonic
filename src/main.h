@@ -29,6 +29,7 @@
 #	include <math.h>
 #	include <gtkplot-2.0/gtkplotlinear.h>
 #	include <gtkplot-2.0/gtkplotpolar.h>
+#	include "config.h"
 	G_BEGIN_DECLS
 #	define DZE 0.00001 /* divide by zero threshold */
 #	define NZE -0.00001 /* negative of this */
@@ -36,11 +37,6 @@
 #	define NMY_2PI -6.2831853071795864769252867665590057683943387987502
 #	define NMY_PI -3.1415926535897932384626433832795028841971693993751
 #	define LNTOT 0.23025850929940456840179914546843642076011014886288 /* (ln10)/10 */
-#	ifdef G_OS_WIN32
-#		define DLMT "\r\n"
-#	else
-#		define DLMT "\n"
-#	endif
 	typedef enum
 	{
 		PROC_OPN=1<<0,

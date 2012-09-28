@@ -26,13 +26,12 @@
 #	define __DATA_H__
 #	include "main.h"
 #	include "util.h"
-	extern GtkWidget *window, *statusbar, *plot1, *plot2, *plot3, *notebook, *notebook2, *visl, *dsl, *rest, *tracmenu, *anosa, *sws, *mg, *ri;
-	extern GtkWidget *trans, *neg, *dBs, *twopionx, *wll, *opttri, *chi, *oft;
-	extern GArray *stars, *delf, *vis, *doms, *chp, *msr, *x, *yb, *sz, *nx, *specs;
-	extern GSList *group, *group2, *group3, *group4, *group5;
-	extern guint jdim, kdim, jdimxf, kdimxf, flags, satl;
-	extern gint lc, mx;
+	extern GArray *vis, *doms, *chp;
 	extern gchar *fold, *folr;
+	extern GSList *group, *group2, *group3, *group4, *group5;
+	extern GtkWidget *anosa, *dsl, *mg, *notebook, *notebook2, *plot1, *plot2, *plot3, *rest, *ri, *statusbar, *sws, *tracmenu, *visl, *window;
+	extern GtkWidget *chi, *dBs, *fst, *neg, *oft, *opttri, *trans, *twopionx, *wll, *zpd;
+	extern guint flags;
 	extern void upg(GtkWidget*, gpointer);
 	void prf(GtkPrintOperation*, GtkPrintContext*, int);
 	void prt(GtkWidget*, gpointer);

@@ -52,27 +52,25 @@
 #include "proc.h"
 #include "util.h"
 
-GtkWidget *window, *tr, *zpd, *pr, *tracmenu, *trac, *fst, *notebook, *notebook2, *plot1, *plot2, *plot3, *statusbar, *rest, *visl, *dsl, *chil;
-GtkWidget *agosa, *agtl, *anosa, *sws, *dlm, *mg, *mgp, *ri, *ncmp, *lcmp, *frr, *db4, *db8, *myr, *mrl, *chi, *twopionx, *opttri, *trans, *dBs, *neg, *wll, *oft;
-GtkWidget *bsr, *bsp, *isr, *isp, *tc, *tw, *zw, *jind, *jind2, *kind; /* widgets for windowing */
-GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa, *x, *specs, *yb, *stars, *xsb, *ysb, *delf, *vis, *doms, *chp, *msr, *bxr, *byr; /* arrays for windowing and data */
-GArray *sz, *nx, *sz2, *nx2, *bsz, *bnx, *rd1, *gr1, *bl1, *al1, *rd2, *gr2, *bl2, *al2, *rd3, *gr3, *bl3, *al3;
+GtkWidget *chil, *dsl, *fst, *notebook, *notebook2, *plot1, *plot2, *plot3, *pr, *rest, *statusbar, *tr, *trac, *tracmenu, *visl, *window, *zpd;
+GtkWidget *agosa, *agtl, *anosa, *chi, *db4, *db8, *dBs, *dlm, *frr, *lcmp, *mg, *mgp, *mrl, *myr, *ncmp, *neg, *oft, *opttri, *ri, *sws, *trans, *twopionx, *wll;
+GtkWidget *bsp, *bsr, *isp, *isr, *jind, *jind2, *kind, *tc, *tw, *zw; /* widgets for windowing */
+GArray *bspa, *bsra, *chp, *doms, *ispa, *isra, *tca, *twa, *vis, *zwa; /* arrays for windowing and data */
 GSList *group=NULL, *group2=NULL, *group3=NULL, *group4=NULL, *group5=NULL;
 gint lc, mx; /* number of data points and number of files in batch routine */
-guint jdim=0, kdim=0, jdimx=1, kdimx=1, jdimxf=1, kdimxf=1, satl=0, trc=1, flags=0, flagd=0; /* array indices, #of traces, trace number, and current processing state and display flags */
+guint flagd=0, flags=0, kdimxf=1; /* display flags, current processing state and number of kdim's in batch process */
 gulong j1_id, j2_id, k_id, bsr_id, bsp_id, isr_id, isp_id, tc_id, tw_id, zw_id; /* id for disabling/enabling post-transform processing */
 gdouble oe=0; /* value to hold prior reference level for offset tracking */
 gchar *fold=NULL, *folr=NULL;
 
 int main(int argc, char *argv[])
 {
-	GtkAdjustment *adj;
-	GtkWidget *vbox, *mnb, *mnu, *smnu, *mni, *hpane, *table, *label, *butt;
-	GtkAccelGroup *accel_group=NULL;
-	GtkPlotLinear *plt, *plt2;
-	AtkObject *atk_widget, *atk_label;
-
+	AtkObject *atk_label, *atk_widget;
+	GArray *caa, *cab, *cag, *car;
 	gdouble fll=0;
+	GtkAccelGroup *accel_group=NULL;
+	GtkAdjustment *adj;
+	GtkWidget *butt, *hpane, *label, *mnb, *mni, *mnu, *smnu, *table, *vbox;
 
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset(PACKAGE, "UTF-8");
@@ -310,13 +308,7 @@ int main(int argc, char *argv[])
 	hpane=gtk_hpaned_new();
 	gtk_widget_show(hpane);
 	gtk_container_add(GTK_CONTAINER(vbox), hpane);
-	bsra=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	bspa=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	isra=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	ispa=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	tca=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	twa=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	zwa=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	{bsra=g_array_new(FALSE, FALSE, sizeof(gdouble)); bspa=g_array_new(FALSE, FALSE, sizeof(gdouble)); isra=g_array_new(FALSE, FALSE, sizeof(gdouble)); ispa=g_array_new(FALSE, FALSE, sizeof(gdouble)); tca=g_array_new(FALSE, FALSE, sizeof(gdouble)); twa=g_array_new(FALSE, FALSE, sizeof(gdouble)); zwa=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	g_array_append_val(bsra, fll);
 	fll++;
 	g_array_append_val(bspa, fll);
@@ -501,21 +493,13 @@ int main(int argc, char *argv[])
 	table=gtk_table_new(1, 1, FALSE);
 	gtk_widget_show(table);
 	plot1=gtk_plot_linear_new();
-	rd1=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	gr1=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	bl1=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	al1=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	{car=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 1); cag=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 1); cab=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 1); caa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 1);}
 	fll=0;
-	g_array_append_val(rd1, fll);
-	g_array_append_val(gr1, fll);
-	g_array_append_val(bl1, fll);
+	{g_array_append_val(car, fll); g_array_append_val(cag, fll); g_array_append_val(cab, fll);}
 	fll=1;
-	g_array_append_val(al1, fll);
-	plt=GTK_PLOT_LINEAR(plot1);
-	(plt->rd)=rd1;
-	(plt->gr)=gr1;
-	(plt->bl)=bl1;
-	(plt->al)=al1;
+	g_array_append_val(caa, fll);
+	gtk_plot_set_colour(GTK_PLOT(plot1), car, cag, cab, caa);
+	{g_array_unref(car); g_array_unref(cag); g_array_unref(cab); g_array_unref(caa);}
 	g_signal_connect(plot1, "moved", G_CALLBACK(pltmv), NULL);
 	gtk_widget_show(plot1);
 	gtk_table_attach(GTK_TABLE(table), plot1, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK |GTK_EXPAND, 2, 2);
@@ -524,33 +508,18 @@ int main(int argc, char *argv[])
 	table=gtk_table_new(1, 1, FALSE);
 	gtk_widget_show(table);
 	plot2=gtk_plot_linear_new();
-	plt2=GTK_PLOT_LINEAR(plot2);
-	(plt2->xlab)=g_strdup(_("Inverse Domain"));
-	rd2=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	gr2=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	bl2=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	al2=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	rd3=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	gr3=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	bl3=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	al3=g_array_new(FALSE, FALSE, sizeof(gdouble));
+	gtk_plot_linear_set_label(GTK_PLOT_LINEAR(plot2), _("Inverse Domain"), _("Magnitude"));
+	{car=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 4); cag=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 4); cab=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 4); caa=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), 4);}
 	fll=0;
-	{g_array_append_val(rd2, fll); g_array_append_val(gr2, fll); g_array_append_val(bl2, fll); g_array_append_val(rd3, fll); g_array_append_val(gr3, fll); g_array_append_val(bl3, fll);}
-	{g_array_append_val(gr2, fll); g_array_append_val(bl2, fll); g_array_append_val(gr3, fll); g_array_append_val(bl3, fll);}
-	{g_array_append_val(bl2, fll); g_array_append_val(bl3, fll);}
+	{g_array_append_val(car, fll); g_array_append_val(cag, fll); g_array_append_val(cag, fll); g_array_append_val(cab, fll); g_array_append_val(cab, fll); g_array_append_val(cab, fll);}
 	fll=1;
-	{g_array_append_val(rd2, fll); g_array_append_val(rd3, fll);}
-	{g_array_append_val(gr2, fll); g_array_append_val(gr3, fll);}
-	{g_array_append_val(bl2, fll); g_array_append_val(bl3, fll);}
+	{g_array_append_val(car, fll); g_array_append_val(cag, fll); g_array_append_val(cab, fll);}
 	fll=0;
-	{g_array_append_val(rd2, fll); g_array_append_val(gr2, fll); g_array_append_val(rd3, fll); g_array_append_val(gr3, fll);}
-	{g_array_append_val(rd2, fll); g_array_append_val(rd3, fll);}
+	{g_array_append_val(car, fll); g_array_append_val(car, fll); g_array_append_val(cag, fll);}
 	fll=0.8;
-	{g_array_append_val(al2, fll); g_array_append_val(al2, fll); g_array_append_val(al2, fll); g_array_append_val(al2, fll); g_array_append_val(al3, fll); g_array_append_val(al3, fll); g_array_append_val(al3, fll); g_array_append_val(al3, fll);}
-	(plt2->rd)=rd2;
-	(plt2->gr)=gr2;
-	(plt2->bl)=bl2;
-	(plt2->al)=al2;
+	{g_array_append_val(caa, fll); g_array_append_val(caa, fll); g_array_append_val(caa, fll); g_array_append_val(caa, fll);}
+	gtk_plot_set_colour(GTK_PLOT(plot2), car, cag, cab, caa);
+	{g_array_unref(car); g_array_unref(cag); g_array_unref(cab); g_array_unref(caa);}
 	g_signal_connect(plot2, "moved", G_CALLBACK(pltmv), NULL);
 	gtk_widget_show(plot2);
 	gtk_table_attach(GTK_TABLE(table), plot2, 0, 1, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -570,6 +539,12 @@ int main(int argc, char *argv[])
 	dsl=gtk_label_new("");
 	gtk_table_attach(GTK_TABLE(rest), dsl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 	gtk_widget_show(dsl);
+	label=gtk_label_new(_("Chirp"));
+	gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+	gtk_widget_show(label);
+	chil=gtk_label_new("");
+	gtk_table_attach(GTK_TABLE(rest), chil, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+	gtk_widget_show(chil);
 	label=gtk_label_new(_("Analysis Results"));
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
 	gtk_widget_show(notebook2);
@@ -577,28 +552,14 @@ int main(int argc, char *argv[])
 	statusbar=gtk_statusbar_new();
 	gtk_box_pack_start(GTK_BOX(vbox), statusbar, FALSE, FALSE, 2);
 	gtk_widget_show(statusbar);
-	x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	yb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	specs=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	stars=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	xsb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	ysb=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	delf=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	vis=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	doms=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	chp=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	msr=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	bxr=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	byr=g_array_new(FALSE, FALSE, sizeof(gdouble));
-	sz=g_array_new(FALSE, FALSE, sizeof(gint));
-	nx=g_array_new(FALSE, FALSE, sizeof(gint));
-	sz2=g_array_new(FALSE, FALSE, sizeof(gint));
-	nx2=g_array_new(FALSE, FALSE, sizeof(gint));
-	bsz=g_array_new(FALSE, FALSE, sizeof(gint));
-	bnx=g_array_new(FALSE, FALSE, sizeof(gint));
-	fold=g_strdup("/home");
-	folr=g_strdup("/home");
+	{vis=g_array_new(FALSE, FALSE, sizeof(gdouble)); doms=g_array_new(FALSE, FALSE, sizeof(gdouble)); chp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
+	{fold=g_strdup("/home"); folr=g_strdup("/home");}
 	gtk_widget_show(window);
 	gtk_main();
+	{g_slist_free(group); g_slist_free(group3); g_slist_free(group4); g_slist_free(group5);}
+	if (group2) g_slist_free(group2);
+	{g_array_free(bsra, FALSE); g_array_free(bspa, FALSE); g_array_free(isra, FALSE); g_array_free(ispa, FALSE); g_array_free(tca, FALSE); g_array_free(twa, FALSE); g_array_free(zwa, FALSE);}
+	{g_array_free(vis, FALSE); g_array_free(doms, FALSE); g_array_free(chp, FALSE);}
+	{g_free(fold); g_free(folr);}
 	return 0;
 }

@@ -27,12 +27,11 @@
 #	include "main.h"
 #	include "util.h"
 #	include <fftw3.h>
-	extern GtkWidget *window, *statusbar, *notebook, *notebook2, *plot1, *plot3, *zpd, *fst, *rest, *tr, *pr;
-	extern GtkWidget *chi, *trans, *anosa, *sws, *mg, *mgp, *wll, *oft, *twopionx, *lcmp, *dBs, *neg, *plot3;
-	extern GArray *bxr, *byr, *bsz, *bnx, *msr, *vis, *doms, *chp;
+	extern GtkWidget *fst, *notebook, *notebook2, *plot1, *plot3, *pr, *rest, *statusbar, *tr, *window, *zpd;
+	extern GtkWidget *anosa, *chi, *dBs, *lcmp, *mg, *mgp, *neg, *oft, *plot3, *sws, *trans, *twopionx, *wll;
+	extern GArray *chp, *doms, *vis;
 	extern GArray *bsra, *bspa, *isra, *ispa, *tca, *twa, *zwa;
-	extern gint mx;
-	extern guint jdim, kdim, jdimx, kdimx, jdimxf, kdimxf, flags, flagd, trc;
+	extern guint flagd, flags;
 	extern gdouble oe;
 	extern gchar *fold, *folr;
 	extern void trs(GtkWidget*, gpointer);
