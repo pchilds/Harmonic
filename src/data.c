@@ -4012,19 +4012,12 @@ void opd(GtkWidget *widget, gpointer data)
 				dsl=gtk_label_new("");
 				gtk_table_attach(GTK_TABLE(rest), dsl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 				gtk_widget_show(dsl);
-				label=gtk_label_new(_("Chirp"));
-				gtk_table_attach(GTK_TABLE(rest), label, 0, 1, 2, 3, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-				gtk_widget_show(label);
-				chil=gtk_label_new("");
-				gtk_table_attach(GTK_TABLE(rest), chil, 0, 1, 3, 4, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-				gtk_widget_show(chil);
 				label=gtk_label_new(_("Analysis Results"));
 				gtk_notebook_append_page(GTK_NOTEBOOK(notebook2), rest, label);
 				flags^=PROC_BAT;
 			}
 			flags|=PROC_OPN;
-			x=g_array_new(FALSE, FALSE, sizeof(gdouble));
-			y=g_array_new(FALSE, FALSE, sizeof(gdouble));
+			{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); y=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(anosa))) {k=2; lc=-1;}
 			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(sws))) {k=0; lc=-1;}
 			else {k=0; lc=0;}
@@ -4038,8 +4031,8 @@ void opd(GtkWidget *widget, gpointer data)
 					if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) {k++; continue;}
 					if (lc<0) {lc++; k++; continue;}
 					strat=g_strsplit_set(strary[k], "\t", 0);
-					lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
-					g_array_append_val(x, lcl);
+					xf=g_ascii_strtod(g_strstrip(strat[0]), NULL);
+					g_array_append_val(x, xf);
 					if (lc==0)
 					{
 						satl=g_strv_length(strat);
@@ -4057,6 +4050,7 @@ void opd(GtkWidget *widget, gpointer data)
 					g_array_append_val(y, lcl);
 					for (l=2; l<satl; l++)
 					{
+						g_array_append_val(x, xf);
 						if (!strat[l]) lcl=0;
 						else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
 						g_array_append_val(y, lcl);
@@ -4087,8 +4081,7 @@ void opd(GtkWidget *widget, gpointer data)
 				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 				g_free(str);
 				plt=GTK_PLOT_LINEAR(plot1);
-				xi=g_array_index(x, gdouble, 0);
-				xf=g_array_index(x, gdouble, (lc-1));
+				{xi=g_array_index(x, gdouble, 0); xf=g_array_index(x, gdouble, (lc*satl)-1);}
 				{st=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1); sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1); nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1);}
 				g_array_append_val(st, satl);
 				g_array_append_val(sz, lc);/* adjust if multiple traces desired */

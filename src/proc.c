@@ -38,7 +38,7 @@ void prs(GtkWidget *widget, gpointer data)
 	{
 		pt=GTK_PLOT(plot2);
 		plt=GTK_PLOT_LINEAR(plot2);
-		sz4=g_array_index(pt->sizes, gint, 0);/* check placing of this with what is desired for multiplots (within for loop?) */
+		sz4=g_array_index(pt->sizes, gint, 0);
 		jdimx=(plt->ydata->len)/(2*sz4);
 		if (jdimx==(bsra->len))
 		{
@@ -78,8 +78,8 @@ void prs(GtkWidget *widget, gpointer data)
 				{
 for (j=0; j<jdimx; j++)
 {
-	delf=g_array_index(plt->xdata, gdouble, (2*j*sz4)+1)-g_array_index(plt->xdata, gdouble, 2*j*sz4);
-	if (iv<DZE) idelf=G_MAXDOUBLE;
+	delf=g_array_index(plt->xdata, gdouble, 2*((j*sz4)+1))-g_array_index(plt->xdata, gdouble, 2*j*sz4);
+	if (delf<DZE) idelf=G_MAXDOUBLE;
 	else idelf=1/delf;
 	vzt=g_array_index(plt->ydata, gdouble, 2*j*sz4);
 						/*
@@ -190,8 +190,8 @@ flags|=(PROC_CHP|PROC_PRS);
 				{
 for (j=0; j<jdimx; j++)
 {
-	delf=g_array_index(plt->xdata, gdouble, (2*j*sz4)+1)-g_array_index(plt->xdata, gdouble, 2*j*sz4);
-	if (iv<DZE) idelf=G_MAXDOUBLE;
+	delf=g_array_index(plt->xdata, gdouble, 2*((j*sz4)+1))-g_array_index(plt->xdata, gdouble, 2*j*sz4);
+	if (delf<DZE) idelf=G_MAXDOUBLE;
 	else idelf=1/delf;
 	vzt=g_array_index(plt->ydata, gdouble, 2*j*sz4);
 						/*
@@ -263,8 +263,8 @@ flags|=PROC_PRS;
 			{
 for (j=0; j<jdimx; j++)
 {
-	delf=g_array_index(plt->xdata, gdouble, (2*j*sz4)+1)-g_array_index(plt->xdata, gdouble, 2*j*sz4);
-	if (iv<DZE) idelf=G_MAXDOUBLE;
+	delf=g_array_index(plt->xdata, gdouble, 2*((j*sz4)+1))-g_array_index(plt->xdata, gdouble, 2*j*sz4);
+	if (delf<DZE) idelf=G_MAXDOUBLE;
 	else idelf=1/delf;
 	vzt=g_array_index(plt->ydata, gdouble, 2*j*sz4);
 	iv=g_array_index(zwa, gdouble, j)*idelf/2;
@@ -369,8 +369,8 @@ flags|=(PROC_CHP|PROC_PRS);
 			{
 for (j=0; j<jdimx; j++)
 {
-	delf=g_array_index(plt->xdata, gdouble, (2*j*sz4)+1)-g_array_index(plt->xdata, gdouble, 2*j*sz4);
-	if (iv<DZE) idelf=G_MAXDOUBLE;
+	delf=g_array_index(plt->xdata, gdouble, 2*((j*sz4)+1))-g_array_index(plt->xdata, gdouble, 2*j*sz4);
+	if (delf<DZE) idelf=G_MAXDOUBLE;
 	else idelf=1/delf;
 	vzt=g_array_index(plt->ydata, gdouble, 2*j*sz4);
 	iv=g_array_index(zwa, gdouble, j)*idelf/2;
@@ -2340,8 +2340,8 @@ g_array_append_val(delf, iv);
 		p=fftw_plan_many_r2r(1, &zp, jdimx, yt, NULL, 1, zp, star, NULL, 1, zp, &type, FFTW_ESTIMATE);
 		fftw_execute(p);
 		{fftw_destroy_plan(p); fftw_free(yt);}
-		{n>>=1; dx=zp>>1;}
 		{x=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n); y=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);}
+		dx=zp>>1;
 		xx=0;
 		g_array_append_val(x, xx);
 		g_array_append_val(x, xx);
@@ -2370,7 +2370,7 @@ g_array_append_val(delf, iv);
 			g_array_append_val(y, xx);
 			for (j=1; j<dx; j++)
 			{
-				xx=j*g_array_index(delf, gdouble, 0);
+				xx=j*g_array_index(delf, gdouble, k);
 				g_array_append_val(x, xx);
 				{iv=star[j+(k*zp)]; clc=star[((k+1)*zp)-j];}
 				iv2=atan2(iv, clc);
@@ -2397,7 +2397,7 @@ g_array_append_val(delf, iv);
 		else
 		{
 			{nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx); sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx); st=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx);}
-			for (j=0;j<(2*n);j+=zp) {g_array_append_val(nx, j); g_array_append_val(sz, dx); g_array_append_val(st, dx2);}
+			for (j=0;j<n;j+=zp) {g_array_append_val(nx, j); g_array_append_val(sz, dx); g_array_append_val(st, dx2);}
 			yx=g_array_index(y, gdouble, 0);
 			for (j=2; j<n; j+=2)
 			{

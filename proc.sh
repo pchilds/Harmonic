@@ -1,8 +1,8 @@
 #!/bin/bash
 str0="for (j=0; j<jdimx; j++)
 {
-	delf=g_array_index(plt->xdata, gdouble, (2*j*sz4)+1)-g_array_index(plt->xdata, gdouble, 2*j*sz4);
-	if (iv<DZE) idelf=G_MAXDOUBLE;
+	delf=g_array_index(plt->xdata, gdouble, 2*((j*sz4)+1))-g_array_index(plt->xdata, gdouble, 2*j*sz4);
+	if (delf<DZE) idelf=G_MAXDOUBLE;
 	else idelf=1/delf;
 	vzt=g_array_index(plt->ydata, gdouble, 2*j*sz4);"
 
@@ -232,7 +232,7 @@ echo "	if ((flags&PROC_TRS)!=0)"
 echo "	{"
 echo "		pt=GTK_PLOT(plot2);"
 echo "		plt=GTK_PLOT_LINEAR(plot2);"
-echo "		sz4=g_array_index(pt->sizes, gint, 0);/* check placing of this with what is desired for multiplots (within for loop?) */"
+echo "		sz4=g_array_index(pt->sizes, gint, 0);"
 echo "		jdimx=(plt->ydata->len)/(2*sz4);"
 echo "		if (jdimx==(bsra->len))"
 echo "		{"
@@ -1234,8 +1234,8 @@ echo "		star=fftw_malloc(sizeof(double)*n);"
 echo "		p=fftw_plan_many_r2r(1, &zp, jdimx, yt, NULL, 1, zp, star, NULL, 1, zp, &type, FFTW_ESTIMATE);"
 echo "		fftw_execute(p);"
 echo "		{fftw_destroy_plan(p); fftw_free(yt);}"
-echo "		{n>>=1; dx=zp>>1;}"
 echo "		{x=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n); y=g_array_sized_new(FALSE, FALSE, sizeof(gdouble), n);}"
+echo "		dx=zp>>1;"
 echo "		xx=0;"
 echo "		g_array_append_val(x, xx);"
 echo "		g_array_append_val(x, xx);"
@@ -1264,7 +1264,7 @@ echo "			g_array_append_val(y, iv);"
 echo "			g_array_append_val(y, xx);"
 echo "			for (j=1; j<dx; j++)"
 echo "			{"
-echo "				xx=j*g_array_index(delf, gdouble, 0);"
+echo "				xx=j*g_array_index(delf, gdouble, k);"
 echo "				g_array_append_val(x, xx);"
 echo "				{iv=star[j+(k*zp)]; clc=star[((k+1)*zp)-j];}"
 echo "				iv2=atan2(iv, clc);"
@@ -1291,7 +1291,7 @@ echo "		}"
 echo "		else"
 echo "		{"
 echo "			{nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx); sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx); st=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx);}"
-echo "			for (j=0;j<(2*n);j+=zp) {g_array_append_val(nx, j); g_array_append_val(sz, dx); g_array_append_val(st, dx2);}"
+echo "			for (j=0;j<n;j+=zp) {g_array_append_val(nx, j); g_array_append_val(sz, dx); g_array_append_val(st, dx2);}"
 echo "			yx=g_array_index(y, gdouble, 0);"
 echo "			for (j=2; j<n; j+=2)"
 echo "			{"

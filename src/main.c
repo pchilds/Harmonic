@@ -57,7 +57,6 @@ GtkWidget *agosa, *agtl, *anosa, *chi, *db4, *db8, *dBs, *dlm, *frr, *lcmp, *mg,
 GtkWidget *bsp, *bsr, *isp, *isr, *jind, *jind2, *kind, *tc, *tw, *zw; /* widgets for windowing */
 GArray *bspa, *bsra, *chp, *doms, *ispa, *isra, *tca, *twa, *vis, *zwa; /* arrays for windowing and data */
 GSList *group=NULL, *group2=NULL, *group3=NULL, *group4=NULL, *group5=NULL;
-gint lc, mx; /* number of data points and number of files in batch routine */
 guint flagd=0, flags=0, kdimxf=1; /* display flags, current processing state and number of kdim's in batch process */
 gulong j1_id, j2_id, k_id, bsr_id, bsp_id, isr_id, isp_id, tc_id, tw_id, zw_id; /* id for disabling/enabling post-transform processing */
 gdouble oe=0; /* value to hold prior reference level for offset tracking */
