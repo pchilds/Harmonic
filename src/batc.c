@@ -232,7 +232,7 @@ void bat(GtkWidget *widget, gpointer data)
 	fftw_plan p;
 	fftw_r2r_kind type=FFTW_R2HC;
 	GArray *delp, *starp, *nx, *st, *sz, *x, *xp, *y, *yp;
-	gchar *contents, *contents2, *fin=NULL, *str, *s2;
+	gchar *contents, *contents2, *dm, *fin=NULL, *str, *s2;
 	gchar **strary, **strary2, **strat, **strat2;
 	gchar s1[10];
 	gdouble ce, clc, cn, ct, ddp, dst, idelf, iv, ivd, ivdt, lcl, mny, mxy, ofe, ofs, phi, phia, phio, pn, tcn, tp, twd, vt, vzt, xi, xf, xx;
@@ -355,9 +355,9 @@ void bat(GtkWidget *widget, gpointer data)
 			yt=fftw_malloc(sizeof(double)*n);
 			star=fftw_malloc(sizeof(double)*n);
 			p=fftw_plan_many_r2r(1, &zp, jdimx, yt, NULL, 1, zp, star, NULL, 1, zp, &type, FFTW_ESTIMATE);
-			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(anosa))) {kib=2; lcib=-1;}
-			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(sws))) {kib=0; lcib=-1;}
-			else {kib=0; lcib=0;}
+			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(anosa))) {kib=2; lcib=-1; dm=",";}
+			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(sws))) {kib=0; lcib=-1; dm="\t";}
+			else {kib=0; lcib=0; dm="\t";}
 			trc=g_array_index(GTK_PLOT(plot1)->stride, gint, 0)-1;
 			list=group2;
 			while (list)
@@ -394,7 +394,7 @@ void bat(GtkWidget *widget, gpointer data)
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -405,7 +405,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -549,7 +549,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -560,7 +560,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -706,7 +706,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -717,7 +717,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -862,7 +862,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -873,7 +873,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -1018,7 +1018,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -1029,7 +1029,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -1174,7 +1174,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -1185,7 +1185,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -1334,7 +1334,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -1345,7 +1345,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -1489,7 +1489,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -1500,7 +1500,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -1646,7 +1646,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -1657,7 +1657,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -1802,7 +1802,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -1813,7 +1813,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -1958,7 +1958,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -1969,7 +1969,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -2114,7 +2114,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -2125,7 +2125,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -2276,7 +2276,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -2287,7 +2287,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -2460,7 +2460,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -2471,7 +2471,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -2646,7 +2646,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -2657,7 +2657,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -2813,7 +2813,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -2824,7 +2824,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -2980,7 +2980,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -2991,7 +2991,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -3170,7 +3170,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -3181,7 +3181,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -3346,7 +3346,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -3357,7 +3357,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -3525,7 +3525,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -3536,7 +3536,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -3706,7 +3706,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -3717,7 +3717,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -3873,7 +3873,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -3884,7 +3884,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -4040,7 +4040,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -4051,7 +4051,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -4225,7 +4225,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -4236,7 +4236,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -4402,7 +4402,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -4413,7 +4413,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -4516,7 +4516,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -4527,7 +4527,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -4632,7 +4632,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -4643,7 +4643,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -4747,7 +4747,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -4758,7 +4758,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -4862,7 +4862,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -4873,7 +4873,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -4977,7 +4977,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -4988,7 +4988,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -5096,7 +5096,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -5107,7 +5107,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -5210,7 +5210,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -5221,7 +5221,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -5326,7 +5326,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -5337,7 +5337,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -5441,7 +5441,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -5452,7 +5452,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -5556,7 +5556,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -5567,7 +5567,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -5671,7 +5671,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -5682,7 +5682,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -5794,7 +5794,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -5805,7 +5805,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -5937,7 +5937,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -5948,7 +5948,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -6085,7 +6085,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -6096,7 +6096,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -6211,7 +6211,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -6222,7 +6222,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -6337,7 +6337,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -6348,7 +6348,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -6486,7 +6486,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -6497,7 +6497,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -6623,7 +6623,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -6634,7 +6634,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -6761,7 +6761,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -6772,7 +6772,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -6901,7 +6901,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -6912,7 +6912,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -7027,7 +7027,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -7038,7 +7038,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -7155,7 +7155,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -7166,7 +7166,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -7301,7 +7301,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -7312,7 +7312,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -7443,7 +7443,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -7454,7 +7454,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -7601,7 +7601,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -7612,7 +7612,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -7760,7 +7760,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -7771,7 +7771,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -7918,7 +7918,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -7929,7 +7929,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -8077,7 +8077,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -8088,7 +8088,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -8235,7 +8235,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -8246,7 +8246,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -8398,7 +8398,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -8409,7 +8409,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -8556,7 +8556,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -8567,7 +8567,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -8715,7 +8715,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -8726,7 +8726,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -8873,7 +8873,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -8884,7 +8884,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -9032,7 +9032,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -9043,7 +9043,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -9190,7 +9190,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -9201,7 +9201,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -9355,7 +9355,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -9366,7 +9366,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -9529,7 +9529,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -9540,7 +9540,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -9704,7 +9704,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -9715,7 +9715,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -9873,7 +9873,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -9884,7 +9884,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -10043,7 +10043,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -10054,7 +10054,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -10217,7 +10217,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -10228,7 +10228,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -10396,7 +10396,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -10407,7 +10407,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -10565,7 +10565,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -10576,7 +10576,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -10735,7 +10735,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -10746,7 +10746,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -10904,7 +10904,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -10915,7 +10915,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -11074,7 +11074,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -11085,7 +11085,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -11243,7 +11243,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -11254,7 +11254,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -11424,7 +11424,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -11435,7 +11435,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -11541,7 +11541,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -11552,7 +11552,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -11659,7 +11659,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -11670,7 +11670,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -11776,7 +11776,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -11787,7 +11787,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -11894,7 +11894,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -11905,7 +11905,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -12011,7 +12011,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -12022,7 +12022,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -12133,7 +12133,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -12144,7 +12144,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -12250,7 +12250,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -12261,7 +12261,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -12368,7 +12368,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -12379,7 +12379,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -12485,7 +12485,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -12496,7 +12496,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -12603,7 +12603,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -12614,7 +12614,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -12720,7 +12720,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -12731,7 +12731,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -12847,7 +12847,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -12858,7 +12858,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -12980,7 +12980,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -12991,7 +12991,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -13114,7 +13114,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -13125,7 +13125,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -13242,7 +13242,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -13253,7 +13253,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -13371,7 +13371,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -13382,7 +13382,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -13504,7 +13504,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -13515,7 +13515,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -13645,7 +13645,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -13656,7 +13656,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -13773,7 +13773,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -13784,7 +13784,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -13902,7 +13902,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -13913,7 +13913,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -14030,7 +14030,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -14041,7 +14041,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -14162,7 +14162,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -14173,7 +14173,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -14293,7 +14293,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -14304,7 +14304,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -14438,7 +14438,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -14449,7 +14449,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -14593,7 +14593,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -14604,7 +14604,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -14749,7 +14749,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -14760,7 +14760,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -14904,7 +14904,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -14915,7 +14915,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -15060,7 +15060,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -15071,7 +15071,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -15215,7 +15215,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -15226,7 +15226,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -15375,7 +15375,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -15386,7 +15386,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -15530,7 +15530,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -15541,7 +15541,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -15686,7 +15686,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -15697,7 +15697,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -15841,7 +15841,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -15852,7 +15852,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -15997,7 +15997,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -16008,7 +16008,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -16152,7 +16152,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -16163,7 +16163,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -16314,7 +16314,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -16325,7 +16325,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -16485,7 +16485,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -16496,7 +16496,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -16657,7 +16657,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -16668,7 +16668,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -16823,7 +16823,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -16834,7 +16834,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -16998,7 +16998,7 @@ if ((ofs<DZE)&&(ofs>NZE))
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -17009,7 +17009,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -17178,7 +17178,7 @@ if ((ofs<DZE)&&(ofs>NZE))
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -17189,7 +17189,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -17355,7 +17355,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -17366,7 +17366,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -17521,7 +17521,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -17532,7 +17532,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -17688,7 +17688,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -17699,7 +17699,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -17854,7 +17854,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -17865,7 +17865,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -18029,7 +18029,7 @@ if ((ofs<DZE)&&(ofs>NZE))
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -18040,7 +18040,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -18204,7 +18204,7 @@ if ((ofs<DZE)&&(ofs>NZE))
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -18215,7 +18215,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -18383,7 +18383,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -18394,7 +18394,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -18497,7 +18497,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -18508,7 +18508,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -18612,7 +18612,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -18623,7 +18623,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -18726,7 +18726,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -18737,7 +18737,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -18841,7 +18841,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -18852,7 +18852,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -18955,7 +18955,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -18966,7 +18966,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -19074,7 +19074,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -19085,7 +19085,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -19188,7 +19188,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -19199,7 +19199,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -19303,7 +19303,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -19314,7 +19314,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -19417,7 +19417,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -19428,7 +19428,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -19573,7 +19573,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -19584,7 +19584,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -19687,7 +19687,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -19698,7 +19698,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -19811,7 +19811,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -19822,7 +19822,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -19941,7 +19941,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -19952,7 +19952,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -20072,7 +20072,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -20083,7 +20083,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -20197,7 +20197,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -20208,7 +20208,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -20331,7 +20331,7 @@ if ((ofs<DZE)&&(ofs>NZE))
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -20342,7 +20342,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -20470,7 +20470,7 @@ if ((ofs<DZE)&&(ofs>NZE))
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -20481,7 +20481,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -20609,7 +20609,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -20620,7 +20620,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -20734,7 +20734,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -20745,7 +20745,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -20860,7 +20860,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -20871,7 +20871,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -20985,7 +20985,7 @@ else
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -20996,7 +20996,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -21122,7 +21122,7 @@ if ((ofs<DZE)&&(ofs>NZE))
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -21133,7 +21133,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
@@ -21259,7 +21259,7 @@ if ((ofs<DZE)&&(ofs>NZE))
 strat2=g_strsplit_set(strary2[m], "\t", 0);
 if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 {
-	strary=g_strsplit_set(contents, "\r\n", 0);
+	strary=g_strsplit_set(contents, "\r", 0);
 	sal=g_strv_length(strary);
 	{xp=g_array_new(FALSE, FALSE, sizeof(gdouble)); yp=g_array_new(FALSE, FALSE, sizeof(gdouble));}
 	lc=lcib;
@@ -21270,7 +21270,7 @@ if (g_file_get_contents(strat2[1], &contents, NULL, &Err))
 		if (!g_strcmp0("", strary[k])) continue;
 		if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) continue;
 		if ((lc++)<0) continue;
-		strat=g_strsplit_set(strary[k], "\t", 0);
+		strat=g_strsplit_set(strary[k], dm, 0);
 		lcl=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 		g_array_append_val(xp, lcl);
 		if (!strat[trc]) lcl=0;
