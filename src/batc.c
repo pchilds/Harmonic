@@ -23,11 +23,11 @@
  */
 
 #include "batc.h"
-GtkWidget *dialog, *adb, *spin, *cft;
+GtkWidget *adb, *cft, *dialog, *lbl1, *lbl2, *spin;
 GList *conff=NULL, *confv=NULL;
 GSList *confb=NULL;
 
-void tsw(GtkWidget *widget, gpointer dta)
+void tsw(GtkWidget* widget, gpointer dta)
 {
 	gchar *s1=NULL, *s2=NULL;
 	gdouble val, val2;
@@ -52,7 +52,7 @@ void tsw(GtkWidget *widget, gpointer dta)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(iter->data), val);
 }
 
-void tdl(GtkWidget *widget, gpointer dta)
+void tdl(GtkWidget* widget, gpointer dta)
 {
 	GList *iter1=NULL, *iter2=NULL;
 	gchar *s=NULL;
@@ -60,7 +60,6 @@ void tdl(GtkWidget *widget, gpointer dta)
 	guint ps;
 	gint rw;
 
-	ps=GPOINTER_TO_INT(dta);
 	g_object_get(G_OBJECT(cft), "n-rows", &rw, NULL);
 	rw-=3;
 	if (rw<=2)
@@ -73,6 +72,7 @@ void tdl(GtkWidget *widget, gpointer dta)
 	}
 	else
 	{
+		ps=GPOINTER_TO_INT(dta);
 		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(confb->data));
 		confb=(confb->next);
 		gtk_container_remove(GTK_CONTAINER(cft), GTK_WIDGET(confb->data));
@@ -107,17 +107,18 @@ void tdl(GtkWidget *widget, gpointer dta)
 	gtk_table_resize(GTK_TABLE(cft), rw, 3);
 }
 
-void upt(GtkWidget *widget, gpointer dta)
+void upt(GtkWidget* widget, gpointer dta)
 {
-	GtkWidget *wwfile, *lbl, *btt;
-	GtkAdjustment *adj;
-	GList *chld;
-	GSList *fls, *list;
+	AtkObject *atk_lbl, *atk_ll, *atk_wgt;
+	gdouble val;
 	gint rw, j;
 	gint ps;
-	gdouble val;
+	GList *chld;
+	GSList *fls=NULL, *list;
+	GtkAdjustment *adj;
+	GtkWidget *btd, *btt, *btu, *lbl, *wwfile;
 
-	wwfile=gtk_file_chooser_dialog_new(_("Select Data File"), GTK_WINDOW(dialog), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+	wwfile=gtk_file_chooser_dialog_new(_("Select Data File(s)"), GTK_WINDOW(dialog), GTK_FILE_CHOOSER_ACTION_OPEN, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(wwfile), TRUE);
 	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(wwfile), FALSE);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(wwfile), fold);
@@ -132,55 +133,90 @@ void upt(GtkWidget *widget, gpointer dta)
 		val=gtk_spin_button_get_value(GTK_SPIN_BUTTON(spin));
 		g_object_ref(G_OBJECT(widget));
 		gtk_container_remove(GTK_CONTAINER(cft), widget);
+		atk_lbl=gtk_widget_get_accessible(GTK_WIDGET(lbl2));
 		if (ps==0)
 		{
+			lbl=gtk_label_new((gchar*) (fls->data));
+			gtk_table_attach(GTK_TABLE(cft), lbl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			conff=g_list_append(conff, (gpointer) lbl);
+			g_free(fls->data);
+			fls=(fls->next);
 			btt=gtk_button_new_from_stock(GTK_STOCK_DELETE);
 			g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tdl), GINT_TO_POINTER(ps));
 			gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_widget_show(btt);
 			confb=g_slist_prepend(confb, (gpointer) btt);
-			list=(fls->next);
-			lbl=gtk_label_new((gchar*) (fls->data));
-			gtk_table_attach(GTK_TABLE(cft), lbl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			conff=g_list_append(conff, (gpointer) lbl);
-			g_free(fls->data);
-			fls=list;
+			atk_wgt=gtk_widget_get_accessible(lbl1);
+			atk_ll=gtk_widget_get_accessible(GTK_WIDGET(lbl));
+			atk_object_add_relationship(atk_wgt, ATK_RELATION_LABEL_FOR, atk_ll);
+			atk_object_add_relationship(atk_ll, ATK_RELATION_LABELLED_BY, atk_wgt);
+			atk_wgt=gtk_widget_get_accessible(spin);
+			atk_object_add_relationship(atk_ll, ATK_RELATION_LABEL_FOR, atk_wgt);
+			atk_object_add_relationship(atk_wgt, ATK_RELATION_LABELLED_BY, atk_ll);
 			confv=g_list_append(confv, (gpointer) spin);
+			{ps++; rw+=3;}
 			adj=(GtkAdjustment*) gtk_adjustment_new(val, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 			spin=gtk_spin_button_new(adj, 0, 0);
 			gtk_widget_show(spin);
 			gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, 4, 5, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			{ps++; rw+=3;}
+			atk_wgt=gtk_widget_get_accessible(spin);
+			atk_object_add_relationship(atk_lbl, ATK_RELATION_LABEL_FOR, atk_wgt);
+			atk_object_add_relationship(atk_wgt, ATK_RELATION_LABELLED_BY, atk_lbl);
 		}
+		else atk_ll=gtk_widget_get_accessible(GTK_WIDGET(g_list_last(conff)->data));
 		while (fls)
 		{
-			btt=gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
-			g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tsw), GINT_TO_POINTER(ps));
-			gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, rw-3, rw-2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			gtk_widget_show(btt);
-			confb=g_slist_prepend(confb, (gpointer) btt);
-			btt=gtk_button_new_from_stock(GTK_STOCK_GO_UP);
-			g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tsw), GINT_TO_POINTER(ps));
-			gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, rw-2, rw-1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			gtk_widget_show(btt);
-			confb=g_slist_prepend(confb, (gpointer) btt);
+			btd=gtk_button_new_from_stock(GTK_STOCK_GO_DOWN);
+			g_signal_connect(G_OBJECT(btd), "clicked", G_CALLBACK(tsw), GINT_TO_POINTER(ps));
+			gtk_table_attach(GTK_TABLE(cft), btd, 0, 1, rw-3, rw-2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(btd);
+			confb=g_slist_prepend(confb, (gpointer) btd);
+			btu=gtk_button_new_from_stock(GTK_STOCK_GO_UP);
+			g_signal_connect(G_OBJECT(btu), "clicked", G_CALLBACK(tsw), GINT_TO_POINTER(ps));
+			gtk_table_attach(GTK_TABLE(cft), btu, 0, 1, rw-2, rw-1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			gtk_widget_show(btu);
+			confb=g_slist_prepend(confb, (gpointer) btu);
+			atk_wgt=gtk_widget_get_accessible(btd);
+			atk_object_add_relationship(atk_ll, ATK_RELATION_CONTROLLED_BY, atk_wgt);
+			atk_object_add_relationship(atk_wgt, ATK_RELATION_CONTROLLER_FOR, atk_ll);
+			atk_wgt=gtk_widget_get_accessible(btu);
+			atk_object_add_relationship(atk_ll, ATK_RELATION_CONTROLLED_BY, atk_wgt);
+			atk_object_add_relationship(atk_wgt, ATK_RELATION_CONTROLLER_FOR, atk_ll);
+			lbl=gtk_label_new((gchar*) (fls->data));
+			gtk_table_attach(GTK_TABLE(cft), lbl, 1, 2, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			conff=g_list_append(conff, (gpointer) lbl);
+			g_free(fls->data);
+			fls=(fls->next);
+			atk_wgt=gtk_widget_get_accessible(lbl1);
+			atk_ll=gtk_widget_get_accessible(GTK_WIDGET(lbl));
+			atk_object_add_relationship(atk_wgt, ATK_RELATION_LABEL_FOR, atk_ll);
+			atk_object_add_relationship(atk_ll, ATK_RELATION_LABELLED_BY, atk_wgt);
+			atk_wgt=gtk_widget_get_accessible(btd);
+			atk_object_add_relationship(atk_ll, ATK_RELATION_CONTROLLED_BY, atk_wgt);
+			atk_object_add_relationship(atk_wgt, ATK_RELATION_CONTROLLER_FOR, atk_ll);
+			atk_wgt=gtk_widget_get_accessible(btu);
+			atk_object_add_relationship(atk_ll, ATK_RELATION_CONTROLLED_BY, atk_wgt);
+			atk_object_add_relationship(atk_wgt, ATK_RELATION_CONTROLLER_FOR, atk_ll);
 			btt=gtk_button_new_from_stock(GTK_STOCK_DELETE);
 			g_signal_connect(G_OBJECT(btt), "clicked", G_CALLBACK(tdl), GINT_TO_POINTER(ps));
 			gtk_table_attach(GTK_TABLE(cft), btt, 0, 1, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			gtk_widget_show(btt);
 			confb=g_slist_prepend(confb, (gpointer) btt);
-			list=(fls->next);
-			lbl=gtk_label_new((gchar*) (fls->data));
-			gtk_table_attach(GTK_TABLE(cft), lbl, 1, 2, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			conff=g_list_append(conff, (gpointer) lbl);
-			g_free(fls->data);
-			fls=list;
+			atk_wgt=gtk_widget_get_accessible(btt);
+			atk_object_add_relationship(atk_ll, ATK_RELATION_CONTROLLED_BY, atk_wgt);
+			atk_object_add_relationship(atk_wgt, ATK_RELATION_CONTROLLER_FOR, atk_ll);
+			atk_wgt=gtk_widget_get_accessible(spin);
+			atk_object_add_relationship(atk_ll, ATK_RELATION_LABEL_FOR, atk_wgt);
+			atk_object_add_relationship(atk_wgt, ATK_RELATION_LABELLED_BY, atk_ll);
 			confv=g_list_append(confv, (gpointer) spin);
 			{ps++; rw+=3;}
 			adj=(GtkAdjustment*) gtk_adjustment_new(val, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 			spin=gtk_spin_button_new(adj, 0, 0);
 			gtk_widget_show(spin);
 			gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			atk_wgt=gtk_widget_get_accessible(spin);
+			atk_object_add_relationship(atk_lbl, ATK_RELATION_LABEL_FOR, atk_wgt);
+			atk_object_add_relationship(atk_wgt, ATK_RELATION_LABELLED_BY, atk_lbl);
 		}
 		gtk_table_attach(GTK_TABLE(cft), widget, 1, 2, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 		g_object_unref(G_OBJECT(widget));
@@ -191,6 +227,7 @@ void upt(GtkWidget *widget, gpointer dta)
 
 void bat(GtkWidget *widget, gpointer data)
 {
+	AtkObject *atk_label, *atk_widget;
 	double *yt, *star;
 	fftw_plan p;
 	fftw_r2r_kind type=FFTW_R2HC;
@@ -226,12 +263,12 @@ void bat(GtkWidget *widget, gpointer data)
 			content=gtk_dialog_get_content_area(GTK_DIALOG(dialog));
 			cft=gtk_table_new(2, 3, FALSE);
 			gtk_widget_show(cft);
-			label=gtk_label_new(_("File:"));
-			gtk_widget_show(label);
-			gtk_table_attach(GTK_TABLE(cft), label, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
-			label=gtk_label_new(_("Measurand\nValue:"));
-			gtk_widget_show(label);
-			gtk_table_attach(GTK_TABLE(cft), label, 2, 3, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			lbl1=gtk_label_new(_("File:"));
+			gtk_widget_show(lbl1);
+			gtk_table_attach(GTK_TABLE(cft), lbl1, 1, 2, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			lbl2=gtk_label_new(_("Measurand\nValue:"));
+			gtk_widget_show(lbl2);
+			gtk_table_attach(GTK_TABLE(cft), lbl2, 2, 3, 0, 1, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			adb=gtk_button_new_with_label(_("Add another file"));
 			gtk_widget_show(adb);
 			gtk_table_attach(GTK_TABLE(cft), adb, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
@@ -240,6 +277,10 @@ void bat(GtkWidget *widget, gpointer data)
 			spin=gtk_spin_button_new(adj, 0, 0);
 			gtk_widget_show(spin);
 			gtk_table_attach(GTK_TABLE(cft), spin, 2, 3, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
+			atk_wgt=gtk_widget_get_accessible(spin);
+			atk_lbl=gtk_widget_get_accessible(GTK_WIDGET(lbl2));
+			atk_object_add_relationship(atk_lbl, ATK_RELATION_LABEL_FOR, atk_wgt);
+			atk_object_add_relationship(atk_wgt, ATK_RELATION_LABELLED_BY, atk_lbl);
 			adj=(GtkAdjustment*) gtk_adjustment_new(0, 0, 0, 0.0, 0.0, 0.0);
 			adj2=(GtkAdjustment*) gtk_adjustment_new(0, -G_MAXDOUBLE, G_MAXDOUBLE, 1.0, 5.0, 0.0);
 			scroll=gtk_scrolled_window_new(adj, adj2);

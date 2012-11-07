@@ -15,5 +15,5 @@ Harmonic_SOURCES=		\
 	disp.h			\
 	batc.c			\
 	batc.h
-Harmonic_LDADD=$(HARM_LIBS)
+Harmonic_LDADD=$(HARM_LIBS) -lm
 MAINTAINERCLEANFILES=Makefile.in
