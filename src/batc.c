@@ -227,7 +227,7 @@ void upt(GtkWidget* widget, gpointer dta)
 
 void bat(GtkWidget *widget, gpointer data)
 {
-	AtkObject *atk_label, *atk_widget;
+	AtkObject *atk_lbl, *atk_wgt;
 	double *yt, *star;
 	fftw_plan p;
 	fftw_r2r_kind type=FFTW_R2HC;
