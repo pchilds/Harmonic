@@ -3993,7 +3993,7 @@ void opd(GtkWidget *widget, gpointer data)
 		fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
 		if (g_file_get_contents(fin, &contents, NULL, &Err))
 		{
-			strary=g_strsplit_set(contents, "\r\n", 0);
+			strary=g_strsplit_set(contents, "\r", 0);
 			sal=g_strv_length(strary);
 			if ((flags&PROC_BAT)!=0)
 			{
@@ -4033,27 +4033,17 @@ void opd(GtkWidget *widget, gpointer data)
 					strat=g_strsplit_set(strary[k], "\t", 0);
 					xf=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 					g_array_append_val(x, xf);
-					if (lc==0)
-					{
-						satl=g_strv_length(strat);
-						if (!strat[1]) lcl=0;
-						else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-						{mny=lcl; mxy=lcl;}
-					}
-					else
-					{
-						if (!strat[1]) lcl=0;
-						else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-						if (lcl<mny) mny=lcl;
-						else if (lcl>mxy) mxy=lcl;
-					}
+					if (!strat[1]) lcl=0;
+					else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
+					if (lc==0) {satl=g_strv_length(strat); xi=xf; mny=lcl; mxy=lcl;}
+					else if (lcl<mny) mny=lcl;
+					else if (lcl>mxy) mxy=lcl;
 					g_array_append_val(y, lcl);
 					for (l=2; l<satl; l++)
 					{
-						g_array_append_val(x, xf);
 						if (!strat[l]) lcl=0;
 						else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-						g_array_append_val(y, lcl);
+						{g_array_append_val(x, xf); g_array_append_val(y, lcl);}
 					}
 					g_strfreev(strat);
 					{lc++; k++;}
@@ -4081,12 +4071,9 @@ void opd(GtkWidget *widget, gpointer data)
 				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 				g_free(str);
 				plt=GTK_PLOT_LINEAR(plot1);
-				{xi=g_array_index(x, gdouble, 0); xf=g_array_index(x, gdouble, (lc*satl)-1);}
 				{st=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1); sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1); nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1);}
-				g_array_append_val(st, satl);
-				g_array_append_val(sz, lc);/* adjust if multiple traces desired */
 				zp=0;
-				g_array_append_val(nx, zp);
+				{g_array_append_val(st, satl); g_array_append_val(sz, lc); g_array_append_val(nx, zp);}
 				gtk_plot_linear_set_data(plt, x, y, nx, sz, st);
 				{g_array_unref(x); g_array_unref(y); g_array_unref(nx); g_array_unref(sz); g_array_unref(st);}
 				gtk_plot_linear_update_scale_pretty(plot1, xi, xf, mny, mxy);
