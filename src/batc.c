@@ -136,7 +136,7 @@ void upt(GtkWidget* widget, gpointer dta)
 		atk_lbl=gtk_widget_get_accessible(GTK_WIDGET(lbl2));
 		if (ps==0)
 		{
-			lbl=gtk_label_new((gchar*) (fls->data));
+			lbl=gtk_label_new(g_strdup((gchar*) (fls->data)));
 			gtk_table_attach(GTK_TABLE(cft), lbl, 1, 2, 1, 2, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			conff=g_list_append(conff, (gpointer) lbl);
 			g_free(fls->data);
@@ -182,7 +182,7 @@ void upt(GtkWidget* widget, gpointer dta)
 			atk_wgt=gtk_widget_get_accessible(btu);
 			atk_object_add_relationship(atk_ll, ATK_RELATION_CONTROLLED_BY, atk_wgt);
 			atk_object_add_relationship(atk_wgt, ATK_RELATION_CONTROLLER_FOR, atk_ll);
-			lbl=gtk_label_new((gchar*) (fls->data));
+			lbl=gtk_label_new(g_strdup((gchar*) (fls->data)));
 			gtk_table_attach(GTK_TABLE(cft), lbl, 1, 2, rw-1, rw, GTK_FILL|GTK_SHRINK|GTK_EXPAND, GTK_FILL|GTK_SHRINK|GTK_EXPAND, 2, 2);
 			conff=g_list_append(conff, (gpointer) lbl);
 			g_free(fls->data);
