@@ -35,7 +35,6 @@
  * TO DO:
  *
  * BAT: skip over erroneous data points (maybe duplicate previous/next?)
- * BAT: opening of multiple files for config writer
  * FFT: implement invert to 2pi/x routine
  * PRC: triangle optimisation
  * SAV: session save/restore routine
@@ -52,15 +51,15 @@
 #include "proc.h"
 #include "util.h"
 
+GArray *bspa, *bsra, *chp, *doms, *ispa, *isra, *tca, *twa, *vis, *zwa; /* arrays for windowing and data */
+gchar *fold=NULL, *folr=NULL;
+gdouble oe=0; /* value to hold prior reference level for offset tracking */
+GSList *group=NULL, *group2=NULL, *group3=NULL, *group4=NULL, *group5=NULL;
 GtkWidget *chil, *dsl, *fst, *notebook, *notebook2, *plot1, *plot2, *plot3, *pr, *rest, *statusbar, *tr, *trac, *tracmenu, *visl, *window, *zpd;
 GtkWidget *agosa, *agtl, *anosa, *chi, *db4, *db8, *dBs, *dlm, *frr, *lcmp, *mg, *mgp, *mrl, *myr, *ncmp, *neg, *oft, *opttri, *ri, *sws, *trans, *twopionx, *wll;
 GtkWidget *bsp, *bsr, *isp, *isr, *jind, *jind2, *kind, *tc, *tw, *zw; /* widgets for windowing */
-GArray *bspa, *bsra, *chp, *doms, *ispa, *isra, *tca, *twa, *vis, *zwa; /* arrays for windowing and data */
-GSList *group=NULL, *group2=NULL, *group3=NULL, *group4=NULL, *group5=NULL;
 guint flagd=0, flags=0, kdimxf=1; /* display flags, current processing state and number of kdim's in batch process */
 gulong j1_id, j2_id, k_id, bsr_id, bsp_id, isr_id, isp_id, tc_id, tw_id, zw_id; /* id for disabling/enabling post-transform processing */
-gdouble oe=0; /* value to hold prior reference level for offset tracking */
-gchar *fold=NULL, *folr=NULL;
 
 int main(int argc, char *argv[])
 {
