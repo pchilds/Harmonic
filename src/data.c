@@ -26,97 +26,66 @@
 
 GtkPrintSettings *prst=NULL;
 
-void prf(GtkPrintOperation *prto, GtkPrintContext *ctex, int page_nr)
-{
-	cairo_t *cr=gtk_print_context_get_cairo_context(ctex);
-	gchar *str;
-
-	if (page_nr) return;
-	switch (gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook2)))
-	{
-		case 2:
-		if ((flags&(PROC_BAT|PROC_PRS))==(PROC_BAT|PROC_PRS))
-		{
-		}
-		else if ((flags&PROC_TRS)!=0)
-		{
-		}
-		else if ((flags&PROC_OPN)!=0)
-		{
-		}
-		else
-		{
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
-			str=g_strdup(_("No available image."));
-			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-			g_free(str);
-		}
-		break;
-		case 1:
-		if ((flags&PROC_TRS)!=0)
-		{
-		}
-		else if ((flags&PROC_OPN)!=0)
-		{
-		}
-		else
-		{
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
-			str=g_strdup(_("No available image."));
-			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-			g_free(str);
-		}
-		break;
-		default:
-		if ((flags&PROC_OPN)!=0)
-		{
-		}
-		else
-		{
-			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
-			str=g_strdup(_("No available image."));
-			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
-			g_free(str);
-		}
-		break;
-	}
-}
-
-void prb(GtkPrintOperation *prto, GtkPrintContext *ctex, int page_nr)
-{
-	gtk_print_operation_set_current_page(prto, 0);
-	gtk_print_operation_set_has_selection(prto, FALSE);
-}
+void prb(GtkPrintOperation *prto, GtkPrintContext *ctex, int page_nr) {gtk_print_operation_set_current_page(prto, 0); gtk_print_operation_set_has_selection(prto, FALSE);}
 
 void prt(GtkWidget *widget, gpointer data)
 {
-	GtkPrintOperation *prto;
-	GtkPageSetup *prps;
-	GtkPrintOperationResult res;
-	GError *Err=NULL;
 	gchar *str;
+	GError *Err=NULL;
+	GtkPageSetup *prps=NULL;
+	GtkPrintOperation *prto;
+	GtkPrintOperationResult res;
 
-	prto=gtk_print_operation_new();
-	if (prst!=NULL) gtk_print_operation_set_print_settings(prto, prst);
-	/*prps=gtk_print_operation_get_default_page_setup(prto);
-	gtk_page_setup_set_orientation(prps, GTK_PAGE_ORIENTATION_LANDSCAPE);
-	gtk_print_operation_set_default_page_setup(prto, prps);*/
-	g_signal_connect(prto, "begin_print", G_CALLBACK(prb), NULL);
-	g_signal_connect(prto, "draw_page", G_CALLBACK(prf), NULL);
-	res=gtk_print_operation_run(prto, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW(data), &Err);
-	if (res==GTK_PRINT_OPERATION_RESULT_ERROR)
+	if ((flags&PROC_OPN)==0)
 	{
-		str=g_strdup_printf(_("An error occured while printing: %s."), (Err->message));
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook2), 0);
+		str=g_strdup(_("No available image."));
 		gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 		g_free(str);
-		g_error_free(Err);
 	}
-	else if (res==GTK_PRINT_OPERATION_RESULT_APPLY)
+	else
 	{
-		if (prst!=NULL) g_object_unref(prst);
-		prst=g_object_ref(gtk_print_operation_get_print_settings(prto));
+		prto=gtk_print_operation_new();
+		if (prst!=NULL) gtk_print_operation_set_print_settings(prto, prst);
+		prps=gtk_print_operation_get_default_page_setup(prto);
+		if (prps==NULL) prps=gtk_page_setup_new();
+		gtk_page_setup_set_orientation(prps, GTK_PAGE_ORIENTATION_LANDSCAPE);
+		gtk_print_operation_set_default_page_setup(prto, prps);
+		g_signal_connect(prto, "begin_print", G_CALLBACK(prb), NULL);
+		switch (gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook2)))
+		{
+			case 2:
+			if ((flags&(PROC_BAT|PROC_PRS))==(PROC_BAT|PROC_PRS))
+			{
+				if ((flags&PROC_POL)!=0) g_signal_connect(prto, "draw_page", G_CALLBACK(gtk_plot_polar_print), (gpointer) plot3);
+				else g_signal_connect(prto, "draw_page", G_CALLBACK(gtk_plot_linear_print), (gpointer) plot3);
+			}
+			else if ((flags&PROC_TRS)!=0) g_signal_connect(prto, "draw_page", G_CALLBACK(gtk_plot_linear_print), (gpointer) plot2);
+			else g_signal_connect(prto, "draw_page", G_CALLBACK(gtk_plot_linear_print), (gpointer) plot1);
+			break;
+			case 1:
+			if ((flags&PROC_TRS)!=0) g_signal_connect(prto, "draw_page", G_CALLBACK(gtk_plot_linear_print), (gpointer) plot2);
+			else g_signal_connect(prto, "draw_page", G_CALLBACK(gtk_plot_linear_print), (gpointer) plot1);
+			break;
+			default:
+			g_signal_connect(prto, "draw_page", G_CALLBACK(gtk_plot_linear_print), (gpointer) plot1);
+			break;
+		}
+		res=gtk_print_operation_run(prto, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW(data), &Err);
+		if (res==GTK_PRINT_OPERATION_RESULT_ERROR)
+		{
+			str=g_strdup_printf(_("An error occured while printing: %s."), (Err->message));
+			gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
+			g_free(str);
+			g_error_free(Err);
+		}
+		else if (res==GTK_PRINT_OPERATION_RESULT_APPLY)
+		{
+			if (prst!=NULL) g_object_unref(prst);
+			prst=g_object_ref(gtk_print_operation_get_print_settings(prto));
+		}
+		g_object_unref(prto);
 	}
-	g_object_unref(prto);
 }
 
 void prg(GtkWidget *widget, gpointer data)
@@ -3969,7 +3938,7 @@ bottomofcheck5b:
 void opd(GtkWidget *widget, gpointer data)
 {
 	GArray *nx, *st, *sz, *x, *y;
-	gchar *contents=NULL, *dm, *fin=NULL, *str;
+	gchar *contents=NULL, *fin=NULL, *str;
 	gchar **strat=NULL, **strary=NULL;
 	gchar s[5];
 	gdouble lcl, mny, mxy, xf, xi;
@@ -3993,7 +3962,7 @@ void opd(GtkWidget *widget, gpointer data)
 		fin=gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(wfile));
 		if (g_file_get_contents(fin, &contents, NULL, &Err))
 		{
-			strary=g_strsplit_set(contents, "\r", 0);
+			strary=g_strsplit_set(contents, "\r\n", 0);
 			sal=g_strv_length(strary);
 			if ((flags&PROC_BAT)!=0)
 			{
@@ -4018,9 +3987,9 @@ void opd(GtkWidget *widget, gpointer data)
 			}
 			flags|=PROC_OPN;
 			{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); y=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(anosa))) {k=2; lc=-1; dm=",";}
-			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(sws))) {k=0; lc=-1; dm="\t";}
-			else {k=0; lc=0; dm="\t";}
+			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(anosa))) {k=2; lc=-1;}
+			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(sws))) {k=0; lc=-1;}
+			else {k=0; lc=0;}
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(mg)))
 			{
 				while (k<sal)
@@ -4030,20 +3999,30 @@ void opd(GtkWidget *widget, gpointer data)
 					if (!g_strcmp0("", strary[k])) {k++; continue;}
 					if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) {k++; continue;}
 					if (lc<0) {lc++; k++; continue;}
-					strat=g_strsplit_set(strary[k], dm, 0);
+					strat=g_strsplit_set(strary[k], "\t", 0);
 					xf=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 					g_array_append_val(x, xf);
-					if (!strat[1]) lcl=0;
-					else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
-					if (lc==0) {satl=g_strv_length(strat); xi=xf; mny=lcl; mxy=lcl;}
-					else if (lcl<mny) mny=lcl;
-					else if (lcl>mxy) mxy=lcl;
+					if (lc==0)
+					{
+						satl=g_strv_length(strat);
+						if (!strat[1]) lcl=0;
+						else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
+						{mny=lcl; mxy=lcl;}
+					}
+					else
+					{
+						if (!strat[1]) lcl=0;
+						else lcl=g_ascii_strtod(g_strstrip(strat[1]), NULL);
+						if (lcl<mny) mny=lcl;
+						else if (lcl>mxy) mxy=lcl;
+					}
 					g_array_append_val(y, lcl);
 					for (l=2; l<satl; l++)
 					{
+						g_array_append_val(x, xf);
 						if (!strat[l]) lcl=0;
 						else lcl=g_ascii_strtod(g_strstrip(strat[l]), NULL);
-						{g_array_append_val(x, xf); g_array_append_val(y, lcl);}
+						g_array_append_val(y, lcl);
 					}
 					g_strfreev(strat);
 					{lc++; k++;}
@@ -4071,9 +4050,12 @@ void opd(GtkWidget *widget, gpointer data)
 				gtk_statusbar_push(GTK_STATUSBAR(statusbar), gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), str), str);
 				g_free(str);
 				plt=GTK_PLOT_LINEAR(plot1);
+				{xi=g_array_index(x, gdouble, 0); xf=g_array_index(x, gdouble, (lc*satl)-1);}
 				{st=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1); sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1); nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1);}
+				g_array_append_val(st, satl);
+				g_array_append_val(sz, lc);/* adjust if multiple traces desired */
 				zp=0;
-				{g_array_append_val(st, satl); g_array_append_val(sz, lc); g_array_append_val(nx, zp);}
+				g_array_append_val(nx, zp);
 				gtk_plot_linear_set_data(plt, x, y, nx, sz, st);
 				{g_array_unref(x); g_array_unref(y); g_array_unref(nx); g_array_unref(sz); g_array_unref(st);}
 				gtk_plot_linear_update_scale_pretty(plot1, xi, xf, mny, mxy);
