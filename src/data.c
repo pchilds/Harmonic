@@ -3938,7 +3938,7 @@ bottomofcheck5b:
 void opd(GtkWidget *widget, gpointer data)
 {
 	GArray *nx, *st, *sz, *x, *y;
-	gchar *contents=NULL, *fin=NULL, *str;
+	gchar *contents=NULL, *dm, *fin=NULL, *str;
 	gchar **strat=NULL, **strary=NULL;
 	gchar s[5];
 	gdouble lcl, mny, mxy, xf, xi;
@@ -3987,9 +3987,9 @@ void opd(GtkWidget *widget, gpointer data)
 			}
 			flags|=PROC_OPN;
 			{x=g_array_new(FALSE, FALSE, sizeof(gdouble)); y=g_array_new(FALSE, FALSE, sizeof(gdouble));}
-			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(anosa))) {k=2; lc=-1;}
-			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(sws))) {k=0; lc=-1;}
-			else {k=0; lc=0;}
+			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(anosa))) {k=2; lc=-1; dm=",";}
+			else if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(sws))) {k=0; lc=-1; dm="\t";}
+			else {k=0; lc=0; dm="\t";}
 			if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(mg)))
 			{
 				while (k<sal)
@@ -3999,7 +3999,7 @@ void opd(GtkWidget *widget, gpointer data)
 					if (!g_strcmp0("", strary[k])) {k++; continue;}
 					if (!(g_ascii_isdigit(strary[k][0])|(g_str_has_prefix(strary[k],"-")))) {k++; continue;}
 					if (lc<0) {lc++; k++; continue;}
-					strat=g_strsplit_set(strary[k], "\t", 0);
+					strat=g_strsplit_set(strary[k], dm, 0);
 					xf=g_ascii_strtod(g_strstrip(strat[0]), NULL);
 					g_array_append_val(x, xf);
 					if (lc==0)
