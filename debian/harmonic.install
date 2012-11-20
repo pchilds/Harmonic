@@ -1,6 +1,8 @@
 usr/bin/Harmonic
 usr/share/applications/harmonic.desktop
 usr/share/gnome/help/Harmonic-help/C/Harmonic-help.xml
+usr/share/gnome/help/Harmonic-help/C/figures/ex4_1.png
+usr/share/gnome/help/Harmonic-help/C/figures/ex4_2.png
 usr/share/locale/el/LC_MESSAGES/gtk-harmonic.mo
 usr/share/locale/fr/LC_MESSAGES/gtk-harmonic.mo
 usr/share/locale/it/LC_MESSAGES/gtk-harmonic.mo
