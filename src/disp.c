@@ -520,7 +520,7 @@ void dpa(GtkWidget *widget, gpointer data)
 				if ((flags&PROC_TRS)!=0)
 				{
 					{dx2=2; xi=0; mny=0; xf=g_array_index(plt->xdata, gdouble, (2*sz4)-1); mxy=g_array_index(plt->ydata, gdouble, 0);}
-					{nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx); sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx); sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx);}
+					{nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx); sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx); st=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx);}
 					for (j=2; j<plt->ydata->len; j+=2)
 					{
 						iv=g_array_index(plt->ydata, gdouble, j);
@@ -528,7 +528,7 @@ void dpa(GtkWidget *widget, gpointer data)
 					}
 					for (j=0; j<jdimx; j++)
 					{
-						g_array_append_val(sz, dx2);
+						g_array_append_val(st, dx2);
 						g_array_append_val(sz, sz4);
 						k=2*j*sz4;
 						g_array_append_val(nx, k);
@@ -626,15 +626,14 @@ void dpo(GtkWidget *widget, gpointer data)
 void upc2(GtkWidget *widget, gpointer data)
 {
 	GdkColor clr2;
-	gint dx, val;
+	gint dx;
 	GtkPlot *pt;
 	guint alp2=65535;
 
 	pt=GTK_PLOT(plot2);
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck1)))
 	{
-		val=(pt->rd->len);
-		dx=fmod(jdim2, val);
+		dx=fmod(jdim2, (pt->rd->len));
 		(clr2.red)=(guint16) (65535*g_array_index(pt->rd, gdouble, dx));
 		(clr2.green)=(guint16) (65535*g_array_index(pt->gr, gdouble, dx));
 		(clr2.blue)=(guint16) (65535*g_array_index(pt->bl, gdouble, dx));
@@ -657,21 +656,20 @@ void upc2(GtkWidget *widget, gpointer data)
 void upc3(GtkWidget *widget, gpointer data)
 {
 	GdkColor clr3;
-	gint dx, val;
+	gint dx;
 	GtkPlot *pt;
 	guint alp3=65535;
 
 	pt=GTK_PLOT(plot3);
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2)))
 	{
-		val=(pt->rd->len);
 		if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3)))
 		{
-			dx=fmod(jdim3, val);
+			dx=fmod(jdim3, (pt->rd->len));
 			gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour3), TRUE);
 			gtk_color_selection_set_current_alpha(GTK_COLOR_SELECTION(colour3), alp3);
 		}
-		else dx=fmod((jdim3*kdimxf)+kdim2, val);
+		else dx=fmod((jdim3*kdimxf)+kdim2, (pt->rd->len));
 		(clr3.red)=(guint16) (65535*g_array_index(pt->rd, gdouble, dx));
 		(clr3.green)=(guint16) (65535*g_array_index(pt->gr, gdouble, dx));
 		(clr3.blue)=(guint16) (65535*g_array_index(pt->bl, gdouble, dx));
@@ -689,8 +687,7 @@ void upc3(GtkWidget *widget, gpointer data)
 		}
 		else
 		{
-			val=(pt->rd->len);
-			dx=fmod(kdim2, val);
+			dx=fmod(kdim2, (pt->rd->len));
 			(clr3.red)=(guint16) (65535*g_array_index(pt->rd, gdouble, dx));
 			(clr3.green)=(guint16) (65535*g_array_index(pt->gr, gdouble, dx));
 			(clr3.blue)=(guint16) (65535*g_array_index(pt->bl, gdouble, dx));
@@ -704,21 +701,20 @@ void upc3(GtkWidget *widget, gpointer data)
 void upc4(GtkWidget *widget, gpointer data)
 {
 	GdkColor clr3;
-	gint dx, val;
+	gint dx;
 	GtkPlot *pt;
 	guint alp3=65535;
 
 	pt=GTK_PLOT(plot3);
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3)))
 	{
-		val=(pt->rd->len);
 		if (!gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2)))
 		{
-			dx=fmod(kdim2, val);
+			dx=fmod(kdim2, (pt->rd->len));
 			gtk_color_selection_set_has_opacity_control(GTK_COLOR_SELECTION(colour3), TRUE);
 			gtk_color_selection_set_current_alpha(GTK_COLOR_SELECTION(colour3), alp3);
 		}
-		else dx=fmod((jdim3*kdimxf)+kdim2, val);
+		else dx=fmod((jdim3*kdimxf)+kdim2, (pt->rd->len));
 		(clr3.red)=(guint16) (65535*g_array_index(pt->rd, gdouble, dx));
 		(clr3.green)=(guint16) (65535*g_array_index(pt->gr, gdouble, dx));
 		(clr3.blue)=(guint16) (65535*g_array_index(pt->bl, gdouble, dx));
@@ -736,8 +732,7 @@ void upc4(GtkWidget *widget, gpointer data)
 		}
 		else
 		{
-			val=(pt->rd->len);
-			dx=fmod(jdim3, val);
+			dx=fmod(jdim3, (pt->rd->len));
 			(clr3.red)=(guint16) (65535*g_array_index(pt->rd, gdouble, dx));
 			(clr3.green)=(guint16) (65535*g_array_index(pt->gr, gdouble, dx));
 			(clr3.blue)=(guint16) (65535*g_array_index(pt->bl, gdouble, dx));
@@ -751,14 +746,13 @@ void upc4(GtkWidget *widget, gpointer data)
 void upj3(GtkWidget *widget, gpointer data)
 {
 	GdkColor clr2;
-	gint dx, val;
+	gint dx;
 	GtkPlot *pt;
 	guint alp2;
 
 	pt=GTK_PLOT(plot2);
 	jdim2=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-	val=(pt->rd->len);
-	dx=fmod(jdim2, val);
+	dx=fmod(jdim2, (pt->rd->len));
 	(clr2.red)=(guint16) (65535*g_array_index(pt->rd, gdouble, dx));
 	(clr2.green)=(guint16) (65535*g_array_index(pt->gr, gdouble, dx));
 	(clr2.blue)=(guint16) (65535*g_array_index(pt->bl, gdouble, dx));
@@ -771,15 +765,14 @@ void upj3(GtkWidget *widget, gpointer data)
 void upj4(GtkWidget* widget, gpointer data)
 {
 	GdkColor clr3;
-	gint dx, val;
+	gint dx;
 	GtkPlot *pt;
 	guint alp3;
 
 	pt=GTK_PLOT(plot3);
 	jdim3=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-	val=(pt->rd->len);
-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3))) dx=fmod((jdim3*kdimxf)+kdim2, val);
-	else dx=fmod(jdim3, val);
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck3))) dx=fmod((jdim3*kdimxf)+kdim2, (pt->rd->len));
+	else dx=fmod(jdim3, (pt->rd->len));
 	(clr3.red)=(guint16) (65535*g_array_index(pt->rd, gdouble, dx));
 	(clr3.green)=(guint16) (65535*g_array_index(pt->gr, gdouble, dx));
 	(clr3.blue)=(guint16) (65535*g_array_index(pt->bl, gdouble, dx));
@@ -792,15 +785,14 @@ void upj4(GtkWidget* widget, gpointer data)
 void upk2(GtkWidget *widget, gpointer data)
 {
 	GdkColor clr3;
-	gint dx, val;
+	gint dx;
 	GtkPlot *pt;
 	guint alp3;
 
 	pt=GTK_PLOT(plot3);
 	kdim2=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-	val=(pt->rd->len);
-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2))) dx=fmod((jdim3*kdimxf)+kdim2, val);
-	else dx=fmod(kdim2, val);
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ck2))) dx=fmod((jdim3*kdimxf)+kdim2, (pt->rd->len));
+	else dx=fmod(kdim2, (pt->rd->len));
 	(clr3.red)=(guint16) (65535*g_array_index(pt->rd, gdouble, dx));
 	(clr3.green)=(guint16) (65535*g_array_index(pt->gr, gdouble, dx));
 	(clr3.blue)=(guint16) (65535*g_array_index(pt->bl, gdouble, dx));

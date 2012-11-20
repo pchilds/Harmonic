@@ -178,7 +178,7 @@
     <glossdiv><title>E</title>
       <glossentry>
         <glossterm>EPS</glossterm>
-        <glossdef><para>Encapsulated Postscript. An image file that is described by a set of vectors rather than the usual bitmap format. An advantage of vector graphics is that they can be scaled to arbitrary sizes without losing resolution.</para></glossdef>
+        <glossdef><para>Encapsulated Postscript. An image file that is described by a set of vectors rather than the usual bitmap format. An advantage of vector graphics is that they can be scaled to arbitrary sizes without losing resolution. Postscript formats are almost universally used for printing.</para></glossdef>
       </glossentry>
     </glossdiv>
     <glossdiv><title>L</title>
@@ -211,6 +211,10 @@
       <glossentry>
         <glossterm>Spectral Shadowing</glossterm>
         <glossdef><para>When upstream elements remove a portion of the spectrum available to downstream elements.</para></glossdef>
+      </glossentry>
+      <glossentry>
+        <glossterm>SVG</glossterm>
+        <glossdef><para>Scalar Vector Graphics. An image file that is described by a set of vectors rather than the usual bitmap format. An advantage of vector graphics is that they can be scaled to arbitrary sizes without losing resolution. SVG is an accepted protocol of the W3C; intended for use on the web.</para></glossdef>
       </glossentry>
     </glossdiv>
     <glossdiv><title>V</title>
