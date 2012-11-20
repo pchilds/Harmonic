@@ -142,6 +142,13 @@
       <para>As the spectrum is potentially quite narrow, in the inverse domain it will be quite broad, potentially giving a good number of data points. Ensure that the 2's exponent of the "Zero Padding" value is greater than the number of data points in the spectrum start/stop range and then increase it as desired to give finer resolution. E.g. if you have a range of 384 points then select at least 9 as the value for zero padding (<inlineequation><mathphrase>2<superscript>8</superscript>=256&lt;384, 2<superscript>9</superscript>=512&gt;384</mathphrase></inlineequation>). Press "Transform Spectrum".</para>
     </sect2>
     <sect2><title>Example 4: Processing a measurement of a tilted fibre grating pair</title>
+      <figure id="app-FIG-shot1"><title>Spectrum of a tilted fibre grating pair</title>
+        <screenshot><mediaobject>
+          <imageobject><imagedata fileref="figures/ex4_1.png" format="PNG"/></imageobject>
+          <textobject><phrase>Shows a screenshot of the application displaying the settings for the two interferometric peaks.</phrase></textobject>
+          <caption><para>Two windows are specified in this spectrum and because of the slope, window compensation is used.</para></caption>
+        </mediaobject></screenshot>
+      </figure>
       <para>Tilted gratings have multiple reflected signals. Apart from the Bragg reflection, there is also reflection to the cladding modes as well as to a mode called the ghost mode (a highly resonant collection of cladding modes). When these gratings are concatenated, (apart from the core-to-core Fabry-Perot interference) they form a ring cavity of reflections to the ghost/cladding modes and back into the core mode. An analysis of the visibility of interference for this ring cavity can be used to monitor the optical properties of the medium surrounding the fibre that the cladding modes extend into<footnote><para>P. Childs, A.C.L. Wong, I. Leung, G.D. Peng, and Y.B. Liao "An In-Line In-Fibre Ring Cavity Sensor for Localized Multi-Parameter Sensing" in Meas. Sci. Technol., Vol. 19, Iss. 6, Jun. (2008) paper 065302.</para></footnote>.</para>
       <para>The steps to process measurements from such a device is the same as that of example 3, with the exception that there is not just one spectral range of interest. Once the file is loaded select Spectrum Start and Stop for the range over which the Bragg mode is expected to lie. Increment the j index and then enter the Spectrum Start and Stop values for the range over which the ghost mode is expected to lie. If an analysis of the cladding modes (either individually or as a group) is desired then continue incrementing the j index and entering values.</para>
     </sect2>
@@ -178,7 +185,7 @@
     <glossdiv><title>E</title>
       <glossentry>
         <glossterm>EPS</glossterm>
-        <glossdef><para>Encapsulated Postscript. An image file that is described by a set of vectors rather than the usual bitmap format. An advantage of vector graphics is that they can be scaled to arbitrary sizes without losing resolution.</para></glossdef>
+        <glossdef><para>Encapsulated Postscript. An image file that is described by a set of vectors rather than the usual bitmap format. An advantage of vector graphics is that they can be scaled to arbitrary sizes without losing resolution. Postscript formats are almost universally used for printing.</para></glossdef>
       </glossentry>
     </glossdiv>
     <glossdiv><title>L</title>
@@ -211,6 +218,10 @@
       <glossentry>
         <glossterm>Spectral Shadowing</glossterm>
         <glossdef><para>When upstream elements remove a portion of the spectrum available to downstream elements.</para></glossdef>
+      </glossentry>
+      <glossentry>
+        <glossterm>SVG</glossterm>
+        <glossdef><para>Scalar Vector Graphics. An image file that is described by a set of vectors rather than the usual bitmap format. An advantage of vector graphics is that they can be scaled to arbitrary sizes without losing resolution. SVG is an accepted protocol of the W3C; intended for use on the web.</para></glossdef>
       </glossentry>
     </glossdiv>
     <glossdiv><title>V</title>

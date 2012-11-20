@@ -3,6 +3,6 @@ dist-hook: doc-dist-hook
 DOC_MODULE=Harmonic-help
 DOC_ENTITIES=
 DOC_INCLUDES=
-DOC_FIGURES=
+DOC_FIGURES=figures/ex4_1.png
 DOC_LINGUAS=
 MAINTAINERCLEANFILES=Makefile.in
