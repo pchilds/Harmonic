@@ -32,7 +32,9 @@
 	extern GSList *group2;
 	extern guint flagd, flags, kdimxf;
 	extern gulong j1_id, j2_id, k_id, bsr_id, bsp_id, isr_id, isp_id, tc_id, tw_id, zw_id;
+#	ifdef USE_GDOC
 	void help(GtkWidget*, gpointer);
+#	endif
 	void about(GtkWidget*, gpointer);
 	void upg(GtkWidget*, gpointer);
 	void pltmv(GtkPlotLinear*, gpointer);
