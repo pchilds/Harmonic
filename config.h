@@ -8,11 +8,11 @@
    language is requested. */
 #define ENABLE_NLS 1
 
-/* Define to 1 if you have the MacOS X function CFLocaleCopyCurrent in the
+/* Define to 1 if you have the Mac OS X function CFLocaleCopyCurrent in the
    CoreFoundation framework. */
 /* #undef HAVE_CFLOCALECOPYCURRENT */
 
-/* Define to 1 if you have the MacOS X function CFPreferencesCopyAppValue in
+/* Define to 1 if you have the Mac OS X function CFPreferencesCopyAppValue in
    the CoreFoundation framework. */
 /* #undef HAVE_CFPREFERENCESCOPYAPPVALUE */
 
@@ -46,6 +46,9 @@
 
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "0.1.0"
+
+/* Use Gnome Documentation */
+#define USE_GDOC 1
 
 /* Version number of package */
 #define VERSION "0.1.0"
