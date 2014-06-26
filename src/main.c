@@ -289,11 +289,13 @@ int main(int argc, char *argv[])
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(mni), mnu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnb), mni);
 	mnu=gtk_menu_new();
+#ifdef USE_GDOC
 	mni=gtk_menu_item_new_with_label(_("Instructions"));
 	gtk_widget_add_accelerator(mni, "activate", accel_group, GDK_F1, 0, GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(help), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);
 	gtk_widget_show(mni);
+#endif
 	mni=gtk_image_menu_item_new_from_stock(GTK_STOCK_ABOUT, NULL);
 	g_signal_connect(G_OBJECT(mni), "activate", G_CALLBACK(about), NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(mnu), mni);

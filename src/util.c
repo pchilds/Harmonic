@@ -24,6 +24,7 @@
 
 #include "util.h"
 
+#ifdef USE_GDOC
 void help(GtkWidget *widget, gpointer data)
 {
 	gchar *uri, *str;
@@ -41,6 +42,7 @@ void help(GtkWidget *widget, gpointer data)
 		g_error_free(Err);
 	}
 }
+#endif
 
 void about(GtkWidget *widget, gpointer data)
 {
