@@ -2,7 +2,10 @@
 export DH_VERBOSE=1
 
 %:
-	dh  $@ --with autoreconf
-.PHONY: override_dh_strip
+	dh  $@ --parallel --with autotools-dev --with autoreconf
+.PHONY: override_dh_strip override_dh_autotools-dev_updateconfig
 override_dh_strip:
 	dh_strip --dbg-package=harmonic-dbg
+override_dh_autotools-dev_updateconfig:
+	./gdp.sh
+	dh_autotools-dev_updateconfig

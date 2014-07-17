@@ -33,7 +33,7 @@ msgstr ""
 
 #: src/main.c:110
 msgid "Graph"
-msgstr ""
+msgstr "Граф"
 
 #: src/main.c:127
 msgid "Restore Session"
