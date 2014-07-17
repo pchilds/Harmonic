@@ -120,11 +120,9 @@ void upj(GtkWidget *widget, gpointer data)
 	 * If transform has been performed and in single plot mode, changes the graph in plot 2
 	 * If processing has been performed, updates the displayed value/plot
 	 */
-	GArray *nx, *sz, *x, *y;
+	GArray *nx;
 	gchar s[10];
-	gchar *str;
-	gdouble mny, mxy, num, num2, num3, num4, num5, num6, num7, xf, xi;
-	gdouble *ptr;
+	gdouble num, num2, num3, num4, num5, num6, num7;
 	gint j, jdim, jdimx, k, kdim, kdimx, l, sz4;
 	GtkPlot *pt;
 	GtkPlotLinear *plt;
@@ -204,6 +202,7 @@ void upj(GtkWidget *widget, gpointer data)
 					g_array_unref(nx);
 					if ((flags&PROC_POL)==0)
 					{
+						plt=GTK_PLOT_LINEAR(plot3);
 						num=g_array_index(plt->xdata, gdouble, l);
 						num3=g_array_index(plt->ydata, gdouble, l);
 						{num2=num; num4=num3;}
@@ -333,7 +332,7 @@ void upj(GtkWidget *widget, gpointer data)
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind2), jdim);
 		g_signal_handler_unblock(G_OBJECT(jind2), j2_id);
 	}
-	else if (widget=jind2)
+	else if (widget==jind2)
 	{
 		g_signal_handler_block(G_OBJECT(jind), j1_id);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(jind), jdim);
@@ -350,7 +349,6 @@ void upk(GtkWidget *widget, gpointer data)
 	 */
 	GArray *nx;
 	gchar s[10];
-	gchar *str;
 	gdouble num, num2, num3, num4, num5;
 	gint j, jdim, jdimx, k, kdim, kdimx, l, st4, sz4;
 	GtkPlot *pt;
@@ -576,7 +574,6 @@ void reset(GtkWidget *widget, gpointer data)
 
 void reset2(GtkWidget *widget, gpointer data)
 {/*update arrays to current values*/
-	gdouble *ptr;
 	gdouble num;
 	gint jdim, jdimx;
 	

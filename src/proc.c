@@ -28,7 +28,7 @@ void prs(GtkWidget *widget, gpointer data)
 {
 	gchar *str;
 	gchar s[10];
-	gdouble cn, ct, ddp, delf, dst, idelf, iv, ivd, ivdt, phi, phio, phia, pn, tcn, tp, twd, vt, vzt;
+	gdouble cn, ct, ddp, delf, dst, idelf, iv, phi, phio, phia, pn, tcn, tp, twd, vt, vzt;
 	gint j, jdim, jdimx, k, kdim, l, sp, sr, sz4;
 	GtkPlot *pt;
 	GtkPlotLinear *plt;

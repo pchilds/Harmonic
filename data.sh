@@ -122,23 +122,25 @@ g_free(str2);"
 
 str_dupj="str2=g_strdup(contents);
 for (j=1; j<jdimx; j++)
-	{
+{
 	str=g_strjoin(\"\\t\", contents, str2, NULL);
 	g_free(contents);
 	contents=g_strdup(str);
 	g_free(str);
 }
-g_free(str2);"
+g_free(str2);
+dim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind));"
 
 str_dupk="str2=g_strdup(contents);
 for (j=1; j<kdimxf; j++)
-	{
+{
 	str=g_strjoin(\"\\t\", contents, str2, NULL);
 	g_free(contents);
 	contents=g_strdup(str);
 	g_free(str);
 }
-g_free(str2);"
+g_free(str2);
+dim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind));"
 
 str_dup2="pt=GTK_PLOT(plot2);
 plt=GTK_PLOT_LINEAR(plot2);
@@ -193,12 +195,12 @@ g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, k*st4));
 g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (k+sz4)*st4));
 g_snprintf(s4, 10, \"%f\", g_array_index(plt->ydata, gdouble, (k+2*sz4)*st4));
 str2=g_strjoin(\"\\t\", s1, s2, s3, s4, NULL);
-j=1;
-while (j<st4)
+j=0;
+while (++j<st4)
 {
 	g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, j+(k*st4)));
 	g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, j+((k+sz4)*st4)));
-	g_snprintf(s4, 10, \"%f\", g_array_index(plt->ydata, gdouble, (j++)+((k+(2*sz4))*st4)));
+	g_snprintf(s4, 10, \"%f\", g_array_index(plt->ydata, gdouble, j+((k+(2*sz4))*st4)));
 	str=g_strjoin(\"\\t\", str2, s1, s2, s3, s4, NULL);
 	g_free(str2);
 	str2=g_strdup(str);
@@ -214,12 +216,12 @@ g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, k*st4));
 g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (k+sz4)*st4));
 g_snprintf(s4, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (k+2*sz4)*st4));
 str2=g_strjoin(\"\\t\", s1, s2, s3, s4, NULL);
-j=1;
-while (j<st4)
+j=0;
+while (++j<st4)
 {
 	g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, j+(k*st4)));
 	g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, j+((k+sz4)*st4)));
-	g_snprintf(s4, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (j++)+((k+(2*sz4))*st4)));
+	g_snprintf(s4, 10, \"%f\", g_array_index(plt2->rdata, gdouble, j+((k+(2*sz4))*st4)));
 	str=g_strjoin(\"\\t\", str2, s1, s2, s3, s4, NULL);
 	g_free(str2);
 	str2=g_strdup(str);
@@ -230,9 +232,9 @@ g_free(contents);
 contents=g_strjoin(DLMT, str, str2, NULL);
 {g_free(str); g_free(str2);}"
 
-str_l3="g_snprintf(s1, 10, \"%f\", g_array_index(plt2->thdata, gdouble, j));
-g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, j));
-g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, j+sz4));
+str_l3="g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, j));
+g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, j));
+g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, j+sz4));
 str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);
 str=g_strdup(contents);
 g_free(contents);
@@ -252,11 +254,11 @@ str_l3a="g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, k*st4));
 g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, k*st4));
 g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (k+sz4)*st4));
 str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);
-j=1;
-while (j<st4)
+j=0;
+while (++j<st4)
 {
 	g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, j+(k*st4)));
-	g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (j++)+((k+sz4)*st4)));
+	g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, j+((k+sz4)*st4)));
 	str=g_strjoin(\"\\t\", str2, s1, s2, s3, NULL);
 	g_free(str2);
 	str2=g_strdup(str);
@@ -271,11 +273,11 @@ str_p3a="g_snprintf(s1, 10, \"%f\", g_array_index(plt2->thdata, gdouble, k*st4))
 g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, k*st4));
 g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (k+sz4)*st4));
 str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);
-j=1;
-while (j<st4)
+j=0;
+while (++j<st4)
 {
 	g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, j+(k*st4)));
-	g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (j++)+((k+sz4)*st4)));
+	g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, j+((k+sz4)*st4)));
 	str=g_strjoin(\"\\t\", str2, s1, s2, s3, NULL);
 	g_free(str2);
 	str2=g_strdup(str);
@@ -305,10 +307,10 @@ contents=g_strjoin(DLMT, str, str2, NULL);
 str_l2a="g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, k*st4));
 g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, k*st4));
 str2=g_strjoin(\"\\t\", s1, s2, NULL);
-j=1;
-while (j<st4)
+j=0;
+while (++j<st4)
 {
-	g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, (j++)+(k*st4)));
+	g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, j+(k*st4)));
 	str=g_strjoin(\"\\t\", str2, s1, s2, NULL);
 	g_free(str2);
 	str2=g_strdup(str);
@@ -322,10 +324,10 @@ contents=g_strjoin(DLMT, str, str2, NULL);
 str_p2a="g_snprintf(s1, 10, \"%f\", g_array_index(plt2->thdata, gdouble, k*st4));
 g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, k*st4));
 str2=g_strjoin(\"\\t\", s1, s2, NULL);
-j=1;
-while (j<st4)
+j=0;
+while (++j<st4)
 {
-	g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (j++)+(k*st4)));
+	g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, j+(k*st4)));
 	str=g_strjoin(\"\\t\", str2, s1, s2, NULL);
 	g_free(str2);
 	str2=g_strdup(str);
@@ -339,8 +341,8 @@ contents=g_strjoin(DLMT, str, str2, NULL);
 str_l2k="g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, (dim*kdimxf)+(j*st4)));
 g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, (dim*kdimxf)+(j*st4)));
 str2=g_strjoin(\"\\t\", s1, s2, NULL);
-k=1;
-while (k<kdimxf)
+k=0;
+while (++k<kdimxf)
 {
 	g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, k+(dim*kdimxf)+(j*st4)));
 	str=g_strjoin(\"\\t\", str2, s1, s2, NULL);
@@ -356,8 +358,8 @@ contents=g_strjoin(DLMT, str, str2, NULL);
 str_p2k="g_snprintf(s1, 10, \"%f\", g_array_index(plt2->thdata, gdouble, (dim*kdimxf)+(j*st4)));
 g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (dim*kdimxf)+(j*st4)));
 str2=g_strjoin(\"\\t\", s1, s2, NULL);
-k=1;
-while (k<kdimxf)
+k=0;
+while (++k<kdimxf)
 {
 	g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, k+(dim*kdimxf)+(j*st4)));
 	str=g_strjoin(\"\\t\", str2, s1, s2, NULL);
@@ -372,12 +374,12 @@ contents=g_strjoin(DLMT, str, str2, NULL);
 
 str_l2j="g_snprintf(s2, 10, \"%f\", g_array_index(plt->xdata, gdouble, dim+(k*st4)));
 g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+(k*st4)));
-str2=g_strjoin(\"\\t\", s1, s2, s3, s4, NULL);
-k=1;
-while (j<jdimx)
+str2=g_strjoin(\"\\t\", s1, s2, NULL);
+j=0;
+while (++j<jdimx)
 {
 	g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+(j*kdimxf)+(k*st4)));
-	str=g_strjoin(\"\\t\", str2, s1, s2, s3, s4, NULL);
+	str=g_strjoin(\"\\t\", str2, s1, s2, NULL);
 	g_free(str2);
 	str2=g_strdup(str);
 	g_free(str);
@@ -389,12 +391,12 @@ contents=g_strjoin(DLMT, str, str2, NULL);
 
 str_p2j="g_snprintf(s2, 10, \"%f\", g_array_index(plt2->thdata, gdouble, dim+(k*st4)));
 g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+(k*st4)));
-str2=g_strjoin(\"\\t\", s1, s2, s3, s4, NULL);
-k=1;
-while (j<jdimx)
+str2=g_strjoin(\"\\t\", s1, s2, NULL);
+j=0;
+while (++j<jdimx)
 {
 	g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+(j*kdimxf)+(k*st4)));
-	str=g_strjoin(\"\\t\", str2, s1, s2, s3, s4, NULL);
+	str=g_strjoin(\"\\t\", str2, s1, s2, NULL);
 	g_free(str2);
 	str2=g_strdup(str);
 	g_free(str);
@@ -960,7 +962,6 @@ echo "						{"
 echo "							case 8:"
 echo "							contents=g_strdup(_(\"MEAS     \\tVISIBILTY\\tDOMN_SHFT\\tCHIRP    \"));"
 echo "${str_dupk}"
-echo "							dim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind));"
 echo "							if ((flags&PROC_POL)==PROC_POL)"
 echo "							{"
 echo "								plt2=GTK_PLOT_POLAR(plot3);"
@@ -971,12 +972,12 @@ echo "									g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (d
 echo "									g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (dim*kdimxf)+((j+sz4)*st4)));"
 echo "									g_snprintf(s4, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (dim*kdimxf)+((j+(2*sz4))*st4)));"
 echo "									str2=g_strjoin(\"\\t\", s1, s2, s3, s4, NULL);"
-echo "									k=1;"
-echo "									while (k<kdimxf)"
+echo "									k=0;"
+echo "									while (++k<kdimxf)"
 echo "									{"
 echo "										g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, k+(dim*kdimxf)+(j*st4)));"
 echo "										g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, k+(dim*kdimxf)+((j+sz4)*st4)));"
-echo "										g_snprintf(s4, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (k++)+(dim*kdimxf)+((j+(2*sz4))*st4)));"
+echo "										g_snprintf(s4, 10, \"%f\", g_array_index(plt2->rdata, gdouble, k+(dim*kdimxf)+((j+(2*sz4))*st4)));"
 echo "										str=g_strjoin(\"\\t\", str2, s1, s2, s3, s4, NULL);"
 echo "										g_free(str2);"
 echo "										str2=g_strdup(str);"
@@ -998,12 +999,12 @@ echo "									g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, (di
 echo "									g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (dim*kdimxf)+((j+sz4)*st4)));"
 echo "									g_snprintf(s4, 10, \"%f\", g_array_index(plt->ydata, gdouble, (dim*kdimxf)+((j+(2*sz4))*st4)));"
 echo "									str2=g_strjoin(\"\\t\", s1, s2, s3, s4, NULL);"
-echo "									k=1;"
-echo "									while (k<kdimxf)"
+echo "									k=0;"
+echo "									while (++k<kdimxf)"
 echo "									{"
 echo "										g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, k+(dim*kdimxf)+(j*st4)));"
 echo "										g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, k+(dim*kdimxf)+((j+sz4)*st4)));"
-echo "										g_snprintf(s4, 10, \"%f\", g_array_index(plt->ydata, gdouble, (k++)+(dim*kdimxf)+((j+(2*sz4))*st4)));"
+echo "										g_snprintf(s4, 10, \"%f\", g_array_index(plt->ydata, gdouble, k+(dim*kdimxf)+((j+(2*sz4))*st4)));"
 echo "										str=g_strjoin(\"\\t\", str2, s1, s2, s3, s4, NULL);"
 echo "										g_free(str2);"
 echo "										str2=g_strdup(str);"
@@ -1083,7 +1084,6 @@ echo "							break;"
 echo "							case 4:"
 echo "							contents=g_strdup(_(\"MEAS     \\tVISIBILTY\\tDOMN_SHFT\\tCHIRP    \"));"
 echo "${str_dupj}"
-echo "							dim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind));"
 echo "							if ((flags&PROC_POL)==PROC_POL)"
 echo "							{"
 echo "								plt2=GTK_PLOT_POLAR(plot3);"
@@ -1094,12 +1094,12 @@ echo "									g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, di
 echo "									g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+((k+sz4)*st4)));"
 echo "									g_snprintf(s4, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+((k+(2*sz4))*st4)));"
 echo "									str2=g_strjoin(\"\\t\", s1, s2, s3, s4, NULL);"
-echo "									k=1;"
-echo "									while (j<jdimx)"
+echo "									j=0;"
+echo "									while (++j<jdimx)"
 echo "									{"
 echo "										g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+(j*kdimxf)+(k*st4)));"
 echo "										g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+(j*kdimxf)+((k+sz4)*st4)));"
-echo "										g_snprintf(s4, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+((j++)*kdimxf)+((k+(2*sz4))*st4)));"
+echo "										g_snprintf(s4, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+(j*kdimxf)+((k+(2*sz4))*st4)));"
 echo "										str=g_strjoin(\"\\t\", str2, s1, s2, s3, s4, NULL);"
 echo "										g_free(str2);"
 echo "										str2=g_strdup(str);"
@@ -1121,12 +1121,12 @@ echo "									g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim
 echo "									g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+((k+sz4)*st4)));"
 echo "									g_snprintf(s4, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+((k+(2*sz4))*st4)));"
 echo "									str2=g_strjoin(\"\\t\", s1, s2, s3, s4, NULL);"
-echo "									k=1;"
-echo "									while (j<jdimx)"
+echo "									j=0;"
+echo "									while (++j<jdimx)"
 echo "									{"
 echo "										g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+(j*kdimxf)+(k*st4)));"
 echo "										g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+(j*kdimxf)+((k+sz4)*st4)));"
-echo "										g_snprintf(s4, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+((j++)*kdimxf)+((k+(2*sz4))*st4)));"
+echo "										g_snprintf(s4, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+(j*kdimxf)+((k+(2*sz4))*st4)));"
 echo "										str=g_strjoin(\"\\t\", str2, s1, s2, s3, s4, NULL);"
 echo "										g_free(str2);"
 echo "										str2=g_strdup(str);"
@@ -1457,7 +1457,6 @@ echo "						{"
 echo "							case 6:"
 echo "							contents=g_strdup(_(\"MEAS     \\tVISIBILTY\\tDOMN_SHFT\"));"
 echo "${str_dupk}"
-echo "							dim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind));"
 echo "							if ((flags&PROC_POL)==PROC_POL)"
 echo "							{"
 echo "								plt2=GTK_PLOT_POLAR(plot3);"
@@ -1467,11 +1466,11 @@ echo "									g_snprintf(s1, 10, \"%f\", g_array_index(plt2->thdata, gdouble, (
 echo "									g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (dim*kdimxf)+(j*st4)));"
 echo "									g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (dim*kdimxf)+((j+sz4)*st4)));"
 echo "									str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);"
-echo "									k=1;"
-echo "									while (k<kdimxf)"
+echo "									k=0;"
+echo "									while (++k<kdimxf)"
 echo "									{"
 echo "										g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, k+(dim*kdimxf)+(j*st4)));"
-echo "										g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, (k++)+(dim*kdimxf)+((j+sz4)*st4)));"
+echo "										g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, k+(dim*kdimxf)+((j+sz4)*st4)));"
 echo "										str=g_strjoin(\"\\t\", str2, s1, s2, s3, NULL);"
 echo "										g_free(str2);"
 echo "										str2=g_strdup(str);"
@@ -1492,11 +1491,11 @@ echo "									g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, (di
 echo "									g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, (dim*kdimxf)+(j*st4)));"
 echo "									g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (dim*kdimxf)+((j+sz4)*st4)));"
 echo "									str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);"
-echo "									k=1;"
-echo "									while (k<kdimxf)"
+echo "									k=0;"
+echo "									while (++k<kdimxf)"
 echo "									{"
 echo "										g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, k+(dim*kdimxf)+(j*st4)));"
-echo "										g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (k++)+(dim*kdimxf)+((j+sz4)*st4)));"
+echo "										g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, k+(dim*kdimxf)+((j+sz4)*st4)));"
 echo "										str=g_strjoin(\"\\t\", str2, s1, s2, s3, NULL);"
 echo "										g_free(str2);"
 echo "										str2=g_strdup(str);"
@@ -1555,7 +1554,6 @@ echo "							break;"
 echo "							case 3:"
 echo "							contents=g_strdup(_(\"MEAS     \\tVISIBILTY\\tDOMN_SHFT\"));"
 echo "${str_dupj}"
-echo "							dim=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind));"
 echo "							if ((flags&PROC_POL)==PROC_POL)"
 echo "							{"
 echo "								plt2=GTK_PLOT_POLAR(plot3);"
@@ -1565,11 +1563,11 @@ echo "									g_snprintf(s2, 10, \"%f\", g_array_index(plt2->thdata, gdouble, d
 echo "									g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+(k*st4)));"
 echo "									g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+((k+sz4)*st4)));"
 echo "									str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);"
-echo "									k=1;"
-echo "									while (j<jdimx)"
+echo "									j=0;"
+echo "									while (++j<jdimx)"
 echo "									{"
 echo "										g_snprintf(s2, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+(j*kdimxf)+(k*st4)));"
-echo "										g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+((j++)*kdimxf)+((k+sz4)*st4)));"
+echo "										g_snprintf(s3, 10, \"%f\", g_array_index(plt2->rdata, gdouble, dim+(j*kdimxf)+((k+sz4)*st4)));"
 echo "										str=g_strjoin(\"\\t\", str2, s1, s2, s3, NULL);"
 echo "										g_free(str2);"
 echo "										str2=g_strdup(str);"
@@ -1590,11 +1588,11 @@ echo "									g_snprintf(s2, 10, \"%f\", g_array_index(plt->xdata, gdouble, dim
 echo "									g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+(k*st4)));"
 echo "									g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+((k+sz4)*st4)));"
 echo "									str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);"
-echo "									k=1;"
-echo "									while (j<jdimx)"
+echo "									j=0;"
+echo "									while (++j<jdimx)"
 echo "									{"
 echo "										g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+(j*kdimxf)+(k*st4)));"
-echo "										g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+((j++)*kdimxf)+((k+sz4)*st4)));"
+echo "										g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, dim+(j*kdimxf)+((k+sz4)*st4)));"
 echo "										str=g_strjoin(\"\\t\", str2, s1, s2, s3, NULL);"
 echo "										g_free(str2);"
 echo "										str2=g_strdup(str);"
@@ -1792,12 +1790,12 @@ echo "						g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, 2*j));
 echo "						g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, 2*j));"
 echo "						g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (2*j)+1));"
 echo "						str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);"
-echo "						k=1;"
-echo "						while (k<jdimx)"
+echo "						k=0;"
+echo "						while (++k<jdimx)"
 echo "						{"
 echo "							g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, 2*(j+(k*sz4))));"
 echo "							g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, 2*(j+(k*sz4))));"
-echo "							g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (2*(j+((k++)*sz4)))+1));"
+echo "							g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (2*(j+(k*sz4)))+1));"
 echo "							str=g_strjoin(\"\\t\", str2, s1, s2, s3, NULL);"
 echo "							g_free(str2);"
 echo "							str2=g_strdup(str);"
@@ -1822,12 +1820,12 @@ echo "						num2=g_array_index(plt->ydata, gdouble, (2*j)+1);"
 echo "						g_snprintf(s2, 10, \"%f\", num*cos(num2));"
 echo "						g_snprintf(s3, 10, \"%f\", num*sin(num2));"
 echo "						str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);"
-echo "						k=1;"
-echo "						while (k<jdimx)"
+echo "						k=0;"
+echo "						while (++k<jdimx)"
 echo "						{"
 echo "							g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, 2*(j+(k*sz4))));"
 echo "							num=g_array_index(plt->ydata, gdouble, 2*(j+(k*sz4)));"
-echo "							num2=g_array_index(plt->ydata, gdouble, (2*(j+((k++)*sz4)))+1);"
+echo "							num2=g_array_index(plt->ydata, gdouble, (2*(j+(k*sz4)))+1);"
 echo "							g_snprintf(s2, 10, \"%f\", num*cos(num2));"
 echo "							g_snprintf(s3, 10, \"%f\", num*sin(num2));"
 echo "							str=g_strjoin(\"\\t\", str2, s1, s2, s3, NULL);"
@@ -1874,12 +1872,12 @@ echo "						g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, 2*j));
 echo "						g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, 2*j));"
 echo "						g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (2*j)+1));"
 echo "						str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);"
-echo "						k=1;"
-echo "						while (k<jdimx)"
+echo "						k=0;"
+echo "						while (++k<jdimx)"
 echo "						{"
 echo "							g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, 2*(j+(k*sz4))));"
 echo "							g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, 2*(j+(k*sz4))));"
-echo "							g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (2*(j+((k++)*sz4)))+1));"
+echo "							g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (2*(j+(k*sz4)))+1));"
 echo "							str=g_strjoin(\"\\t\", str2, s1, s2, s3, NULL);"
 echo "							g_free(str2);"
 echo "							str2=g_strdup(str);"
@@ -1904,12 +1902,12 @@ echo "						num2=g_array_index(plt->ydata, gdouble, (2*j)+1);"
 echo "						g_snprintf(s2, 10, \"%f\", num*cos(num2));"
 echo "						g_snprintf(s3, 10, \"%f\", num*sin(num2));"
 echo "						str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);"
-echo "						k=1;"
-echo "						while (k<jdimx)"
+echo "						k=0;"
+echo "						while (++k<jdimx)"
 echo "						{"
 echo "							g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, 2*(j+(k*sz4))));"
 echo "							num=g_array_index(plt->ydata, gdouble, 2*(j+(k*sz4)));"
-echo "							num2=g_array_index(plt->ydata, gdouble, (2*(j+((k++)*sz4)))+1);"
+echo "							num2=g_array_index(plt->ydata, gdouble, (2*(j+(k*sz4)))+1);"
 echo "							g_snprintf(s2, 10, \"%f\", num*cos(num2));"
 echo "							g_snprintf(s3, 10, \"%f\", num*sin(num2));"
 echo "							str=g_strjoin(\"\\t\", str2, s1, s2, s3, NULL);"
@@ -1957,12 +1955,12 @@ echo "						g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, 2*j));
 echo "						g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, 2*j));"
 echo "						g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (2*j)+1));"
 echo "						str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);"
-echo "						k=1;"
-echo "						while (k<jdimx)"
+echo "						k=0;"
+echo "						while (++k<jdimx)"
 echo "						{"
 echo "							g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, 2*(j+(k*sz4))));"
 echo "							g_snprintf(s2, 10, \"%f\", g_array_index(plt->ydata, gdouble, 2*(j+(k*sz4))));"
-echo "							g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (2*(j+((k++)*sz4)))+1));"
+echo "							g_snprintf(s3, 10, \"%f\", g_array_index(plt->ydata, gdouble, (2*(j+(k*sz4)))+1));"
 echo "							str=g_strjoin(\"\\t\", str2, s1, s2, s3, NULL);"
 echo "							g_free(str2);"
 echo "							str2=g_strdup(str);"
@@ -1987,12 +1985,12 @@ echo "						num2=g_array_index(plt->ydata, gdouble, (2*j)+1);"
 echo "						g_snprintf(s2, 10, \"%f\", num*cos(num2));"
 echo "						g_snprintf(s3, 10, \"%f\", num*sin(num2));"
 echo "						str2=g_strjoin(\"\\t\", s1, s2, s3, NULL);"
-echo "						k=1;"
-echo "						while (k<jdimx)"
+echo "						k=0;"
+echo "						while (++k<jdimx)"
 echo "						{"
 echo "							g_snprintf(s1, 10, \"%f\", g_array_index(plt->xdata, gdouble, 2*(j+(k*sz4))));"
 echo "							num=g_array_index(plt->ydata, gdouble, 2*(j+(k*sz4)));"
-echo "							num2=g_array_index(plt->ydata, gdouble, (2*(j+((k++)*sz4)))+1);"
+echo "							num2=g_array_index(plt->ydata, gdouble, (2*(j+(k*sz4)))+1);"
 echo "							g_snprintf(s2, 10, \"%f\", num*cos(num2));"
 echo "							g_snprintf(s3, 10, \"%f\", num*sin(num2));"
 echo "							str=g_strjoin(\"\\t\", str2, s1, s2, s3, NULL);"
@@ -2466,11 +2464,10 @@ echo "	GArray *nx, *st, *sz, *x, *y;"
 echo "	gchar *contents=NULL, *dm, *fin=NULL, *str;"
 echo "	gchar **strat=NULL, **strary=NULL;"
 echo "	gchar s[5];"
-echo "	gdouble lcl, mny, mxy, xf, xi;"
+echo "	gdouble lcl, mny=0.0, mxy=0.0, xf, xi;"
 echo "	GError *Err=NULL;"
 echo "	gint j, k, l, lc, sal, satl, zp;"
 echo "	GSList *list;"
-echo "	GtkPlot *pt;"
 echo "	GtkPlotLinear *plt;"
 echo "	GtkWidget *label, *mni, *wfile;"
 echo ""

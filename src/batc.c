@@ -113,8 +113,7 @@ void upt(GtkWidget* widget, gpointer dta)
 	gdouble val;
 	gint rw, j;
 	gint ps;
-	GList *chld;
-	GSList *fls=NULL, *list;
+	GSList *fls=NULL;
 	GtkAdjustment *adj;
 	GtkWidget *btd, *btt, *btu, *lbl, *wwfile;
 
@@ -239,14 +238,13 @@ void bat(GtkWidget *widget, gpointer data)
 	gchar s1[10];
 	gdouble ce, clc, cn, ct, ddp, dst, idelf, iv, ivd, ivdt, lcl, mny, mxy, ofe, ofs, phi, phia, phio, pn, tcn, tp, twd, vt, vzt, xi, xf, xx;
 	GError *Err=NULL;
-	gint dr, dx, dx2, j, jdim, jdimx, k, kdim, kib, l, lc, lcib, m, mx, n, sal, sr, sp, trc, zp;
+	gint dr, dx, dx2, j, jdimx, k, kib, l, lc, lcib, m, mx, n, sal, sr, sp, trc, zp;
 	GList *iter1, *iter2;
 	GSList *list;
 	GtkAdjustment *adj, *adj2;
 	GtkPlotLinear *plt;
 	GtkPlotPolar *plt2;
-	GtkWidget *cont, *content, *hbox, *label, *scroll, *vsc, *wfile;
-	struct confrow *row;
+	GtkWidget *cont, *content, *label, *scroll, *wfile;
 
 	wfile=gtk_file_chooser_dialog_new(_("Select Config File"), GTK_WINDOW(window), GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, GTK_STOCK_NEW, GTK_RESPONSE_APPLY, GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
 	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(wfile), FALSE);
@@ -21456,7 +21454,7 @@ else
 				if ((flagd&DISP_MRK)==0)/* single plot mode */
 				{
 					{nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1); sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1); st=g_array_sized_new(FALSE, FALSE, sizeof(gint), 1);}
-					dx2+=kdim+(jdim*kdimxf);
+					dx2+=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind))+(gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind2))*kdimxf);
 					{g_array_append_val(sz, mx); g_array_append_val(st, dx); g_array_append_val(nx, dx2);}
 					mny=g_array_index(y, gdouble, dx2);
 					{mxy=mny; l=1;}
@@ -21470,7 +21468,7 @@ else
 				else/* multiplot over k */
 				{
 					{nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf); sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf); st=g_array_sized_new(FALSE, FALSE, sizeof(gint), kdimxf);}
-					dx2+=jdim*kdimxf;
+					dx2+=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(jind2))*kdimxf;
 					{g_array_append_val(sz, mx); g_array_append_val(st, dx); g_array_append_val(nx, dx2);}
 					mny=g_array_index(y, gdouble, dx2);
 					{mxy=mny; l=1;}
@@ -21498,7 +21496,7 @@ else
 			else if ((flagd&DISP_MRK)==0)/* multiplot over j */
 			{
 				{nx=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx); sz=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx); st=g_array_sized_new(FALSE, FALSE, sizeof(gint), jdimx);}
-				dx2+=kdim;
+				dx2+=gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(kind));
 				{g_array_append_val(sz, mx); g_array_append_val(st, dx); g_array_append_val(nx, dx2);}
 				mny=g_array_index(y, gdouble, dx2);
 				{mxy=mny; l=1;}
